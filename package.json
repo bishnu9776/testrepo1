@@ -14,7 +14,9 @@
     "url": "git+https://github.com/systeminsights/svc-ather-collector.git"
   },
   "scripts": {
-    "start": "babel-node src/main.js",
+    "start": "ELASTIC_APM_ACTIVE=false babel-node src/main.js",
+    "debug-subscriber": "babel-node src/gcpSubscriber/index.js",
+    "debug-publisher": "babel-node scripts/gcpProducer.js",
     "start-dev-staging": "VI_MODE=dev VI_ES_HOST=s-elasticsearch-1.use1.systeminsights.com npm run start",
     "test": "mocha --recursive test",
     "eslint": "eslint ./src ./test",
@@ -33,7 +35,11 @@
     }
   },
   "dependencies": {
-    "ramda": "0.26.1"
+    "ramda": "0.26.1",
+    "@google-cloud/pubsub": "1.1.1",
+    "rxjs": "6.5.3",
+    "vi-kafka-stream-client": "1.0.207",
+    "node-microservice": "3.5.359"
   },
   "devDependencies": {
     "@babel/node": "7.6.2",
