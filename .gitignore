@@ -1,0 +1,26 @@
+.vscode/
+.code/
+node_modules/
+*.log
+*.log.*
+.nyc_output/
+coverage/
+dist/
+bin/data/
+tmp
+data/
+.DS_Store
+data/
+
+# All other idea project files are safe to commit
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/mongoSettings.xml
+.idea/watcherTasks.xml
+.idea/deployment.xml
+.idea/markdown-navigator/
+.idea/markdown-exported-files.xml
+.idea/markdown-navigator.xml
+.idea/webResources.xml
+.idea/sonarlint/issuestore/
+.idea/sonarlint-state.xml

@@ -1,0 +1,48 @@
+{
+  "name": "svc-ather-collector",
+  "version": "0.0.1",
+  "description": "Collector to read from Gcp pub/sub and write to Kafka",
+  "main": "dist/main.js",
+  "author": "VIMANA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/systeminsights/svc-ather-collector/issues"
+  },
+  "homepage": "https://github.com/systeminsights/svc-ather-collector#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/systeminsights/svc-ather-collector.git"
+  },
+  "scripts": {
+    "start": "babel-node src/main.js",
+    "start-dev-staging": "VI_MODE=dev VI_ES_HOST=s-elasticsearch-1.use1.systeminsights.com npm run start",
+    "test": "mocha --recursive test",
+    "eslint": "eslint ./src ./test",
+    "eslint-fix": "eslint ./src ./test --fix",
+    "tc:version": "tc-version-app",
+    "tc:eslint": "tc-eslint",
+    "tc:test_pre": "docker-compose -f teamcity-services.yml up -d",
+    "tc:coverage": "tc-coverage-mocha",
+    "tc:test_post": "docker-compose -f teamcity-services.yml down",
+    "tc:build": "tc-build"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitmsg-jira",
+      "pre-commit": "tc-eslint"
+    }
+  },
+  "dependencies": {
+    "ramda": "0.26.1"
+  },
+  "devDependencies": {
+    "@babel/node": "7.6.2",
+    "babel-preset-vi-node": "1.0.89",
+    "eslint-config-vi-node": "1.2.75",
+    "husky": "3.0.5",
+    "mocha": "6.2.0",
+    "chai": "3.3.0",
+    "sinon": "7.5.0",
+    "sinon-chai": "3.3.0"
+  }
+}
