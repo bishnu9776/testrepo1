@@ -1,6 +1,6 @@
 import R from "ramda"
 import {bindNodeCallback, forkJoin, merge, Observable, of, throwError} from "rxjs"
-import {bufferTime, catchError, concatAll, concatMap, filter, flatMap, switchMap} from "rxjs/operators"
+import {bufferTime, catchError, concatAll, concatMap, filter, finalize, flatMap, switchMap} from "rxjs/operators"
 import {ErrorCodes as kafkaErrorCodes, Producer as KafkaProducer} from "vi-kafka-stream-client"
 
 const {env} = process
@@ -8,8 +8,8 @@ const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalC
 
 export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
   const config = {
-    dataTopics: "test-topic-ather",
-    probeTopics: "ather-probes",
+    dataTopics: ["test-topic-ather"],
+    probeTopics: ["ather-probes"],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
     "vi-kafka-stream-client-options": {
       globalConfig: {
@@ -94,15 +94,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
     return merge(...observables)
   }
 
-  /*
-  Reason for using producer$ in following way:
-   *  Writer should be pass-through, i.e., should send out the original events after write is successful. Hence, the send
-      function returns the event in the observable chain after producer.produce is successful
-   *  The ordering of events should be preserved, even if some events do not get sent to kafka and hence we are not
-      waiting for any producer.produce to complete. Hence, a bufferTime is used to batch up those messages and we use
-      a forkJoin to wait until all messages in that batch are successfully sent
-  */
-
   const {globalConfig, topicConfig, retryConfig, errorConfig} = config["vi-kafka-stream-client-options"]
 
   const catchAndAttachErrorCodes = err => {
@@ -140,7 +131,11 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
             filter(R.complement(R.isEmpty)),
             concatMap(events => forkJoin(R.map(send(producer), events))),
             concatAll(),
-            catchError(flushAndThrow(producer))
+            catchError(flushAndThrow(producer)),
+            finalize(() => {
+              console.log("Disconnecting producer")
+              producer.disconnect()
+            })
           )
         }),
         catchError(catchAndAttachErrorCodes)

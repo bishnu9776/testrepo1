@@ -11,7 +11,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId}) => 
 
     const startTime = new Date()
 
-    const maxMessagesToConsume = 100
+    const maxMessagesToConsume = 50
     let numMessagesConsumed = 0
 
     const subscriberOptions = {
@@ -31,10 +31,11 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId}) => 
       if (numMessagesConsumed === maxMessagesToConsume) {
         const endTime = new Date()
         const processingTime = (endTime - startTime) / 1000
-        console.log(
-          `Processed ${maxMessagesToConsume} in ${processingTime} seconds at the rate of ${maxMessagesToConsume /
-            processingTime} events / second`
-        )
+        console.log(`Got ${maxMessagesToConsume} events. Closing input stream`)
+        // console.log(
+        //   `Processed ${maxMessagesToConsume} in ${processingTime} seconds at the rate of ${maxMessagesToConsume /
+        //     processingTime} events / second`
+        // )
         observer.complete()
       }
       message.ack()
@@ -50,10 +51,11 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId}) => 
       observer.error(err)
     })
 
-    return async () => {
+    return () => {
+      console.log("Unsubscribing source")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
-      await subscription.close()
+      subscription.close() // https://github.com/ReactiveX/rxjs/issues/4222
     }
   })
 }

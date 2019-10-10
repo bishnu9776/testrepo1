@@ -12,6 +12,8 @@ data/
 .DS_Store
 data/
 src/credentials.json
+.npmrc
+Dockerfile
 
 # All other idea project files are safe to commit
 .idea/workspace.xml

@@ -6,11 +6,40 @@ const subscriptionName = "samplesubscription"
 const projectId = "udemy-react-nati-1553102095753"
 const credentialsPath = "./src/credentials.json"
 
-getGCPstream({subscriptionName, projectId, credentialsPath})
+const pipeline = getGCPstream({subscriptionName, projectId, credentialsPath})
   .pipe(kafkaProducer({log}))
-  .subscribe(x => {
-    console.log(x)
+  .subscribe({
+    next: x => {
+      // console.log(x)
+    },
+    complete: () => {
+      console.log("Completed. Exiting application")
+      process.exit(0)
+    }
   })
+
+const delayAndExit = (exitCode, delayMs = 5000) => {
+  setTimeout(() => {
+    process.exit(exitCode)
+  }, delayMs)
+}
+
+const sigExit = signal => {
+  if (pipeline) {
+    pipeline.close()
+  }
+  log.info(`Exiting due to ${signal}`)
+  delayAndExit(0)
+}
+
+process.on("SIGINT", () => sigExit("SIGINT"))
+process.on("SIGTERM", () => sigExit("SIGTERM"))
+process.on("uncaughtException", error => {
+  const errorMsg = error.message || error
+  log.error({uncaughtError: JSON.stringify(error)}, "Uncaught exception: ", JSON.stringify(errorMsg))
+  pipeline.close()
+  delayAndExit(1)
+})
 
 // getGCPStream
 // formatData
