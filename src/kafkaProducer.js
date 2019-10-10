@@ -75,11 +75,15 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
       return of(event)
     }
 
+    // strip meta from event
+
     const value = JSON.stringify(event)
     const key = (getMessageKey && getMessageKey(event)) || null
     const observables = topics.map(
       topic =>
         new Observable(observer => {
+          // send only non-ack events
+
           producer.produce(topic, null, Buffer.from(value), key, Date.now(), err => {
             if (!err) {
               observer.next(event)
@@ -131,9 +135,10 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
             filter(R.complement(R.isEmpty)),
             concatMap(events => forkJoin(R.map(send(producer), events))),
             concatAll(),
+            // ack message here
             catchError(flushAndThrow(producer)),
             finalize(() => {
-              console.log("Disconnecting producer")
+              log.warn("Disconnecting producer")
               producer.disconnect()
             })
           )

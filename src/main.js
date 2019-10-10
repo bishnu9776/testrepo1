@@ -1,22 +1,51 @@
+import {concatAll, concatMap, filter, map} from "rxjs/operators"
+import {from} from "rxjs"
 import {getGCPstream} from "./gcpSubscriber"
 import {kafkaProducer} from "./kafkaProducer"
 import {log} from "./logger"
+import {formatData} from "./formatData"
+import {getMetricRegistry} from "./metricRegistry"
 
-const subscriptionName = "samplesubscription"
-const projectId = "udemy-react-nati-1553102095753"
-const credentialsPath = "./src/credentials.json"
+const {env} = process
+const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION || "samplesubscription"
+const projectId = env.VI_GCP_PROJECT_ID || "udemy-react-nati-1553102095753"
+const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH || "./src/credentials.json"
 
-const pipeline = getGCPstream({subscriptionName, projectId, credentialsPath})
-  .pipe(kafkaProducer({log}))
+const metricRegistry = getMetricRegistry(log)
+metricRegistry.startStatsReporting()
+
+// TODO
+// 1. Errors on gcp stream will be caught in kafka producer - fix this
+// 2. Ack message on main pipeline
+// 3. Attach actual message with prototype to be able to ack messages.
+
+// connectToKafka()
+const pipeline = getGCPstream({
+  subscriptionName,
+  projectId,
+  credentialsPath,
+  metricRegistry,
+  log
+})
+  .pipe(
+    map(formatData(log)),
+    filter(x => !!x),
+    concatMap(events => from(events)),
+    concatAll(),
+    kafkaProducer({log, metricRegistry})
+  )
+  // retry with exponential back off on errors
   .subscribe({
     next: x => {
-      // console.log(x)
+      console.log(x)
     },
     complete: () => {
       console.log("Completed. Exiting application")
       process.exit(0)
     }
   })
+
+// Add timeout for entire stream if no messages for some time
 
 const delayAndExit = (exitCode, delayMs = 5000) => {
   setTimeout(() => {
@@ -26,7 +55,7 @@ const delayAndExit = (exitCode, delayMs = 5000) => {
 
 const sigExit = signal => {
   if (pipeline) {
-    pipeline.close()
+    pipeline.unsubscribe()
   }
   log.info(`Exiting due to ${signal}`)
   delayAndExit(0)
@@ -37,7 +66,7 @@ process.on("SIGTERM", () => sigExit("SIGTERM"))
 process.on("uncaughtException", error => {
   const errorMsg = error.message || error
   log.error({uncaughtError: JSON.stringify(error)}, "Uncaught exception: ", JSON.stringify(errorMsg))
-  pipeline.close()
+  pipeline.unsubscribe()
   delayAndExit(1)
 })
 

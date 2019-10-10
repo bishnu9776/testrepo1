@@ -1,64 +1,60 @@
 import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
-// import zlib from "zlib"
+import {errorFormatter} from "./utils/errorFormatter"
 
-export const getGCPstream = ({subscriptionName, credentialsPath, projectId}) => {
+// TODO
+// 1. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
+// 2. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
+
+const {env} = process
+const parseNumber = string => {
+  string ? parseInt(string, 10) : false
+}
+
+export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   return new Observable(observer => {
-    const pubsubclient = new PubSub({
+    const pubsubClient = new PubSub({
       projectId,
       keyFilename: credentialsPath
     })
 
-    const startTime = new Date()
-
-    const maxMessagesToConsume = 50
-    let numMessagesConsumed = 0
-
     const subscriberOptions = {
       flowControl: {
-        maxMessages: 20000
+        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 2000000,
+        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10000,
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 100000 // 100 MB
       },
       streamingOptions: {
-        highWaterMark: 10000,
-        maxStreams: 5,
-        timeout: 30 * 1000
+        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 200000,
+        maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
+        timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 5000
       }
     }
 
-    const subscription = pubsubclient.subscription(subscriptionName, subscriberOptions)
-    subscription.on("message", message => {
-      numMessagesConsumed++
-      if (numMessagesConsumed === maxMessagesToConsume) {
-        const endTime = new Date()
-        const processingTime = (endTime - startTime) / 1000
-        console.log(`Got ${maxMessagesToConsume} events. Closing input stream`)
-        // console.log(
-        //   `Processed ${maxMessagesToConsume} in ${processingTime} seconds at the rate of ${maxMessagesToConsume /
-        //     processingTime} events / second`
-        // )
-        observer.complete()
-      }
-      message.ack()
+    log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
+    const subscription = pubsubClient.subscription(subscriptionName, subscriberOptions)
+
+    // There is no event emitted to identify successful connection to GCP. Will rely on source stats.
+
+    subscription.on("message", msg => {
+      metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
+
       observer.next({
-        meta: {ackId: message.ackId},
-        parsedMessage: JSON.parse(message.data.toString()),
-        tag: "MTConnectDataItems"
+        meta: {ackId: msg.ackId, id: msg.id, attributes: msg.attributes},
+        data: msg.data
       })
     })
 
-    subscription.on("error", err => {
-      console.log("Got error", err)
-      observer.error(err)
+    subscription.on("error", error => {
+      log.warn({error: errorFormatter(error)}, "Error on GCP stream")
+      observer.error(error)
     })
 
-    return () => {
-      console.log("Unsubscribing source")
+    return async () => {
+      log.info("Unsubscribing GCP client")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
       subscription.close() // https://github.com/ReactiveX/rxjs/issues/4222
     }
   })
 }
-
-// TODO: Add retry policy
-// TODO: Add stats
