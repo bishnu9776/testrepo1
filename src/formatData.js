@@ -27,7 +27,7 @@ export const formatData = log => msg => {
 
       return [
         R.flatten([parsedMessage]).map(x => ({...x, tag: "MTConnectDataItems"})),
-        {type: "ack", ackId: msg.meta.ackId}
+        {type: "ack", ackId: msg.meta.ackId, message: msg}
       ]
     } catch (e) {
       log.warn({ctx: {data: decompressedMessage.toString()}}, "Could not parse string to JSON")

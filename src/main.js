@@ -35,7 +35,8 @@ const pipeline = gcpStream
     concatMap(events => from(events)),
     concatAll(),
     kafkaProducer({log, metricRegistry}),
-    tap(acknowledgeMessage)
+    filter(event => event.type === "ack"),
+    tap(event => acknowledgeMessage(event.message))
   )
   // retry with exponential back off on errors
   .subscribe({
