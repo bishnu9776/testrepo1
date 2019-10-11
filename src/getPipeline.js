@@ -6,11 +6,13 @@ import {log} from "./logger"
 import {formatData} from "./formatData"
 import {kafkaProducer} from "./kafkaProducer"
 import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
+import {throwOnNoEvent} from "./utils/throwOnNoEvent"
 
 const {env} = process
 const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION || "samplesubscription"
 const projectId = env.VI_GCP_PROJECT_ID || "udemy-react-nati-1553102095753"
 const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH || "./src/creds/credentials.json"
+const eventTimeout = env.VI_EVENT_TIMEOUT || 30000
 
 const initializeGCPStream = metricRegistry =>
   getGCPstream({
@@ -43,6 +45,7 @@ export const getPipeline = ({metricRegistry}) => {
     tap(event => {
       acknowledgeMessage(event.message)
     }),
+    throwOnNoEvent(eventTimeout),
     retryWithExponentialBackoff({retryDelayCap: 30000, retryDelayFactor: 2, retryDelayInit: 5000, log})
   )
 }
