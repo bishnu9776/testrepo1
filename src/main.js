@@ -1,4 +1,4 @@
-import {concatAll, concatMap, filter, map} from "rxjs/operators"
+import {concatAll, concatMap, filter, map, tap} from "rxjs/operators"
 import {from} from "rxjs"
 import {getGCPstream} from "./gcpSubscriber"
 import {kafkaProducer} from "./kafkaProducer"
@@ -16,23 +16,26 @@ metricRegistry.startStatsReporting()
 
 // TODO
 // 1. Errors on gcp stream will be caught in kafka producer - fix this
-// 2. Ack message on main pipeline
-// 3. Attach actual message with prototype to be able to ack messages.
+// 2. Attach actual message with prototype to be able to ack messages.
 
 // connectToKafka()
-const pipeline = getGCPstream({
+
+const {acknowledgeMessage, stream: gcpStream} = getGCPstream({
   subscriptionName,
   projectId,
   credentialsPath,
   metricRegistry,
   log
 })
+
+const pipeline = gcpStream
   .pipe(
     map(formatData(log)),
     filter(x => !!x),
     concatMap(events => from(events)),
     concatAll(),
-    kafkaProducer({log, metricRegistry})
+    kafkaProducer({log, metricRegistry}),
+    tap(acknowledgeMessage)
   )
   // retry with exponential back off on errors
   .subscribe({
