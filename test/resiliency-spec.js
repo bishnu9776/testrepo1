@@ -1,38 +1,32 @@
-describe("Resiliency tests", () => {
-  describe("Kafka resilience", () => {
-    it("retries connection to Kafka based on retry policy")
-    it("pauses source and does not consume events when retrying connection to Kafka")
-    it("does not acknowledge events which aren't sent to Kafka")
+describe("Resiliency smoke tests", () => {
+  describe("GCP resiliency", () => {
+    it.skip("not able to connect on bootstrap", () => {
+      // keeps retrying till successful connection
+    })
+
+    it.skip("loses connection after bootstrap", () => {
+      // keeps retrying till successful connection
+      // Getting UnhandledPromiseRejectionWarning, logging and ignoring for now
+    })
   })
 
-  describe("GCP resilience", () => {
-    it("continuously tries to connect to GCP as per retry policy if not able to connect to GCP")
+  describe("Kafka resiliency", () => {
+    // we might get a queue full error if we get too many messages after decompression
+    // can try tuning above by configuring max gcp internal buffer
+    it.skip("not able to connect on bootstrap", () => {
+      // keeps retrying till successful connection
+    })
+
+    it("loses connection after bootstrap", () => {
+      // keeps retrying till successful connection
+    })
   })
 
-  describe("Smoke tests", () => {
-    describe("GCP resiliency", () => {
-      it("on bootstrap, if unable to connect")
+  describe("Pipeline resiliency", () => {
+    it.skip("Pipeline resiliency - Error parsing event or somewhere between getting gcp event and producing to kafka")
 
-      it("loses connection after bootstrap", () => {
-        // works but throws UnhandledPromiseRejectionWarning, should understand this
-      })
-
-      describe("Pipeline resiliency", () => {
-        it.skip(
-          "Pipeline resiliency - Error parsing event or somewhere between getting gcp event and producing to kafka"
-        )
-
-        it.skip("Memory does not blow up by consuming too much from GCP", () => {
-          // By limiting maxMessages in flow control settings, able to control consumption rate
-        })
-      })
-
-      // - disconnect wifi, have local kafka", () => {
-      // after VI_GCP_PUBSUB_TIMEOUT seconds, error from gcp stream and we retry whole chain
-      // set flow control settings (maxMessagesInProgress as 5)
-      // have a huge setTimeout for every message before acking
-      // observe memory of progress
-      // observe how many times .on event handler is being called
+    it.skip("Memory does not blow up by consuming too much from GCP", () => {
+      // By limiting maxMessages in flow control settings, able to control consumption rate
     })
   })
 })

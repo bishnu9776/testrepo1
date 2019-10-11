@@ -42,7 +42,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
     flushTimeout: Number.parseInt(env.VI_FLUSH_TIMEOUT, 10) || 5000
   }
 
-  log.info({appConfig: JSON.stringify(config, null, 2)}, "Collector kafka producer config")
+  log.info({appConfig: JSON.stringify(config, null, 2)}, "Kafka producer config")
 
   const strategies = {
     MTConnectDevices: {

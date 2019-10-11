@@ -28,7 +28,7 @@ const delayAndExit = (exitCode, delayMs = 5000) => {
 }
 
 const sigExit = signal => {
-  if (pipeline) {
+  if (pipeline && pipeline.unsubscribe) {
     pipeline.unsubscribe()
   }
   log.info(`Exiting due to ${signal}`)
@@ -40,4 +40,7 @@ process.on("SIGTERM", () => sigExit("SIGTERM"))
 process.on("uncaughtException", error => {
   log.error({error: errorFormatter(error)}, "Got an uncaught exception. Exiting application")
   delayAndExit(0)
+})
+process.on("unhandledRejection", error => {
+  log.warn({error: errorFormatter(error)}, "Got unhandled promise rejection")
 })

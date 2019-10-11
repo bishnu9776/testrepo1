@@ -24,8 +24,6 @@ const initializeGCPStream = metricRegistry =>
 
 // TODO
 // 1. Retry with exponential back off on errors
-// 2. Resiliency test cases
-// 4. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
 // 5. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
 // 6. Decide how to handle uncaught exceptions - exit app or retry chain?
 // 7. Make retry operator a node module

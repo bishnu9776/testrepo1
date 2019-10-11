@@ -20,16 +20,16 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
 
     const subscriberOptions = {
       flowControl: {
-        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 2000000,
-        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10000,
-        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 100000 // 100 MB
+        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 1000,
+        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 5,
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
       },
       streamingOptions: {
-        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 200000,
+        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 500, // Looks like this will be overridden by maxMessages
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
-        timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 5000
+        timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 10000
       },
-      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 300
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 1
     }
 
     log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
