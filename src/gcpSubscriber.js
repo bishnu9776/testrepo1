@@ -2,9 +2,6 @@ import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
 import {errorFormatter} from "./utils/errorFormatter"
 
-// TODO
-// 1. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
-// 2. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
 
 const {env} = process
 const parseNumber = string => {
@@ -32,7 +29,8 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
         highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 200000,
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
         timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 5000
-      }
+      },
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 30000
     }
 
     log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
@@ -42,11 +40,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
 
     subscription.on("message", msg => {
       metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
-
-      observer.next({
-        meta: {ackId: msg.ackId, id: msg.id, attributes: msg.attributes},
-        data: msg.data
-      })
+      observer.next(msg)
     })
 
     subscription.on("error", error => {
