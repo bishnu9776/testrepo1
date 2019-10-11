@@ -21,7 +21,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
     const subscriberOptions = {
       flowControl: {
         maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 1000,
-        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 5,
+        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10,
         maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
       },
       streamingOptions: {
@@ -29,7 +29,10 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
         timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 10000
       },
-      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 1
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 10
+      // If this is too low, modifyAckDeadline will be called too many times causing (Request payload size exceeds the limit: 524288 bytes.) error
+      // https://github.com/googleapis/nodejs-pubsub/pull/65/files
+      // sample ackID has 176 characters which is greater than what's mentioned in ^
     }
 
     log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
@@ -51,7 +54,9 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       log.info("Unsubscribing GCP client")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
-      subscription.close() // https://github.com/ReactiveX/rxjs/issues/4222
+      subscription.close()
+      // https://github.com/ReactiveX/rxjs/issues/4222. This should be long enough to give time for clearing buffer and sending ACKs/NACKs before we retry the observable chain
+      // https://github.com/googleapis/nodejs-pubsub/issues/725
     }
   })
 

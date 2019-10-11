@@ -43,4 +43,5 @@ process.on("uncaughtException", error => {
 })
 process.on("unhandledRejection", error => {
   log.warn({error: errorFormatter(error)}, "Got unhandled promise rejection")
+  // gcp throws UnhandledPromiseRejectionWarning when modifyAckDeadline fails (when not able to connect to gcp)
 })

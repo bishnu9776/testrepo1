@@ -9,9 +9,9 @@ import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
 import {ACK_MSG_TAG} from "./constants"
 
 const {env} = process
-const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION || "samplesubscription"
-const projectId = env.VI_GCP_PROJECT_ID || "udemy-react-nati-1553102095753"
-const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH || "./src/creds/credentials.json"
+const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION
+const projectId = env.VI_GCP_PROJECT_ID
+const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH
 
 const initializeGCPStream = metricRegistry =>
   getGCPstream({
@@ -23,12 +23,7 @@ const initializeGCPStream = metricRegistry =>
   })
 
 // TODO
-// 1. Retry with exponential back off on errors
-// 5. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
-// 6. Decide how to handle uncaught exceptions - exit app or retry chain?
-// 7. Make retry operator a node module
-// 8. pipeline.unsubscribe is not a function error
-// 9. understand how modifyAckDeadline works
+// 1. Make retry operator a node module
 
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
