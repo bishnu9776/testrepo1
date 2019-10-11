@@ -9,30 +9,29 @@ export const formatData = ({log, metricRegistry}) => async msg => {
     ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
     : false
 
-  if (shouldDecompressMessage) {
-    let decompressedMessage
-    let parsedMessage
+  let decompressedMessage
+  let parsedMessage
 
-    try {
+  try {
+    if (shouldDecompressMessage) {
       decompressedMessage = await decompressMessage(msg.data)
-    } catch (e) {
-      metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-      return null
+    } else {
+      decompressedMessage = msg.data
     }
+  } catch (e) {
+    metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
+    return null
+  }
 
-    try {
-      parsedMessage = JSON.parse(decompressedMessage.toString())
-      // const {attributes} = msg.meta
-      // construct events using attributes
+  try {
+    parsedMessage = JSON.parse(decompressedMessage.toString())
+    // const {attributes} = msg.meta
+    // construct events using attributes
 
-      return [
-        R.flatten([parsedMessage]).map(x => ({...x, tag: "MTConnectDataItems"})),
-        {message: msg, tag: ACK_MSG_TAG}
-      ]
-    } catch (e) {
-      metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-      log.debug({ctx: {data: decompressedMessage.toString()}}, "Could not parse string to JSON")
-      return null
-    }
+    return [R.flatten([parsedMessage]).map(x => ({...x, tag: "MTConnectDataItems"})), {message: msg, tag: ACK_MSG_TAG}]
+  } catch (e) {
+    metricRegistry.updateStat("Counter", "parse_failures", 1, {})
+    log.error({ctx: {data: decompressedMessage.toString()}}, "Could not parse string to JSON") // change to debug once we know how to handle all data
+    return null
   }
 }

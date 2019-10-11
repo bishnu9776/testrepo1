@@ -1,13 +1,16 @@
+import {timeout} from "rxjs/operators"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
 import {getPipeline} from "./getPipeline"
 import {errorFormatter} from "./utils/errorFormatter"
 
 const metricRegistry = getMetricRegistry(log)
-metricRegistry.startStatsReporting()
 const pipeline = getPipeline({metricRegistry})
+const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
 
-pipeline.subscribe({
+metricRegistry.startStatsReporting()
+
+pipeline.pipe(timeout(eventTimeout)).subscribe({
   complete: () => {
     log.error("GCP stream completed. Exiting application")
     delayAndExit(0)

@@ -4,4 +4,7 @@ describe("Format data", () => {
   it("gives out array of messages")
   it("returns null if parse fails")
   it("returns null if decompress fails")
+  it("can channel")
+  it("channel 1")
+  it("channel 2..")
 })

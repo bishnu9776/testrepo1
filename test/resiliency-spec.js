@@ -10,7 +10,25 @@ describe("Resiliency tests", () => {
   })
 
   describe("Smoke tests", () => {
-    it.skip("does not blow up memory if processing is slow", () => {
+    describe("GCP resiliency", () => {
+      it("on bootstrap, if unable to connect")
+
+      it("loses connection after bootstrap", () => {
+        // works but throws UnhandledPromiseRejectionWarning, should understand this
+      })
+
+      describe("Pipeline resiliency", () => {
+        it.skip(
+          "Pipeline resiliency - Error parsing event or somewhere between getting gcp event and producing to kafka"
+        )
+
+        it.skip("Memory does not blow up by consuming too much from GCP", () => {
+          // By limiting maxMessages in flow control settings, able to control consumption rate
+        })
+      })
+
+      // - disconnect wifi, have local kafka", () => {
+      // after VI_GCP_PUBSUB_TIMEOUT seconds, error from gcp stream and we retry whole chain
       // set flow control settings (maxMessagesInProgress as 5)
       // have a huge setTimeout for every message before acking
       // observe memory of progress

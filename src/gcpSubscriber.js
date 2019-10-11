@@ -29,7 +29,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
         timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 5000
       },
-      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 30000
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 300
     }
 
     log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")

@@ -9,7 +9,7 @@ const pubsubclient = new PubSub({
   keyFilename
 })
 
-const numMessagesToSend = 100000
+const numMessagesToSend = 100
 let numMessagesSent = 0
 const getSampleDoc = seq =>
   Buffer.from(
@@ -24,7 +24,7 @@ while (numMessagesSent < numMessagesToSend) {
   const messageToSend = getSampleDoc(numMessagesSent)
   pubsubclient.topic(topicName).publish(messageToSend, (err, _) => {
     if (err) {
-      console.log("Exiting due to error")
+      console.log("Exiting due to error", err)
       process.exit(1)
     }
   })

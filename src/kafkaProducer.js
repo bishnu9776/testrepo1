@@ -53,7 +53,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
       topics: config.dataTopics,
       getMessageKey: event => `${event.device_uuid}`
     },
-    AckMessage: {
+    [ACK_MSG_TAG]: {
       topics: []
     }
   }
