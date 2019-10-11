@@ -2,7 +2,6 @@ import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
 import {errorFormatter} from "./utils/errorFormatter"
 
-
 const {env} = process
 const parseNumber = string => {
   string ? parseInt(string, 10) : false

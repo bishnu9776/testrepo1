@@ -12,6 +12,5 @@ describe("Integration spec", () => {
       // parse failures
       // decompress failures
     })
-
   })
 })

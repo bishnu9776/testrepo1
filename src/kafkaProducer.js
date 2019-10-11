@@ -24,7 +24,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
         dr_cb: true, // message does not appear in delivery report
         "statistics.interval.ms": 0,
         "log.connection.close": false,
-        "max.in.flight.requests.per.connection": parseInt(env.VI_KAFKA_SINK_MAX_REQUESTS_PER_CONNECTION, 10) || 6
+        "max.in.flight.requests.per.connection": parseInt(env.VI_KAFKA_SINK_MAX_REQUESTS_PER_CONNECTION, 10) || 3
       },
       topicConfig: {
         "request.required.acks": parseInt(env.VI_KAFKA_SINK_REQUEST_REQUIRED_ACKS, 10) || 1
@@ -71,7 +71,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
     return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
   }
 
-  const send = (producer) => event => {
+  const send = producer => event => {
     const {topics, getMessageKey} = strategies[event.tag]
 
     if (topics.length === 0) {
@@ -129,7 +129,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
 
   return stream =>
     Producer(globalConfig, topicConfig)
-      .producer$({retryConfig, log, errorConfig})
+      .producer$({retryConfig, log, errorConfig}) // producer throws after 30 seconds if unable to connect
       .pipe(
         switchMap(producer => {
           producer.setPollInterval(config.deliveryReportPollInterval)

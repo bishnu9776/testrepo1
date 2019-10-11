@@ -5,6 +5,7 @@ import {getGCPstream} from "./gcpSubscriber"
 import {log} from "./logger"
 import {formatData} from "./formatData"
 import {kafkaProducer} from "./kafkaProducer"
+import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
 
 const {env} = process
 const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION || "samplesubscription"
@@ -21,13 +22,14 @@ const initializeGCPStream = metricRegistry =>
   })
 
 // TODO
-// 1. Immediately throw if not able to connect to Kafka
-// 2. Add timeout for entire stream if no messages for some time
-// 3. Retry with exponential back off on errors
-// 4. Make zlib async and use mergeMap
-// 5. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
-// 6. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
-// 7. Decide how to handle uncaught exceptions - exit app or retry chain?
+// 1. Add timeout for entire stream if no messages for some time
+// 2. Retry with exponential back off on errors
+// 3. Make zlib async and use mergeMap
+// 4. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
+// 5. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
+// 6. Decide how to handle uncaught exceptions - exit app or retry chain?
+// 7. Make retry operator a node module
+
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
 
@@ -40,6 +42,7 @@ export const getPipeline = ({metricRegistry}) => {
     filter(event => event.type === "ack"),
     tap(event => {
       acknowledgeMessage(event.message)
-    })
+    }),
+    retryWithExponentialBackoff({retryDelayCap: 30000, retryDelayFactor: 2, retryDelayInit: 5000, log})
   )
 }
