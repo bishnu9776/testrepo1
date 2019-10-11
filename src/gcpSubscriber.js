@@ -12,7 +12,11 @@ const parseNumber = string => {
 }
 
 export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
-  return new Observable(observer => {
+  function acknowledgeMessage(message) {
+    message.ack()
+  }
+
+  const stream = new Observable(observer => {
     const pubsubClient = new PubSub({
       projectId,
       keyFilename: credentialsPath
@@ -57,4 +61,9 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       subscription.close() // https://github.com/ReactiveX/rxjs/issues/4222
     }
   })
+
+  return {
+    acknowledgeMessage,
+    stream
+  }
 }
