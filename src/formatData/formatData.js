@@ -1,10 +1,10 @@
-import zlib from "zlib"
 import R from "ramda"
-import {ACK_MSG_TAG} from "./constants"
+import {decompressMessage} from "./decompressMessage"
+import {ACK_MSG_TAG} from "../constants"
 
 const {env} = process
 
-export const formatData = ({log, metricRegistry}) => msg => {
+export const formatData = ({log, metricRegistry}) => async msg => {
   const shouldDecompressMessage = env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
     ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
     : false
@@ -14,7 +14,7 @@ export const formatData = ({log, metricRegistry}) => msg => {
     let parsedMessage
 
     try {
-      decompressedMessage = zlib.unzipSync(msg.data)
+      decompressedMessage = await decompressMessage(msg.data)
     } catch (e) {
       metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
       return null

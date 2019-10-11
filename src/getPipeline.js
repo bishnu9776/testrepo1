@@ -1,9 +1,9 @@
-import {concatMap, filter, map, tap} from "rxjs/operators"
+import {concatMap, filter, map, tap, mergeMap} from "rxjs/operators"
 import {flatten} from "ramda"
 import {from} from "rxjs"
 import {getGCPstream} from "./gcpSubscriber"
 import {log} from "./logger"
-import {formatData} from "./formatData"
+import {formatData} from "./formatData/formatData"
 import {kafkaProducer} from "./kafkaProducer"
 import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
 import {throwOnNoEvent} from "./utils/throwOnNoEvent"
@@ -24,7 +24,6 @@ const initializeGCPStream = metricRegistry =>
   })
 
 // TODO
-// 1. Add timeout for entire stream if no messages for some time
 // 2. Retry with exponential back off on errors
 // 3. Make zlib async and use mergeMap
 // 4. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
@@ -36,7 +35,7 @@ export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
 
   return stream.pipe(
-    map(formatData({log, metricRegistry})),
+    mergeMap(event => from(formatData({log, metricRegistry})(event))),
     filter(x => !!x),
     map(x => flatten([x])),
     concatMap(events => from(events)),
