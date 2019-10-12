@@ -4,7 +4,7 @@ import {errorFormatter} from "./utils/errorFormatter"
 
 const {env} = process
 const parseNumber = string => {
-  string ? parseInt(string, 10) : false
+  return string ? parseInt(string, 10) : false
 }
 
 export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
@@ -20,13 +20,13 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
 
     const subscriberOptions = {
       flowControl: {
-        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 1000,
+        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 10,
         maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10,
-        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 1 // 10 MB
       },
       streamingOptions: {
-        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 500, // Looks like this will be overridden by maxMessages
-        maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
+        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 5, // Looks like this will be overridden by maxMessages
+        maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 2,
         timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 10000
       },
       ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 10
