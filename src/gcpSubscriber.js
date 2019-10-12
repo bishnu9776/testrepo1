@@ -7,6 +7,7 @@ const parseNumber = string => {
   return string ? parseInt(string, 10) : false
 }
 
+const parseableChannels = ["mcu", "can", "gps_tpv", "heman"]
 export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   function acknowledgeMessage(message) {
     message.ack()
@@ -41,8 +42,10 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
     // There is no event emitted to identify successful connection to GCP. Will rely on source stats.
 
     subscription.on("message", msg => {
-      metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
-      observer.next(msg)
+      if (!parseableChannels.includes(msg.attributes.channel)) {
+        metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
+        observer.next(msg)
+      }
     })
 
     subscription.on("error", error => {

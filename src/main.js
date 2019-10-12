@@ -22,7 +22,7 @@ app.listen(port, () =>
     {
       port
     },
-    "Starting Ather collector"
+    "Starting Ather Collector"
   )
 )
 

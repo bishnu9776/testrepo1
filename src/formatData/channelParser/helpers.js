@@ -11,7 +11,7 @@ export const getValueKey = ({probeInfo}) => {
 }
 
 export const getDataItem = ({attributes, dataItemName, timestamp, value, probe}) => {
-  const {version, bike_id: bikeId} = attributes
+  const {version, bike_id: bikeId, channel} = attributes
   const probeInfo = probe[dataItemName] || {}
   const valueKey = getValueKey({probeInfo})
 
@@ -23,7 +23,9 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
       data_item_id: `${dataItemName}-${version}`,
       timestamp,
       id: `${bikeId}-${dataItemName}-${timestamp}`,
-      [valueKey]: value
+      [valueKey]: value,
+      tag: "MTConnectDataItems",
+      channel
     }
   }
 
@@ -33,6 +35,8 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
     data_item_id: `${dataItemName}-${version}`,
     timestamp,
     id: `${bikeId}-${dataItemName}-${timestamp}`,
-    value
+    value: value.toString(),
+    tag: "MTConnectDataItems",
+    channel
   }
 }

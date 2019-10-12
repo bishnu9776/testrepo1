@@ -1,6 +1,8 @@
 import {difference, flatten, mergeDeepLeft, pick} from "ramda"
 import {getDataItem} from "./helpers"
 
+const locationKeys = ["lat_deg", "lon_deg"]
+
 // Can we rely on this being a whitelist or should we use a blacklist?
 const eventAndSampleKeys = [
   "mode",
@@ -17,8 +19,6 @@ const eventAndSampleKeys = [
   "alt_m",
   "ttff_s"
 ]
-
-const locationKeys = ["lat_deg", "lon_deg"]
 
 // TODO: Handle missing location
 export const parseGPSTPV = ({data, attributes, probe}) => {
@@ -39,7 +39,8 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
           data_item_type: "LOCATION",
           data_item_id: `location-${attributes.version}`,
           timestamp,
-          id: `${bikeId}-location-${timestamp}`
+          id: `${bikeId}-location-${timestamp}`,
+          tag: "MTConnectDataItems"
         }
       )
 
