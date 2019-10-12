@@ -1,4 +1,5 @@
 import {timeout} from "rxjs/operators"
+import {expressApp} from "node-microservice"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
 import {getPipeline} from "./getPipeline"
@@ -9,6 +10,18 @@ const pipeline = getPipeline({metricRegistry})
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
 
 metricRegistry.startStatsReporting()
+
+const app = expressApp()
+const port = parseInt(process.env.VI_PORT || "3000", 10)
+
+app.listen(port, () =>
+  log.info(
+    {
+      port
+    },
+    "Starting Ather collector"
+  )
+)
 
 pipeline.pipe(timeout(eventTimeout)).subscribe({
   complete: () => {

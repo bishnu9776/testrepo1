@@ -46,7 +46,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
   const strategies = {
     MTConnectDataItems: {
       topics: config.dataTopics,
-      getMessageKey: event => `${event.device_uuid}`
+      getMessageKey: () => "ather" // Update to use device_uuid
     },
     [ACK_MSG_TAG]: {
       topics: []

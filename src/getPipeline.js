@@ -36,6 +36,16 @@ export const getPipeline = ({metricRegistry}) => {
     kafkaProducer({log, metricRegistry}),
     tap(event => {
       if (event.tag === ACK_MSG_TAG) {
+        const eventPublishTime = event.message.publishTime.getTime()
+        const consumerLag = event.message.received - eventPublishTime
+
+        metricRegistry.updateStat("Gauge", "lastAckedMessagePublishTime", eventPublishTime, {
+          device_uuid: "ather" // TODO Update tag
+        })
+        metricRegistry.updateStat("Gauge", "consumerLag", consumerLag, {
+          device_uuid: "ather" // TODO Update tag
+        })
+
         acknowledgeMessage(event.message)
       }
     }),
