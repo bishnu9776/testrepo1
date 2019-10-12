@@ -7,7 +7,7 @@ const {env} = process
 export const formatData = ({log, metricRegistry}) => async msg => {
   const shouldDecompressMessage = env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
     ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
-    : false
+    : true
 
   let decompressedMessage
   let parsedMessage
