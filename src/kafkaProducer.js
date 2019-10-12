@@ -9,7 +9,7 @@ const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalC
 
 export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
-    dataTopics: ["test-topic-ather"],
+    dataTopics: env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : ["test-topic-ather"],
     probeTopics: ["ather-probes"],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
     "vi-kafka-stream-client-options": {
