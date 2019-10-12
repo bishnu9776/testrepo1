@@ -14,7 +14,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
     "vi-kafka-stream-client-options": {
       globalConfig: {
         "metadata.broker.list": env.VI_KAFKA_URL || "localhost:9092",
-        "client.id": env.VI_KAFKA_SINK_CLIENT_ID || `ather-test`,
+        "client.id": env.VI_KAFKA_SINK_CLIENT_ID || "ather-test",
         "retry.backoff.ms": parseInt(env.VI_KAFKA_SINK_RETRY_BACKOFF_MS, 10) || 500,
         "message.send.max.retries": parseInt(env.VI_KAFKA_SINK_MESSAGE_SEND_MAX_RETRIES, 10) || 10, // retry for 5 mins
         "queue.buffering.max.ms": parseInt(env.VI_KAFKA_SINK_QUEUE_BUFFERING_MAX_MS, 10) || 500,
@@ -34,7 +34,12 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
         timeout: parseInt(env.VI_KAFKA_SINK_RETRY_TIMEOUT, 10) || 2000
       },
       errorConfig: {
-        ignorableErrors: [{code: -1, message: "all broker connections are down"}]
+        ignorableErrors: [
+          {code: -195, message: "broker transport failure"},
+          {code: -1, message: "broker transport failure"},
+          {code: -1, message: "all broker connections are down"},
+          {code: -1, message: "timed out"}
+        ]
       }
     },
     deliveryReportPollInterval: parseInt(env.VI_KAFKA_SINK_DELIVERY_REPORT_POLL_INTERVAL, 10) || 5000,
