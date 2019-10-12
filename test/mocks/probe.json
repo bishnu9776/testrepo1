@@ -1,5 +1,5 @@
-[
-  {
+{
+  "BMS_Aux_Temp2": {
     "data_item_name": "BMS_Aux_Temp2",
     "Ather comments": "SenseResistor_Aux2 Temperature (deg C)",
     "component": "battery",
@@ -10,7 +10,7 @@
     "units": "CELSIUS",
     "Notes": "Might need to think of this and the cell voltages as coming from different components"
   },
-  {
+  "BMS_Aux_Temp5": {
     "data_item_name": "BMS_Aux_Temp5",
     "Ather comments": "PosBusBar_Aux5 Temperature (deg C)",
     "component": "battery",
@@ -21,7 +21,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_Aux_Temp4": {
     "data_item_name": "BMS_Aux_Temp4",
     "Ather comments": "NegBusBar_Aux4 Temperature (deg C)",
     "component": "battery",
@@ -32,7 +32,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_Aux_Temp1": {
     "data_item_name": "BMS_Aux_Temp1",
     "Ather comments": "MOSFET_Aux1 Temperature (deg C)",
     "component": "battery",
@@ -43,7 +43,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_MinCellVoltage": {
     "data_item_name": "BMS_MinCellVoltage",
     "Ather comments": "Min Cell Voltage (V)",
     "component": "battery",
@@ -54,7 +54,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_MaxCellVoltage": {
     "data_item_name": "BMS_MaxCellVoltage",
     "Ather comments": "Max Cell Voltage (V)",
     "component": "battery",
@@ -65,7 +65,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_CellVoltageDelta": {
     "data_item_name": "BMS_CellVoltageDelta",
     "Ather comments": "Diff between max and min cell voltage (mV)",
     "component": "battery",
@@ -76,7 +76,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell1": {
     "data_item_name": "BMS_Cell1",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -87,7 +87,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell10": {
     "data_item_name": "BMS_Cell10",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -98,7 +98,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell11": {
     "data_item_name": "BMS_Cell11",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -109,7 +109,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell12": {
     "data_item_name": "BMS_Cell12",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -120,7 +120,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell13": {
     "data_item_name": "BMS_Cell13",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -131,7 +131,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell14": {
     "data_item_name": "BMS_Cell14",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -142,7 +142,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell2": {
     "data_item_name": "BMS_Cell2",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -153,7 +153,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell3": {
     "data_item_name": "BMS_Cell3",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -164,7 +164,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell4": {
     "data_item_name": "BMS_Cell4",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -175,7 +175,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell5": {
     "data_item_name": "BMS_Cell5",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -186,7 +186,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell6": {
     "data_item_name": "BMS_Cell6",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -197,7 +197,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell7": {
     "data_item_name": "BMS_Cell7",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -208,7 +208,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell8": {
     "data_item_name": "BMS_Cell8",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -219,7 +219,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Cell9": {
     "data_item_name": "BMS_Cell9",
     "Ather comments": "Cell voltage (V)",
     "component": "battery",
@@ -230,7 +230,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Aux_Temp6": {
     "data_item_name": "BMS_Aux_Temp6",
     "Ather comments": "BoxAmbient_Aux6 Temperature (deg C)",
     "component": "battery",
@@ -241,7 +241,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_Voltage": {
     "data_item_name": "BMS_Voltage",
     "Ather comments": "BMS Pack Voltage (V)",
     "component": "battery",
@@ -252,7 +252,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "BMS_Current": {
     "data_item_name": "BMS_Current",
     "Ather comments": "BMS Pack Current (A)",
     "component": "battery",
@@ -263,7 +263,7 @@
     "units": "AMPERE",
     "Notes": ""
   },
-  {
+  "BMS_AFE_Temp3": {
     "data_item_name": "BMS_AFE_Temp3",
     "Ather comments": "Block4Cell12_AFE3 Temperature (deg C)",
     "component": "battery",
@@ -274,7 +274,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_AFE_Temp2": {
     "data_item_name": "BMS_AFE_Temp2",
     "Ather comments": "Block3Cell13_AFE2 Temperature (deg C)",
     "component": "battery",
@@ -285,7 +285,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_AFE_Temp1": {
     "data_item_name": "BMS_AFE_Temp1",
     "Ather comments": "Block3Cell1_AFE1 Temperature (deg C)",
     "component": "battery",
@@ -296,7 +296,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_Aux_Temp3": {
     "data_item_name": "BMS_Aux_Temp3",
     "Ather comments": "Block14Cell1_Aux3 Temperature (deg C)",
     "component": "battery",
@@ -307,7 +307,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_Humidity": {
     "data_item_name": "BMS_Humidity",
     "Ather comments": "Humidity %",
     "component": "battery",
@@ -318,7 +318,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "BMS_ThermalAlert": {
     "data_item_name": "BMS_ThermalAlert",
     "Ather comments": "Alert when BMS is about to have thermal fault (1/0)",
     "component": "battery",
@@ -329,7 +329,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "MOT_UBatt_V": {
     "data_item_name": "MOT_UBatt_V",
     "Ather comments": "Motor voltage (V)",
     "component": "motor",
@@ -340,7 +340,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "MOT_TorqueActual_Nm": {
     "data_item_name": "MOT_TorqueActual_Nm",
     "Ather comments": "Motor torque (Nm)",
     "component": "motor",
@@ -351,7 +351,7 @@
     "units": "NEWTON_METER",
     "Notes": ""
   },
-  {
+  "MOT_Tmot_C": {
     "data_item_name": "MOT_Tmot_C",
     "Ather comments": "Motor temperature (deg C)",
     "component": "motor",
@@ -362,7 +362,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "MOT_NPres_RPM": {
     "data_item_name": "MOT_NPres_RPM",
     "Ather comments": "Motor RPM",
     "component": "motor",
@@ -373,7 +373,7 @@
     "units": "REVOLUTION/MINUTE",
     "Notes": ""
   },
-  {
+  "MOT_KillSwitchEcho": {
     "data_item_name": "MOT_KillSwitchEcho",
     "Ather comments": "Motor kill switch (1/0)",
     "component": "motor",
@@ -384,7 +384,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "MOT_IBatt_A": {
     "data_item_name": "MOT_IBatt_A",
     "Ather comments": "motor current (A)",
     "component": "motor",
@@ -395,7 +395,7 @@
     "units": "AMPERE",
     "Notes": ""
   },
-  {
+  "MOT_ErrorCode": {
     "data_item_name": "MOT_ErrorCode",
     "Ather comments": "Errors (0 is good, 83, 90, 93, 94 ignore, everything else is error - captured in heman)",
     "component": "motor",
@@ -406,7 +406,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "MOT_Tpcb_C": {
     "data_item_name": "MOT_Tpcb_C",
     "Ather comments": "Controller temperature (deg C)",
     "component": "motor",
@@ -417,7 +417,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "CHA_Vrms": {
     "data_item_name": "CHA_Vrms",
     "Ather comments": "Input RMS voltage (V)",
     "component": "charger",
@@ -428,7 +428,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "CHA_Vout": {
     "data_item_name": "CHA_Vout",
     "Ather comments": "Output Voltage (V)",
     "component": "charger",
@@ -439,7 +439,7 @@
     "units": "VOLT",
     "Notes": ""
   },
-  {
+  "CHA_Iout": {
     "data_item_name": "CHA_Iout",
     "Ather comments": "Output current (A)",
     "component": "charger",
@@ -450,7 +450,7 @@
     "units": "AMPERE",
     "Notes": ""
   },
-  {
+  "CHA_Irms": {
     "data_item_name": "CHA_Irms",
     "Ather comments": "Input RMS current (A)",
     "component": "charger",
@@ -461,7 +461,7 @@
     "units": "AMPERE",
     "Notes": ""
   },
-  {
+  "CHA_FMS_Flag": {
     "data_item_name": "CHA_FMS_Flag",
     "Ather comments": "Error Flag (0 is good)",
     "component": "charger",
@@ -472,7 +472,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "CHA_CV": {
     "data_item_name": "CHA_CV",
     "Ather comments": "Constant Voltage Flag (1/0)",
     "component": "charger",
@@ -483,7 +483,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "CHA_CC": {
     "data_item_name": "CHA_CC",
     "Ather comments": "Constant Current Flag (1/0)",
     "component": "charger",
@@ -494,7 +494,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "CHA_CD": {
     "data_item_name": "CHA_CD",
     "Ather comments": "Charging Done Flag (1/0)",
     "component": "charger",
@@ -505,7 +505,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "MCU_SOC": {
     "data_item_name": "MCU_SOC",
     "Ather comments": "Battery state of charge % (0-100)",
     "component": "mcu",
@@ -516,7 +516,7 @@
     "units": "PERCENT",
     "Notes": "New data item type?"
   },
-  {
+  "vehicle_status": {
     "data_item_name": "vehicle_status",
     "Ather comments": "type of session - Riding, Charging",
     "component": "vehicle",
@@ -527,7 +527,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "isvisible": {
     "data_item_name": "isvisible",
     "Ather comments": "-1, 0, 1 - invalid, valid, valid and useable\n\nFor Riding:\n- Trip is less than 100m (isVisible = 0)\n- Trip end time is missing (isVisible = -1)\n- All good (isVisible = 1)\n\nFor charging:\nisvisible = 1 if change in SOC during charge is > 1. Else it is 0.\n\nFeel free to ignore it completely if you don't think if it is necessary.",
     "component": "vehicle",
@@ -538,7 +538,7 @@
     "units": "",
     "Notes": "This is of type MODE?"
   },
-  {
+  "isvalid": {
     "data_item_name": "isvalid",
     "Ather comments": "error validity - 0,1",
     "component": "heman",
@@ -549,7 +549,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "error_code": {
     "data_item_name": "error_code",
     "Ather comments": "Identifier for error. Eg.: M019",
     "component": "heman",
@@ -560,7 +560,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "mode": {
     "data_item_name": "mode",
     "Ather comments": "GPS fix mode",
     "component": "gps",
@@ -571,7 +571,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "ept_s": {
     "data_item_name": "ept_s",
     "Ather comments": "",
     "component": "gps",
@@ -582,7 +582,7 @@
     "units": "SECOND",
     "Notes": ""
   },
-  {
+  "epx_m": {
     "data_item_name": "epx_m",
     "Ather comments": "Error x",
     "component": "gps",
@@ -593,7 +593,7 @@
     "units": "METER",
     "Notes": ""
   },
-  {
+  "epy_m": {
     "data_item_name": "epy_m",
     "Ather comments": "Error y",
     "component": "gps",
@@ -604,7 +604,7 @@
     "units": "METER",
     "Notes": ""
   },
-  {
+  "epv_m": {
     "data_item_name": "epv_m",
     "Ather comments": "Error vertical",
     "component": "gps",
@@ -615,7 +615,7 @@
     "units": "METER",
     "Notes": ""
   },
-  {
+  "epd_deg": {
     "data_item_name": "epd_deg",
     "Ather comments": "",
     "component": "gps",
@@ -626,7 +626,7 @@
     "units": "DEGREE",
     "Notes": ""
   },
-  {
+  "eps_mps2": {
     "data_item_name": "eps_mps2",
     "Ather comments": "",
     "component": "gps",
@@ -637,7 +637,7 @@
     "units": "METER/SECOND^2",
     "Notes": ""
   },
-  {
+  "epc_mps2": {
     "data_item_name": "epc_mps2",
     "Ather comments": "",
     "component": "gps",
@@ -648,7 +648,7 @@
     "units": "METER/SECOND^2",
     "Notes": ""
   },
-  {
+  "track_deg": {
     "data_item_name": "track_deg",
     "Ather comments": "heading",
     "component": "gps",
@@ -659,7 +659,7 @@
     "units": "DEGREE",
     "Notes": ""
   },
-  {
+  "speed_mps": {
     "data_item_name": "speed_mps",
     "Ather comments": "speed",
     "component": "gps",
@@ -670,7 +670,7 @@
     "units": "METER/SECOND",
     "Notes": ""
   },
-  {
+  "climb_mps": {
     "data_item_name": "climb_mps",
     "Ather comments": "",
     "component": "gps",
@@ -681,7 +681,7 @@
     "units": "METER/SECOND",
     "Notes": ""
   },
-  {
+  "lat_deg": {
     "data_item_name": "lat_deg",
     "Ather comments": "Latitude",
     "component": "gps",
@@ -692,7 +692,7 @@
     "units": "DEGREE",
     "Notes": ""
   },
-  {
+  "lon_deg": {
     "data_item_name": "lon_deg",
     "Ather comments": "Longitude",
     "component": "gps",
@@ -703,7 +703,7 @@
     "units": "DEGREE",
     "Notes": ""
   },
-  {
+  "alt_m": {
     "data_item_name": "alt_m",
     "Ather comments": "",
     "component": "gps",
@@ -714,7 +714,7 @@
     "units": "METER",
     "Notes": ""
   },
-  {
+  "ttff_s": {
     "data_item_name": "ttff_s",
     "Ather comments": "Time to first fix",
     "component": "gps",
@@ -725,10 +725,10 @@
     "units": "SECOND",
     "Notes": ""
   },
-  {
+  "data": {
     "data_item_name": "data",
     "Ather comments": "UART hex data",
-    "component": "vcu",
+    "component": "mcu",
     "subcomponent": "",
     "data_item_type": "?",
     "sub_type": "",
@@ -736,7 +736,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "network_status": {
     "data_item_name": "network_status",
     "Ather comments": "",
     "component": "vcu",
@@ -747,7 +747,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "network_signal": {
     "data_item_name": "network_signal",
     "Ather comments": "",
     "component": "vcu",
@@ -758,7 +758,7 @@
     "units": "",
     "Notes": "?"
   },
-  {
+  "screen_brightness": {
     "data_item_name": "screen_brightness",
     "Ather comments": "Brightness selected by user",
     "component": "vcu",
@@ -769,7 +769,7 @@
     "units": "LUMEN",
     "Notes": "?"
   },
-  {
+  "display_status": {
     "data_item_name": "display_status",
     "Ather comments": "",
     "component": "vcu",
@@ -780,7 +780,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "screen_brightness_control": {
     "data_item_name": "screen_brightness_control",
     "Ather comments": "",
     "component": "vcu",
@@ -791,7 +791,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "touchscreen_status": {
     "data_item_name": "touchscreen_status",
     "Ather comments": "",
     "component": "vcu",
@@ -802,7 +802,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "bluetooth_device_status": {
     "data_item_name": "bluetooth_device_status",
     "Ather comments": "",
     "component": "vcu",
@@ -813,7 +813,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "vehicle_range": {
     "data_item_name": "vehicle_range",
     "Ather comments": "Range shown to user (km)",
     "component": "vcu",
@@ -824,7 +824,7 @@
     "units": "KILOMETER",
     "Notes": ""
   },
-  {
+  "incognito_mode": {
     "data_item_name": "incognito_mode",
     "Ather comments": "Incognito mode off/on",
     "component": "vcu",
@@ -835,7 +835,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "cpu_thermal_zone0": {
     "data_item_name": "cpu_thermal_zone0",
     "Ather comments": "Dashboard temperature sensor",
     "component": "vcu",
@@ -846,7 +846,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "ddr_temperature": {
     "data_item_name": "ddr_temperature",
     "Ather comments": "Dashboard temperature sensor",
     "component": "vcu",
@@ -857,7 +857,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "gsm_temperature": {
     "data_item_name": "gsm_temperature",
     "Ather comments": "Dashboard temperature sensor",
     "component": "vcu",
@@ -868,7 +868,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "buck_temperature": {
     "data_item_name": "buck_temperature",
     "Ather comments": "Dashboard temperature sensor",
     "component": "vcu",
@@ -879,7 +879,7 @@
     "units": "CELSIUS",
     "Notes": ""
   },
-  {
+  "als_lux": {
     "data_item_name": "als_lux",
     "Ather comments": "",
     "component": "vcu",
@@ -890,7 +890,7 @@
     "units": "LUMEN/METER^2",
     "Notes": ""
   },
-  {
+  "odometer": {
     "data_item_name": "odometer",
     "Ather comments": "Odometer (m)",
     "component": "vcu",
@@ -901,7 +901,7 @@
     "units": "KILOMETER",
     "Notes": ""
   },
-  {
+  "imu_fault": {
     "data_item_name": "imu_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -912,7 +912,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "als_fault": {
     "data_item_name": "als_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -923,7 +923,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "touch_fault": {
     "data_item_name": "touch_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -934,7 +934,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "lcd_power_fault": {
     "data_item_name": "lcd_power_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -945,7 +945,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "lcd_backlight_fault": {
     "data_item_name": "lcd_backlight_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -956,7 +956,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "gps_power_fault": {
     "data_item_name": "gps_power_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -967,7 +967,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "ldu_fault": {
     "data_item_name": "ldu_fault",
     "Ather comments": "",
     "component": "vcu",
@@ -978,18 +978,7 @@
     "units": "",
     "Notes": ""
   },
-  {
-    "data_item_name": "data",
-    "Ather comments": "UART hex data",
-    "component": "mcu",
-    "subcomponent": "",
-    "data_item_type": "?",
-    "sub_type": "",
-    "category": "",
-    "units": "",
-    "Notes": ""
-  },
-  {
+  "left_brake": {
     "data_item_name": "left_brake",
     "Ather comments": "Left brake 1/0",
     "component": "mcu",
@@ -1000,7 +989,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_brake": {
     "data_item_name": "right_brake",
     "Ather comments": "Right brake 1/0",
     "component": "mcu",
@@ -1011,7 +1000,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "head_lamp_switch": {
     "data_item_name": "head_lamp_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1022,7 +1011,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "horn_switch": {
     "data_item_name": "horn_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1033,7 +1022,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "left_indicator_switch": {
     "data_item_name": "left_indicator_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1044,7 +1033,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_indicator_switch": {
     "data_item_name": "right_indicator_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1055,7 +1044,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "no_indicator_switch": {
     "data_item_name": "no_indicator_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1066,7 +1055,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "key_switch": {
     "data_item_name": "key_switch",
     "Ather comments": "User key 1/0",
     "component": "mcu",
@@ -1077,7 +1066,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "start_switch": {
     "data_item_name": "start_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1088,7 +1077,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "left_scroll_switch": {
     "data_item_name": "left_scroll_switch",
     "Ather comments": "switch similar to the indicator on the right side of the bike, which helps you change modes while riding without using the touch screen.",
     "component": "mcu",
@@ -1099,7 +1088,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_scroll_switch": {
     "data_item_name": "right_scroll_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1110,7 +1099,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "side_stand": {
     "data_item_name": "side_stand",
     "Ather comments": "Not being used",
     "component": "mcu",
@@ -1121,7 +1110,7 @@
     "units": "",
     "Notes": "FLAG"
   },
-  {
+  "ldu": {
     "data_item_name": "ldu",
     "Ather comments": "",
     "component": "mcu",
@@ -1132,7 +1121,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "solenoid_feedback": {
     "data_item_name": "solenoid_feedback",
     "Ather comments": "",
     "component": "mcu",
@@ -1143,7 +1132,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "gsm_power": {
     "data_item_name": "gsm_power",
     "Ather comments": "",
     "component": "mcu",
@@ -1154,7 +1143,7 @@
     "units": "WATT",
     "Notes": ""
   },
-  {
+  "gps_power": {
     "data_item_name": "gps_power",
     "Ather comments": "",
     "component": "mcu",
@@ -1165,7 +1154,7 @@
     "units": "WATT",
     "Notes": ""
   },
-  {
+  "als_power": {
     "data_item_name": "als_power",
     "Ather comments": "",
     "component": "mcu",
@@ -1176,7 +1165,7 @@
     "units": "WATT",
     "Notes": ""
   },
-  {
+  "imu_power": {
     "data_item_name": "imu_power",
     "Ather comments": "",
     "component": "mcu",
@@ -1187,7 +1176,7 @@
     "units": "WATT",
     "Notes": ""
   },
-  {
+  "motor_fan": {
     "data_item_name": "motor_fan",
     "Ather comments": "Motor fan 1/0",
     "component": "mcu",
@@ -1198,7 +1187,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "low_beam": {
     "data_item_name": "low_beam",
     "Ather comments": "",
     "component": "mcu",
@@ -1209,7 +1198,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "high_beam": {
     "data_item_name": "high_beam",
     "Ather comments": "High beam 1/0",
     "component": "mcu",
@@ -1220,7 +1209,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "tail_lamp": {
     "data_item_name": "tail_lamp",
     "Ather comments": "",
     "component": "mcu",
@@ -1231,7 +1220,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "stop_lamp": {
     "data_item_name": "stop_lamp",
     "Ather comments": "",
     "component": "mcu",
@@ -1242,7 +1231,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "horn": {
     "data_item_name": "horn",
     "Ather comments": "Horn 1/0",
     "component": "mcu",
@@ -1253,7 +1242,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "left_indicator": {
     "data_item_name": "left_indicator",
     "Ather comments": "left indicator 1/0",
     "component": "mcu",
@@ -1264,7 +1253,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_indicator": {
     "data_item_name": "right_indicator",
     "Ather comments": "right indicator 1/0",
     "component": "mcu",
@@ -1275,7 +1264,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "position_lamp": {
     "data_item_name": "position_lamp",
     "Ather comments": "",
     "component": "mcu",
@@ -1286,7 +1275,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "license_plate": {
     "data_item_name": "license_plate",
     "Ather comments": "",
     "component": "mcu",
@@ -1297,7 +1286,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "high_beam_fault": {
     "data_item_name": "high_beam_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1308,7 +1297,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "low_beam_fault": {
     "data_item_name": "low_beam_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1319,7 +1308,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "left_indicator_open_fault": {
     "data_item_name": "left_indicator_open_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1330,7 +1319,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_indicator_open_fault": {
     "data_item_name": "right_indicator_open_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1341,7 +1330,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "left_indicator_fault": {
     "data_item_name": "left_indicator_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1352,7 +1341,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "right_indicator_fault": {
     "data_item_name": "right_indicator_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1363,7 +1352,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "motor_fan_fault": {
     "data_item_name": "motor_fan_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1374,7 +1363,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "tail_lamp_fault": {
     "data_item_name": "tail_lamp_fault",
     "Ather comments": "",
     "component": "mcu",
@@ -1385,7 +1374,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "kill_switch": {
     "data_item_name": "kill_switch",
     "Ather comments": "",
     "component": "mcu",
@@ -1396,7 +1385,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "gsm_1_8v": {
     "data_item_name": "gsm_1_8v",
     "Ather comments": "",
     "component": "mcu",
@@ -1407,7 +1396,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "charger_status": {
     "data_item_name": "charger_status",
     "Ather comments": "",
     "component": "mcu",
@@ -1418,7 +1407,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "vcu_status": {
     "data_item_name": "vcu_status",
     "Ather comments": "",
     "component": "mcu",
@@ -1429,7 +1418,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "bms_status": {
     "data_item_name": "bms_status",
     "Ather comments": "",
     "component": "mcu",
@@ -1440,7 +1429,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "bms_key_in_status": {
     "data_item_name": "bms_key_in_status",
     "Ather comments": "",
     "component": "mcu",
@@ -1451,7 +1440,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "vehicle_previous_state": {
     "data_item_name": "vehicle_previous_state",
     "Ather comments": "",
     "component": "mcu",
@@ -1462,7 +1451,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "vehicle_current_state": {
     "data_item_name": "vehicle_current_state",
     "Ather comments": "1 - Parked 2 - Standby 3 - Riding 4 - Charging 5 - Updating",
     "component": "mcu",
@@ -1473,7 +1462,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "motor_previous_state": {
     "data_item_name": "motor_previous_state",
     "Ather comments": "",
     "component": "mcu",
@@ -1484,7 +1473,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "motor_current_state": {
     "data_item_name": "motor_current_state",
     "Ather comments": "1 - Ride, 2 - Sport, 3 - Reverse, 4 - Eco",
     "component": "mcu",
@@ -1495,7 +1484,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "motor_power_status": {
     "data_item_name": "motor_power_status",
     "Ather comments": "",
     "component": "",
@@ -1506,7 +1495,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "release_name": {
     "data_item_name": "release_name",
     "Ather comments": "Software version name",
     "component": "software",
@@ -1517,7 +1506,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "bms_version": {
     "data_item_name": "bms_version",
     "Ather comments": "BMS firmware version",
     "component": "bms",
@@ -1528,7 +1517,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "charger_version": {
     "data_item_name": "charger_version",
     "Ather comments": "Charger firmware version",
     "component": "charger",
@@ -1539,7 +1528,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "sim_ccid": {
     "data_item_name": "sim_ccid",
     "Ather comments": "SIM CCID",
     "component": "sim",
@@ -1550,7 +1539,7 @@
     "units": "",
     "Notes": "New Data item type"
   },
-  {
+  "sim_cimi": {
     "data_item_name": "sim_cimi",
     "Ather comments": "SIM CIMI",
     "component": "sim",
@@ -1561,7 +1550,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "mender_artifact_ver": {
     "data_item_name": "mender_artifact_ver",
     "Ather comments": "Mender version",
     "component": "software",
@@ -1572,7 +1561,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "mcu_version": {
     "data_item_name": "mcu_version",
     "Ather comments": "MCU firmware version",
     "component": "mcu",
@@ -1583,7 +1572,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "system_boot_time": {
     "data_item_name": "system_boot_time",
     "Ather comments": "Time at last boot",
     "component": "vehicle",
@@ -1594,7 +1583,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "vin": {
     "data_item_name": "vin",
     "Ather comments": "Bike chassis number",
     "component": "vehicle",
@@ -1605,7 +1594,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "bike_type": {
     "data_item_name": "bike_type",
     "Ather comments": "Gen1/Gen1.5",
     "component": "vehicle",
@@ -1616,7 +1605,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "key": {
     "data_item_name": "key",
     "Ather comments": "sends events like range_prediction, etc.",
     "component": "vehicle",
@@ -1627,7 +1616,7 @@
     "units": "",
     "Notes": ""
   },
-  {
+  "value": {
     "data_item_name": "value",
     "Ather comments": "sends event values like range_prediction, etc.",
     "component": "vehicle",
@@ -1638,4 +1627,4 @@
     "units": "",
     "Notes": ""
   }
-]
+}
