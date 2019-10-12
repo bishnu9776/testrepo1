@@ -1,11 +1,9 @@
-import {GPSTPV} from "../mocks/GPSTPV"
 import {parseChannelMessage} from "../../src/formatData/channelParser"
+import {CAN} from "../mocks/CAN"
 import probe from "../mocks/probe.json"
 
 describe("Parses GPSTPV", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...GPSTPV, probe})).to.eql([])
+    expect(parseChannelMessage({...CAN, probe})).to.eql([])
   })
-
-  it.skip("creates null events for missing keys")
 })

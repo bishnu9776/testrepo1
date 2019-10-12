@@ -22,7 +22,11 @@ const initializeGCPStream = metricRegistry =>
     log
   })
 
-const probe = {} // TODO: Read from file and pass to formatData. Exit application if probe not available
+const probe = {}
+
+// TODO:
+//  1. Read from file and pass to formatData. Exit application if probe not available
+//  2. Have a whitelist of keys to send out
 
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
