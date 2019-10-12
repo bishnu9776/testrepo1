@@ -2,11 +2,12 @@ import R from "ramda"
 import {bindNodeCallback, forkJoin, merge, Observable, of, throwError} from "rxjs"
 import {bufferTime, catchError, concatAll, concatMap, filter, finalize, flatMap, switchMap} from "rxjs/operators"
 import {ErrorCodes as kafkaErrorCodes, Producer as KafkaProducer} from "vi-kafka-stream-client"
+import {ACK_MSG_TAG} from "./constants"
 
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
 
-export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
+export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
     dataTopics: ["test-topic-ather"],
     probeTopics: ["ather-probes"],
@@ -21,9 +22,9 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
         "queue.buffering.max.messages": parseInt(env.VI_KAFKA_SINK_QUEUE_BUFFERING_MAX_MESSAGES, 10) || 100000, // NOTE: queue.buffering.max.messages >= batch.num.messages. Else, queue full error!
         "batch.num.messages": parseInt(env.VI_KAFKA_SINK_BATCH_NUM_MESSAGES, 10) || 10000,
         dr_cb: true, // message does not appear in delivery report
-        "statistics.interval.ms": parseInt(env.VI_KAFKA_SINK_STATISTICS_INTERVAL_MS, 10) || 0, // TODO: Why do we need this?
+        "statistics.interval.ms": 0,
         "log.connection.close": false,
-        "max.in.flight.requests.per.connection": 1 // TODO: Can this be more than 1?
+        "max.in.flight.requests.per.connection": parseInt(env.VI_KAFKA_SINK_MAX_REQUESTS_PER_CONNECTION, 10) || 3
       },
       topicConfig: {
         "request.required.acks": parseInt(env.VI_KAFKA_SINK_REQUEST_REQUIRED_ACKS, 10) || 1
@@ -41,7 +42,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
     flushTimeout: Number.parseInt(env.VI_FLUSH_TIMEOUT, 10) || 5000
   }
 
-  log.info({appConfig: JSON.stringify(config, null, 2)}, "Collector kafka producer config")
+  log.info({appConfig: JSON.stringify(config, null, 2)}, "Kafka producer config")
 
   const strategies = {
     MTConnectDevices: {
@@ -51,6 +52,9 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
     MTConnectDataItems: {
       topics: config.dataTopics,
       getMessageKey: event => `${event.device_uuid}`
+    },
+    [ACK_MSG_TAG]: {
+      topics: []
     }
   }
 
@@ -63,7 +67,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
   }
 
   const flushAndThrow = producer => err => {
-    log.error(`Kafka sink: Got error while sending message to kafka: ${err.message}`)
     const flushObs = bindNodeCallback(producer.flush.bind(producer))
     return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
   }
@@ -75,20 +78,22 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
       return of(event)
     }
 
-    // strip meta from event
+    if (event.tag === ACK_MSG_TAG) {
+      return of(event)
+    }
 
-    const value = JSON.stringify(event)
+    const value = JSON.stringify(R.dissoc("meta", event))
     const key = (getMessageKey && getMessageKey(event)) || null
     const observables = topics.map(
       topic =>
         new Observable(observer => {
-          // send only non-ack events
-
           producer.produce(topic, null, Buffer.from(value), key, Date.now(), err => {
             if (!err) {
               observer.next(event)
+              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {tag: event.tag})
               observer.complete()
             } else {
+              log.error(`Kafka sink: Got error while sending message to kafka: ${err.message}`)
               observer.error({...err, kafka_topic: topic})
             }
           })
@@ -124,7 +129,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
 
   return stream =>
     Producer(globalConfig, topicConfig)
-      .producer$({retryConfig, log, errorConfig})
+      .producer$({retryConfig, log, errorConfig}) // producer throws after 30 seconds if unable to connect
       .pipe(
         switchMap(producer => {
           producer.setPollInterval(config.deliveryReportPollInterval)
@@ -135,7 +140,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer}) => {
             filter(R.complement(R.isEmpty)),
             concatMap(events => forkJoin(R.map(send(producer), events))),
             concatAll(),
-            // ack message here
             catchError(flushAndThrow(producer)),
             finalize(() => {
               log.warn("Disconnecting producer")

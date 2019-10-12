@@ -2,17 +2,17 @@ import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
 import {errorFormatter} from "./utils/errorFormatter"
 
-// TODO
-// 1. Client library repeatedly extends the acknowledgement deadline for backlogged messages -> How does this happen? How do we configure this?
-// 2. Reproduce a case where message exceeds maxExtension deadline and observe how application reacts
-
 const {env} = process
 const parseNumber = string => {
   string ? parseInt(string, 10) : false
 }
 
 export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
-  return new Observable(observer => {
+  function acknowledgeMessage(message) {
+    message.ack()
+  }
+
+  const stream = new Observable(observer => {
     const pubsubClient = new PubSub({
       projectId,
       keyFilename: credentialsPath
@@ -20,15 +20,19 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
 
     const subscriberOptions = {
       flowControl: {
-        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 2000000,
-        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10000,
-        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 100000 // 100 MB
+        maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 1000,
+        maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10,
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
       },
       streamingOptions: {
-        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 200000,
+        highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 500, // Looks like this will be overridden by maxMessages
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 5,
-        timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 5000
-      }
+        timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 10000
+      },
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 10
+      // If this is too low, modifyAckDeadline will be called too many times causing (Request payload size exceeds the limit: 524288 bytes.) error
+      // https://github.com/googleapis/nodejs-pubsub/pull/65/files
+      // sample ackID has 176 characters which is greater than what's mentioned in ^
     }
 
     log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
@@ -38,11 +42,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
 
     subscription.on("message", msg => {
       metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
-
-      observer.next({
-        meta: {ackId: msg.ackId, id: msg.id, attributes: msg.attributes},
-        data: msg.data
-      })
+      observer.next(msg)
     })
 
     subscription.on("error", error => {
@@ -54,7 +54,14 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       log.info("Unsubscribing GCP client")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
-      subscription.close() // https://github.com/ReactiveX/rxjs/issues/4222
+      subscription.close()
+      // https://github.com/ReactiveX/rxjs/issues/4222. This should be long enough to give time for clearing buffer and sending ACKs/NACKs before we retry the observable chain
+      // https://github.com/googleapis/nodejs-pubsub/issues/725
     }
   })
+
+  return {
+    acknowledgeMessage,
+    stream
+  }
 }

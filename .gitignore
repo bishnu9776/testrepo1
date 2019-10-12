@@ -12,6 +12,7 @@ data/
 .DS_Store
 data/
 src/creds/*
+scripts/gcpConsumer.js
 .npmrc
 Dockerfile
 

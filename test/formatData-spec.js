@@ -1,0 +1,10 @@
+describe("Format data", () => {
+  it("adds id, data_item_id, data_item_name, device_uuid, value")
+  it("decompresses")
+  it("gives out array of messages")
+  it("returns null if parse fails")
+  it("returns null if decompress fails")
+  it("can channel")
+  it("channel 1")
+  it("channel 2..")
+})

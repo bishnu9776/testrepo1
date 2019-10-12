@@ -1,20 +1,32 @@
-describe("Resiliency tests", () => {
-  describe("Kafka resilience", () => {
-    it("retries connection to Kafka based on retry policy")
-    it("pauses source and does not consume events when retrying connection to Kafka")
-    it("does not acknowledge events which aren't sent to Kafka")
+describe("Resiliency smoke tests", () => {
+  describe("GCP resiliency", () => {
+    it.skip("not able to connect on bootstrap", () => {
+      // keeps retrying till successful connection
+    })
+
+    it.skip("loses connection after bootstrap", () => {
+      // keeps retrying till successful connection
+      // Getting UnhandledPromiseRejectionWarning, logging and ignoring for now
+    })
   })
 
-  describe("GCP resilience", () => {
-    it("continuously tries to connect to GCP as per retry policy if not able to connect to GCP")
+  describe("Kafka resiliency", () => {
+    // we might get a queue full error if we get too many messages after decompression
+    // can try tuning above by configuring max gcp internal buffer
+    it.skip("not able to connect on bootstrap", () => {
+      // keeps retrying till successful connection
+    })
+
+    it("loses connection after bootstrap", () => {
+      // keeps retrying till successful connection
+    })
   })
 
-  describe("Smoke tests", () => {
-    it.skip("does not blow up memory if processing is slow", () => {
-      // set flow control settings (maxMessagesInProgress as 5)
-      // have a huge setTimeout for every message before acking
-      // observe memory of progress
-      // observe how many times .on event handler is being called
+  describe("Pipeline resiliency", () => {
+    it.skip("Pipeline resiliency - Error parsing event or somewhere between getting gcp event and producing to kafka")
+
+    it.skip("Memory does not blow up by consuming too much from GCP", () => {
+      // By limiting maxMessages in flow control settings, able to control consumption rate
     })
   })
 })
