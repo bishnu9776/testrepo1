@@ -7,9 +7,10 @@ const csvpath = process.env.VI_PATH_TO_PROBE_CSV || path.join(__dirname, "/probe
 Convertor()
 .fromFile(csvpath)
   .then(json => {
+    const keyedJson = keyByDataItemName(json)
     const probeFilePath = path.join(__dirname, "probe.json")
     try {
-      fs.writeFileSync(probeFilePath, JSON.stringify(json, null, 2), {flag: "w"})
+      fs.writeFileSync(probeFilePath, JSON.stringify(keyedJson, null, 2), {flag: "w"})
     } catch (error) {
       console.error("Error writing probe json", error)
     }
@@ -17,3 +18,11 @@ Convertor()
   .catch(error => {
     console.error("Error converting to JSON", error)
   })
+
+
+function keyByDataItemName(jsonArray) {
+  return jsonArray.reduce((acc, dataItem) => {
+    acc[dataItem.data_item_name] = dataItem
+    return acc
+  }, {})
+}
