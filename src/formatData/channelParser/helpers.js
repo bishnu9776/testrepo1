@@ -1,5 +1,3 @@
-import {log} from "../../logger"
-
 export const getValueKey = ({probeInfo}) => {
   if (probeInfo.category === "SAMPLE") {
     return "value_sample"
@@ -8,8 +6,6 @@ export const getValueKey = ({probeInfo}) => {
   if (probeInfo.category === "EVENT") {
     return "value_event"
   }
-
-  // log warn and event
 
   return null
 }
@@ -31,6 +27,12 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
     }
   }
 
-  log.warn(`Could not find probe for ${dataItemName}. Ignoring event.`)
-  return null
+  return {
+    device_uuid: bikeId,
+    data_item_name: dataItemName,
+    data_item_id: `${dataItemName}-${version}`,
+    timestamp,
+    id: `${bikeId}-${dataItemName}-${timestamp}`,
+    value
+  }
 }

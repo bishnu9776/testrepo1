@@ -27,6 +27,8 @@ const probe = {}
 // TODO:
 //  1. Read from file and pass to formatData. Exit application if probe not available
 //  2. Have a whitelist of keys to send out
+//  3. Data loss metrics
+//  4. Group by bike x data_item_id and do distinctUntilChanged before sending to Kafka
 
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)

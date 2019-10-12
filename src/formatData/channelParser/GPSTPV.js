@@ -1,7 +1,8 @@
 import {difference, flatten, mergeDeepLeft, pick} from "ramda"
 import {getDataItem} from "./helpers"
 
-const eventOrSampleKeys = [
+// Can we rely on this being a whitelist or should we use a blacklist?
+const eventAndSampleKeys = [
   "mode",
   "ept_s",
   "epx_m",
@@ -42,10 +43,10 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
         }
       )
 
-      const missingKeys = difference(eventOrSampleKeys, Object.keys(event))
+      const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
 
       const eventAndSampleDataItems = Object.keys(event)
-        .filter(dataItemName => eventOrSampleKeys.includes(dataItemName))
+        .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
         .map(dataItemName => {
           return getDataItem({probe, timestamp, attributes, dataItemName, value: event[dataItemName]})
         })
