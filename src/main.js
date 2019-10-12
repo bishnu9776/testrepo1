@@ -14,6 +14,9 @@ metricRegistry.startStatsReporting()
 const app = expressApp()
 const port = parseInt(process.env.VI_PORT || "3000", 10)
 
+const maxMessagesToProcess = 10
+let numMessagesProcessed = 0
+
 app.listen(port, () =>
   log.info(
     {
@@ -24,6 +27,12 @@ app.listen(port, () =>
 )
 
 pipeline.pipe(timeout(eventTimeout)).subscribe({
+  next: () => {
+    numMessagesProcessed++
+    if (numMessagesProcessed === maxMessagesToProcess) {
+      delayAndExit(0)
+    }
+  },
   complete: () => {
     log.error("GCP stream completed. Exiting application")
     delayAndExit(0)

@@ -13,6 +13,7 @@ data/
 data/
 src/creds/*
 scripts/gcpConsumer.js
+test/dummyMocks/
 .npmrc
 Dockerfile
 

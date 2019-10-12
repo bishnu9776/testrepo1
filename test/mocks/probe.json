@@ -1,0 +1,8 @@
+{
+  "data_item_name_1" : {
+    "data_item_type": "foo"
+  },
+  "data_item_name_2" : {
+    "data_item_type": "bar"
+  }
+}

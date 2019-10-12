@@ -22,14 +22,13 @@ const initializeGCPStream = metricRegistry =>
     log
   })
 
-// TODO
-// 1. Make retry operator a node module
+const probe = {} // TODO: Read from file and pass to formatData. Exit application if probe not available
 
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
 
   return stream.pipe(
-    mergeMap(event => from(formatData({log, metricRegistry})(event))),
+    mergeMap(event => from(formatData({log, metricRegistry, probe})(event))),
     filter(x => !!x),
     map(x => flatten([x])),
     concatMap(events => from(events)),

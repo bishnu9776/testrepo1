@@ -22,7 +22,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       flowControl: {
         maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 10,
         maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10,
-        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 1 // 10 MB
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
       },
       streamingOptions: {
         highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 5, // Looks like this will be overridden by maxMessages
