@@ -2,3 +2,4 @@ version.js
 node_modules/
 dist/
 coverage/
+scripts/
