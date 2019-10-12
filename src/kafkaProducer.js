@@ -9,12 +9,11 @@ const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalC
 
 export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
-    dataTopics: env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : ["test-topic-ather"],
-    probeTopics: ["ather-probes"],
+    dataTopics: env.VI_KAFKA_SINK_DATA_TOPIC ? [env.VI_KAFKA_SINK_DATA_TOPIC] : ["test-topic-ather"],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
     "vi-kafka-stream-client-options": {
       globalConfig: {
-        "metadata.broker.list": env.VI_KAFKA_BROKER || "localhost:9092",
+        "metadata.broker.list": env.VI_KAFKA_URL || "localhost:9092",
         "client.id": env.VI_KAFKA_SINK_CLIENT_ID || `ather-test`,
         "retry.backoff.ms": parseInt(env.VI_KAFKA_SINK_RETRY_BACKOFF_MS, 10) || 500,
         "message.send.max.retries": parseInt(env.VI_KAFKA_SINK_MESSAGE_SEND_MAX_RETRIES, 10) || 10, // retry for 5 mins
@@ -45,10 +44,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
   log.info({appConfig: JSON.stringify(config, null, 2)}, "Kafka producer config")
 
   const strategies = {
-    MTConnectDevices: {
-      topics: config.probeTopics,
-      getMessageKey: probe => `MTConnectDevices-${probe.agent}-${probe.device_uuid}`
-    },
     MTConnectDataItems: {
       topics: config.dataTopics,
       getMessageKey: event => `${event.device_uuid}`
