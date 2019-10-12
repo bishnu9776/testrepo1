@@ -35,7 +35,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       // sample ackID has 176 characters which is greater than what's mentioned in ^
     }
 
-    log.info({ctx: {config: subscriberOptions}}, "Connecting to GCP")
+    log.info({ctx: {config: JSON.stringify(subscriberOptions, null, 2)}}, "Connecting to GCP")
     const subscription = pubsubClient.subscription(subscriptionName, subscriberOptions)
 
     // There is no event emitted to identify successful connection to GCP. Will rely on source stats.
