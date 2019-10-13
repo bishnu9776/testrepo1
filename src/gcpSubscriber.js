@@ -7,7 +7,7 @@ const parseNumber = string => {
   return string ? parseInt(string, 10) : false
 }
 
-const parseableChannels = ["mcu", "can", "gps_tpv", "heman"]
+const parseableChannels = ["mcu", "can", "gps_tpv", "heman", "imu", "events"]
 export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   function acknowledgeMessage(message) {
     message.ack()

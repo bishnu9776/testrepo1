@@ -1,9 +1,9 @@
 import {parseChannelMessage} from "../../src/formatData/channelParser"
-import {events} from "../mocks/events"
+import {EVENTS} from "../mocks/EVENTS"
 import probe from "../mocks/probe.json"
 
-describe.skip("Parses events", () => {
+describe.skip("Parses EVENTS", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...events, probe})).to.eql([])
+    expect(parseChannelMessage({...EVENTS, probe})).to.eql([])
   })
 })

@@ -1,4 +1,4 @@
-export const events = {
+export const EVENTS = {
   attributes: {
     version: "v1",
     channel: "events",

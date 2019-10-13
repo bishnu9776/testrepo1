@@ -1,7 +1,7 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 
-export const parseEvents = ({data, attributes, probe}) => {
+export const parseEVENTS = ({data, attributes, probe}) => {
   return flatten(
     data.map(e => {
       const timestamp = new Date(e.timestamp * 1000).toISOString()

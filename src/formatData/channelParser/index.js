@@ -4,7 +4,8 @@ import {parseCAN} from "./CAN"
 import {parseMCU} from "./MCU"
 import {parseHEMAN} from "./HEMAN"
 import {parseIMU} from "./IMU"
-import {parseEvents} from "./events"
+import {parseEVENTS} from "./EVENTS"
+import {parseVCU} from "./VCU"
 
 // TODO: Do merge probe info and using correct value key outside of all the parsers
 export const parseChannelMessage = ({data, attributes, probe}) => {
@@ -20,7 +21,9 @@ export const parseChannelMessage = ({data, attributes, probe}) => {
     case "imu":
       return parseIMU({data, attributes, probe})
     case "events":
-      return parseEvents({data, attributes, probe})
+      return parseEVENTS({data, attributes, probe})
+    case "vcu":
+      return parseVCU({data, attributes, probe})
     default: {
       log.warn({ctx: {message: data.toString()}}, "Could not parse message")
       return null
