@@ -39,8 +39,7 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
           data_item_type: "LOCATION",
           data_item_id: `location-${attributes.version}`,
           timestamp,
-          id: `${bikeId}-location-${timestamp}`,
-          tag: "MTConnectDataItems"
+          device_uuid: bikeId
         }
       )
 

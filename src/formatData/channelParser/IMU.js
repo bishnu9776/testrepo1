@@ -19,9 +19,7 @@ export const parseIMU = ({data, attributes, probe}) => {
         data_item_name: "acc", // TODO: Merge probe, what's the data_item_name for this?
         device_uuid: bike_id,
         channel,
-        timestamp,
-        tag: "MTConnectDataItems",
-        id: `${bike_id}-acc-${timestamp}` // eslint-disable-line
+        timestamp
       }
 
       const gyrEvent = {
@@ -33,9 +31,7 @@ export const parseIMU = ({data, attributes, probe}) => {
         data_item_name: "gyr", // TODO: Merge probe, what's the data_item_name for this?
         device_uuid: bike_id,
         channel,
-        timestamp,
-        tag: "MTConnectDataItems",
-        id: `${bike_id}-gyr-${timestamp}` // eslint-disable-line
+        timestamp
       }
 
       return [accEvent, gyrEvent]

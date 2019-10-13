@@ -90,7 +90,8 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
           producer.produce(topic, null, Buffer.from(value), key, Date.now(), err => {
             if (!err) {
               observer.next(event)
-              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {tag: event.tag})
+              const {channel, device_uuid, data_item_name} = event // eslint-disable-line
+              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {channel, device_uuid, data_item_name})
               observer.complete()
             } else {
               log.error(`Kafka sink: Got error while sending message to kafka: ${err.message}`)

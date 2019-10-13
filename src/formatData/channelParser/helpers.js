@@ -22,9 +22,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
       data_item_name: dataItemName,
       data_item_id: `${dataItemName}-${version}`,
       timestamp,
-      id: `${bikeId}-${dataItemName}-${timestamp}`,
       [valueKey]: value,
-      tag: "MTConnectDataItems",
       channel
     }
   }
@@ -34,9 +32,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
     data_item_name: dataItemName,
     data_item_id: `${dataItemName}-${version}`,
     timestamp,
-    id: `${bikeId}-${dataItemName}-${timestamp}`,
     value: value.toString(),
-    tag: "MTConnectDataItems",
     channel
   }
 }

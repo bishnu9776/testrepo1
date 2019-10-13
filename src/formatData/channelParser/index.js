@@ -6,8 +6,9 @@ import {parseHEMAN} from "./HEMAN"
 import {parseIMU} from "./IMU"
 import {parseEVENTS} from "./EVENTS"
 import {parseVCU} from "./VCU"
+import {parseSESSION} from "./SESSION"
+import {parseBIKEINFO} from "./BIKEINFO"
 
-// TODO: Do merge probe info and using correct value key outside of all the parsers
 export const parseChannelMessage = ({data, attributes, probe}) => {
   switch (attributes.channel) {
     case "gps_tpv":
@@ -24,6 +25,10 @@ export const parseChannelMessage = ({data, attributes, probe}) => {
       return parseEVENTS({data, attributes, probe})
     case "vcu":
       return parseVCU({data, attributes, probe})
+    case "session":
+      return parseSESSION({data, attributes, probe})
+    case "bike_info":
+      return parseBIKEINFO({data, attributes, probe})
     default: {
       log.warn({ctx: {message: data.toString()}}, "Could not parse message")
       return null

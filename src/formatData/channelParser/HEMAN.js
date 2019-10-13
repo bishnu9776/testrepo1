@@ -13,8 +13,8 @@ export const parseHEMAN = ({data, attributes}) => {
         device_uuid: bike_id,
         value_event: event.error_code,
         is_valid: event.isvalid,
-        channel,
-        tag: "MTConnectDataItems" // TODO: What's the data item name for this? How do you construct id?
+        channel
+        // TODO: What's the data item name for this? How do you construct id?
         // TODO: Merge probe info
       }
     })
