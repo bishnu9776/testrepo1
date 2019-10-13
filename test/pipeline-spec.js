@@ -1,4 +1,4 @@
-describe("Pipeline spec", () => {
+describe.skip("Pipeline spec", () => {
   it("writes valid events to Kafka and passes them through", () => {
     // getGCPStream
     // getKafkaProducer

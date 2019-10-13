@@ -1,3 +1,3 @@
-describe("Merge probe info", () => {
+describe.skip("Merge probe info", () => {
   it("merges probe", () => {})
 })

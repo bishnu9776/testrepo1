@@ -1,4 +1,4 @@
-describe("Resiliency smoke tests", () => {
+describe.skip("Resiliency smoke tests", () => {
   describe("GCP resiliency", () => {
     it("not able to connect on bootstrap", () => {
       // keeps retrying till successful connection
