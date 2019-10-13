@@ -12,6 +12,7 @@ export const parseBIKEINFO = ({data, attributes}) => {
       data_item_name: "bike_info",
       data_item_id: `bike_info-${version}`,
       device_uuid: bike_id,
+      value: null,
       channel
       // TODO: What's the data item name for this?
       // TODO: Merge probe info?
