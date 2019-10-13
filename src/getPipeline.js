@@ -29,6 +29,7 @@ const initializeGCPStream = metricRegistry =>
 //  3. How to use seq_num and global_seq_num?
 //  4. Clean up parsers. Go through comments in individual parsers, and their spec
 //  5. Do merge probe info and using correct value key outside of all the parsers
+//  6. Heartbeats
 
 const stateStore = {}
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid"]
