@@ -2,18 +2,12 @@ import {formatData} from "../src/formatData/formatData"
 import probe from "./mocks/probe.json"
 import {MCU} from "./mocks/MCU"
 import {ACK_MSG_TAG} from "../src/constants"
+import {metricRegistry} from "./mocks/metricRegistry"
+import {log} from "./mocks/logger"
+import {getMockGCPEvent} from "./mocks/getMockGCPEvent"
+import {BIKEINFO} from "./mocks/BIKEINFO"
 
-describe.skip("Format data", () => {
-  const log = sinon.stub({
-    debug: () => {},
-    info: () => {},
-    warn: () => {},
-    error: () => {}
-  })
-  const metricRegistry = sinon.stub({
-    updateStat: () => {}
-  })
-
+describe("Format data", () => {
   before(() => {
     process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
   })
@@ -23,7 +17,13 @@ describe.skip("Format data", () => {
   })
 
   it("dedups events", async () => {
-    const message = {data: Buffer.from(JSON.stringify(MCU.data)), attributes: MCU.attributes}
+    const message = getMockGCPEvent(MCU)
+    const output = (await formatData({log, metricRegistry, probe})(message)).filter(e => e.tag !== ACK_MSG_TAG)
+    expect(output).to.eql([])
+  })
+
+  it("prod error", async () => {
+    const message = getMockGCPEvent(BIKEINFO)
     const output = (await formatData({log, metricRegistry, probe})(message)).filter(e => e.tag !== ACK_MSG_TAG)
     expect(output).to.eql([])
   })

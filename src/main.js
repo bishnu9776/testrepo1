@@ -1,8 +1,7 @@
-import {timeout} from "rxjs/operators"
 import {expressApp} from "node-microservice"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
-import {getPipeline} from "./getPipeline"
+import {getPipeline} from "./pipeline"
 import {errorFormatter} from "./utils/errorFormatter"
 
 const delayAndExit = (exitCode, delayMs = 5000) => {
@@ -20,8 +19,7 @@ try {
 }
 
 const metricRegistry = getMetricRegistry(log)
-const pipeline = getPipeline({metricRegistry, probe})
-const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
+const pipeline = getPipeline({metricRegistry, probe, log})
 
 metricRegistry.startStatsReporting()
 
@@ -37,7 +35,7 @@ app.listen(port, () =>
   )
 )
 
-pipeline.pipe(timeout(eventTimeout)).subscribe({
+pipeline.subscribe({
   complete: () => {
     log.error("GCP stream completed. Exiting application")
     delayAndExit(0)

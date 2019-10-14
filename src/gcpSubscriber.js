@@ -8,7 +8,7 @@ const parseNumber = string => {
   return string ? parseInt(string, 10) : false
 }
 
-export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
+export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   function acknowledgeMessage(message) {
     message.ack()
   }
@@ -46,6 +46,7 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
         channel: path(["attributes", "channel"], msg),
         device_uuid: path(["attributes", "bike_id"], msg)
       })
+
       observer.next(msg)
     })
 

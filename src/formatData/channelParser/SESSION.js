@@ -1,14 +1,13 @@
 import {flatten} from "ramda"
 
-export const parseSESSION = ({data, attributes, probe}) => {
+export const parseSESSION = ({data, attributes}) => {
   return flatten(
     data.map(event => {
-      const probeInfo = probe.vehicle_status
-
       const {version, bike_id, channel} = attributes // eslint-disable-line
       const timestamp = new Date(event.timestamp * 1000).toISOString()
-      const start_ts = new Date(parseFloat(event.start_timestamp) * 1000).toISOString() // eslint-disable-line
-      const end_ts = new Date(parseFloat(event.end_timestamp) * 1000).toISOString() // eslint-disable-line
+
+      const start_ts = event.start_timestamp ? new Date(parseFloat(event.start_timestamp) * 1000).toISOString() : null// eslint-disable-line
+      const end_ts = event.end_timestamp ? new Date(parseFloat(event.end_timestamp) * 1000).toISOString() : null // eslint-disable-line
       return {
         timestamp,
         data_item_name: "vehicle_status",
@@ -19,8 +18,7 @@ export const parseSESSION = ({data, attributes, probe}) => {
         start_ts,
         end_ts,
         channel,
-        sequence: event.seq_num,
-        ...probeInfo
+        sequence: event.seq_num
       }
     })
   ).filter(e => !!e)

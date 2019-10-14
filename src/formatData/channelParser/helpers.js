@@ -1,6 +1,14 @@
-import {groupBy, sortWith, ascend, prop, intersection, equals, flatten} from "ramda"
+import {ascend, equals, flatten, groupBy, intersection, prop, sortWith} from "ramda"
 
-export const getValueKey = ({probeInfo}) => {
+export const getValueKey = ({probeInfo, dataItemName}) => {
+  if (dataItemName === "acc" || dataItemName === "gyr") {
+    return "value_xyz"
+  }
+
+  if (!probeInfo) {
+    return "value"
+  }
+
   if (probeInfo.category === "SAMPLE") {
     return "value_sample"
   }
@@ -9,33 +17,22 @@ export const getValueKey = ({probeInfo}) => {
     return "value_event"
   }
 
-  return null
+  if (probeInfo.category === "LOCATION") {
+    return "value_location"
+  }
+
+  return "value"
 }
 
-export const getDataItem = ({attributes, dataItemName, timestamp, value, probe, sequence}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence}) => {
   const {version, bike_id: bikeId, channel} = attributes
-  const probeInfo = probe[dataItemName] || {}
-  const valueKey = getValueKey({probeInfo})
-
-  if (valueKey) {
-    return {
-      ...probeInfo,
-      device_uuid: bikeId,
-      data_item_name: dataItemName,
-      data_item_id: `${dataItemName}-${version}`,
-      timestamp,
-      [valueKey]: value,
-      channel,
-      sequence
-    }
-  }
 
   return {
     device_uuid: bikeId,
     data_item_name: dataItemName,
     data_item_id: `${dataItemName}-${version}`,
     timestamp,
-    value: value.toString(),
+    value,
     channel,
     sequence
   }

@@ -9,26 +9,26 @@ import {parseVCU} from "./VCU"
 import {parseSESSION} from "./SESSION"
 import {parseBIKEINFO} from "./BIKEINFO"
 
-export const parseChannelMessage = ({data, attributes, probe}) => {
+export const parseChannelMessage = ({data, attributes}) => {
   switch (attributes.channel) {
     case "gps_tpv":
-      return parseGPSTPV({data, attributes, probe})
+      return parseGPSTPV({data, attributes})
     case "can":
-      return parseCAN({data, attributes, probe})
+      return parseCAN({data, attributes})
     case "mcu":
-      return parseMCU({data, attributes, probe})
+      return parseMCU({data, attributes})
     case "heman":
-      return parseHEMAN({data, attributes, probe})
+      return parseHEMAN({data, attributes})
     case "imu":
-      return parseIMU({data, attributes, probe})
+      return parseIMU({data, attributes})
     case "events":
-      return parseEVENTS({data, attributes, probe})
+      return parseEVENTS({data, attributes})
     case "vcu":
-      return parseVCU({data, attributes, probe})
+      return parseVCU({data, attributes})
     case "session":
-      return parseSESSION({data, attributes, probe})
+      return parseSESSION({data, attributes})
     case "bike_info":
-      return parseBIKEINFO({data, attributes, probe})
+      return parseBIKEINFO({data, attributes})
     default: {
       log.warn({ctx: {message: data.toString()}}, "Could not parse message")
       return null

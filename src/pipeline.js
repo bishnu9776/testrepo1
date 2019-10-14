@@ -1,10 +1,9 @@
-import {concatMap, filter, map, mergeMap, tap} from "rxjs/operators"
+import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
 import {path} from "ramda"
-import {getGCPstream} from "./gcpSubscriber"
-import {log} from "./logger"
+import * as gcpSubscriber from "./gcpSubscriber"
 import {formatData} from "./formatData/formatData"
-import {kafkaProducer} from "./kafkaProducer"
+import * as kafkaProducer from "./kafkaProducer"
 import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
 import {ACK_MSG_TAG} from "./constants"
 
@@ -12,9 +11,15 @@ const {env} = process
 const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION
 const projectId = env.VI_GCP_PROJECT_ID
 const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH
+const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
 
-const initializeGCPStream = metricRegistry =>
-  getGCPstream({
+// TODO:
+//  1. Handle disk full exception in Kafka (currently silently dies)
+
+const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
+
+export const getPipeline = ({metricRegistry, probe, log}) => {
+  const {acknowledgeMessage, stream} = gcpSubscriber.getGCPStream({
     subscriptionName,
     projectId,
     credentialsPath,
@@ -22,21 +27,12 @@ const initializeGCPStream = metricRegistry =>
     log
   })
 
-// TODO:
-//  1. Clean up parsers. Go through comments in individual parsers, and their spec
-//  2. Do merge probe info and using correct value key outside of all the parsers
-//  3. Handle disk full exception in Kafka (currently silently dies)
-//  4. Do we need version and channel as top level keys?
-
-const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
-
-export const getPipeline = ({metricRegistry, probe}) => {
-  const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
-
   return stream.pipe(
+    timeout(eventTimeout),
     mergeMap(event => from(formatData({log, metricRegistry, probe})(event))),
     filter(x => !!x),
     concatMap(events => from(events)),
+    // TODO: Remove this after writing unit tests for parsers to include all the necessary keys
     filter(event => {
       const eventKeys = Object.keys(event)
       const hasRequiredKeys = requiredKeys.reduce((acc, x) => eventKeys.includes(x) && acc, true)
@@ -53,15 +49,12 @@ export const getPipeline = ({metricRegistry, probe}) => {
       return {tag: "MTConnectDataItems", ...event, agent: "ather", id, instance_id: id, received_at: new Date().toISOString()} // eslint-disable-line
     }),
     filter(x => !!x),
-    kafkaProducer({log, metricRegistry}),
+    kafkaProducer.getKafkaProducer({log, metricRegistry}),
     tap(event => {
       if (event.tag === ACK_MSG_TAG) {
         const eventPublishTime = event.message.publishTime.getTime()
         const consumerLag = event.message.received - eventPublishTime
 
-        metricRegistry.updateStat("Gauge", "lastAckedMessagePublishTime", eventPublishTime, {
-          device_uuid: path(["message", "attributes", "bike_id"], event)
-        })
         metricRegistry.updateStat("Gauge", "consumerLag", consumerLag, {
           device_uuid: path(["message", "attributes", "bike_id"], event)
         })

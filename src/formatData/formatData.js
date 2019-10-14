@@ -1,10 +1,10 @@
-// import path from "path"
-// import fs from "fs"
 import {flatten} from "ramda"
 import {decompressMessage} from "./decompressMessage"
 import {parseChannelMessage} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {dedupData} from "./channelParser/helpers"
+import {errorFormatter} from "../utils/errorFormatter"
+import {mergeProbeInfo} from "./mergeProbeInfo"
 
 const {env} = process
 export const formatData = ({log, metricRegistry, probe}) => async msg => {
@@ -30,17 +30,22 @@ export const formatData = ({log, metricRegistry, probe}) => async msg => {
   try {
     parsedMessage = JSON.parse(decompressedMessage.toString())
     const dataItems = parseChannelMessage({data: parsedMessage, attributes: msg.attributes, probe})
-    return dataItems ? flatten(dedupFn(dataItems)).concat({message: msg, tag: ACK_MSG_TAG}) : null
-    // const filepath = path.join(__dirname, `../../test/dummyMocks/${msg.ackId}.json`)
-    // const objToWrite = {
-    //   attributes: msg.attributes,
-    //   data: parsedMessage
-    // }
-    // fs.writeFileSync(filepath, JSON.stringify(objToWrite, null, 2), {flag: "w"})
-    // return [flatten([parsedMessage]).map(x => ({...x, tag: "MTConnectDataItems"})), {message: msg, tag: ACK_MSG_TAG}]
+    return dataItems
+      ? flatten(dedupFn(dataItems))
+          .map(mergeProbeInfo(probe))
+          .concat({message: msg, tag: ACK_MSG_TAG})
+      : null
   } catch (e) {
     metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-    log.error({ctx: {data: decompressedMessage.toString()}}, "Could not parse string to JSON") // change to debug once we know how to handle all data
+    let dataToLog
+
+    try {
+      dataToLog = decompressedMessage.toString()
+    } catch (_) {
+      dataToLog = JSON.stringify(decompressedMessage, null, 2)
+    }
+
+    log.error({ctx: {data: dataToLog}, error: errorFormatter(e)}, "Could not parse string to JSON") // change to debug once we know how to handle all data
     return null
   }
 }

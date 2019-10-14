@@ -3,7 +3,6 @@ import {getDataItem} from "./helpers"
 
 const locationKeys = ["lat_deg", "lon_deg"]
 
-// Can we rely on this being a whitelist or should we use a blacklist?
 const eventAndSampleKeys = [
   "mode",
   "ept_s",
@@ -21,7 +20,7 @@ const eventAndSampleKeys = [
 ]
 
 // TODO: Handle missing location
-export const parseGPSTPV = ({data, attributes, probe}) => {
+export const parseGPSTPV = ({data, attributes}) => {
   return flatten(
     data.map(event => {
       const bikeId = attributes.bike_id
@@ -34,7 +33,6 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
             lat_deg: null,
             lon_deg: null
           },
-          ...probe.lat_deg,
           data_item_name: "location",
           data_item_type: "LOCATION",
           data_item_id: `location-${attributes.version}`,
@@ -50,7 +48,6 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
         .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
         .map(dataItemName => {
           return getDataItem({
-            probe,
             timestamp,
             attributes,
             dataItemName,
@@ -61,7 +58,7 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
         .filter(e => !!e)
 
       const missingKeyEvents = missingKeys.map(dataItemName => {
-        return getDataItem({probe, timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
+        return getDataItem({timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
       })
 
       return [locationEvent, ...eventAndSampleDataItems, ...missingKeyEvents]

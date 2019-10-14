@@ -7,7 +7,7 @@ import {ACK_MSG_TAG} from "./constants"
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
 
-export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
+export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
     dataTopics: env.VI_KAFKA_SINK_DATA_TOPIC ? [env.VI_KAFKA_SINK_DATA_TOPIC] : ["test-topic-ather"],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
