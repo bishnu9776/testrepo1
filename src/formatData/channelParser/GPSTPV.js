@@ -39,7 +39,8 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
           data_item_type: "LOCATION",
           data_item_id: `location-${attributes.version}`,
           timestamp,
-          device_uuid: bikeId
+          device_uuid: bikeId,
+          sequence: event.seq_num
         }
       )
 
@@ -48,12 +49,19 @@ export const parseGPSTPV = ({data, attributes, probe}) => {
       const eventAndSampleDataItems = Object.keys(event)
         .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
         .map(dataItemName => {
-          return getDataItem({probe, timestamp, attributes, dataItemName, value: event[dataItemName]})
+          return getDataItem({
+            probe,
+            timestamp,
+            attributes,
+            dataItemName,
+            value: event[dataItemName],
+            sequence: event.seq_num
+          })
         })
         .filter(e => !!e)
 
       const missingKeyEvents = missingKeys.map(dataItemName => {
-        return getDataItem({probe, timestamp, attributes, dataItemName, value: null})
+        return getDataItem({probe, timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
       })
 
       return [locationEvent, ...eventAndSampleDataItems, ...missingKeyEvents]

@@ -9,7 +9,7 @@ export const HEMAN = {
       seq_num: 283,
       error_code: "M043",
       start_timestamp: "1.570339273807e+09",
-      end_timestamp: "", // TODO: How would this come?
+      end_timestamp: "",
       isvalid: -1,
       timestamp: 1570339273.807,
       global_seq: 503258175,

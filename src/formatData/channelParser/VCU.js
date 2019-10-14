@@ -1,7 +1,7 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 
-// Blacklist or whitelist?
+// TODO: Blacklist or whitelist?
 const nonDataItemKeys = ["timestamp", "seq_num", "gpstime_utc", "global_seq", "bigsink_timestamp", "bike_id", "data"]
 
 export const parseVCU = ({data, attributes, probe}) => {
@@ -11,7 +11,14 @@ export const parseVCU = ({data, attributes, probe}) => {
       return Object.keys(event)
         .filter(dataItemName => !nonDataItemKeys.includes(dataItemName))
         .map(dataItemName => {
-          return getDataItem({probe, timestamp, attributes, dataItemName, value: event[dataItemName]})
+          return getDataItem({
+            probe,
+            timestamp,
+            attributes,
+            dataItemName,
+            value: event[dataItemName],
+            sequence: event.seq_num
+          })
         })
         .filter(e => !!e)
     })

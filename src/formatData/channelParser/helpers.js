@@ -10,7 +10,7 @@ export const getValueKey = ({probeInfo}) => {
   return null
 }
 
-export const getDataItem = ({attributes, dataItemName, timestamp, value, probe}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, probe, sequence}) => {
   const {version, bike_id: bikeId, channel} = attributes
   const probeInfo = probe[dataItemName] || {}
   const valueKey = getValueKey({probeInfo})
@@ -23,7 +23,8 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
       data_item_id: `${dataItemName}-${version}`,
       timestamp,
       [valueKey]: value,
-      channel
+      channel,
+      sequence
     }
   }
 
@@ -33,6 +34,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, probe})
     data_item_id: `${dataItemName}-${version}`,
     timestamp,
     value: value.toString(),
-    channel
+    channel,
+    sequence
   }
 }

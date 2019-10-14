@@ -13,9 +13,8 @@ export const parseBIKEINFO = ({data, attributes}) => {
       data_item_id: `bike_info-${version}`,
       device_uuid: bike_id,
       value: null,
-      channel
-      // TODO: What's the data item name for this?
-      // TODO: Merge probe info?
+      channel,
+      sequence: event.seq_num
     }
   })
 }

@@ -16,10 +16,11 @@ export const parseIMU = ({data, attributes, probe}) => {
         },
         ...probe[accKeys[0]],
         data_item_id: `acc-${version}`,
-        data_item_name: "acc", // TODO: Merge probe, what's the data_item_name for this?
+        data_item_name: "acc",
         device_uuid: bike_id,
         channel,
-        timestamp
+        timestamp,
+        sequence: event.seq_num
       }
 
       const gyrEvent = {
@@ -28,10 +29,11 @@ export const parseIMU = ({data, attributes, probe}) => {
         },
         ...probe[gyrKeys[0]],
         data_item_id: `gyr-${version}`,
-        data_item_name: "gyr", // TODO: Merge probe, what's the data_item_name for this?
+        data_item_name: "gyr",
         device_uuid: bike_id,
         channel,
-        timestamp
+        timestamp,
+        sequence: event.seq_num
       }
 
       return [accEvent, gyrEvent]

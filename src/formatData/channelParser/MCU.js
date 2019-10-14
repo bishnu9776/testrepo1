@@ -1,17 +1,7 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 
-// const nonEventAndSampleKeys = [
-//   "timestamp",
-//   "seq_num",
-//   "gpstime_utc",
-//   "global_seq",
-//   "bigsink_timestamp",
-//   "bike_id",
-//   "data"
-// ]
-
-// Can we rely on this being a whitelist or should we use a blacklist?
+// TODO: Blacklist or whitelist?
 const eventAndSampleKeys = [
   "gps_power",
   "head_lamp_switch",
@@ -69,7 +59,14 @@ export const parseMCU = ({data, attributes, probe}) => {
       return Object.keys(event)
         .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
         .map(dataItemName => {
-          return getDataItem({probe, timestamp, attributes, dataItemName, value: event[dataItemName]})
+          return getDataItem({
+            probe,
+            timestamp,
+            attributes,
+            dataItemName,
+            value: event[dataItemName],
+            sequence: event.seq_num
+          })
         })
         .filter(e => !!e)
     })

@@ -19,7 +19,7 @@ export const parseSESSION = ({data, attributes, probe}) => {
         start_ts,
         end_ts,
         channel,
-        // TODO: Is the data_item_name correct for this?
+        sequence: event.seq_num,
         ...probeInfo
       }
     })

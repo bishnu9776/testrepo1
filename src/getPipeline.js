@@ -25,15 +25,14 @@ const initializeGCPStream = metricRegistry =>
 
 // TODO:
 //  1. Have a whitelist of keys to send out
-//  2. Data loss metrics.
-//  3. How to use seq_num and global_seq_num?
-//  4. Clean up parsers. Go through comments in individual parsers, and their spec
-//  5. Do merge probe info and using correct value key outside of all the parsers
-//  6. Heartbeats
-//  7. Handle disk full exception in Kafka (currently silently dies)
+//  2. Clean up parsers. Go through comments in individual parsers, and their spec
+//  3. Do merge probe info and using correct value key outside of all the parsers
+//  4. Heartbeats
+//  5. Handle disk full exception in Kafka (currently silently dies)
+//  6. Do we need version and channel as top level keys?
 
 const stateStore = {}
-const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid"]
+const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
 const valueKeys = ["value", "value_event", "value_sample", "value_location", "value_xyz"]
 
 export const getPipeline = ({metricRegistry}) => {
