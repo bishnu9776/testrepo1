@@ -22,7 +22,9 @@ describe("Pipeline spec", () => {
       }
     })
 
-    kafkaProducerStub = sinon.stub(kafkaProducer, "getKafkaProducer").callsFake(stream => stream)
+    kafkaProducerStub = sinon.stub(kafkaProducer, "getKafkaProducer").callsFake(() => {
+      return stream => stream
+    })
   })
 
   afterEach(() => {
