@@ -30,7 +30,10 @@ export const parseChannelMessage = ({data, attributes}) => {
     case "bike_info":
       return parseBIKEINFO({data, attributes})
     default: {
-      log.warn({ctx: {message: data.toString()}}, "Could not parse message")
+      log.warn(
+        {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes)}},
+        "No parser for message. Dropping event"
+      )
       return null
     }
   }

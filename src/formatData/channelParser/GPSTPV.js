@@ -1,7 +1,5 @@
-import {difference, flatten, mergeDeepLeft, pick} from "ramda"
+import {difference, flatten} from "ramda"
 import {getDataItem} from "./helpers"
-
-const locationKeys = ["lat_deg", "lon_deg"]
 
 const eventAndSampleKeys = [
   "mode",
@@ -19,28 +17,21 @@ const eventAndSampleKeys = [
   "ttff_s"
 ]
 
-// TODO: Handle missing location
 export const parseGPSTPV = ({data, attributes}) => {
   return flatten(
     data.map(event => {
       const bikeId = attributes.bike_id
       const timestamp = new Date(event.timestamp * 1000).toISOString()
 
-      const locationEvent = mergeDeepLeft(
-        {value_location: pick(locationKeys, event)},
-        {
-          value_location: {
-            lat_deg: null,
-            lon_deg: null
-          },
-          data_item_name: "location",
-          data_item_type: "LOCATION",
-          data_item_id: `location-${attributes.version}`,
-          timestamp,
-          device_uuid: bikeId,
-          sequence: event.seq_num
-        }
-      )
+      const locationEvent = {
+        value_location: {lat: event.lat_deg || null, lon: event.lon_deg || null},
+        data_item_name: "location",
+        data_item_type: "LOCATION",
+        data_item_id: `location-${attributes.version}`,
+        timestamp,
+        device_uuid: bikeId,
+        sequence: event.seq_num
+      }
 
       const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
 
