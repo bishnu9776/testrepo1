@@ -1,11 +1,14 @@
 // import path from "path"
 // import fs from "fs"
+import {flatten} from "ramda"
 import {decompressMessage} from "./decompressMessage"
 import {parseChannelMessage} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
+import {dedupData} from "./channelParser/helpers"
 
 const {env} = process
 export const formatData = ({log, metricRegistry, probe}) => async msg => {
+  const dedupFn = dedupData(metricRegistry)
   const shouldDecompressMessage = env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
     ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
     : true
@@ -27,7 +30,7 @@ export const formatData = ({log, metricRegistry, probe}) => async msg => {
   try {
     parsedMessage = JSON.parse(decompressedMessage.toString())
     const dataItems = parseChannelMessage({data: parsedMessage, attributes: msg.attributes, probe})
-    return dataItems ? dataItems.concat({message: msg, tag: ACK_MSG_TAG}) : null
+    return dataItems ? flatten(dedupFn(dataItems)).concat({message: msg, tag: ACK_MSG_TAG}) : null
     // const filepath = path.join(__dirname, `../../test/dummyMocks/${msg.ackId}.json`)
     // const objToWrite = {
     //   attributes: msg.attributes,

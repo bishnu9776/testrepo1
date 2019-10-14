@@ -1,6 +1,6 @@
-import {MCU} from "../mocks/MCU"
-import {parseChannelMessage} from "../../src/formatData/channelParser"
-import probe from "../mocks/probe.json"
+import {MCU} from "../../mocks/MCU"
+import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import probe from "../../mocks/probe.json"
 
 describe.skip("Parses MCU", () => {
   it("parses given messages", () => {

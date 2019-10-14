@@ -1,6 +1,6 @@
-import {concatMap, filter, groupBy, map, mergeMap, tap} from "rxjs/operators"
+import {concatMap, filter, map, mergeMap, tap} from "rxjs/operators"
 import {from} from "rxjs"
-import {equals, intersection, path} from "ramda"
+import {path} from "ramda"
 import {getGCPstream} from "./gcpSubscriber"
 import {log} from "./logger"
 import {formatData} from "./formatData/formatData"
@@ -24,16 +24,12 @@ const initializeGCPStream = metricRegistry =>
   })
 
 // TODO:
-//  1. Have a whitelist of keys to send out
-//  2. Clean up parsers. Go through comments in individual parsers, and their spec
-//  3. Do merge probe info and using correct value key outside of all the parsers
-//  4. Heartbeats
-//  5. Handle disk full exception in Kafka (currently silently dies)
-//  6. Do we need version and channel as top level keys?
+//  1. Clean up parsers. Go through comments in individual parsers, and their spec
+//  2. Do merge probe info and using correct value key outside of all the parsers
+//  3. Handle disk full exception in Kafka (currently silently dies)
+//  4. Do we need version and channel as top level keys?
 
-const stateStore = {}
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
-const valueKeys = ["value", "value_event", "value_sample", "value_location", "value_xyz"]
 
 export const getPipeline = ({metricRegistry}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
@@ -45,12 +41,7 @@ export const getPipeline = ({metricRegistry}) => {
     filter(event => {
       const eventKeys = Object.keys(event)
       const hasRequiredKeys = requiredKeys.reduce((acc, x) => eventKeys.includes(x) && acc, true)
-      const hasValueKey = valueKeys.reduce((acc, x) => eventKeys.includes(x) || acc, false)
-      if (hasRequiredKeys && hasValueKey) {
-        return true
-      }
-
-      if (event.tag === ACK_MSG_TAG) {
+      if (hasRequiredKeys || event.tag === ACK_MSG_TAG) {
         return true
       }
 
@@ -59,30 +50,9 @@ export const getPipeline = ({metricRegistry}) => {
     }),
     map(event => {
       const {device_uuid, data_item_name, timestamp} = event // eslint-disable-line
-      return {tag: "MTConnectDataItems", ...event, id: `${device_uuid}-${data_item_name}-${timestamp}`} // eslint-disable-line
+      const id = `${device_uuid}-${data_item_name}-${timestamp}` // eslint-disable-line
+      return {tag: "MTConnectDataItems", ...event, agent: "ather", id, instance_id: id, received_at: new Date().toISOString()} // eslint-disable-line
     }),
-    groupBy(event => `${event.device_uuid}.${event.data_item_name}`),
-    mergeMap(dataItemStream => {
-      return dataItemStream.pipe(
-        map(currentEvent => {
-          const {channel, device_uuid, data_item_name} = currentEvent // eslint-disable-line
-          metricRegistry.updateStat("Counter", "num_messages_before_dedup", 1, {channel, device_uuid, data_item_name})
-          const valueKey = intersection(Object.keys(currentEvent), valueKeys)[0]
-
-          const eventKey = `${currentEvent.device_uuid}-${currentEvent.data_item_name}`
-          const previousEvent = stateStore[eventKey]
-          stateStore[eventKey] = currentEvent
-
-          const isDuplicateEvent =
-            previousEvent &&
-            currentEvent.timestamp >= previousEvent.timestamp &&
-            equals(currentEvent[valueKey], previousEvent[valueKey])
-
-          return isDuplicateEvent ? null : currentEvent
-        })
-      )
-    }),
-
     filter(x => !!x),
     kafkaProducer({log, metricRegistry}),
     tap(event => {

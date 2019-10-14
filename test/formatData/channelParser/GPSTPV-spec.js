@@ -1,6 +1,6 @@
-import {GPSTPV} from "../mocks/GPSTPV"
-import {parseChannelMessage} from "../../src/formatData/channelParser"
-import probe from "../mocks/probe.json"
+import {GPSTPV} from "../../mocks/GPSTPV"
+import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import probe from "../../mocks/probe.json"
 
 describe.skip("Parses GPSTPV", () => {
   it("parses given messages", () => {
