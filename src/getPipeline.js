@@ -7,7 +7,6 @@ import {formatData} from "./formatData/formatData"
 import {kafkaProducer} from "./kafkaProducer"
 import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
 import {ACK_MSG_TAG} from "./constants"
-import probe from "./probe"
 
 const {env} = process
 const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION
@@ -31,7 +30,7 @@ const initializeGCPStream = metricRegistry =>
 
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
 
-export const getPipeline = ({metricRegistry}) => {
+export const getPipeline = ({metricRegistry, probe}) => {
   const {acknowledgeMessage, stream} = initializeGCPStream(metricRegistry)
 
   return stream.pipe(

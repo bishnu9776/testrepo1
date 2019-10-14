@@ -5,8 +5,22 @@ import {getMetricRegistry} from "./metricRegistry"
 import {getPipeline} from "./getPipeline"
 import {errorFormatter} from "./utils/errorFormatter"
 
+const delayAndExit = (exitCode, delayMs = 5000) => {
+  setTimeout(() => {
+    process.exit(exitCode)
+  }, delayMs)
+}
+
+let probe
+try {
+  probe = require(process.env.VI_COLLECTOR_PROBE_PATH) // eslint-disable-line
+} catch (e) {
+  log.error({error: errorFormatter(e)}, "Could not load probe. Exiting process")
+  delayAndExit(0)
+}
+
 const metricRegistry = getMetricRegistry(log)
-const pipeline = getPipeline({metricRegistry})
+const pipeline = getPipeline({metricRegistry, probe})
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
 
 metricRegistry.startStatsReporting()
@@ -33,12 +47,6 @@ pipeline.pipe(timeout(eventTimeout)).subscribe({
     delayAndExit(0)
   }
 })
-
-const delayAndExit = (exitCode, delayMs = 5000) => {
-  setTimeout(() => {
-    process.exit(exitCode)
-  }, delayMs)
-}
 
 const sigExit = signal => {
   if (pipeline && pipeline.unsubscribe) {
