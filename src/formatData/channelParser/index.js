@@ -29,6 +29,10 @@ export const parseChannelMessage = ({data, attributes}) => {
       return parseSESSION({data, attributes})
     case "bike_info":
       return parseBIKEINFO({data, attributes})
+    case "soh":
+      return null
+    case "soh2":
+      return null
     default: {
       log.warn(
         {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes)}},

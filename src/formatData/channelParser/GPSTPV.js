@@ -30,7 +30,9 @@ export const parseGPSTPV = ({data, attributes}) => {
         data_item_id: `location-${attributes.version}`,
         timestamp,
         device_uuid: bikeId,
-        sequence: event.seq_num
+        sequence: event.seq_num,
+        mode: event.mode,
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
 
       const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
@@ -43,7 +45,8 @@ export const parseGPSTPV = ({data, attributes}) => {
             attributes,
             dataItemName,
             value: event[dataItemName],
-            sequence: event.seq_num
+            sequence: event.seq_num,
+            bigSinkTimestamp: `${event.bigsink_timestamp}Z`
           })
         })
         .filter(e => !!e)

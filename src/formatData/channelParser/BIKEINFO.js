@@ -14,7 +14,8 @@ export const parseBIKEINFO = ({data, attributes}) => {
       device_uuid: bike_id,
       value: null,
       channel,
-      sequence: event.seq_num
+      sequence: event.seq_num,
+      bigsink_timestamp: `${event.bigsink_timestamp}Z`
     }
   })
 }

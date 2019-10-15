@@ -1,6 +1,6 @@
 import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
-import {path} from "ramda"
+import {omit, path} from "ramda"
 import * as gcpSubscriber from "./gcpSubscriber"
 import {formatData} from "./formatData/formatData"
 import * as kafkaProducer from "./kafkaProducer"
@@ -44,9 +44,21 @@ export const getPipeline = ({metricRegistry, probe, log}) => {
       return false
     }),
     map(event => {
-      const {device_uuid, data_item_name, timestamp} = event // eslint-disable-line
-      const id = `${device_uuid}-${data_item_name}-${timestamp}` // eslint-disable-line
-      return {tag: "MTConnectDataItems", ...event, agent: "ather", id, instance_id: id, received_at: new Date().toISOString()} // eslint-disable-line
+      /* eslint-disable camelcase */
+      const {device_uuid, data_item_name, timestamp, bigsink_timestamp} = event
+      const id = `${device_uuid}-${data_item_name}-${timestamp}`
+      const collector_received_at = new Date()
+      const collector_latency = collector_received_at - new Date(bigsink_timestamp)
+
+      return {
+        tag: "MTConnectDataItems",
+        ...omit(["bigsink_timestamp"], event),
+        agent: "ather",
+        id,
+        instance_id: id,
+        meta: {collector_received_at: collector_received_at.toISOString(), collector_latency, bigsink_timestamp}
+      }
+      /* eslint-disable camelcase */
     }),
     filter(x => !!x),
     kafkaProducer.getKafkaProducer({log, metricRegistry}),

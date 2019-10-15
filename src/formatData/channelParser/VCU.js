@@ -14,7 +14,8 @@ export const parseVCU = ({data, attributes}) => {
             attributes,
             dataItemName,
             value: event[dataItemName],
-            sequence: event.seq_num
+            sequence: event.seq_num,
+            bigsink_timestamp: `${event.bigsink_timestamp}Z`
           })
         })
         .filter(e => !!e)

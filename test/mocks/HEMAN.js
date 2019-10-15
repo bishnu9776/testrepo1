@@ -18,3 +18,9 @@ export const HEMAN = {
     }
   ]
 }
+
+// TODO:
+// if there is no end_timestamp, use start_timestamp as timestamp, else use end_timestamp
+// what should the data_item_name be?
+// should error_code be used as native_code?
+// confirm on isvalid, when should it become -1?

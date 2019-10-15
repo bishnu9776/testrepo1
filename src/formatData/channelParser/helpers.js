@@ -24,7 +24,7 @@ export const getValueKey = ({probeInfo, dataItemName}) => {
   return "value"
 }
 
-export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, bigSinkTimestamp}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
   return {
@@ -34,7 +34,8 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     timestamp,
     value,
     channel,
-    sequence
+    sequence,
+    bigsink_timestamp: bigSinkTimestamp
   }
 }
 

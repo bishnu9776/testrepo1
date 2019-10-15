@@ -19,7 +19,8 @@ export const parseIMU = ({data, attributes}) => {
         device_uuid: bike_id,
         channel,
         timestamp,
-        sequence: event.seq_num
+        sequence: event.seq_num,
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
 
       const gyrEvent = {
@@ -31,7 +32,8 @@ export const parseIMU = ({data, attributes}) => {
         device_uuid: bike_id,
         channel,
         timestamp,
-        sequence: event.seq_num
+        sequence: event.seq_num,
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
 
       return [accEvent, gyrEvent]

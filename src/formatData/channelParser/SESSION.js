@@ -18,7 +18,8 @@ export const parseSESSION = ({data, attributes}) => {
         start_ts,
         end_ts,
         channel,
-        sequence: event.seq_num
+        sequence: event.seq_num,
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
     })
   ).filter(e => !!e)
