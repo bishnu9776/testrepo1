@@ -5,13 +5,14 @@ export const parseHEMAN = ({data, attributes}) => {
     data.map(event => {
       // eslint-disable-next-line
       const {version, bike_id, channel} = attributes
-      const timestamp = new Date(event.timestamp * 1000).toISOString()
+      const timestamp = event.end_timestamp ? event.end_timestamp : event.start_timestamp
       return {
-        timestamp,
+        timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
         data_item_name: "heman",
         data_item_id: `heman-${version}`,
         device_uuid: bike_id,
-        value_event: event.error_code,
+        native_code: event.error_code,
+        value_event: event.end_timestamp ? "NORMAL" : "FAULT",
         is_valid: event.isvalid,
         channel,
         sequence: event.seq_num,

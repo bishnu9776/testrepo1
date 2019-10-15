@@ -3,6 +3,7 @@ import {bindNodeCallback, forkJoin, merge, Observable, of, throwError} from "rxj
 import {bufferTime, catchError, concatAll, concatMap, filter, finalize, flatMap, switchMap} from "rxjs/operators"
 import {ErrorCodes as kafkaErrorCodes, Producer as KafkaProducer} from "vi-kafka-stream-client"
 import {ACK_MSG_TAG} from "./constants"
+import {errorFormatter} from "./utils/errorFormatter"
 
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
@@ -82,20 +83,22 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
       return of(event)
     }
 
-    const value = JSON.stringify(R.dissoc("meta", event))
     const key = (getMessageKey && getMessageKey(event)) || null
     const observables = topics.map(
       topic =>
         new Observable(observer => {
-          producer.produce(topic, null, Buffer.from(value), key, Date.now(), err => {
-            if (!err) {
+          producer.produce(topic, null, Buffer.from(event), key, Date.now(), error => {
+            if (!error) {
               observer.next(event)
               const {channel, device_uuid, data_item_name} = event // eslint-disable-line
               metricRegistry.updateStat("Counter", "num_messages_sent", 1, {channel, device_uuid, data_item_name})
               observer.complete()
             } else {
-              log.error(`Kafka sink: Got error while sending message to kafka: ${err.message}`)
-              observer.error({...err, kafka_topic: topic})
+              log.error(
+                {error: errorFormatter(error)},
+                `Kafka sink: Got error while sending message to kafka: ${error.message}`
+              )
+              observer.error({...error, kafka_topic: topic})
             }
           })
         })

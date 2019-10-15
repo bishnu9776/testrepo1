@@ -14,7 +14,9 @@ const eventAndSampleKeys = [
   "speed_mps",
   "climb_mps",
   "alt_m",
-  "ttff_s"
+  "ttff_s",
+  "lat_deg",
+  "lon_deg"
 ]
 
 export const parseGPSTPV = ({data, attributes}) => {

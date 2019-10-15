@@ -56,7 +56,9 @@ export const getPipeline = ({metricRegistry, probe, log}) => {
         agent: "ather",
         id,
         instance_id: id,
-        meta: {collector_received_at: collector_received_at.toISOString(), collector_latency, bigsink_timestamp}
+        meta: {collector_received_at: collector_received_at.toISOString(), collector_latency, bigsink_timestamp},
+        plant: "ather",
+        tenant: "ather"
       }
       /* eslint-disable camelcase */
     }),

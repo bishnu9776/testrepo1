@@ -5,7 +5,7 @@ export const mergeProbeInfo = probe => event => {
   const probeInfo = probe[event.data_item_name]
   const valueKey = getValueKey({probeInfo, dataItemName: event.data_item_name})
   let {value} = event
-  if (valueKey === "value") {
+  if (valueKey === "value" && typeof value !== "string") {
     value = JSON.stringify(event.value)
   }
 
