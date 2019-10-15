@@ -15,7 +15,7 @@ export const parseMCU = ({data, attributes}) => {
             dataItemName,
             value: event[dataItemName],
             sequence: event.seq_num,
-            bigsink_timestamp: `${event.bigsink_timestamp}Z`
+            bigSinkTimestamp: `${event.bigsink_timestamp}Z`
           })
         })
         .filter(e => !!e)

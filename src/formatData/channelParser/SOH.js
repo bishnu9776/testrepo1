@@ -2,7 +2,7 @@ import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 import {nonDataItemKeys} from "../../constants"
 
-export const parseVCU = ({data, attributes}) => {
+export const parseSOH = ({data, attributes}) => {
   return flatten(
     data.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()

@@ -8,6 +8,8 @@ import {parseEVENTS} from "./EVENTS"
 import {parseVCU} from "./VCU"
 import {parseSESSION} from "./SESSION"
 import {parseBIKEINFO} from "./BIKEINFO"
+import {parseSOH2} from "./SOH2"
+import {parseSOH} from "./SOH"
 
 export const parseChannelMessage = ({data, attributes}) => {
   switch (attributes.channel) {
@@ -30,9 +32,9 @@ export const parseChannelMessage = ({data, attributes}) => {
     case "bike_info":
       return parseBIKEINFO({data, attributes})
     case "soh":
-      return null
+      return parseSOH({data, attributes})
     case "soh2":
-      return null
+      return parseSOH2({data, attributes})
     default: {
       log.warn(
         {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes)}},
