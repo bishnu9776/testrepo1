@@ -35,35 +35,37 @@ describe("Kafka producer spec", () => {
       producer$: () => of(MockProducer)
     })
 
-    it("sends events to configured topics", done => {
+    it("sends events to configured topics, drops events without tag", done => {
       const sourceEvents = [...getMockDataItems(1, "device-1"), ...getMockDataItems(1, "device-2"), getAckEvent()]
       const actualEvents = []
 
-      getKafkaProducer({log, Producer, metricRegistry})(from(sourceEvents)).subscribe({
-        next: x => {
-          actualEvents.push(x)
-        },
-        complete: () => {
-          expect(actualEvents).to.deep.eql(sourceEvents)
-          expect(MockProducer.produce).to.have.been.calledTwice
-          expect(MockProducer.produce).to.have.been.calledWithMatch(
-            "test",
-            null,
-            Buffer.from(JSON.stringify(sourceEvents[0])),
-            "device-1"
-          )
-          expect(MockProducer.produce).to.have.been.calledWithMatch(
-            "test",
-            null,
-            Buffer.from(JSON.stringify(sourceEvents[1])),
-            "device-2"
-          )
-          done()
-        },
-        error: error => {
-          done(error)
+      getKafkaProducer({log, Producer, metricRegistry})(from([...sourceEvents, {message: "tag-is-missing"}])).subscribe(
+        {
+          next: x => {
+            actualEvents.push(x)
+          },
+          complete: () => {
+            expect(actualEvents).to.deep.eql(sourceEvents)
+            expect(MockProducer.produce).to.have.been.calledTwice
+            expect(MockProducer.produce).to.have.been.calledWithMatch(
+              "test",
+              null,
+              Buffer.from(JSON.stringify(sourceEvents[0])),
+              "device-1"
+            )
+            expect(MockProducer.produce).to.have.been.calledWithMatch(
+              "test",
+              null,
+              Buffer.from(JSON.stringify(sourceEvents[1])),
+              "device-2"
+            )
+            done()
+          },
+          error: error => {
+            done(error)
+          }
         }
-      })
+      )
     })
   })
 

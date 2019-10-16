@@ -1,7 +1,7 @@
 import R from "ramda"
 import {bindNodeCallback, forkJoin, merge, Observable, of, throwError} from "rxjs"
 import {bufferTime, catchError, concatAll, concatMap, filter, finalize, flatMap, switchMap} from "rxjs/operators"
-import {ErrorCodes as kafkaErrorCodes, Producer as KafkaProducer} from "vi-kafka-stream-client"
+import {Producer as KafkaProducer} from "vi-kafka-stream-client"
 import {ACK_MSG_TAG} from "./constants"
 import {errorFormatter} from "./utils/errorFormatter"
 
@@ -75,11 +75,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
   const send = producer => event => {
     const {topics, getMessageKey} = strategies[event.tag]
 
-    if (topics.length === 0) {
-      return of(event)
-    }
-
-    if (event.tag === ACK_MSG_TAG) {
+    if (topics.length === 0 || event.tag === ACK_MSG_TAG) {
       return of(event)
     }
 
@@ -109,28 +105,6 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
 
   const {globalConfig, topicConfig, retryConfig, errorConfig} = config["vi-kafka-stream-client-options"]
 
-  const catchAndAttachErrorCodes = err => {
-    const {
-      ERR__TRANSPORT,
-      ERR__ALL_BROKERS_DOWN,
-      ERR__TIMED_OUT,
-      ERR_REQUEST_TIMED_OUT,
-      ERR_BROKER_NOT_AVAILABLE
-    } = kafkaErrorCodes
-    if (
-      [ERR__TRANSPORT, ERR__ALL_BROKERS_DOWN, ERR__TIMED_OUT, ERR_REQUEST_TIMED_OUT, ERR_BROKER_NOT_AVAILABLE].includes(
-        err.code
-      ) ||
-      /all broker connections are down/.test(err.message) || // Should have error code ERR__ALL_BROKERS_DOWN, but has error code ERR_UNKNOWN in some cases
-      /Message timed out/.test(err.message) || // Should have error code ERR__TIMED_OUT, but has error code ERR_UNKNOWN in some cases
-      /broker transport failure/.test(err.message) // Should have error code ERR__TRANSPORT, but has error code ERR_UNKNOWN in some cases
-    ) {
-      err.errorCode = "WRITER_DISCONNECTED" // eslint-disable-line no-param-reassign
-    }
-
-    return throwError(err)
-  }
-
   return stream =>
     Producer(globalConfig, topicConfig)
       .producer$({retryConfig, log, errorConfig}) // producer throws after 30 seconds if unable to connect
@@ -150,7 +124,6 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
               producer.disconnect()
             })
           )
-        }),
-        catchError(catchAndAttachErrorCodes)
+        })
       )
 }
