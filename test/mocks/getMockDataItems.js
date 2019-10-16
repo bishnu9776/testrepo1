@@ -1,22 +1,24 @@
 import {repeat} from "ramda"
 import {ACK_MSG_TAG} from "../../src/constants"
 
-export const getMockDataItems = numEvents => {
+export const getMockDataItems = (numEvents, deviceUUID) => {
   let sequence = 1
   return repeat(
     {
-      device_uuid: 1,
+      device_uuid: deviceUUID,
       data_item_name: "mode",
       data_item_id: "mode-v1",
-      timestamp: new Date().toISOString(),
+      timestamp: "2019-01-01T00:00:00.000Z",
       value_event: "abc",
       category: "EVENT",
       channel: "gps",
-      bigsink_timestamp: new Date(Date.now() - 12000).toISOString(),
+      bigsink_timestamp: "2019-01-01T00:05:00.000Z",
       tag: "MTConnectDataItems"
     },
     numEvents
-  )
-    .map(event => ({...event, sequence: sequence++}))
-    .concat({tag: ACK_MSG_TAG, message: "foo"})
+  ).map(event => ({...event, sequence: sequence++}))
+}
+
+export const getAckEvent = () => {
+  return {tag: ACK_MSG_TAG, message: "foo"}
 }

@@ -87,7 +87,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
     const observables = topics.map(
       topic =>
         new Observable(observer => {
-          producer.produce(topic, null, Buffer.from(event), key, Date.now(), error => {
+          producer.produce(topic, null, Buffer.from(JSON.stringify(event)), key, Date.now(), error => {
             if (!error) {
               observer.next(event)
               const {channel, device_uuid, data_item_name} = event // eslint-disable-line
@@ -98,7 +98,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
                 {error: errorFormatter(error)},
                 `Kafka sink: Got error while sending message to kafka: ${error.message}`
               )
-              observer.error({...error, kafka_topic: topic})
+              observer.error({message: error.message, kafka_topic: topic})
             }
           })
         })
