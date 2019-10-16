@@ -52,7 +52,7 @@ export const dedupData = metricRegistry => dataItems => {
         data_item_name
       })
 
-      const sortedEvents = sortWith([ascend(prop("timestamp"))])(groupedDIValues).reduce((acc, currentEvent) => {
+      return sortWith([ascend(prop("timestamp"))])(groupedDIValues).reduce((acc, currentEvent) => {
         if (acc.length) {
           const previousEvent = acc[acc.length - 1]
           const valueKey = intersection(Object.keys(currentEvent), valueKeys)[0]
@@ -67,8 +67,6 @@ export const dedupData = metricRegistry => dataItems => {
         }
         return acc
       }, [])
-
-      return sortedEvents
     })
   )
 }

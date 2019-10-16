@@ -2,8 +2,21 @@ import {parseChannelMessage} from "../../../src/formatData/channelParser"
 import {HEMAN} from "../../mocks/HEMAN"
 import probe from "../../mocks/probe.json"
 
-describe.skip("Parses HEMAN", () => {
+describe("Parses HEMAN", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...HEMAN, probe})).to.eql([])
+    expect(parseChannelMessage({...HEMAN, probe})).to.eql([
+      {
+        bigsink_timestamp: "2019-10-06T05:22:38.902Z",
+        channel: "heman",
+        data_item_id: "heman-v1",
+        data_item_name: "heman",
+        device_uuid: "s_248",
+        is_valid: -1,
+        native_code: "M043",
+        sequence: 283,
+        timestamp: "2019-10-06T05:21:13.807Z",
+        value_event: "FAULT"
+      }
+    ])
   })
 })

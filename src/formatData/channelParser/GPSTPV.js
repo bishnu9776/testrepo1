@@ -1,4 +1,4 @@
-import {difference, flatten} from "ramda"
+import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 
 const eventAndSampleKeys = [
@@ -37,7 +37,7 @@ export const parseGPSTPV = ({data, attributes}) => {
         bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
 
-      const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
+      // const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
 
       const eventAndSampleDataItems = Object.keys(event)
         .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
@@ -53,11 +53,11 @@ export const parseGPSTPV = ({data, attributes}) => {
         })
         .filter(e => !!e)
 
-      const missingKeyEvents = missingKeys.map(dataItemName => {
-        return getDataItem({timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
-      })
+      // const missingKeyEvents = missingKeys.map(dataItemName => {
+      //   return getDataItem({timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
+      // })
 
-      return [locationEvent, ...eventAndSampleDataItems, ...missingKeyEvents]
+      return [locationEvent, ...eventAndSampleDataItems]
     })
   )
 }

@@ -6,7 +6,7 @@ import {log} from "./mocks/logger"
 import {metricRegistry} from "./mocks/metricRegistry"
 
 describe("GCP subscriber", () => {
-  it("sends data on an observable stream", done => {
+  it("sends data/error on observable stream", done => {
     const eventEmitter = new EventEmitter()
     eventEmitter.close = () => {
       expect(actualEvents).to.deep.eql([{a: 1}, {b: 1}])
