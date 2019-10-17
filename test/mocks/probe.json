@@ -8,5 +8,15 @@
     "data_item_name": "MCU_CHARGER_TYPE",
     "data_item_type": "mcu_charger",
     "category": "SAMPLE"
+  },
+  "BMS_ThermalAlert": {
+    "data_item_name": "BMS_ThermalAlert",
+    "data_item_type": "bms_thermal_alert",
+    "category": "EVENT"
+  },
+  "GPS_TPV": {
+    "data_item_name": "GPS_TPV",
+    "data_item_type": "lat_val",
+    "category": "LOCATION"
   }
 }

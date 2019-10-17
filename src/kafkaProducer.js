@@ -68,8 +68,13 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
   }
 
   const flushAndThrow = producer => err => {
-    const flushObs = bindNodeCallback(producer.flush.bind(producer))
-    return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
+    try {
+      const flushObs = bindNodeCallback(producer.flush.bind(producer))
+      return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
+    } catch (error) {
+      log.warn({error: errorFormatter(error)}, "Error while flushing kafka producer queue")
+      return throwError(err)
+    }
   }
 
   const send = producer => event => {
