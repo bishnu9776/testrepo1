@@ -37,8 +37,8 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "1.1.2",
-    "node-metric-registry": "1.0.20",
-    "node-microservice": "3.5.361",
+    "node-metric-registry": "1.0.21",
+    "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
     "vi-kafka-stream-client": "1.0.209"
@@ -47,9 +47,9 @@
     "@babel/node": "7.6.3",
     "babel-preset-vi-node": "1.0.90",
     "chai": "4.2.0",
-    "eslint-config-vi-node": "1.2.95",
+    "eslint-config-vi-node": "1.2.96",
     "husky": "3.0.9",
-    "mocha": "6.2.1",
+    "mocha": "6.2.2",
     "sinon": "7.5.0",
     "sinon-chai": "3.3.0"
   }
