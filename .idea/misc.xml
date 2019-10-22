@@ -90,4 +90,5 @@
       </profile-state>
     </entry>
   </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="JDK 12" project-jdk-type="JavaSDK" />
 </project>
