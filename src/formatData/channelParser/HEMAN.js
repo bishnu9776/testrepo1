@@ -1,0 +1,23 @@
+import {flatten} from "ramda"
+
+export const parseHEMAN = ({data, attributes}) => {
+  return flatten(
+    data.map(event => {
+      // eslint-disable-next-line
+      const {version, bike_id, channel} = attributes
+      const timestamp = event.end_timestamp ? event.end_timestamp : event.start_timestamp
+      return {
+        timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
+        data_item_name: "heman",
+        data_item_id: `heman-${version}`,
+        device_uuid: bike_id,
+        native_code: event.error_code,
+        value_event: event.end_timestamp ? "NORMAL" : "FAULT",
+        is_valid: event.isvalid,
+        channel,
+        sequence: event.seq_num,
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`
+      }
+    })
+  ).filter(e => !!e)
+}

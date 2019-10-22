@@ -1,13 +1,25 @@
-import {timeout} from "rxjs/operators"
 import {expressApp} from "node-microservice"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
-import {getPipeline} from "./getPipeline"
+import {getPipeline} from "./pipeline"
 import {errorFormatter} from "./utils/errorFormatter"
 
+const delayAndExit = (exitCode, delayMs = 5000) => {
+  setTimeout(() => {
+    process.exit(exitCode)
+  }, delayMs)
+}
+
+let probe
+try {
+  probe = require(process.env.VI_COLLECTOR_PROBE_PATH) // eslint-disable-line
+} catch (e) {
+  log.error({error: errorFormatter(e)}, "Could not load probe. Exiting process")
+  delayAndExit(0)
+}
+
 const metricRegistry = getMetricRegistry(log)
-const pipeline = getPipeline({metricRegistry})
-const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
+const pipeline = getPipeline({metricRegistry, probe, log})
 
 metricRegistry.startStatsReporting()
 
@@ -19,11 +31,11 @@ app.listen(port, () =>
     {
       port
     },
-    "Starting Ather collector"
+    "Starting Ather Collector"
   )
 )
 
-pipeline.pipe(timeout(eventTimeout)).subscribe({
+pipeline.subscribe({
   complete: () => {
     log.error("GCP stream completed. Exiting application")
     delayAndExit(0)
@@ -33,12 +45,6 @@ pipeline.pipe(timeout(eventTimeout)).subscribe({
     delayAndExit(0)
   }
 })
-
-const delayAndExit = (exitCode, delayMs = 5000) => {
-  setTimeout(() => {
-    process.exit(exitCode)
-  }, delayMs)
-}
 
 const sigExit = signal => {
   if (pipeline && pipeline.unsubscribe) {

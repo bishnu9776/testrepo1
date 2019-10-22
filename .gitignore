@@ -12,9 +12,12 @@ data/
 .DS_Store
 data/
 src/creds/*
+creds/*
 scripts/gcpConsumer.js
+test/dummyMocks/
 .npmrc
 Dockerfile
+scripts/probe.csv
 
 # All other idea project files are safe to commit
 .idea/workspace.xml

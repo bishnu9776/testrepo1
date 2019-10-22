@@ -1,20 +1,21 @@
 import R from "ramda"
 import {bindNodeCallback, forkJoin, merge, Observable, of, throwError} from "rxjs"
 import {bufferTime, catchError, concatAll, concatMap, filter, finalize, flatMap, switchMap} from "rxjs/operators"
-import {ErrorCodes as kafkaErrorCodes, Producer as KafkaProducer} from "vi-kafka-stream-client"
+import {Producer as KafkaProducer} from "vi-kafka-stream-client"
 import {ACK_MSG_TAG} from "./constants"
+import {errorFormatter} from "./utils/errorFormatter"
 
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
 
-export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
+export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
     dataTopics: env.VI_KAFKA_SINK_DATA_TOPIC ? [env.VI_KAFKA_SINK_DATA_TOPIC] : ["test-topic-ather"],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
     "vi-kafka-stream-client-options": {
       globalConfig: {
         "metadata.broker.list": env.VI_KAFKA_URL || "localhost:9092",
-        "client.id": env.VI_KAFKA_SINK_CLIENT_ID || `ather-test`,
+        "client.id": env.VI_KAFKA_SINK_CLIENT_ID || "ather-test",
         "retry.backoff.ms": parseInt(env.VI_KAFKA_SINK_RETRY_BACKOFF_MS, 10) || 500,
         "message.send.max.retries": parseInt(env.VI_KAFKA_SINK_MESSAGE_SEND_MAX_RETRIES, 10) || 10, // retry for 5 mins
         "queue.buffering.max.ms": parseInt(env.VI_KAFKA_SINK_QUEUE_BUFFERING_MAX_MS, 10) || 500,
@@ -34,7 +35,12 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
         timeout: parseInt(env.VI_KAFKA_SINK_RETRY_TIMEOUT, 10) || 2000
       },
       errorConfig: {
-        ignorableErrors: [{code: -1, message: "all broker connections are down"}]
+        ignorableErrors: [
+          {code: -195, message: "broker transport failure"},
+          {code: -1, message: "broker transport failure"},
+          {code: -1, message: "all broker connections are down"},
+          {code: -1, message: "timed out"}
+        ]
       }
     },
     deliveryReportPollInterval: parseInt(env.VI_KAFKA_SINK_DELIVERY_REPORT_POLL_INTERVAL, 10) || 5000,
@@ -46,7 +52,7 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
   const strategies = {
     MTConnectDataItems: {
       topics: config.dataTopics,
-      getMessageKey: () => "ather" // Update to use device_uuid
+      getMessageKey: e => e.device_uuid
     },
     [ACK_MSG_TAG]: {
       topics: []
@@ -62,34 +68,38 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
   }
 
   const flushAndThrow = producer => err => {
-    const flushObs = bindNodeCallback(producer.flush.bind(producer))
-    return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
+    try {
+      const flushObs = bindNodeCallback(producer.flush.bind(producer))
+      return flushObs(config.flushTimeout).pipe(flatMap(() => throwError(err)))
+    } catch (error) {
+      log.warn({error: errorFormatter(error)}, "Error while flushing kafka producer queue")
+      return throwError(err)
+    }
   }
 
   const send = producer => event => {
     const {topics, getMessageKey} = strategies[event.tag]
 
-    if (topics.length === 0) {
+    if (topics.length === 0 || event.tag === ACK_MSG_TAG) {
       return of(event)
     }
 
-    if (event.tag === ACK_MSG_TAG) {
-      return of(event)
-    }
-
-    const value = JSON.stringify(R.dissoc("meta", event))
     const key = (getMessageKey && getMessageKey(event)) || null
     const observables = topics.map(
       topic =>
         new Observable(observer => {
-          producer.produce(topic, null, Buffer.from(value), key, Date.now(), err => {
-            if (!err) {
+          producer.produce(topic, null, Buffer.from(JSON.stringify(event)), key, Date.now(), error => {
+            if (!error) {
               observer.next(event)
-              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {tag: event.tag})
+              const {channel, device_uuid, data_item_name} = event // eslint-disable-line
+              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {channel, device_uuid, data_item_name})
               observer.complete()
             } else {
-              log.error(`Kafka sink: Got error while sending message to kafka: ${err.message}`)
-              observer.error({...err, kafka_topic: topic})
+              log.error(
+                {error: errorFormatter(error)},
+                `Kafka sink: Got error while sending message to kafka: ${error.message}`
+              )
+              observer.error({message: error.message, kafka_topic: topic})
             }
           })
         })
@@ -99,28 +109,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
   }
 
   const {globalConfig, topicConfig, retryConfig, errorConfig} = config["vi-kafka-stream-client-options"]
-
-  const catchAndAttachErrorCodes = err => {
-    const {
-      ERR__TRANSPORT,
-      ERR__ALL_BROKERS_DOWN,
-      ERR__TIMED_OUT,
-      ERR_REQUEST_TIMED_OUT,
-      ERR_BROKER_NOT_AVAILABLE
-    } = kafkaErrorCodes
-    if (
-      [ERR__TRANSPORT, ERR__ALL_BROKERS_DOWN, ERR__TIMED_OUT, ERR_REQUEST_TIMED_OUT, ERR_BROKER_NOT_AVAILABLE].includes(
-        err.code
-      ) ||
-      /all broker connections are down/.test(err.message) || // Should have error code ERR__ALL_BROKERS_DOWN, but has error code ERR_UNKNOWN in some cases
-      /Message timed out/.test(err.message) || // Should have error code ERR__TIMED_OUT, but has error code ERR_UNKNOWN in some cases
-      /broker transport failure/.test(err.message) // Should have error code ERR__TRANSPORT, but has error code ERR_UNKNOWN in some cases
-    ) {
-      err.errorCode = "WRITER_DISCONNECTED" // eslint-disable-line no-param-reassign
-    }
-
-    return throwError(err)
-  }
 
   return stream =>
     Producer(globalConfig, topicConfig)
@@ -141,7 +129,6 @@ export const kafkaProducer = ({log, Producer = DefaultProducer, metricRegistry})
               producer.disconnect()
             })
           )
-        }),
-        catchError(catchAndAttachErrorCodes)
+        })
       )
 }

@@ -1,4 +1,5 @@
 import {PubSub} from "@google-cloud/pubsub"
+import {path} from "ramda"
 import {Observable} from "rxjs"
 import {errorFormatter} from "./utils/errorFormatter"
 
@@ -7,7 +8,7 @@ const parseNumber = string => {
   return string ? parseInt(string, 10) : false
 }
 
-export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
+export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   function acknowledgeMessage(message) {
     message.ack()
   }
@@ -22,14 +23,14 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
       flowControl: {
         maxMessages: parseNumber(env.VI_GCP_PUBSUB_MAX_MESSAGES) || 10,
         maxExtension: parseNumber(env.VI_GCP_PUBSUB_MAX_EXTENSION) || 10,
-        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 1 // 10 MB
+        maxBytes: parseNumber(env.VI_GCP_PUBSUB_MAX_BYTES) || 1024 * 1024 * 10 // 10 MB
       },
       streamingOptions: {
         highWaterMark: parseNumber(env.VI_GCP_PUBSUB_HIGH_WATERMARK) || 5, // Looks like this will be overridden by maxMessages
         maxStreams: parseNumber(env.VI_GCP_PUBSUB_MAX_STREAMS) || 2,
         timeout: parseNumber(env.VI_GCP_PUBSUB_TIMEOUT) || 10000
       },
-      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 10
+      ackDeadline: parseNumber(env.VI_GCP_PUBSUB_ACK_DEADLINE) || 60
       // If this is too low, modifyAckDeadline will be called too many times causing (Request payload size exceeds the limit: 524288 bytes.) error
       // https://github.com/googleapis/nodejs-pubsub/pull/65/files
       // sample ackID has 176 characters which is greater than what's mentioned in ^
@@ -41,7 +42,11 @@ export const getGCPstream = ({subscriptionName, credentialsPath, projectId, log,
     // There is no event emitted to identify successful connection to GCP. Will rely on source stats.
 
     subscription.on("message", msg => {
-      metricRegistry.updateStat("Counter", "num_messages_received", 1, {type: "raw"})
+      metricRegistry.updateStat("Counter", "num_messages_received", 1, {
+        channel: path(["attributes", "channel"], msg),
+        device_uuid: path(["attributes", "bike_id"], msg)
+      })
+
       observer.next(msg)
     })
 
