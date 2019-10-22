@@ -12,10 +12,6 @@ const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION
 const projectId = env.VI_GCP_PROJECT_ID
 const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
-
-// TODO:
-//  1. Handle disk full exception in Kafka (currently silently dies)
-
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
 
 export const getPipeline = ({metricRegistry, probe, log}) => {
@@ -32,7 +28,7 @@ export const getPipeline = ({metricRegistry, probe, log}) => {
     mergeMap(event => from(formatData({log, metricRegistry, probe})(event))),
     filter(x => !!x),
     concatMap(events => from(events)),
-    // TODO: Remove this after writing unit tests for parsers to include all the necessary keys
+    // After finalising all parsers, remove this.
     filter(event => {
       const eventKeys = Object.keys(event)
       const hasRequiredKeys = requiredKeys.reduce((acc, x) => eventKeys.includes(x) && acc, true)
