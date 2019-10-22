@@ -16,7 +16,11 @@ export const getMockDataItems = (numEvents, deviceUUID) => {
       tag: "MTConnectDataItems"
     },
     numEvents
-  ).map(event => ({...event, sequence: sequence++}))
+  ).map(event => {
+    const eventWithSequence = {...event, sequence}
+    sequence += 1
+    return eventWithSequence
+  })
 }
 
 export const getAckEvent = () => {

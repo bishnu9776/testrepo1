@@ -37,8 +37,6 @@ export const parseGPSTPV = ({data, attributes}) => {
         bigsink_timestamp: `${event.bigsink_timestamp}Z`
       }
 
-      // const missingKeys = difference(eventAndSampleKeys, Object.keys(event))
-
       const eventAndSampleDataItems = Object.keys(event)
         .filter(dataItemName => eventAndSampleKeys.includes(dataItemName))
         .map(dataItemName => {
@@ -52,10 +50,6 @@ export const parseGPSTPV = ({data, attributes}) => {
           })
         })
         .filter(e => !!e)
-
-      // const missingKeyEvents = missingKeys.map(dataItemName => {
-      //   return getDataItem({timestamp, attributes, dataItemName, value: null, sequence: event.seq_num})
-      // })
 
       return [locationEvent, ...eventAndSampleDataItems]
     })

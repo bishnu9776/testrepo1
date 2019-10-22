@@ -1,5 +1,4 @@
 import EventEmitter from "events"
-// import * as gcp from "@google-cloud/pubsub"
 import {PubSub} from "@google-cloud/pubsub"
 import {getGCPStream} from "../src/gcpSubscriber"
 import {log} from "./mocks/logger"
@@ -8,6 +7,7 @@ import {metricRegistry} from "./mocks/metricRegistry"
 describe("GCP subscriber", () => {
   it("sends data/error on observable stream", done => {
     const eventEmitter = new EventEmitter()
+    const actualEvents = []
     eventEmitter.close = () => {
       expect(actualEvents).to.deep.eql([{a: 1}, {b: 1}])
       done()
@@ -17,7 +17,6 @@ describe("GCP subscriber", () => {
       return eventEmitter
     })
 
-    const actualEvents = []
     getGCPStream({log, metricRegistry}).stream.subscribe({
       next: x => actualEvents.push(x),
       error: e => {

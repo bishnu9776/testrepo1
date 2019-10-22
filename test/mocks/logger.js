@@ -4,5 +4,3 @@ export const log = sinon.stub({
   warn: () => {},
   error: () => {}
 })
-
-// export const log = console
