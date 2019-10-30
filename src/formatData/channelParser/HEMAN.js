@@ -8,11 +8,11 @@ export const parseHEMAN = ({data, attributes}) => {
       const timestamp = event.end_timestamp ? event.end_timestamp : event.start_timestamp
       return {
         timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
-        data_item_name: "heman",
+        data_item_name: "error_code",
         data_item_id: `heman-${version}`,
         device_uuid: bike_id,
         native_code: event.error_code,
-        value_event: event.end_timestamp ? "NORMAL" : "FAULT",
+        condition_level: event.end_timestamp ? "NORMAL" : "FAULT",
         is_valid: event.isvalid,
         channel,
         sequence: event.seq_num,
