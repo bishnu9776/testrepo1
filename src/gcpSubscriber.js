@@ -8,6 +8,8 @@ const parseNumber = string => {
   return string ? parseInt(string, 10) : false
 }
 
+const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
+
 export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   function acknowledgeMessage(message) {
     message.ack()
@@ -42,10 +44,16 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
     // There is no event emitted to identify successful connection to GCP. Will rely on source stats.
 
     subscription.on("message", msg => {
-      metricRegistry.updateStat("Counter", "num_messages_received", 1, {
-        channel: path(["attributes", "channel"], msg),
-        device_uuid: path(["attributes", "bike_id"], msg)
-      })
+      const channel = path(["attributes", "channel"], msg)
+      const device_uuid = path(["attributes", "bike_id"], msg) // eslint-disable-line
+      const tags = debugStats
+        ? {
+            channel,
+            device_uuid
+          }
+        : {channel}
+
+      metricRegistry.updateStat("Counter", "num_messages_received", 1, tags)
 
       observer.next(msg)
     })

@@ -1,4 +1,5 @@
 import {expressApp} from "node-microservice"
+import eventLoopStats from "event-loop-stats"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
 import {getPipeline} from "./pipeline"
@@ -64,3 +65,10 @@ process.on("unhandledRejection", error => {
   log.warn({error: errorFormatter(error)}, "Got unhandled promise rejection")
   // gcp throws UnhandledPromiseRejectionWarning when modifyAckDeadline fails (when not able to connect to gcp)
 })
+
+const statsInterval = parseInt(process.env.VI_STATS_INTERVAL, 10) || 10000
+setInterval(() => {
+  const {sum, max, num} = eventLoopStats.sense()
+  metricRegistry.updateStat("Max", "max_event_loop_duration", max, {})
+  metricRegistry.updateStat("Gauge", "average_event_loop_duration", sum / num, {})
+}, statsInterval)

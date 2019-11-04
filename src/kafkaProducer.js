@@ -7,6 +7,7 @@ import {errorFormatter} from "./utils/errorFormatter"
 
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
+const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 
 export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
@@ -91,8 +92,14 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
           producer.produce(topic, null, Buffer.from(JSON.stringify(event)), key, Date.now(), error => {
             if (!error) {
               observer.next(event)
-              const {channel, device_uuid, data_item_name} = event // eslint-disable-line
-              metricRegistry.updateStat("Counter", "num_messages_sent", 1, {channel, device_uuid, data_item_name})
+              const {channel, device_uuid} = event // eslint-disable-line
+              const tags = debugStats
+                ? {
+                    channel,
+                    device_uuid
+                  }
+                : {channel}
+              metricRegistry.updateStat("Counter", "num_messages_sent", 1, tags)
               observer.complete()
             } else {
               log.error(

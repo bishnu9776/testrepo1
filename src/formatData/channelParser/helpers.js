@@ -41,16 +41,22 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
 
 const valueKeys = ["value", "value_event", "value_sample", "value_location", "value_xyz"]
 
+const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
+
 export const dedupData = metricRegistry => dataItems => {
   const groupedDIs = groupBy(e => `${e.data_item_name}`, dataItems)
   return flatten(
     Object.values(groupedDIs).map(groupedDIValues => {
     const {channel, device_uuid, data_item_name} = groupedDIValues[0] // eslint-disable-line
-      metricRegistry.updateStat("Counter", "num_messages_before_dedup", groupedDIValues.length, {
-        channel,
-        device_uuid,
-        data_item_name
-      })
+
+      const tags = debugStats
+        ? {
+            channel,
+            device_uuid
+          }
+        : {channel}
+
+      metricRegistry.updateStat("Counter", "num_messages_before_dedup", groupedDIValues.length, tags)
 
       return sortWith([ascend(prop("timestamp"))])(groupedDIValues).reduce((acc, currentEvent) => {
         if (acc.length) {

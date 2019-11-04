@@ -42,7 +42,8 @@
     "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
-    "vi-kafka-stream-client": "1.0.209"
+    "vi-kafka-stream-client": "1.0.209",
+    "event-loop-stats": "1.2.0"
   },
   "devDependencies": {
     "@babel/node": "7.6.3",
