@@ -26,7 +26,7 @@ export const parseGPSTPV = ({data, attributes}) => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
 
       const locationEvent = {
-        value_location: {lat: event.lat_deg || null, lon: event.lon_deg || null},
+        value: {lat: event.lat_deg || null, lon: event.lon_deg || null},
         data_item_name: "location",
         data_item_type: "LOCATION",
         data_item_id: `location-${attributes.version}`,

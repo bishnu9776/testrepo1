@@ -14,7 +14,7 @@ describe("Parses GPSTPV", () => {
         mode: 3,
         sequence: 290929,
         timestamp: "2019-10-05T18:27:04.164Z",
-        value_location: {
+        value: {
           lat: 12.910605,
           lon: 77.60284
         }

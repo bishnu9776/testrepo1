@@ -1,4 +1,13 @@
 {
+  "test-data-item-1": {
+    "data_item_name": "test-data-item-1",
+    "component": "test",
+    "subcomponent": "TEST",
+    "data_item_type": "TEST",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": ""
+  },
   "BMS_Aux_Temp2": {
     "data_item_name": "BMS_Aux_Temp2",
     "component": "battery",
@@ -453,9 +462,9 @@
     "data_item_name": "error_code",
     "component": "heman",
     "subcomponent": "",
-    "data_item_type": "FAULT",
+    "data_item_type": "HEMAN",
     "sub_type": "",
-    "category": "EVENT",
+    "category": "CONDITION",
     "units": ""
   },
   "mode": {
@@ -563,11 +572,20 @@
     "subcomponent": "",
     "data_item_type": "LOCATION",
     "sub_type": "",
-    "category": "LOCATION",
+    "category": "EVENT",
     "units": "DEGREE"
   },
   "lon_deg": {
     "data_item_name": "lon_deg",
+    "component": "gps",
+    "subcomponent": "",
+    "data_item_type": "LOCATION",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": "DEGREE"
+  },
+  "location": {
+    "data_item_name": "location",
     "component": "gps",
     "subcomponent": "",
     "data_item_type": "LOCATION",
