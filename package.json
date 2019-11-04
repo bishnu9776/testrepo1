@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "1.1.5",
-    "node-metric-registry": "1.0.21",
+    "node-metric-registry": "1.0.23",
     "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
@@ -48,7 +48,7 @@
     "@babel/node": "7.6.3",
     "babel-preset-vi-node": "1.0.90",
     "csvtojson": "2.0.10",
-    "eslint-config-vi-node": "1.2.96",
+    "eslint-config-vi-node": "1.2.124",
     "chai": "4.2.0",
     "husky": "3.0.9",
     "mocha": "6.2.2",
