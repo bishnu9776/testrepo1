@@ -20,7 +20,7 @@
     "debug-subscriber": "babel-node src/gcpSubscriber/index.js",
     "debug-publisher": "babel-node scripts/gcpProducer.js",
     "start-dev-staging": "VI_MODE=dev VI_ES_HOST=s-elasticsearch-1.use1.systeminsights.com npm run start",
-    "test": "mocha --recursive test",
+    "test": "ELASTIC_APM_ACTIVE=false mocha --reporter dot --recursive test",
     "eslint": "eslint ./src ./test",
     "eslint-fix": "eslint ./src ./test --fix",
     "tc:version": "tc-version-app",

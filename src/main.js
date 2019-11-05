@@ -4,6 +4,7 @@ import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
 import {getPipeline} from "./pipeline"
 import {errorFormatter} from "./utils/errorFormatter"
+import appFactory from "./appFactory"
 
 const delayAndExit = (exitCode, delayMs = 5000) => {
   setTimeout(() => {
@@ -24,7 +25,7 @@ const pipeline = getPipeline({metricRegistry, probe, log})
 
 metricRegistry.startStatsReporting()
 
-const app = expressApp()
+const app = appFactory()
 const port = parseInt(process.env.VI_PORT || "3000", 10)
 
 app.listen(port, () =>
