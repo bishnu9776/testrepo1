@@ -67,7 +67,7 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
       log.info("Unsubscribing GCP client")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
-      subscription.close()
+      process.nextTick(() => subscription.close())
       // https://github.com/ReactiveX/rxjs/issues/4222. This should be long enough to give time for clearing buffer and sending ACKs/NACKs before we retry the observable chain
       // https://github.com/googleapis/nodejs-pubsub/issues/725
     }

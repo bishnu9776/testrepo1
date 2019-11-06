@@ -39,7 +39,6 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
         ignorableErrors: [
           {code: -195, message: "broker transport failure"},
           {code: -1, message: "broker transport failure"},
-          {code: -1, message: "all broker connections are down"},
           {code: -1, message: "timed out"}
         ]
       }
