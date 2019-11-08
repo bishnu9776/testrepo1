@@ -8,7 +8,7 @@ describe("GCP subscriber", () => {
   it("sends data/error on observable stream", done => {
     const eventEmitter = new EventEmitter()
     const actualEvents = []
-    eventEmitter.close = () => {
+    eventEmitter.close = async () => {
       expect(actualEvents).to.deep.eql([{a: 1}, {b: 1}])
       done()
     }
