@@ -21,6 +21,7 @@ export const formatEvent = event => {
   return {
     tag: "MTConnectDataItems",
     ...omit(["bigsink_timestamp"], event),
+    received_at: new Date().toISOString(),
     agent: "ather",
     id,
     instance_id: id,
