@@ -64,14 +64,13 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
     }
   ]
 
-  const getTopics = event => {
-    return routes.reduce((acc, route) => {
+  const getTopics = event =>
+    routes.reduce((acc, route) => {
       if (route.filter(event)) {
         return [...acc, ...route.topics]
       }
       return acc
     }, [])
-  }
 
   const hasTag = event => {
     if (!R.has("tag", event)) {
