@@ -109,9 +109,10 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
               const tags = debugStats
                 ? {
                     channel,
-                    device_uuid
+                    device_uuid,
+                    kafka_topic: topic
                   }
-                : {channel}
+                : {channel, kafka_topic: topic}
               metricRegistry.updateStat("Counter", "num_messages_sent", 1, tags)
               observer.complete()
             } else {
