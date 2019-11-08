@@ -11,9 +11,9 @@ const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 
 export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
-    dataTopics: env.VI_KAFKA_SINK_DATA_TOPIC ? env.VI_KAFKA_SINK_DATA_TOPIC.split(",") : ["test-topic-ather"],
-    archiveTopics: env.VI_KAFKA_SINK_ARCHIVE_TOPIC
-      ? env.VI_KAFKA_SINK_ARCHIVE_TOPIC.split(",")
+    dataTopics: env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : ["test-topic-ather"],
+    archiveTopics: env.VI_KAFKA_SINK_ARCHIVE_TOPICS
+      ? env.VI_KAFKA_SINK_ARCHIVE_TOPICS.split(",")
       : ["test-archive-topic-ather"],
     whitetlist: env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : [],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
