@@ -69,6 +69,68 @@ describe("Kafka producer spec", () => {
     })
   })
 
+  describe("should write whitelist dataitems to both data and archive topics", () => {
+    beforeEach(() => {
+      process.env.VI_KAFKA_SINK_DATA_TOPIC = "test"
+      process.env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
+      process.env.VI_DATAITEM_WHITELIST = "mode"
+      process.env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
+      sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
+        callback(null)
+      })
+      sinon.stub(MockProducer, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
+        cb()
+      })
+    })
+
+    afterEach(() => {
+      delete process.env.VI_PRODUCER_BUFFER_TIME_SPAN
+      MockProducer.flush.restore()
+      MockProducer.produce.restore()
+    })
+
+    const Producer = () => ({
+      producer$: () => of(MockProducer)
+    })
+
+    it("sends events to configured data and archive topics", done => {
+      const sourceEvents = [...getMockDataItems(1, "device-1", "mode"), ...getMockDataItems(1, "device-2", "location")]
+      const actualEvents = []
+
+      getKafkaProducer({log, Producer, metricRegistry})(from(sourceEvents)).subscribe({
+        next: x => {
+          actualEvents.push(x)
+        },
+        complete: () => {
+          expect(actualEvents).to.deep.eql(sourceEvents)
+          expect(MockProducer.produce).to.have.been.calledThrice
+          expect(MockProducer.produce).to.have.been.calledWithMatch(
+            "test",
+            null,
+            Buffer.from(JSON.stringify(sourceEvents[0])),
+            "device-1"
+          )
+          expect(MockProducer.produce).to.have.been.calledWithMatch(
+            "test-archive",
+            null,
+            Buffer.from(JSON.stringify(sourceEvents[0])),
+            "device-1"
+          )
+          expect(MockProducer.produce).to.have.been.calledWithMatch(
+            "test-archive",
+            null,
+            Buffer.from(JSON.stringify(sourceEvents[1])),
+            "device-2"
+          )
+          done()
+        },
+        error: error => {
+          done(error)
+        }
+      })
+    })
+  })
+
   describe("handlers errors", () => {
     beforeEach(() => {
       process.env.VI_KAFKA_SINK_DATA_TOPIC = "test"

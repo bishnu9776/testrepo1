@@ -11,7 +11,7 @@ const parseNumber = string => {
 const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 
 export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
-  function acknowledgeMessage(message) {
+  const acknowledgeMessage = message => {
     message.ack()
   }
 
@@ -64,10 +64,16 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
     })
 
     return async () => {
-      log.info("Unsubscribing GCP client")
       subscription.removeAllListeners("error")
       subscription.removeAllListeners("event")
-      subscription.close()
+      subscription
+        .close()
+        .then(() => {
+          log.info("Unsubscribed GCP client")
+        })
+        .catch(() => {
+          log.info("Error when unsubscribing GCP client. Continuing.")
+        })
       // https://github.com/ReactiveX/rxjs/issues/4222. This should be long enough to give time for clearing buffer and sending ACKs/NACKs before we retry the observable chain
       // https://github.com/googleapis/nodejs-pubsub/issues/725
     }

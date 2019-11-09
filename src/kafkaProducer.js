@@ -11,7 +11,11 @@ const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 
 export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistry}) => {
   const config = {
-    dataTopics: env.VI_KAFKA_SINK_DATA_TOPIC ? [env.VI_KAFKA_SINK_DATA_TOPIC] : ["test-topic-ather"],
+    dataTopics: env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : ["test-topic-ather"],
+    archiveTopics: env.VI_KAFKA_SINK_ARCHIVE_TOPICS
+      ? env.VI_KAFKA_SINK_ARCHIVE_TOPICS.split(",")
+      : ["test-archive-topic-ather"],
+    whitetlist: env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : [],
     bufferTimeSpan: Number.parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000,
     "vi-kafka-stream-client-options": {
       globalConfig: {
@@ -39,7 +43,6 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
         ignorableErrors: [
           {code: -195, message: "broker transport failure"},
           {code: -1, message: "broker transport failure"},
-          {code: -1, message: "all broker connections are down"},
           {code: -1, message: "timed out"}
         ]
       }
@@ -50,15 +53,24 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
 
   log.info({appConfig: JSON.stringify(config, null, 2)}, "Kafka producer config")
 
-  const strategies = {
-    MTConnectDataItems: {
-      topics: config.dataTopics,
-      getMessageKey: e => e.device_uuid
+  const routes = [
+    {
+      filter: e => config.whitetlist.includes(e.data_item_name),
+      topics: config.dataTopics
     },
-    [ACK_MSG_TAG]: {
-      topics: []
+    {
+      filter: e => e.tag === "MTConnectDataItems",
+      topics: config.archiveTopics
     }
-  }
+  ]
+
+  const getTopics = event =>
+    routes.reduce((acc, route) => {
+      if (route.filter(event)) {
+        return [...acc, ...route.topics]
+      }
+      return acc
+    }, [])
 
   const hasTag = event => {
     if (!R.has("tag", event)) {
@@ -79,7 +91,8 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
   }
 
   const send = producer => event => {
-    const {topics, getMessageKey} = strategies[event.tag]
+    const topics = getTopics(event)
+    const getMessageKey = e => e.device_uuid || null
 
     if (topics.length === 0 || event.tag === ACK_MSG_TAG) {
       return of(event)
@@ -96,9 +109,10 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
               const tags = debugStats
                 ? {
                     channel,
-                    device_uuid
+                    device_uuid,
+                    kafka_topic: topic
                   }
-                : {channel}
+                : {channel, kafka_topic: topic}
               metricRegistry.updateStat("Counter", "num_messages_sent", 1, tags)
               observer.complete()
             } else {
