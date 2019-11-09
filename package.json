@@ -39,7 +39,7 @@
   "dependencies": {
     "@google-cloud/pubsub": "1.1.5",
     "event-loop-stats": "1.2.0",
-    "node-metric-registry": "1.0.25",
+    "node-metric-registry": "1.0.26",
     "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
