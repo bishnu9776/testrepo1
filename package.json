@@ -39,11 +39,11 @@
   "dependencies": {
     "@google-cloud/pubsub": "1.1.5",
     "event-loop-stats": "1.2.0",
-    "node-metric-registry": "1.0.30",
+    "node-metric-registry": "1.0.31",
     "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
-    "vi-kafka-stream-client": "1.0.221"
+    "vi-kafka-stream-client": "1.0.222"
   },
   "devDependencies": {
     "@babel/node": "7.7.0",
