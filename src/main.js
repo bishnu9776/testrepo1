@@ -1,4 +1,3 @@
-import {expressApp} from "node-microservice"
 import eventLoopStats from "event-loop-stats"
 import {log} from "./logger"
 import {getMetricRegistry} from "./metricRegistry"
