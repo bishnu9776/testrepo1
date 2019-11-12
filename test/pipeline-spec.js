@@ -16,6 +16,8 @@ describe("Pipeline spec", () => {
   const acknowledgeMessageSpy = sinon.spy()
   beforeEach(() => {
     process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
+    process.env.VI_COLLECTOR_PROBE_PATH = `${process.cwd()}/test/mocks/probe`
+    process.env.VI_STATS_INTERVAL = "0"
     gcpSubscriberStub = sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
       return {
         stream: from([getMockGCPEvent(CAN), "foobar"]),
@@ -36,7 +38,7 @@ describe("Pipeline spec", () => {
 
   it("valid events flow through pipeline", done => {
     const output = []
-    getPipeline({metricRegistry, probe, log}).subscribe({
+    const observer = {
       next: e => {
         output.push(e)
       },
@@ -47,6 +49,8 @@ describe("Pipeline spec", () => {
         expect(acknowledgeMessageSpy.callCount).to.eql(1)
         done()
       }
-    })
+    }
+
+    getPipeline({log, observer})
   })
 })

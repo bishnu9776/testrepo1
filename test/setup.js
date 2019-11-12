@@ -12,3 +12,5 @@ global.afterEach = mocha.after
 global.expect = chai.expect
 chai.use(sinonChai)
 global.sinon = sinon
+
+process.env.ELASTIC_APM_ACTIVE = "false"

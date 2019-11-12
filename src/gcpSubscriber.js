@@ -59,7 +59,7 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
     })
 
     subscription.on("error", error => {
-      log.warn({error: errorFormatter(error)}, "Error on GCP stream")
+      log.warn({error: errorFormatter(error)}, "Error on GCP subscription")
       observer.error(error)
     })
 
@@ -71,8 +71,8 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
         .then(() => {
           log.info("Unsubscribed GCP client")
         })
-        .catch(() => {
-          log.info("Error when unsubscribing GCP client. Continuing.")
+        .catch(err => {
+          log.info({error: errorFormatter(err)}, "Error when unsubscribing GCP client. Continuing.")
         })
       // https://github.com/ReactiveX/rxjs/issues/4222. This should be long enough to give time for clearing buffer and sending ACKs/NACKs before we retry the observable chain
       // https://github.com/googleapis/nodejs-pubsub/issues/725

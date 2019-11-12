@@ -8,9 +8,15 @@ describe("GCP subscriber", () => {
   it("sends data/error on observable stream", done => {
     const eventEmitter = new EventEmitter()
     const actualEvents = []
-    eventEmitter.close = async () => {
-      expect(actualEvents).to.deep.eql([{a: 1}, {b: 1}])
-      done()
+    eventEmitter.close = () => {
+      return new Promise(() => {
+        try {
+          expect(actualEvents).to.deep.eql([{a: 1}, {b: 1}])
+          done()
+        } catch (e) {
+          done(e)
+        }
+      })
     }
 
     sinon.stub(PubSub.prototype, "subscription").callsFake(() => {
