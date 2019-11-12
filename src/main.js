@@ -1,4 +1,3 @@
-import {expressApp} from "node-microservice"
 import {log} from "./logger"
 import {getPipeline} from "./pipeline"
 import {errorFormatter} from "./utils/errorFormatter"

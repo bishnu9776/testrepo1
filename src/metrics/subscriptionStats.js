@@ -26,10 +26,7 @@ export const collectSubscriptionStats = ({
 
     const [timeSeries] = await client.listTimeSeries(request)
 
-    const getStartTime = pipe(
-      path(["interval", "startTime", "seconds"]),
-      parseInt
-    )
+    const getStartTime = pipe(path(["interval", "startTime", "seconds"]), parseInt)
 
     timeSeries.forEach(ts => {
       const points = ts.points.sort((a, b) => getStartTime(b) - getStartTime(a)) // descending
