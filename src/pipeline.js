@@ -39,7 +39,7 @@ export const getPipeline = ({log, observer}) => {
   metricRegistry.startStatsReporting()
   const {statsInterval} = metricRegistry
   if (statsInterval) {
-    collectSubscriptionStats({metricRegistry, subscriptionName, projectId, credentialsPath, statsInterval})
+    collectSubscriptionStats({metricRegistry, subscriptionName, projectId, credentialsPath, statsInterval, log})
     collectProcessStats({metricRegistry, statsInterval})
   }
 
