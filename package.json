@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/node": "7.7.0",
-    "babel-preset-vi-node": "1.0.113",
+    "babel-preset-vi-node": "1.0.114",
     "csvtojson": "2.0.10",
     "eslint-config-vi-node": "1.2.161",
     "chai": "4.2.0",
