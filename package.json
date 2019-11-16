@@ -23,7 +23,6 @@
     "test": "mocha --recursive test",
     "eslint": "eslint ./src ./test",
     "eslint-fix": "eslint ./src ./test --fix",
-    "tc:version": "tc-version-app",
     "tc:eslint": "tc-eslint",
     "tc:test_pre": "docker-compose -f teamcity-services.yml up -d",
     "tc:coverage": "tc-coverage-mocha",
