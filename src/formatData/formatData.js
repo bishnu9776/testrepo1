@@ -24,7 +24,7 @@ export const formatData = ({log, metricRegistry, probe}) => async msg => {
     }
   } catch (e) {
     metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-    log.error({error: errorFormatter(e)}, "Could not decompress message") // change to debug once we know how to handle all data
+    log.warn({error: errorFormatter(e)}, "Could not decompress message")
     return null
   }
 
@@ -46,7 +46,7 @@ export const formatData = ({log, metricRegistry, probe}) => async msg => {
       dataToLog = JSON.stringify(decompressedMessage, null, 2)
     }
 
-    log.error({ctx: {data: dataToLog}, error: errorFormatter(e)}, "Could not parse string to JSON") // change to debug once we know how to handle all data
+    log.warn({ctx: {data: dataToLog}, error: errorFormatter(e)}, "Could not parse string to JSON")
     return null
   }
 }
