@@ -146,7 +146,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
             concatAll(),
             catchError(flushAndThrow(producer)),
             finalize(() => {
-              log.warn("Disconnecting producer")
+              log.info("Disconnecting producer")
               producer.disconnect()
             })
           )
