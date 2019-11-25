@@ -74,7 +74,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
 
   const hasTag = event => {
     if (!R.has("tag", event)) {
-      log.warn({ctx: {event: JSON.stringify(event, null, 2)}}, "Malformed Event does not contain tag")
+      log.error({ctx: {event: JSON.stringify(event, null, 2)}}, "Event does not contain tag")
       return false
     }
     return true
@@ -116,7 +116,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
               metricRegistry.updateStat("Counter", "num_messages_sent", 1, tags)
               observer.complete()
             } else {
-              log.warn(
+              log.error(
                 {error: errorFormatter(error)},
                 `Kafka sink: Got error while sending message to kafka: ${error.message}`
               )
@@ -146,7 +146,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
             concatAll(),
             catchError(flushAndThrow(producer)),
             finalize(() => {
-              log.info("Disconnecting producer")
+              log.warn("Disconnecting producer")
               producer.disconnect()
             })
           )
