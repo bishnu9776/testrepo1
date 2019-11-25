@@ -36,22 +36,22 @@
     }
   },
   "dependencies": {
-    "@google-cloud/monitoring": "1.6.0",
+    "@google-cloud/monitoring": "1.5.0",
     "@google-cloud/pubsub": "1.1.5",
     "event-loop-stats": "1.2.0",
-    "node-metric-registry": "1.0.58",
+    "node-metric-registry": "1.0.56",
     "node-microservice": "3.5.364",
     "ramda": "0.26.1",
     "rxjs": "6.5.3",
-    "vi-kafka-stream-client": "1.1.251"
+    "vi-kafka-stream-client": "1.1.249"
   },
   "devDependencies": {
     "@babel/node": "7.7.4",
     "babel-preset-vi-node": "1.0.114",
-    "chai": "4.2.0",
     "csvtojson": "2.0.10",
-    "eslint-config-vi-node": "1.2.172",
-    "husky": "3.1.0",
+    "eslint-config-vi-node": "1.2.161",
+    "chai": "4.2.0",
+    "husky": "3.0.9",
     "mocha": "6.2.2",
     "sinon": "7.5.0",
     "sinon-chai": "3.3.0"

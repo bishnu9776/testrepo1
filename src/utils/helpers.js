@@ -9,7 +9,7 @@ export const isValid = log => event => {
     return true
   }
 
-  log.debug({ctx: {rawEvent: JSON.stringify(event, null, 2)}}, "Event does not contain required keys")
+  log.warn({ctx: {rawEvent: JSON.stringify(event, null, 2)}}, "Event does not contain required keys")
   return false
 }
 
