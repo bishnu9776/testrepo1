@@ -24,7 +24,7 @@ export const formatData = ({log, metricRegistry, probe}) => async msg => {
     }
   } catch (e) {
     metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-    log.warn({error: errorFormatter(e)}, "Could not decompress message")
+    log.error({error: errorFormatter(e)}, "Could not decompress message")
     return null
   }
 
