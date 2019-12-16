@@ -5,6 +5,8 @@ import {log} from "./mocks/logger"
 import {metricRegistry} from "./mocks/metricRegistry"
 import {getAckEvent, getMockDataItems} from "./mocks/getMockDataItems"
 
+const {env} = process
+
 describe("Kafka producer spec", () => {
   const MockProducer = {
     setPollInterval: () => {},
@@ -15,8 +17,8 @@ describe("Kafka producer spec", () => {
 
   describe("handle valid events", () => {
     beforeEach(() => {
-      process.env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      process.env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
+      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
+      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
       sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
         callback(null)
       })
@@ -26,7 +28,8 @@ describe("Kafka producer spec", () => {
     })
 
     afterEach(() => {
-      delete process.env.VI_PRODUCER_BUFFER_TIME_SPAN
+      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
+      delete env.VI_KAFKA_SINK_DATA_TOPIC
       MockProducer.flush.restore()
       MockProducer.produce.restore()
     })
@@ -71,10 +74,10 @@ describe("Kafka producer spec", () => {
 
   describe("should write whitelist dataitems to both data and archive topics", () => {
     beforeEach(() => {
-      process.env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      process.env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
-      process.env.VI_DATAITEM_WHITELIST = "mode"
-      process.env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
+      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
+      env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
+      env.VI_DATAITEM_WHITELIST = "mode"
+      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
       sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
         callback(null)
       })
@@ -84,7 +87,10 @@ describe("Kafka producer spec", () => {
     })
 
     afterEach(() => {
-      delete process.env.VI_PRODUCER_BUFFER_TIME_SPAN
+      delete env.VI_KAFKA_SINK_DATA_TOPIC
+      delete env.VI_KAFKA_SINK_ARCHIVE_TOPIC
+      delete env.VI_DATAITEM_WHITELIST
+      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
       MockProducer.flush.restore()
       MockProducer.produce.restore()
     })
@@ -133,8 +139,8 @@ describe("Kafka producer spec", () => {
 
   describe("handlers errors", () => {
     beforeEach(() => {
-      process.env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      process.env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
+      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
+      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
       sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
         callback(null)
       })
@@ -144,7 +150,8 @@ describe("Kafka producer spec", () => {
     })
 
     afterEach(() => {
-      delete process.env.VI_PRODUCER_BUFFER_TIME_SPAN
+      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
+      delete env.VI_KAFKA_SINK_DATA_TOPIC
       MockProducer.flush.restore()
       MockProducer.produce.restore()
     })
