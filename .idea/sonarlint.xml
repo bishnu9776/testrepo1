@@ -10,6 +10,6 @@
       </list>
     </option>
     <option name="projectKey" value="svc-ather-collector" />
-    <option name="serverId" value="sonarqube SI" />
+    <option name="serverId" value="systeminsights" />
   </component>
 </project>
