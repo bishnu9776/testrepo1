@@ -14,9 +14,15 @@ describe("Kafka producer spec", () => {
     produce: () => {},
     disconnect: () => {}
   }
+  const cleanUp = () => {
+    delete env.VI_PRODUCER_BUFFER_TIME_SPAN
+    delete env.VI_KAFKA_SINK_DATA_TOPIC
+    MockProducer.flush.restore()
+    MockProducer.produce.restore()
+  }
 
   describe("handle valid events", () => {
-    beforeEach(() => {
+    beforeEach("Setup kafka producer", () => {
       env.VI_KAFKA_SINK_DATA_TOPIC = "test"
       env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
       sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
@@ -27,12 +33,7 @@ describe("Kafka producer spec", () => {
       })
     })
 
-    afterEach(() => {
-      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
-      delete env.VI_KAFKA_SINK_DATA_TOPIC
-      MockProducer.flush.restore()
-      MockProducer.produce.restore()
-    })
+    afterEach("clean up", () => cleanUp())
 
     const Producer = () => ({
       producer$: () => of(MockProducer)
@@ -73,7 +74,7 @@ describe("Kafka producer spec", () => {
   })
 
   describe("should write whitelist dataitems to both data and archive topics", () => {
-    beforeEach(() => {
+    beforeEach("setup", () => {
       env.VI_KAFKA_SINK_DATA_TOPIC = "test"
       env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
       env.VI_DATAITEM_WHITELIST = "mode"
@@ -86,7 +87,7 @@ describe("Kafka producer spec", () => {
       })
     })
 
-    afterEach(() => {
+    afterEach("clean up", () => {
       delete env.VI_KAFKA_SINK_DATA_TOPIC
       delete env.VI_KAFKA_SINK_ARCHIVE_TOPIC
       delete env.VI_DATAITEM_WHITELIST
@@ -149,12 +150,7 @@ describe("Kafka producer spec", () => {
       })
     })
 
-    afterEach(() => {
-      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
-      delete env.VI_KAFKA_SINK_DATA_TOPIC
-      MockProducer.flush.restore()
-      MockProducer.produce.restore()
-    })
+    afterEach("cleanu up", () => cleanUp())
 
     it("on connection error, throws immediately", done => {
       const Producer = () => ({
