@@ -2,6 +2,7 @@ import {asyncScheduler, of} from "rxjs"
 import {delay, delayWhen, retryWhen, tap} from "rxjs/operators"
 import R from "ramda"
 import {errorFormatter} from "./errorFormatter"
+import {delayAndExit} from "./delayAndExit"
 
 export const retryWithExponentialBackoff = ({
   retryDelayInit,
@@ -24,15 +25,18 @@ export const retryWithExponentialBackoff = ({
         tap(e => {
           retryAttempts += 1
           if (!retryIf(e) || retryAttempts === maxRetryAttempts) {
-            throw e
+            log.error(
+              {error: errorFormatter(e)},
+              `Retries have capped out after ${retryAttempts} attempts. Exiting application.`
+            )
+            delayAndExit(6)
+          } else {
+            currentDelay = Math.min(currentDelay * retryDelayFactor, retryDelayCap)
+            log.info(
+              {error: errorFormatter(e)},
+              `Retrying at attempt ${retryAttempts}, after ${currentDelay / 1000} seconds for error: ${e.message}`
+            )
           }
-        }),
-        tap(e => {
-          currentDelay = Math.min(currentDelay * retryDelayFactor, retryDelayCap)
-          log.info(
-            {error: errorFormatter(e)},
-            `Retrying at attempt ${retryAttempts}, after ${currentDelay / 1000} seconds for error: ${e.message}`
-          )
         }),
         delayWhen(e => of(e).pipe(delay(currentDelay, Scheduler)))
       )
