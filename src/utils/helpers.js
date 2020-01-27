@@ -13,7 +13,7 @@ export const isValid = log => event => {
   return false
 }
 
-export const formatEvent = event => {
+export const formatEvent = schemaVersion => event => {
   /* eslint-disable camelcase */
   const {device_uuid, data_item_name, timestamp} = event
   const id = `${device_uuid}-${data_item_name}-${timestamp}`
@@ -27,7 +27,7 @@ export const formatEvent = event => {
     instance_id: id,
     plant: "ather",
     tenant: "ather",
-    schema_version: "1"
+    schema_version: schemaVersion
   }
   /* eslint-disable camelcase */
 }
