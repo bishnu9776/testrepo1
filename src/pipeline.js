@@ -17,6 +17,7 @@ const subscriptionName = env.VI_GCP_PUBSUB_SUBSCRIPTION
 const projectId = env.VI_GCP_PROJECT_ID
 const credentialsPath = env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
+const schemaVersion = process.env.VI_SCHEMA_VERSION
 
 export const getPipeline = ({log, observer}) => {
   let probe
@@ -61,7 +62,7 @@ export const getPipeline = ({log, observer}) => {
       filter(x => !!x),
       concatMap(events => from(events)),
       filter(isValid), // After finalising all parsers, remove this.
-      map(formatEvent),
+      map(formatEvent(schemaVersion)),
       filter(x => !!x),
       kafkaProducer.getKafkaProducer({log, metricRegistry}),
       tap(event => {
