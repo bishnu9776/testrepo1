@@ -18,7 +18,7 @@ describe("Format data", () => {
       device_uuid: "s_2404",
       sequence: 347731,
       timestamp: "2019-10-05T18:26:31.477Z",
-      value: "0"
+      value: 0
     },
     {
       bigsink_timestamp: "2019-10-05T18:27:19.775Z",
