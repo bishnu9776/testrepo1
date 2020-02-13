@@ -1,10 +1,6 @@
 import {ascend, equals, flatten, groupBy, intersection, prop, sortWith} from "ramda"
 
-export const getValueKey = ({probeInfo, dataItemName}) => {
-  if (dataItemName === "acc" || dataItemName === "gyr") {
-    return "value_xyz"
-  }
-
+export const getValueKey = ({probeInfo}) => {
   if (!probeInfo) {
     return "value"
   }
@@ -39,7 +35,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
   }
 }
 
-const valueKeys = ["value", "value_event", "value_sample", "value_location", "value_xyz"]
+const valueKeys = ["value", "value_event", "value_sample", "value_location"]
 
 const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 

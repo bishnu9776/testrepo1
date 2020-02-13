@@ -1,30 +1,40 @@
 import {omit} from "ramda"
 import {mergeProbeInfo} from "../src/formatData/mergeProbeInfo"
 import probe from "./mocks/probe.json"
-import {getMockDataItemDoc} from "./mocks/getMockDataItemDoc"
+import {getDataItem} from "./mocks/getDataItem"
 
 describe("Merge probe info", () => {
+  before(() => {
+    process.env.VI_SCHEMA_VERSION = "1"
+  })
+
+  after(() => {
+    delete process.env.VI_SCHEMA_VERSION
+  })
+
   const mergeProbeFunction = mergeProbeInfo(probe)
-  it("should stringify value in the value key", () => {
-    const mockDataItem = getMockDataItemDoc({value: 1, dataItemName: "MCU_SOC"})
+  it("should return value in value key as is", () => {
+    const mockDataItem = getDataItem({value: 1, dataItemName: "MCU_SOC"})
     expect(mergeProbeFunction(mockDataItem)).to.eql({
       ...mockDataItem,
       component: "mcu",
       data_item_type: "mcu_soc",
-      value: "1"
+      value: 1
     })
   })
-  it("should return value_event for data item of category EVENT", () => {
-    const mockDataItem = getMockDataItemDoc({value: "high", dataItemName: "BMS_ThermalAlert"})
+
+  it("should stringify and return value_event for data item of category EVENT", () => {
+    const mockDataItem = getDataItem({value: 1, dataItemName: "BMS_ThermalAlert"})
     expect(mergeProbeFunction(mockDataItem)).to.eql({
       ...omit(["value"], mockDataItem),
       data_item_type: "bms_thermal_alert",
-      value_event: "high",
+      value_event: "1",
       category: "EVENT"
     })
   })
+
   it("should return value_sample for data item of category SAMPLE", () => {
-    const mockDataItem = getMockDataItemDoc({value: 1, dataItemName: "MCU_CHARGER_TYPE"})
+    const mockDataItem = getDataItem({value: 1, dataItemName: "MCU_CHARGER_TYPE"})
     expect(mergeProbeFunction(mockDataItem)).to.eql({
       ...omit(["value"], mockDataItem),
       category: "SAMPLE",
@@ -32,8 +42,9 @@ describe("Merge probe info", () => {
       value_sample: 1
     })
   })
+
   it("should return value_location for data item of category LOCATION", () => {
-    const mockDataItem = getMockDataItemDoc({value: 10.5, dataItemName: "GPS_TPV"})
+    const mockDataItem = getDataItem({value: 10.5, dataItemName: "GPS_TPV"})
     expect(mergeProbeFunction(mockDataItem)).to.eql({
       ...omit(["value"], mockDataItem),
       category: "LOCATION",
