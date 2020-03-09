@@ -37,8 +37,8 @@
     "@google-cloud/monitoring": "1.7.0",
     "@google-cloud/pubsub": "1.6.0",
     "event-loop-stats": "1.2.0",
-    "node-metric-registry": "1.0.73",
-    "node-microservice": "3.5.463",
+    "node-metric-registry": "1.0.74",
+    "node-microservice": "3.5.464",
     "ramda": "0.27.0",
     "rxjs": "6.5.4",
     "vi-kafka-stream-client": "1.1.257"
