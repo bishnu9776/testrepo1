@@ -1,5 +1,0 @@
---require @babel/register
---ui bdd
---timeout 5000
---require test/setup.js
---require choma
