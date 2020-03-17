@@ -38,14 +38,14 @@
     "@google-cloud/pubsub": "1.6.0",
     "event-loop-stats": "1.2.0",
     "node-metric-registry": "1.0.75",
-    "node-microservice": "3.5.472",
+    "node-microservice": "3.5.475",
     "ramda": "0.27.0",
     "rxjs": "6.5.4",
     "vi-kafka-stream-client": "1.1.260"
   },
   "devDependencies": {
     "@babel/node": "7.8.7",
-    "babel-preset-vi-node": "1.0.141",
+    "babel-preset-vi-node": "1.0.142",
     "chai": "4.2.0",
     "choma": "1.2.1",
     "csvtojson": "2.0.10",
