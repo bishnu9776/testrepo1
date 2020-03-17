@@ -6,7 +6,7 @@ networks:
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:${ZOOKEEPER_VERSION}
+    image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
     container_name: zookeeper
     restart: always
     environment:
@@ -28,7 +28,7 @@ services:
       retries: 3
 
   kafka:
-    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    image: confluentinc/cp-kafka:${CONFLUENT_VERSION}
     container_name: kafka
     ports:
       - 9092:9092
