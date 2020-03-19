@@ -22,7 +22,7 @@ services:
       - ${DATA_DIR}/zookeeper/data:/var/lib/zookeeper/data
       - ${DATA_DIR}/zookeeper/datalog:/var/lib/zookeeper/log
     healthcheck:
-      test: echo ruok | nc localhost 2181 | grep imok
+      test: echo srvr | nc localhost 2181 | grep Zookeeper
       interval: 30s
       timeout: 10s
       retries: 3
