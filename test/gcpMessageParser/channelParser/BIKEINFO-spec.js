@@ -1,5 +1,5 @@
-import {BIKEINFO} from "../../mocks/BIKEINFO"
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import {BIKEINFO} from "../mockChannelData/BIKEINFO"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
 import probe from "../../mocks/probe.json"
 
 describe("Parses BIKEINFO", () => {

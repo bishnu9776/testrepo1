@@ -1,5 +1,5 @@
 import {omit} from "ramda"
-import {mergeProbeInfo} from "../src/formatData/mergeProbeInfo"
+import {mergeProbeInfo} from "../src/gcpMessageParser/mergeProbeInfo"
 import probe from "./mocks/probe.json"
 import {getDataItem} from "./mocks/getDataItem"
 

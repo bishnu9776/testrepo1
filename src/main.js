@@ -1,37 +1,59 @@
+import {handleSignals} from "node-microservice"
 import {log} from "./logger"
-import {getPipeline} from "./pipeline"
+import {getPipeline} from "./pipeline/pipeline"
 import {errorFormatter} from "./utils/errorFormatter"
-import {delayAndExit} from "./utils/delayAndExit"
 import appFactory from "./appFactory"
+import {getMetricRegistry} from "./metrics/metricRegistry"
+import {collectProcessStats} from "./metrics/processStats"
 
+const {env} = process
 const port = parseInt(process.env.VI_PORT || "3000", 10)
-const pipeline = getPipeline({log})
-const app = appFactory()
 
-app.listen(port, () =>
-  log.info(
-    {
-      port
-    },
-    "Starting Ather Collector"
-  )
-)
-
-const sigExit = signal => {
-  if (pipeline && pipeline.unsubscribe) {
-    pipeline.unsubscribe()
-  }
-  log.info(`Exiting due to ${signal}`)
-  delayAndExit(1)
+const subscriptionToProbeMapping = {
+  bike: env.VI_COLLECTOR_BIKE_PROBE_PATH,
+  grid: env.VI_COLLECTOR_GRID_PROBE_PATH
 }
 
-process.on("SIGINT", () => sigExit("SIGINT"))
-process.on("SIGTERM", () => sigExit("SIGTERM"))
-process.on("uncaughtException", error => {
-  log.error({error: errorFormatter(error)}, "Got an uncaught exception. Exiting application")
-  delayAndExit(2)
+const pipelines = []
+
+const startPipelines = subscriptionNames => {
+  const metricRegistry = getMetricRegistry(log)
+  metricRegistry.startStatsReporting()
+  collectProcessStats(metricRegistry)
+
+  subscriptionNames.forEach(subscriptionName => {
+    const subscriptionConfig = {
+      subscriptionName,
+      projectId: env.VI_GCP_PROJECT_ID,
+      credentialsPath: env.VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH
+    }
+
+    pipelines.push(
+      getPipeline({subscriptionConfig, log, metricRegistry, probePath: subscriptionToProbeMapping[subscriptionName]})
+    )
+  })
+}
+const app = appFactory()
+
+app.listen(port, () => {
+  log.info({port}, "Starting Ather Collector")
+  const subscriptionNames = env.VI_GCP_PUBSUB_SUBSCRIPTIONS.split(",")
+  startPipelines(subscriptionNames)
 })
+
+const exitHandler = () => {
+  pipelines.forEach(pipeline => {
+    if (pipeline && pipeline.unsubscribe) {
+      pipeline.unsubscribe()
+    }
+  })
+
+  return Promise.resolve(null)
+}
+
+handleSignals(log, exitHandler)
 process.on("unhandledRejection", error => {
   log.warn({error: errorFormatter(error)}, "Got unhandled promise rejection")
-  // gcp throws UnhandledPromiseRejectionWarning when modifyAckDeadline fails (when not able to connect to gcp)
+  // gcp throws UnhandledPromiseRejectionWarning when modifyAckDeadline fails
+  // We do not want to exit the application unnecessarily. Instead, pipeline will resubscribe and continue.
 })

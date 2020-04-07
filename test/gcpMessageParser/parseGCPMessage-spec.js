@@ -1,13 +1,18 @@
-import {formatData} from "../src/formatData/formatData"
-import probe from "./mocks/probe.json"
-import {ACK_MSG_TAG} from "../src/constants"
-import {metricRegistry} from "./mocks/metricRegistry"
-import {getCompressedMockGCPEvent, getMockGCPEvent} from "./mocks/getMockGCPEvent"
-import {CAN} from "./mocks/CAN"
-import {log} from "./mocks/logger"
+import {parseGCPMessage} from "../../src/gcpMessageParser/parseGCPMessage"
+import probe from "../mocks/probe.json"
+import {ACK_MSG_TAG} from "../../src/constants"
+import {metricRegistry} from "../mocks/metricRegistry"
+import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../mocks/getMockGCPEvent"
+import {CAN} from "./mockChannelData/CAN"
+import {log} from "../mocks/logger"
+import {clearEnv} from "../utils"
 
-describe("Format data", () => {
-  const formattedData = [
+describe("Parse GCP message", () => {
+  afterEach(() => {
+    clearEnv()
+  })
+
+  const parsedGCPEvents = [
     {
       bigsink_timestamp: "2019-10-05T18:27:19.775Z",
       channel: "can",
@@ -36,9 +41,9 @@ describe("Format data", () => {
 
   describe("Compressed data", () => {
     it("formats events and adds ack event to end of array", async () => {
-      const message = getCompressedMockGCPEvent(CAN)
-      const output = await formatData({log: console, metricRegistry, probe})(message)
-      expect(output).to.eql(formattedData.concat({tag: ACK_MSG_TAG, message}))
+      const message = getCompressedGCPEvent(CAN)
+      const output = await parseGCPMessage({log: console, metricRegistry, probe})(message)
+      expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
     })
   })
 
@@ -47,20 +52,16 @@ describe("Format data", () => {
       process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     })
 
-    after(() => {
-      delete process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
-    })
-
     it("formats events and adds ack event to end of array", async () => {
-      const message = getMockGCPEvent(CAN)
-      const output = await formatData({log, metricRegistry, probe})(message)
-      expect(output).to.eql(formattedData.concat({tag: ACK_MSG_TAG, message}))
+      const message = getDecompressedGCPEvent(CAN)
+      const output = await parseGCPMessage({log, metricRegistry, probe})(message)
+      expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
     })
   })
 
   describe("Bad data", () => {
     it("returns null if unable to parse", async () => {
-      const output = await formatData({log, metricRegistry, probe})("foo")
+      const output = await parseGCPMessage({log, metricRegistry, probe})("foo")
       expect(output).to.eql(null)
     })
   })

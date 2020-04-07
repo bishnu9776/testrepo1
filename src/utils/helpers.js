@@ -8,26 +8,27 @@ export const isValid = log => event => {
   if (hasRequiredKeys || event.tag === ACK_MSG_TAG) {
     return true
   }
-
   log.warn({ctx: {rawEvent: JSON.stringify(event, null, 2)}}, "Event does not contain required keys")
   return false
 }
 
-export const formatEvent = schemaVersion => event => {
+export const addSchemaVersion = schemaVersion => {
   /* eslint-disable camelcase */
-  const {device_uuid, data_item_name, timestamp} = event
-  const id = `${device_uuid}-${data_item_name}-${timestamp}`
+  return event => {
+    const {device_uuid, data_item_name, timestamp} = event
+    const id = `${device_uuid}-${data_item_name}-${timestamp}`
 
-  return {
-    tag: "MTConnectDataItems",
-    ...omit(["bigsink_timestamp"], event),
-    received_at: new Date().toISOString(),
-    agent: "ather",
-    id,
-    instance_id: id,
-    plant: "ather",
-    tenant: "ather",
-    schema_version: schemaVersion
+    return {
+      tag: "MTConnectDataItems",
+      ...omit(["bigsink_timestamp"], event),
+      received_at: new Date().toISOString(),
+      agent: "ather",
+      id,
+      instance_id: id,
+      plant: "ather",
+      tenant: "ather",
+      schema_version: schemaVersion
+    }
   }
   /* eslint-disable camelcase */
 }

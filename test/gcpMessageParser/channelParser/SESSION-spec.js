@@ -1,5 +1,5 @@
-import {SESSION} from "../../mocks/SESSION"
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import {SESSION} from "../mockChannelData/SESSION"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
 import probe from "../../mocks/probe.json"
 
 describe("Parses SESSION", () => {

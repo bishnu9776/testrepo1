@@ -1,6 +1,6 @@
 import EventEmitter from "events"
 import {PubSub} from "@google-cloud/pubsub"
-import {getGCPStream} from "../src/gcpSubscriber"
+import {getGCPStream} from "../src/gcpSubscriber/gcpStream"
 import {log} from "./mocks/logger"
 import {metricRegistry} from "./mocks/metricRegistry"
 

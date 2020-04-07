@@ -1,5 +1,5 @@
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
-import {IMU} from "../../mocks/IMU"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {IMU} from "../mockChannelData/IMU"
 import probe from "../../mocks/probe.json"
 
 describe("Parses IMU", () => {

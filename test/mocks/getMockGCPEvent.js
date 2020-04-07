@@ -1,12 +1,12 @@
 import zlib from "zlib"
 
-export const getMockGCPEvent = event => ({
+export const getDecompressedGCPEvent = event => ({
   data: Buffer.from(JSON.stringify(event.data)),
   attributes: event.attributes,
   publishTime: new Date()
 })
 
-export const getCompressedMockGCPEvent = event => ({
+export const getCompressedGCPEvent = event => ({
   data: zlib.gzipSync(Buffer.from(JSON.stringify(event.data))),
   attributes: event.attributes,
   publishTime: new Date()

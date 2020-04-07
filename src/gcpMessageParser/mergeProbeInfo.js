@@ -1,5 +1,24 @@
 import {omit} from "ramda"
-import {getValueKey} from "./channelParser/helpers"
+
+const getValueKey = ({probeInfo}) => {
+  if (!probeInfo) {
+    return "value"
+  }
+
+  if (probeInfo.category === "SAMPLE") {
+    return "value_sample"
+  }
+
+  if (probeInfo.category === "EVENT") {
+    return "value_event"
+  }
+
+  if (probeInfo.category === "LOCATION") {
+    return "value_location"
+  }
+
+  return "value"
+}
 
 export const mergeProbeInfo = probe => event => {
   const probeInfo = probe[event.data_item_name]

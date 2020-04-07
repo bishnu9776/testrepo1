@@ -1,5 +1,5 @@
-import {VCU} from "../../mocks/VCU"
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import {VCU} from "../mockChannelData/VCU"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
 import probe from "../../mocks/probe.json"
 
 describe("Parses VCU", () => {

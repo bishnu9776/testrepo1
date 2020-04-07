@@ -1,5 +1,5 @@
-import {SOH2} from "../../mocks/SOH2"
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
+import {SOH2} from "../mockChannelData/SOH2"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
 import probe from "../../mocks/probe.json"
 
 describe("Parses SOH2", () => {

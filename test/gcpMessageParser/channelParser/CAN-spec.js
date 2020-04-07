@@ -1,5 +1,5 @@
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
-import {CAN} from "../../mocks/CAN"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {CAN} from "../mockChannelData/CAN"
 import probe from "../../mocks/probe.json"
 
 describe("Parses CAN", () => {

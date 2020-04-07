@@ -2,16 +2,17 @@ import {flatten} from "ramda"
 import {decompressMessage} from "./decompressMessage"
 import {parseChannelMessage} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
-import {dedupData} from "./channelParser/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {mergeProbeInfo} from "./mergeProbeInfo"
+import {dedupDataItems} from "./dedupDataItems"
 
 const {env} = process
 
+// TODO: Refactor this
 // eslint-disable-next-line
-export const formatData = ({log, metricRegistry, probe}) => {
+export const parseGCPMessage = ({log, metricRegistry, probe}) => {
   const shouldDedupData = JSON.parse(env.VI_SHOULD_DEDUP_DATA || "true")
-  const dedupFn = dedupData(metricRegistry)
+  const dedupFn = dedupDataItems(metricRegistry)
   const shouldDecompressMessage = env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
     ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
     : true

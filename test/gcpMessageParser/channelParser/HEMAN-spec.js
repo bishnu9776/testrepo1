@@ -1,5 +1,5 @@
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
-import {HEMAN} from "../../mocks/HEMAN"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {HEMAN} from "../mockChannelData/HEMAN"
 import probe from "../../mocks/probe.json"
 
 describe("Parses HEMAN", () => {

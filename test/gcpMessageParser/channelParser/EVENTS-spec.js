@@ -1,5 +1,5 @@
-import {parseChannelMessage} from "../../../src/formatData/channelParser"
-import {EVENTS} from "../../mocks/EVENTS"
+import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {EVENTS} from "../mockChannelData/EVENTS"
 import probe from "../../mocks/probe.json"
 
 describe("Parses EVENTS", () => {

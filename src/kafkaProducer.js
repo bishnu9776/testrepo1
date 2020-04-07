@@ -5,6 +5,7 @@ import {Producer as KafkaProducer} from "vi-kafka-stream-client"
 import {ACK_MSG_TAG} from "./constants"
 import {errorFormatter} from "./utils/errorFormatter"
 
+// TODO: Refactor this. Can we use node-ms kafka producer?
 const {env} = process
 const DefaultProducer = (globalConfig, topicConfig) => new KafkaProducer(globalConfig, topicConfig)
 const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
@@ -150,7 +151,7 @@ export const getKafkaProducer = ({log, Producer = DefaultProducer, metricRegistr
             concatAll(),
             catchError(flushAndThrow(producer)),
             finalize(() => {
-              log.warn("Disconnecting producer")
+              log.warn("Disconnecting kafka producer")
               producer.disconnect()
             })
           )

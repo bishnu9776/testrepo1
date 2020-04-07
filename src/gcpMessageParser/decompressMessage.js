@@ -1,6 +1,6 @@
 import zlib from "zlib"
 
-export function decompressMessage(message) {
+export const decompressMessage = message => {
   return new Promise((resolve, reject) => {
     zlib.unzip(message, (error, data) => {
       if (error) {

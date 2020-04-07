@@ -1,11 +1,11 @@
-import {dedupData} from "../../src/formatData/channelParser/helpers"
+import {dedupDataItems} from "../../src/gcpMessageParser/dedupDataItems"
 
 describe("Helpers spec", () => {
   const metricRegistry = sinon.stub({
     updateStat: () => {}
   })
 
-  const dedupFn = dedupData(metricRegistry)
+  const dedupFn = dedupDataItems(metricRegistry)
 
   describe("dedup data", () => {
     it("dedups events", () => {
