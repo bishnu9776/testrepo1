@@ -10,16 +10,15 @@ import {collectProcessStats} from "./metrics/processStats"
 const {env} = process
 const port = parseInt(process.env.VI_PORT || "3000", 10)
 
-const subscriptionToProbeMapping = {
-  bike: env.VI_COLLECTOR_BIKE_PROBE_PATH,
-  grid: env.VI_COLLECTOR_GRID_PROBE_PATH
-}
-
 const pipelines = []
 
 // TODO: Refactor this file
-// TODO: Add spec for same
 const startPipelines = async subscriptionNames => {
+  const subscriptionToProbeMapping = {
+    [subscriptionNames[0]]: env.VI_COLLECTOR_BIKE_PROBE_PATH
+    // [subscriptionNames[1]]: env.VI_COLLECTOR_GRID_PROBE_PATH
+  }
+
   const kafkaProps = {
     parentLog: log
   }
