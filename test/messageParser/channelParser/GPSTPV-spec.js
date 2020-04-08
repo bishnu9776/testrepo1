@@ -1,6 +1,6 @@
-import {GPSTPV} from "../mockChannelData/GPSTPV"
+import {GPSTPV} from "../../fixtures/channel/GPSTPV"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import probe from "../probe.json"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses GPSTPV", () => {
   it("parses given messages", () => {

@@ -1,9 +1,9 @@
 import {getMessageParser} from "../../src/messageParser"
-import probe from "./probe.json"
+import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {metricRegistry} from "../stubs/metricRegistry"
 import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
-import {CAN} from "./mockChannelData/CAN"
+import {CAN} from "../fixtures/channel/CAN"
 import {log} from "../stubs/logger"
 import {clearEnv} from "../utils"
 

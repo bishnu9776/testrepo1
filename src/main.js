@@ -18,6 +18,7 @@ const subscriptionToProbeMapping = {
 const pipelines = []
 
 // TODO: Refactor this file
+// TODO: Add spec for same
 const startPipelines = async subscriptionNames => {
   const kafkaProps = {
     parentLog: log

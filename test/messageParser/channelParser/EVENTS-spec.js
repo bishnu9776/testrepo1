@@ -1,6 +1,6 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {EVENTS} from "../mockChannelData/EVENTS"
-import probe from "../probe.json"
+import {EVENTS} from "../../fixtures/channel/EVENTS"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses EVENTS", () => {
   it("parses given messages", () => {

@@ -22,7 +22,7 @@ const getMessageDecompresser = ({log, metricRegistry}) => {
       return await decompressMessage(message.data)
     } catch (e) {
       metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-      log.error({error: errorFormatter(e)}, "Could not decompress message") // change to debug once we know how to handle all data
+      log.error({error: errorFormatter(e)}, "Could not decompress message")
       return null
     }
   }

@@ -1,6 +1,6 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {CAN} from "../mockChannelData/CAN"
-import probe from "../probe.json"
+import {CAN} from "../../fixtures/channel/CAN"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses CAN", () => {
   it("parses given messages", () => {

@@ -1,6 +1,6 @@
-import {SOH2} from "../mockChannelData/SOH2"
+import {SOH2} from "../../fixtures/channel/SOH2"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import probe from "../probe.json"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses SOH2", () => {
   it("parses given messages", () => {

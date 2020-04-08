@@ -1,6 +1,8 @@
-import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
+import {filter, map, mergeMap, tap, timeout, concatMap} from "rxjs/operators"
 import {from} from "rxjs"
+import {complement, isEmpty} from "ramda"
 import * as gcpSubscriber from "./gcpSubscriber/gcpStream"
+
 import {getMessageParser} from "./messageParser"
 import {getKafkaSender} from "./kafkaProducer"
 import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
@@ -59,12 +61,14 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
   }
 
   const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
+  const parseMessage = getMessageParser({log, metricRegistry, probe})
 
   return stream
     .pipe(
       timeout(eventTimeout),
-      mergeMap(event => from(getMessageParser({log, metricRegistry, probe})(event))),
-      concatMap(events => from(events)),
+      mergeMap(event => from(parseMessage(event))),
+      filter(complement(isEmpty)),
+      concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(addSchemaVersion()),
       sendToKafka,

@@ -1,6 +1,6 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {IMU} from "../mockChannelData/IMU"
-import probe from "../probe.json"
+import {IMU} from "../../fixtures/channel/IMU"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses IMU", () => {
   it("parses given messages", () => {

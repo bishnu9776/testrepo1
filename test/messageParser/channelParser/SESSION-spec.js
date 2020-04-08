@@ -1,6 +1,6 @@
-import {SESSION} from "../mockChannelData/SESSION"
+import {SESSION} from "../../fixtures/channel/SESSION"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import probe from "../probe.json"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses SESSION", () => {
   it("parses given messages", () => {

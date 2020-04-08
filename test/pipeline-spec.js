@@ -1,21 +1,26 @@
 import {from} from "rxjs"
 import * as gcpSubscriber from "../src/gcpSubscriber/gcpStream"
 import * as kafkaProducer from "../src/kafkaProducer"
-import {CAN} from "./messageParser/mockChannelData/CAN"
+import {CAN} from "./fixtures/channel/CAN"
 import {getPipeline} from "../src/pipeline"
 import {log} from "./stubs/logger"
 import {getDecompressedGCPEvent} from "./utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../src/constants"
+import {clearEnv} from "./utils"
 
-describe.skip("Pipeline spec", () => {
+const {env} = process
+
+describe("Pipeline spec", () => {
   let gcpSubscriberStub
   let kafkaProducerStub
   let probePath
-
   const acknowledgeMessageSpy = sinon.spy()
+
   beforeEach(() => {
-    process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
-    probePath = `${process.cwd()}/test/mocks/probe`
+    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
+    env.VI_SHOULD_DEDUP_DATA = "true"
+
+    probePath = `${process.cwd()}/test/fixtures/probe`
     gcpSubscriberStub = sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
       return {
         stream: from([getDecompressedGCPEvent(CAN), "foobar"]),
@@ -23,19 +28,15 @@ describe.skip("Pipeline spec", () => {
       }
     })
 
-    kafkaProducerStub = sinon.stub(kafkaProducer, "getKafkaProducer").callsFake(() => {
+    kafkaProducerStub = sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
     })
-
-    // TODO: Assert that kafka producer was called three times.
-    // TODO: Add test for getPipelines and show that you can listen to two gcp subscriptions and produce to kafka.
-    //  emit events on gcp subscriber, assert calls on kafka producer. This will cover the previous todo.
   })
 
   afterEach(() => {
     gcpSubscriberStub.restore()
     kafkaProducerStub.restore()
-    delete process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
+    clearEnv()
   })
 
   it("valid events flow through pipeline", done => {
@@ -58,7 +59,8 @@ describe.skip("Pipeline spec", () => {
       observer,
       probePath,
       subscriptionConfig: {},
-      metricRegistry: {statsInterval: 0, updateStat: sinon.stub()}
+      metricRegistry: {statsInterval: 0, updateStat: sinon.stub()},
+      kafkaProducer
     })
   })
 

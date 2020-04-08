@@ -1,6 +1,6 @@
-import {BIKEINFO} from "../mockChannelData/BIKEINFO"
+import {BIKEINFO} from "../../fixtures/channel/BIKEINFO"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import probe from "../probe.json"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses BIKEINFO", () => {
   it("parses given messages", () => {

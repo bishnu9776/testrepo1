@@ -1,6 +1,6 @@
-import {VCU} from "../mockChannelData/VCU"
+import {VCU} from "../../fixtures/channel/VCU"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import probe from "../probe.json"
+import probe from "../../fixtures/probe.json"
 
 describe("Parses VCU", () => {
   it("parses given messages", () => {
