@@ -1,10 +1,10 @@
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import {EVENTS} from "../mockChannelData/EVENTS"
-import probe from "../../mocks/probe.json"
+import probe from "../probe.json"
 
 describe("Parses EVENTS", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...EVENTS, probe})).to.eql([
+    expect(createDataItemsFromMessage({...EVENTS, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-06T05:22:38.848Z",
         channel: "events",

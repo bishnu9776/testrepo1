@@ -1,4 +1,4 @@
-import {dedupDataItems} from "../../src/gcpMessageParser/dedupDataItems"
+import {dedupDataItems} from "../../src/messageParser/dedupDataItems"
 
 describe("Helpers spec", () => {
   const metricRegistry = sinon.stub({

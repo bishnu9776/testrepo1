@@ -1,129 +1,69 @@
-import {from, of, throwError} from "rxjs"
-
-import {getKafkaProducer} from "../src/kafkaProducer"
-import {log} from "./mocks/logger"
-import {metricRegistry} from "./mocks/metricRegistry"
-import {getAckEvent, getMockDataItems} from "./mocks/getMockDataItems"
+import {from} from "rxjs"
+import {clearEnv} from "./utils"
+import {getKafkaSender} from "../src/kafkaProducer"
+import {metricRegistry} from "./stubs/metricRegistry"
+import {log} from "./stubs/logger"
+import {getAckEvent, getMockDataItems} from "./utils/getMockDataItems"
 
 const {env} = process
 
-describe("Kafka producer spec", () => {
-  const MockProducer = {
-    setPollInterval: () => {},
+describe("Kafka producer", () => {
+  const kafkaProducerStub = {
     flush: () => {},
-    produce: () => {},
-    disconnect: () => {}
-  }
-  const cleanUp = () => {
-    delete env.VI_PRODUCER_BUFFER_TIME_SPAN
-    delete env.VI_KAFKA_SINK_DATA_TOPIC
-    MockProducer.flush.restore()
-    MockProducer.produce.restore()
+    produce: () => {}
   }
 
-  describe("handle valid events", () => {
-    beforeEach("Setup kafka producer", () => {
-      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
-      sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
+  afterEach(() => {
+    kafkaProducerStub.flush.restore()
+    kafkaProducerStub.produce.restore()
+    clearEnv()
+  })
+
+  describe("sends events correctly", () => {
+    beforeEach(() => {
+      sinon.stub(kafkaProducerStub, "flush").callsFake((timeout, callback) => {
         callback(null)
       })
-      sinon.stub(MockProducer, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
+      sinon.stub(kafkaProducerStub, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
         cb()
       })
     })
 
-    afterEach("clean up", () => cleanUp())
-
-    const Producer = () => ({
-      producer$: () => of(MockProducer)
-    })
-
-    it("sends events to configured topics, drops events without tag", done => {
-      const sourceEvents = [...getMockDataItems(1, "device-1"), ...getMockDataItems(1, "device-2"), getAckEvent()]
-      const actualEvents = []
-
-      getKafkaProducer({log, Producer, metricRegistry})(from([...sourceEvents, {message: "tag-is-missing"}])).subscribe(
-        {
-          next: x => {
-            actualEvents.push(x)
-          },
-          complete: () => {
-            expect(actualEvents).to.deep.eql(sourceEvents)
-            expect(MockProducer.produce).to.have.been.calledTwice
-            expect(MockProducer.produce).to.have.been.calledWithMatch(
-              "test",
-              null,
-              Buffer.from(JSON.stringify(sourceEvents[0])),
-              "device-1"
-            )
-            expect(MockProducer.produce).to.have.been.calledWithMatch(
-              "test",
-              null,
-              Buffer.from(JSON.stringify(sourceEvents[1])),
-              "device-2"
-            )
-            done()
-          },
-          error: error => {
-            done(error)
-          }
-        }
-      )
-    })
-  })
-
-  describe("should write whitelist dataitems to both data and archive topics", () => {
-    beforeEach("setup", () => {
+    it("sends all data items to archive topic, whitelisted data items to configured topics, drops events without tag", done => {
       env.VI_KAFKA_SINK_DATA_TOPIC = "test"
       env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
       env.VI_DATAITEM_WHITELIST = "mode"
       env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
-      sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
-        callback(null)
-      })
-      sinon.stub(MockProducer, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
-        cb()
-      })
-    })
 
-    afterEach("clean up", () => {
-      delete env.VI_KAFKA_SINK_DATA_TOPIC
-      delete env.VI_KAFKA_SINK_ARCHIVE_TOPIC
-      delete env.VI_DATAITEM_WHITELIST
-      delete env.VI_PRODUCER_BUFFER_TIME_SPAN
-      MockProducer.flush.restore()
-      MockProducer.produce.restore()
-    })
+      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, metricRegistry, log})
 
-    const Producer = () => ({
-      producer$: () => of(MockProducer)
-    })
-
-    it("sends events to configured data and archive topics", done => {
-      const sourceEvents = [...getMockDataItems(1, "device-1", "mode"), ...getMockDataItems(1, "device-2", "location")]
+      const sourceEvents = [
+        ...getMockDataItems(1, "device-1", "mode"),
+        ...getMockDataItems(1, "device-2", "location"),
+        getAckEvent()
+      ]
       const actualEvents = []
 
-      getKafkaProducer({log, Producer, metricRegistry})(from(sourceEvents)).subscribe({
+      sendToKafka(from([...sourceEvents, {message: "tag-is-missing"}])).subscribe({
         next: x => {
           actualEvents.push(x)
         },
         complete: () => {
           expect(actualEvents).to.deep.eql(sourceEvents)
-          expect(MockProducer.produce).to.have.been.calledThrice
-          expect(MockProducer.produce).to.have.been.calledWithMatch(
+          expect(kafkaProducerStub.produce).to.have.been.calledThrice
+          expect(kafkaProducerStub.produce).to.have.been.calledWithMatch(
             "test",
             null,
             Buffer.from(JSON.stringify(sourceEvents[0])),
             "device-1"
           )
-          expect(MockProducer.produce).to.have.been.calledWithMatch(
+          expect(kafkaProducerStub.produce).to.have.been.calledWithMatch(
             "test-archive",
             null,
             Buffer.from(JSON.stringify(sourceEvents[0])),
             "device-1"
           )
-          expect(MockProducer.produce).to.have.been.calledWithMatch(
+          expect(kafkaProducerStub.produce).to.have.been.calledWithMatch(
             "test-archive",
             null,
             Buffer.from(JSON.stringify(sourceEvents[1])),
@@ -138,44 +78,32 @@ describe("Kafka producer spec", () => {
     })
   })
 
-  describe("handlers errors", () => {
+  describe("handles errors gracefully", () => {
     beforeEach(() => {
-      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
-      sinon.stub(MockProducer, "flush").callsFake((timeout, callback) => {
+      sinon.stub(kafkaProducerStub, "flush").callsFake((timeout, callback) => {
         callback(null)
       })
-      sinon.stub(MockProducer, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
+      sinon.stub(kafkaProducerStub, "produce").callsFake((_topic, _partition, _buffer, _key, _time, cb) => {
         cb(new Error("Could not send message to Kafka"))
       })
     })
 
-    afterEach("cleanu up", () => cleanUp())
-
-    it("on connection error, throws immediately", done => {
-      const Producer = () => ({
-        producer$: () => throwError(new Error("Failed to connect to Kafka"))
-      })
-
-      getKafkaProducer({log, Producer, metricRegistry})(from([])).subscribe({
-        error: error => {
-          expect(MockProducer.flush).to.not.have.been.called
-          expect(error.message).to.eql("Failed to connect to Kafka")
-          done()
-        }
-      })
-    })
-
-    it("on error when sending event, flushes and throws error with no retry", done => {
-      const Producer = () => ({
-        producer$: () => of(MockProducer)
-      })
+    it("flushes and throws error if kafka send fails", done => {
+      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
 
       const sourceEvents = getMockDataItems(1, "device-1")
+      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, metricRegistry, log})
 
-      getKafkaProducer({log, Producer, metricRegistry})(from(sourceEvents)).subscribe({
+      sendToKafka(from(sourceEvents)).subscribe({
         error: error => {
-          expect(MockProducer.flush).to.have.been.called
+          expect(kafkaProducerStub.produce).to.have.been.calledOnce
+          expect(kafkaProducerStub.produce).to.have.been.calledWithMatch(
+            "test",
+            null,
+            Buffer.from(JSON.stringify(sourceEvents[0])),
+            "device-1"
+          )
+          expect(kafkaProducerStub.flush).to.have.been.called
           expect(error.message).to.eql("Could not send message to Kafka")
           done()
         }

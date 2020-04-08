@@ -1,7 +1,7 @@
 import {omit} from "ramda"
-import {mergeProbeInfo} from "../src/gcpMessageParser/mergeProbeInfo"
-import probe from "./mocks/probe.json"
-import {getDataItem} from "./mocks/getDataItem"
+import {mergeProbeInfo} from "../src/messageParser/mergeProbeInfo"
+import probe from "./messageParser/probe.json"
+import {getDataItem} from "./utils/getDataItem"
 
 describe("Merge probe info", () => {
   before(() => {

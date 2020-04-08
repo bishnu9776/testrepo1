@@ -1,10 +1,10 @@
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import {IMU} from "../mockChannelData/IMU"
-import probe from "../../mocks/probe.json"
+import probe from "../probe.json"
 
 describe("Parses IMU", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...IMU, probe})).to.eql([
+    expect(createDataItemsFromMessage({...IMU, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-06T05:22:49Z",
         channel: "imu",

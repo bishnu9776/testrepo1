@@ -1,10 +1,10 @@
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import {HEMAN} from "../mockChannelData/HEMAN"
-import probe from "../../mocks/probe.json"
+import probe from "../probe.json"
 
 describe("Parses HEMAN", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...HEMAN, probe})).to.eql([
+    expect(createDataItemsFromMessage({...HEMAN, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-06T05:22:38.902Z",
         channel: "heman",

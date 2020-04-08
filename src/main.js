@@ -1,6 +1,7 @@
 import {handleSignals} from "node-microservice"
+import {createProducer} from "node-microservice/dist/kafka/producer/create-producer"
 import {log} from "./logger"
-import {getPipeline} from "./pipeline/pipeline"
+import {getPipeline} from "./pipeline"
 import {errorFormatter} from "./utils/errorFormatter"
 import appFactory from "./appFactory"
 import {getMetricRegistry} from "./metrics/metricRegistry"
@@ -16,8 +17,14 @@ const subscriptionToProbeMapping = {
 
 const pipelines = []
 
-const startPipelines = subscriptionNames => {
+// TODO: Refactor this file
+const startPipelines = async subscriptionNames => {
+  const kafkaProps = {
+    parentLog: log
+  }
+  const kafkaProducer = await createProducer(kafkaProps)
   const metricRegistry = getMetricRegistry(log)
+
   metricRegistry.startStatsReporting()
   collectProcessStats(metricRegistry)
 
@@ -29,7 +36,13 @@ const startPipelines = subscriptionNames => {
     }
 
     pipelines.push(
-      getPipeline({subscriptionConfig, log, metricRegistry, probePath: subscriptionToProbeMapping[subscriptionName]})
+      getPipeline({
+        subscriptionConfig,
+        log,
+        metricRegistry,
+        probePath: subscriptionToProbeMapping[subscriptionName],
+        kafkaProducer
+      })
     )
   })
 }

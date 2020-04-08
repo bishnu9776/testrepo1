@@ -1,10 +1,10 @@
 import {VCU} from "../mockChannelData/VCU"
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
-import probe from "../../mocks/probe.json"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import probe from "../probe.json"
 
 describe("Parses VCU", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...VCU, probe})).to.eql([
+    expect(createDataItemsFromMessage({...VCU, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-12T21:24:07.927Z",
         channel: "vcu",

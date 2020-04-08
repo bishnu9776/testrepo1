@@ -1,10 +1,10 @@
 import {GPSTPV} from "../mockChannelData/GPSTPV"
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
-import probe from "../../mocks/probe.json"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import probe from "../probe.json"
 
 describe("Parses GPSTPV", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...GPSTPV, probe})).to.eql([
+    expect(createDataItemsFromMessage({...GPSTPV, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-05T18:27:15.892Z",
         data_item_id: "location-v1",

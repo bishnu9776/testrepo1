@@ -1,13 +1,14 @@
-import {parseGCPMessage} from "../../src/gcpMessageParser/parseGCPMessage"
-import probe from "../mocks/probe.json"
+import {getMessageParser} from "../../src/messageParser"
+import probe from "./probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
-import {metricRegistry} from "../mocks/metricRegistry"
-import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../mocks/getMockGCPEvent"
+import {metricRegistry} from "../stubs/metricRegistry"
+import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {CAN} from "./mockChannelData/CAN"
-import {log} from "../mocks/logger"
+import {log} from "../stubs/logger"
 import {clearEnv} from "../utils"
 
 describe("Parse GCP message", () => {
+  let messageParser
   afterEach(() => {
     clearEnv()
   })
@@ -40,29 +41,38 @@ describe("Parse GCP message", () => {
   ]
 
   describe("Compressed data", () => {
+    beforeEach(() => {
+      process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
+      messageParser = getMessageParser({log, metricRegistry, probe})
+    })
+
     it("formats events and adds ack event to end of array", async () => {
       const message = getCompressedGCPEvent(CAN)
-      const output = await parseGCPMessage({log: console, metricRegistry, probe})(message)
+      const output = await messageParser(message)
       expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
+    })
+
+    it("returns empty if unable to decompress", async () => {
+      const output = await messageParser("foo")
+      expect(output).to.eql([])
     })
   })
 
   describe("Decompressed data", () => {
-    before(() => {
+    beforeEach(() => {
       process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
+      messageParser = getMessageParser({log, metricRegistry, probe})
     })
 
     it("formats events and adds ack event to end of array", async () => {
       const message = getDecompressedGCPEvent(CAN)
-      const output = await parseGCPMessage({log, metricRegistry, probe})(message)
+      const output = await messageParser(message)
       expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
     })
-  })
 
-  describe("Bad data", () => {
-    it("returns null if unable to parse", async () => {
-      const output = await parseGCPMessage({log, metricRegistry, probe})("foo")
-      expect(output).to.eql(null)
+    it("returns empty if unable to parse as json", async () => {
+      const output = await messageParser({data: "foo"})
+      expect(output).to.eql([])
     })
   })
 })

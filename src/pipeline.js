@@ -1,14 +1,14 @@
 import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
-import * as gcpSubscriber from "../gcpSubscriber/gcpStream"
-import {parseGCPMessage} from "../gcpMessageParser/parseGCPMessage"
-import * as kafkaProducer from "../kafkaProducer"
-import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"
-import {ACK_MSG_TAG} from "../constants"
-import {addSchemaVersion, isValid} from "../utils/helpers"
-import {collectSubscriptionStats} from "../metrics/subscriptionStats"
-import {errorFormatter} from "../utils/errorFormatter"
-import {delayAndExit} from "../utils/delayAndExit"
+import * as gcpSubscriber from "./gcpSubscriber/gcpStream"
+import {getMessageParser} from "./messageParser"
+import {getKafkaSender} from "./kafkaProducer"
+import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
+import {ACK_MSG_TAG} from "./constants"
+import {addSchemaVersion, isValid} from "./utils/helpers"
+import {collectSubscriptionStats} from "./metrics/subscriptionStats"
+import {errorFormatter} from "./utils/errorFormatter"
+import {delayAndExit} from "./utils/delayAndExit"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -31,7 +31,7 @@ const defaultObserver = log => ({
   }
 })
 
-const getProbe = (filePath, log) => {
+const loadProbe = (filePath, log) => {
   try {
     const probe = require(filePath) // eslint-disable-line
     return probe
@@ -41,8 +41,8 @@ const getProbe = (filePath, log) => {
   }
 }
 
-export const getPipeline = ({log, observer, metricRegistry, probePath, subscriptionConfig}) => {
-  const probe = getProbe(probePath, log)
+export const getPipeline = ({log, observer, metricRegistry, probePath, subscriptionConfig, kafkaProducer}) => {
+  const probe = loadProbe(probePath, log)
   const {subscriptionName, projectId, credentialsPath} = subscriptionConfig
 
   const {acknowledgeMessage, stream} = gcpSubscriber.getGCPStream({
@@ -58,16 +58,16 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
     collectSubscriptionStats({metricRegistry, subscriptionName, projectId, credentialsPath, statsInterval, log})
   }
 
+  const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
+
   return stream
     .pipe(
       timeout(eventTimeout),
-      mergeMap(event => from(parseGCPMessage({log, metricRegistry, probe})(event))),
-      filter(x => !!x),
+      mergeMap(event => from(getMessageParser({log, metricRegistry, probe})(event))),
       concatMap(events => from(events)),
       filter(isValid), // After finalising all parsers, remove this.
       map(addSchemaVersion()),
-      filter(x => !!x),
-      kafkaProducer.getKafkaProducer({log, metricRegistry}),
+      sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
           acknowledgeMessage(event.message)

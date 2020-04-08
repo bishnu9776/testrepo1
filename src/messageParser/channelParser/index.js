@@ -11,7 +11,9 @@ import {parseBIKEINFO} from "./BIKEINFO"
 import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 
-export const parseChannelMessage = ({data, attributes}) => {
+// TODO: Refactor this module to dynamically load parsers and remove switch case. Rename data to message and
+//       remove passing attributes separately if it's present in the message itself
+export const createDataItemsFromMessage = ({data, attributes}) => {
   switch (attributes.channel) {
     case "gps_tpv":
       return parseGPSTPV({data, attributes})
@@ -40,7 +42,7 @@ export const parseChannelMessage = ({data, attributes}) => {
         {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes)}},
         "No parser for message. Dropping event"
       )
-      return null
+      return []
     }
   }
 }

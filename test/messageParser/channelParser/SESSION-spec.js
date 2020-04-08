@@ -1,10 +1,10 @@
 import {SESSION} from "../mockChannelData/SESSION"
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
-import probe from "../../mocks/probe.json"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import probe from "../probe.json"
 
 describe("Parses SESSION", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...SESSION, probe})).to.eql([
+    expect(createDataItemsFromMessage({...SESSION, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-06T14:31:27.069Z",
         channel: "session",

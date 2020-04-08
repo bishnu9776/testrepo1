@@ -12,7 +12,8 @@ export const isValid = log => event => {
   return false
 }
 
-export const addSchemaVersion = schemaVersion => {
+export const addSchemaVersion = () => {
+  const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */
   return event => {
     const {device_uuid, data_item_name, timestamp} = event

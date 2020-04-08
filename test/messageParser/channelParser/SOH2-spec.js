@@ -1,10 +1,10 @@
 import {SOH2} from "../mockChannelData/SOH2"
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
-import probe from "../../mocks/probe.json"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import probe from "../probe.json"
 
 describe("Parses SOH2", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...SOH2, probe})).to.eql([
+    expect(createDataItemsFromMessage({...SOH2, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-09T09:48:46.770Z",
         channel: "soh2",

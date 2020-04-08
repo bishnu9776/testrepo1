@@ -12,3 +12,13 @@ export const getGCPMessageTags = message => {
       }
     : {channel}
 }
+
+export const getEventTags = event => {
+  const {device_uuid, channel} = event // eslint-disable-line
+  return debugStats
+    ? {
+        device_uuid,
+        channel
+      }
+    : {channel}
+}

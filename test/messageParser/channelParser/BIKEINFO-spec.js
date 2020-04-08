@@ -1,10 +1,10 @@
 import {BIKEINFO} from "../mockChannelData/BIKEINFO"
-import {parseChannelMessage} from "../../../src/gcpMessageParser/channelParser"
-import probe from "../../mocks/probe.json"
+import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import probe from "../probe.json"
 
 describe("Parses BIKEINFO", () => {
   it("parses given messages", () => {
-    expect(parseChannelMessage({...BIKEINFO, probe})).to.eql([
+    expect(createDataItemsFromMessage({...BIKEINFO, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-07T11:20:34.634Z",
         channel: "bike_info",

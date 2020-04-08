@@ -1,13 +1,13 @@
 import {from} from "rxjs"
 import * as gcpSubscriber from "../src/gcpSubscriber/gcpStream"
 import * as kafkaProducer from "../src/kafkaProducer"
-import {CAN} from "./gcpMessageParser/mockChannelData/CAN"
-import {getPipeline} from "../src/pipeline/pipeline"
-import {log} from "./mocks/logger"
-import {getDecompressedGCPEvent} from "./mocks/getMockGCPEvent"
+import {CAN} from "./messageParser/mockChannelData/CAN"
+import {getPipeline} from "../src/pipeline"
+import {log} from "./stubs/logger"
+import {getDecompressedGCPEvent} from "./utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../src/constants"
 
-describe("Pipeline spec", () => {
+describe.skip("Pipeline spec", () => {
   let gcpSubscriberStub
   let kafkaProducerStub
   let probePath
@@ -27,7 +27,7 @@ describe("Pipeline spec", () => {
       return stream => stream
     })
 
-    // TODO: Assert that kafka producer was called with these events
+    // TODO: Assert that kafka producer was called three times.
     // TODO: Add test for getPipelines and show that you can listen to two gcp subscriptions and produce to kafka.
     //  emit events on gcp subscriber, assert calls on kafka producer. This will cover the previous todo.
   })
@@ -61,4 +61,8 @@ describe("Pipeline spec", () => {
       metricRegistry: {statsInterval: 0, updateStat: sinon.stub()}
     })
   })
+
+  it.skip("retry's observable chain if producing to kafka fails", () => {})
+
+  it.skip("retry's observable chain if error on gcp stream", () => {})
 })
