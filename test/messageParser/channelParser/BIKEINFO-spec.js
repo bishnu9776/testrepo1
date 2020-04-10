@@ -1,4 +1,4 @@
-import {BIKEINFO} from "../../fixtures/channel/BIKEINFO"
+import {BIKEINFO} from "../../fixtures/bike-channels/BIKEINFO"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 

@@ -1,5 +1,5 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {IMU} from "../../fixtures/channel/IMU"
+import {IMU} from "../../fixtures/bike-channels/IMU"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses IMU", () => {

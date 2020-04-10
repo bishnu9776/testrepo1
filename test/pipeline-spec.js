@@ -1,7 +1,7 @@
 import {from} from "rxjs"
 import * as gcpSubscriber from "../src/gcpSubscriber/gcpStream"
 import * as kafkaProducer from "../src/kafkaProducer"
-import {CAN} from "./fixtures/channel/CAN"
+import {CAN} from "./fixtures/bike-channels/CAN"
 import {getPipeline} from "../src/pipeline"
 import {log} from "./stubs/logger"
 import {getDecompressedGCPEvent} from "./utils/getMockGCPEvent"

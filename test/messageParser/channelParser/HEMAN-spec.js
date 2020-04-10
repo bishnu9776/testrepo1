@@ -1,5 +1,5 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {HEMAN} from "../../fixtures/channel/HEMAN"
+import {HEMAN} from "../../fixtures/bike-channels/HEMAN"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses HEMAN", () => {

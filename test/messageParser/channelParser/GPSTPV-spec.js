@@ -1,4 +1,4 @@
-import {GPSTPV} from "../../fixtures/channel/GPSTPV"
+import {GPSTPV} from "../../fixtures/bike-channels/GPSTPV"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 

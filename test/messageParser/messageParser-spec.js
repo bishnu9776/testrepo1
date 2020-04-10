@@ -3,7 +3,7 @@ import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {metricRegistry} from "../stubs/metricRegistry"
 import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
-import {CAN} from "../fixtures/channel/CAN"
+import {CAN} from "../fixtures/bike-channels/CAN"
 import {log} from "../stubs/logger"
 import {clearEnv} from "../utils"
 

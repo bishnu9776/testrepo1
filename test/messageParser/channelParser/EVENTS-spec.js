@@ -1,5 +1,5 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {EVENTS} from "../../fixtures/channel/EVENTS"
+import {EVENTS} from "../../fixtures/bike-channels/EVENTS"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses EVENTS", () => {

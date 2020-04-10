@@ -1,4 +1,4 @@
-import {SESSION} from "../../fixtures/channel/SESSION"
+import {SESSION} from "../../fixtures/bike-channels/SESSION"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 

@@ -1,5 +1,5 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {CAN} from "../../fixtures/channel/CAN"
+import {CAN} from "../../fixtures/bike-channels/CAN"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses CAN", () => {
