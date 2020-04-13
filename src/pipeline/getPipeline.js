@@ -1,16 +1,17 @@
-import {filter, map, mergeMap, tap, timeout, concatMap} from "rxjs/operators"
+import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
 import {complement, isEmpty} from "ramda"
-import * as gcpSubscriber from "./gcpSubscriber/gcpStream"
+import * as gcpSubscriber from "../gcpSubscriber/gcpStream"
 
-import {getMessageParser} from "./messageParser"
-import {getKafkaSender} from "./kafkaProducer"
-import {retryWithExponentialBackoff} from "./utils/retryWithExponentialBackoff"
-import {ACK_MSG_TAG} from "./constants"
-import {addSchemaVersion, isValid} from "./utils/helpers"
-import {collectSubscriptionStats} from "./metrics/subscriptionStats"
-import {errorFormatter} from "./utils/errorFormatter"
-import {delayAndExit} from "./utils/delayAndExit"
+import {getMessageParser} from "../messageParser"
+import {getKafkaSender} from "../kafkaProducer"
+import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"
+import {ACK_MSG_TAG} from "../constants"
+import {getEventFormatter, isValid} from "../utils/helpers"
+import {collectSubscriptionStats} from "../metrics/subscriptionStats"
+import {errorFormatter} from "../utils/errorFormatter"
+import {delayAndExit} from "../utils/delayAndExit"
+import {loadProbe} from "./loadProbe"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -33,16 +34,6 @@ const defaultObserver = log => ({
   }
 })
 
-const loadProbe = (filePath, log) => {
-  try {
-    const probe = require(filePath) // eslint-disable-line
-    return probe
-  } catch (e) {
-    log.error({error: errorFormatter(e)}, "Could not load probe. Exiting process")
-    delayAndExit(3)
-  }
-}
-
 export const getPipeline = ({log, observer, metricRegistry, probePath, subscriptionConfig, kafkaProducer}) => {
   const probe = loadProbe(probePath, log)
   const {subscriptionName, projectId, credentialsPath} = subscriptionConfig
@@ -62,6 +53,7 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
 
   const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
   const parseMessage = getMessageParser({log, metricRegistry, probe})
+  const formatEvent = getEventFormatter()
 
   return stream
     .pipe(
@@ -70,7 +62,7 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
-      map(addSchemaVersion()),
+      map(formatEvent),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {

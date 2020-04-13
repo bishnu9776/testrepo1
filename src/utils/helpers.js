@@ -2,6 +2,7 @@ import {omit} from "ramda"
 import {ACK_MSG_TAG} from "../constants"
 
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
+
 export const isValid = log => event => {
   const eventKeys = Object.keys(event)
   const hasRequiredKeys = requiredKeys.reduce((acc, x) => eventKeys.includes(x) && acc, true)
@@ -12,7 +13,8 @@ export const isValid = log => event => {
   return false
 }
 
-export const addSchemaVersion = () => {
+// TODO: Rename this function
+export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */
   return event => {

@@ -1,5 +1,5 @@
 import {flatten, pipe} from "ramda"
-import {decompressMessage} from "./decompressMessage"
+import {getDecompresserFn} from "./decompressMessage"
 import {createDataItemsFromMessage} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
@@ -7,26 +7,6 @@ import {mergeProbeInfo} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
 
 const {env} = process
-
-const getMessageDecompresser = ({log, metricRegistry}) => {
-  const isCompressedMessage = env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG
-    ? JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG)
-    : true
-
-  return async message => {
-    if (!isCompressedMessage) {
-      return message.data
-    }
-
-    try {
-      return await decompressMessage(message.data)
-    } catch (e) {
-      metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-      log.error({error: errorFormatter(e)}, "Could not decompress message")
-      return null
-    }
-  }
-}
 
 const getDedupFn = metricRegistry => {
   const shouldDedupData = JSON.parse(env.VI_SHOULD_DEDUP_DATA || "true")
@@ -51,7 +31,7 @@ const handleJSONParseFailures = (message, error, metricRegistry, log) => {
 
 export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
-  const maybeDecompressMessage = getMessageDecompresser({log, metricRegistry})
+  const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
 
   return async message => {
     const decompressedMessage = await maybeDecompressMessage(message)

@@ -1,12 +1,12 @@
 import {from} from "rxjs"
-import * as gcpSubscriber from "../src/gcpSubscriber/gcpStream"
-import * as kafkaProducer from "../src/kafkaProducer"
-import {CAN} from "./fixtures/bike-channels/CAN"
-import {getPipeline} from "../src/pipeline"
-import {log} from "./stubs/logger"
-import {getDecompressedGCPEvent} from "./utils/getMockGCPEvent"
-import {ACK_MSG_TAG} from "../src/constants"
-import {clearEnv} from "./utils"
+import * as gcpSubscriber from "../../src/gcpSubscriber/gcpStream"
+import * as kafkaProducer from "../../src/kafkaProducer"
+import {CAN} from "../fixtures/bike-channels/CAN"
+import {getPipeline} from "../../src/pipeline/getPipeline"
+import {log} from "../stubs/logger"
+import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {ACK_MSG_TAG} from "../../src/constants"
+import {clearEnv} from "../utils"
 
 const {env} = process
 

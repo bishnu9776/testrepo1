@@ -1,9 +1,9 @@
 import {from} from "rxjs"
-import {clearEnv} from "./utils"
-import {getKafkaSender} from "../src/kafkaProducer"
-import {metricRegistry} from "./stubs/metricRegistry"
-import {log} from "./stubs/logger"
-import {getAckEvent, getMockDataItems} from "./utils/getMockDataItems"
+import {clearEnv} from "../utils"
+import {getKafkaSender} from "../../src/kafkaProducer"
+import {metricRegistry} from "../stubs/metricRegistry"
+import {log} from "../stubs/logger"
+import {getAckEvent, getMockDataItems} from "../utils/getMockDataItems"
 
 const {env} = process
 

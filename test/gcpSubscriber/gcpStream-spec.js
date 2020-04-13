@@ -1,8 +1,8 @@
 import EventEmitter from "events"
 import {PubSub} from "@google-cloud/pubsub"
-import {getGCPStream} from "../src/gcpSubscriber/gcpStream"
-import {log} from "./stubs/logger"
-import {metricRegistry} from "./stubs/metricRegistry"
+import {getGCPStream} from "../../src/gcpSubscriber/gcpStream"
+import {log} from "../stubs/logger"
+import {metricRegistry} from "../stubs/metricRegistry"
 
 describe("GCP subscriber", () => {
   it("sends data/error on observable stream", done => {
