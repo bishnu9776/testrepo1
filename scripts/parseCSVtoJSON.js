@@ -9,7 +9,7 @@ Convertor()
 .fromFile(csvpath)
   .then(json => {
     const keyedJson = keyByDataItemName(json)
-    const probeFilePath = path.join(__dirname, "../src/probe.json")
+    const probeFilePath = path.join(__dirname, "./probe.json")
     try {
       fs.writeFileSync(probeFilePath, JSON.stringify(keyedJson, null, 2), {flag: "w"})
     } catch (error) {

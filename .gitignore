@@ -9,6 +9,9 @@ data/
 .data/
 certs/
 reports/
+creds/
+scripts/gcpConsumer.js
+scripts/probe.csv
 
 .idea/markdown-navigator*
 .idea/sonarlint*
