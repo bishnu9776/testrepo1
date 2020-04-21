@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start-ather" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.16.1/bin/node" />
+    <envs>
+      <env name="VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG" value="true" />
+      <env name="VI_GCP_PROJECT_ID" value="foo" />
+      <env name="VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH" value="./creds/creds.json" />
+      <env name="VI_KAFKA_SINK_CLIENT_ID" value="test" />
+      <env name="VI_STATS_INTERVAL" value="300000" />
+      <env name="VI_COLLECTOR_BIKE_PROBE_PATH" value="./scripts/probe.json" />
+      <env name="VI_KAFKA_SINK_DATA_TOPICS" value="test-topic-compressed" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_METADATA_BROKER_LIST" value="localhost:9092" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_RETRY_BACKOFF_MS" value="1000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_MESSAGE_SEND_MAX_RETRIES" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_MS" value="500" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_MESSAGES" value="500000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_BATCH_NUM_MESSAGES" value="5000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_LOG_CONNECTION_CLOSE" value="false" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_REQUEST_REQUIRED_ACKS" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_KBYTES" value="2097151" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_CLIENT_ID" value="foo" />
+      <env name="VI_GCP_PUBSUB_BIKE_SUBSCRIPTION" value="foo" />
+      <env name="VI_COLLECTOR_GRID_PROBE_PATH" value="./scripts/probe.json" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
