@@ -2,6 +2,7 @@ import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 
 export const parseCAN = ({data, attributes}) => {
+  // should call the parse function, get the parsed data and use it instead of event.parsed
   return flatten(
     data.map(event => {
       return event.parsed.map(e => {
