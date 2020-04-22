@@ -1,11 +1,9 @@
 import {keys, isNil} from "ramda"
 /**
- * should get the pasrer json
+ * should get the pasrer config
  * create configObj with function
  * create defaultConfig for legacy
  */
-
-const parserConfig = {}
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -22,19 +20,20 @@ const convertHexToBytes = value =>
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
 
-export const canParser = parser => {
-  const componentNames = keys(parser)
-  componentNames.forEach(name => {
-    const variants = keys(parser[name])
+export const canParser = config => {
+  const parser = {}
+  const coomponents = keys(config)
+  coomponents.forEach(component => {
+    const variants = keys(config[component])
     variants.forEach(variant => {
-      const codes = keys(parser[name][variant])
-      codes.forEach(code => {
-        parser[name][variant][code].forEach(e => {
-          if (isNil(parserConfig[`${name}.${variant}.${code}`])) {
-            parserConfig[`${name}.${variant}.${code}`] = {}
+      const canIds = keys(config[component][variant])
+      canIds.forEach(canId => {
+        config[component][variant][canId].forEach(e => {
+          if (isNil(parser[`${component}.${variant}.${canId}`])) {
+            parser[`${component}.${variant}.${canId}`] = {}
           }
-          parserConfig[`${name}.${variant}.${code}`][e.params] = createFn(e.equation)
-          return parserConfig
+          parser[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
+          return parser
         })
       })
     })
@@ -63,14 +62,14 @@ export const canParser = parser => {
         const bytes = convertHexToBytes(value)
 
         const keyToCheck = `${componentKeys.join(".")}.${canId}`
-        const dataItemKeys = keys(parserConfig[keyToCheck])
+        const dataItemKeys = keys(parser[keyToCheck])
         return dataItemKeys.forEach(key => {
           parsedData.push({
             can_id: canId,
             timestamp,
             seq_num: seqNum,
             key,
-            value: parserConfig[keyToCheck][key](bytes),
+            value: parser[keyToCheck][key](bytes),
             bigsink_timestamp: bsTimestamp,
             bike_id: bikeId,
             ...(globalSeq && {global_seq: globalSeq})
