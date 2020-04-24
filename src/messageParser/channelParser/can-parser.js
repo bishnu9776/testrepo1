@@ -1,4 +1,4 @@
-import {keys, isNil} from "ramda"
+import {keys, isNil, head} from "ramda"
 /**
  * should get the pasrer config
  * create configObj with function
@@ -19,6 +19,34 @@ const convertHexToBytes = value =>
     `${value[12]}${value[13]}`,
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
+
+const parseData = (canRaw, parsedData, parser, keyToCheck) => {
+  const {
+    can_id: canId,
+    data: value,
+    timestamp,
+    seq_num: seqNum,
+    bigsink_timestamp: bsTimestamp,
+    bike_id: bikeId,
+    global_seq: globalSeq
+  } = canRaw
+
+  const bytes = convertHexToBytes(value)
+  const dataItemKeys = keys(parser[keyToCheck])
+
+  return dataItemKeys.forEach(key => {
+    parsedData.push({
+      can_id: canId,
+      timestamp,
+      seq_num: seqNum,
+      key,
+      value: parser[keyToCheck][key](bytes),
+      bigsink_timestamp: bsTimestamp,
+      bike_id: bikeId,
+      ...(globalSeq && {global_seq: globalSeq})
+    })
+  })
+}
 
 export const canParser = config => {
   const parser = {}
@@ -71,51 +99,16 @@ export const canParser = config => {
     const {attributes, data} = event
 
     data.forEach(d => {
-      const {
-        can_id: canId,
-        data: value,
-        timestamp,
-        seq_num: seqNum,
-        bigsink_timestamp: bsTimestamp,
-        bike_id: bikeId,
-        global_seq: globalSeq
-      } = d.canRaw
-
-      const bytes = convertHexToBytes(value)
+      const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
       if (attributes.channel === "can") {
-        // here pluck the key which contains the can id
         const parserKeys = keys(defaultParser)
-        const keyToCheck = parserKeys.filter(key => new RegExp(canId).test(key))
-        const dataItemKeys = keys(parser[keyToCheck])
-        return dataItemKeys.forEach(key => {
-          parsedData.push({
-            can_id: canId,
-            timestamp,
-            seq_num: seqNum,
-            key,
-            value: parser[keyToCheck][key](bytes),
-            bigsink_timestamp: bsTimestamp,
-            bike_id: bikeId,
-            ...(globalSeq && {global_seq: globalSeq})
-          })
-        })
+        // TODO: log error if multiple components have same code or if code is not present.
+        const keyToCheck = head(parserKeys.filter(key => new RegExp(canId).test(key)))
+        return parseData(d.canRaw, parsedData, defaultParser, keyToCheck)
       } else {
         const keyToCheck = `${componentKeys.join(".")}.${canId}`
-        const dataItemKeys = keys(parser[keyToCheck])
-        // TODO: factor this out as a function
-        return dataItemKeys.forEach(key => {
-          parsedData.push({
-            can_id: canId,
-            timestamp,
-            seq_num: seqNum,
-            key,
-            value: parser[keyToCheck][key](bytes),
-            bigsink_timestamp: bsTimestamp,
-            bike_id: bikeId,
-            ...(globalSeq && {global_seq: globalSeq})
-          })
-        })
+        return parseData(d.canRaw, parsedData, parser, keyToCheck)
       }
     })
     return parsedData

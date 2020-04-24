@@ -6,6 +6,7 @@ const {env} = process
 
 export const parseCAN = message => {
   const {data, attributes} = message
+
   let parsedData = []
 
   const shouldParseData = JSON.parse(env.VI_SHOULD_PARSE_DATA || "false")
@@ -21,8 +22,6 @@ export const parseCAN = message => {
     data.map(e => parsedData.push(...e.parsed))
   }
 
-  // should call the parse function, get the parsed data and use it instead of event.parsed
-  // [e1, e2, e3, e4] = parsedEvent
   // TODO: check whether flattern and filter is any more required.
   return flatten(
     parsedData.map(e => {
