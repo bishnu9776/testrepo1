@@ -1,6 +1,6 @@
 import {sortWith, prop, ascend} from "ramda"
 import {canParser} from "../../src/messageParser/channelParser/can-parser"
-import {canMcu, canBms} from "../fixtures/bike-channels/CAN"
+import {canMcu, canBms, legacyCanMcu} from "../fixtures/bike-channels/CAN"
 import canParserConfig from "../fixtures/bike-channels/can-parser-config.json"
 
 describe("can parser", () => {
@@ -18,6 +18,13 @@ describe("can parser", () => {
   it("should parse can data for can_bms", () => {
     const parsedData = canParser(canParserConfig)(canBms)
     assertActualEqualsExpected(parsedData, canBms.data[0].parsed)
+  })
+
+  it("legacy bikes: should parse can data for can_mcu message using default parser config ", () => {
+    const parsedData = canParser(canParserConfig)(legacyCanMcu)
+    const expectedOutput = []
+    legacyCanMcu.data.map(e => expectedOutput.push(...e.parsed))
+    assertActualEqualsExpected(parsedData, expectedOutput)
   })
 
   // it("should parse data - big file", () => {
