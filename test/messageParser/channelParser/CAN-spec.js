@@ -1,9 +1,14 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {CAN} from "../../fixtures/bike-channels/CAN"
+import {CAN, canBms} from "../../fixtures/bike-channels/CAN"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses CAN", () => {
-  it("parses given messages", () => {
+  afterEach(() => {
+    delete process.env.VI_SHOULD_DECODE_CAN_DATA
+  })
+
+  it("VI_SHOULD_DECODE_CAN_DATA: false, parses given messages without decoding", () => {
+    process.env.VI_SHOULD_DECODE_CAN_DATA = false
     expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-05T18:27:19.775Z",
@@ -48,10 +53,13 @@ describe("Parses CAN", () => {
     ])
   })
 
-  // This test wont fail even if env is changed to false, either use one without parsed data or spy on function call
-  it("VI_SHOULD_PARSE_DATA true, should use can parser config to parse the message", () => {
-    process.env.VI_SHOULD_PARSE_DATA = true
-    expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
+  it("VI_SHOULD_DECODE_CAN_DATA true, should decode the message and parse the message", () => {
+    process.env.VI_SHOULD_DECODE_CAN_DATA = true
+    const messageWithoutCanParsed = {
+      attributes: CAN.attributes,
+      data: [{canRaw: CAN.data[0].canRaw}, {canRaw: CAN.data[1].canRaw}]
+    }
+    expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-05T18:27:19.775Z",
         channel: "can",
@@ -93,5 +101,53 @@ describe("Parses CAN", () => {
         value: 0
       }
     ])
+  })
+
+  it("should decode and parse given messages when channel contains component name and version", () => {
+    process.env.VI_SHOULD_DECODE_CAN_DATA = true
+    const parsedData = [
+      {
+        bigsink_timestamp: "2020-04-19T22:12:44.108Z",
+        channel: "can_bms/e55",
+        data_item_id: "BMS_2_Aux_Temp1-v1",
+        data_item_name: "BMS_2_Aux_Temp1",
+        device_uuid: "BEAGLE-ESS-4",
+        sequence: 543232814,
+        timestamp: "2020-04-19T22:12:43.055Z",
+        value: 29.57
+      },
+      {
+        bigsink_timestamp: "2020-04-19T22:12:44.108Z",
+        channel: "can_bms/e55",
+        data_item_id: "BMS_2_Aux_Temp2-v1",
+        data_item_name: "BMS_2_Aux_Temp2",
+        device_uuid: "BEAGLE-ESS-4",
+        sequence: 543232814,
+        timestamp: "2020-04-19T22:12:43.055Z",
+        value: 29.67
+      },
+      {
+        bigsink_timestamp: "2020-04-19T22:12:44.108Z",
+        channel: "can_bms/e55",
+        data_item_id: "BMS_2_Aux_Temp3-v1",
+        data_item_name: "BMS_2_Aux_Temp3",
+        device_uuid: "BEAGLE-ESS-4",
+        sequence: 543232814,
+        timestamp: "2020-04-19T22:12:43.055Z",
+        value: 29.06
+      },
+      {
+        bigsink_timestamp: "2020-04-19T22:12:44.108Z",
+        channel: "can_bms/e55",
+        data_item_id: "BMS_2_Aux_Temp4-v1",
+        data_item_name: "BMS_2_Aux_Temp4",
+        device_uuid: "BEAGLE-ESS-4",
+        sequence: 543232814,
+        timestamp: "2020-04-19T22:12:43.055Z",
+        value: 29.21
+      }
+    ]
+    const messageWithoutCanParsed = {attributes: canBms.attributes, data: [{canRaw: canBms.data[0].canRaw}]}
+    expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
   })
 })

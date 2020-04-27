@@ -1,39 +1,36 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
-import {canParser} from "./can-parser"
+import {canDecoder} from "./channelDecoder/can-decoder"
 
 const {env} = process
 
 export const parseCAN = message => {
   const {data, attributes} = message
 
-  let parsedData = []
+  let decodedData = []
 
-  const shouldParseData = JSON.parse(env.VI_SHOULD_PARSE_DATA || "false")
-  const canParserConfigPath =
-    env.VI_CAN_PARSER_CONFIG_PATH || "../../../test/fixtures/bike-channels/can-parser-config.json"
+  const shouldDecodeData = JSON.parse(env.VI_SHOULD_DECODE_CAN_DATA || "true")
+  const canDecoderConfigPath =
+    env.VI_CAN_DECODER_CONFIG_PATH || "../../../test/fixtures/bike-channels/can-parser-config.json"
 
   // eslint-disable-next-line global-require,import/no-dynamic-require
-  const canParserConfig = require(canParserConfigPath)
+  const canDecoderConfig = require(canDecoderConfigPath)
 
-  if (shouldParseData) {
-    parsedData = canParser(canParserConfig)(message)
+  if (shouldDecodeData) {
+    decodedData = canDecoder(canDecoderConfig)(message)
   } else {
-    data.map(e => parsedData.push(...e.parsed))
+    decodedData = flatten(data.map(e => e.parsed))
   }
 
-  // TODO: check whether flattern and filter is any more required.
-  return flatten(
-    parsedData.map(e => {
-      const timestamp = new Date(e.timestamp * 1000).toISOString()
-      return getDataItem({
-        dataItemName: e.key,
-        attributes,
-        timestamp,
-        value: e.value,
-        sequence: e.seq_num,
-        bigSinkTimestamp: `${e.bigsink_timestamp}Z`
-      })
+  return decodedData.map(e => {
+    const timestamp = new Date(e.timestamp * 1000).toISOString()
+    return getDataItem({
+      dataItemName: e.key,
+      attributes,
+      timestamp,
+      value: e.value,
+      sequence: e.seq_num,
+      bigSinkTimestamp: `${e.bigsink_timestamp}Z`
     })
-  ).filter(e => !!e)
+  })
 }

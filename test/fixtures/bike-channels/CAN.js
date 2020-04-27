@@ -137,6 +137,7 @@ export const canMcu = {
     }
   ]
 }
+
 export const canBms = {
   attributes: {
     channel: "can_bms/e55",

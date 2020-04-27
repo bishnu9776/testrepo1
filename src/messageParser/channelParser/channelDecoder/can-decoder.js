@@ -1,9 +1,4 @@
 import {keys, isNil, head} from "ramda"
-/**
- * should get the pasrer config
- * create configObj with function
- * create defaultConfig for legacy
- */
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -20,7 +15,7 @@ const convertHexToBytes = value =>
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
 
-const parseData = (canRaw, parsedData, parser, keyToCheck) => {
+const decodeData = (canRaw, parsedData, decoder, keyToCheck) => {
   const {
     can_id: canId,
     data: value,
@@ -32,7 +27,7 @@ const parseData = (canRaw, parsedData, parser, keyToCheck) => {
   } = canRaw
 
   const bytes = convertHexToBytes(value)
-  const dataItemKeys = keys(parser[keyToCheck])
+  const dataItemKeys = keys(decoder[keyToCheck])
 
   return dataItemKeys.forEach(key => {
     parsedData.push({
@@ -40,7 +35,7 @@ const parseData = (canRaw, parsedData, parser, keyToCheck) => {
       timestamp,
       seq_num: seqNum,
       key,
-      value: parser[keyToCheck][key](bytes),
+      value: decoder[keyToCheck][key](bytes),
       bigsink_timestamp: bsTimestamp,
       bike_id: bikeId,
       ...(globalSeq && {global_seq: globalSeq})
@@ -48,9 +43,9 @@ const parseData = (canRaw, parsedData, parser, keyToCheck) => {
   })
 }
 
-export const canParser = config => {
-  const parser = {}
-  const defaultParser = {}
+export const canDecoder = config => {
+  const decoder = {}
+  const defaultDecoder = {}
   const components = keys(config)
 
   // get it from outside.
@@ -68,11 +63,10 @@ export const canParser = config => {
       const canIds = keys(config[component][variant])
       canIds.forEach(canId => {
         config[component][variant][canId].forEach(e => {
-          if (isNil(parser[`${component}.${variant}.${canId}`])) {
-            parser[`${component}.${variant}.${canId}`] = {}
+          if (isNil(decoder[`${component}.${variant}.${canId}`])) {
+            decoder[`${component}.${variant}.${canId}`] = {}
           }
-          parser[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
-          return parser
+          decoder[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
         })
       })
     })
@@ -85,11 +79,10 @@ export const canParser = config => {
     const canIds = keys(config[component][variant])
     canIds.forEach(canId => {
       config[component][variant][canId].forEach(e => {
-        if (isNil(defaultParser[`${component}.${variant}.${canId}`])) {
-          defaultParser[`${component}.${variant}.${canId}`] = {}
+        if (isNil(defaultDecoder[`${component}.${variant}.${canId}`])) {
+          defaultDecoder[`${component}.${variant}.${canId}`] = {}
         }
-        defaultParser[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
-        return defaultParser
+        defaultDecoder[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
       })
     })
   })
@@ -102,13 +95,13 @@ export const canParser = config => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
       if (attributes.channel === "can") {
-        const parserKeys = keys(defaultParser)
+        const parserKeys = keys(defaultDecoder)
         // TODO: log error if multiple components have same code or if code is not present.
         const keyToCheck = head(parserKeys.filter(key => new RegExp(canId).test(key)))
-        return parseData(d.canRaw, parsedData, defaultParser, keyToCheck)
+        return decodeData(d.canRaw, parsedData, defaultDecoder, keyToCheck)
       } else {
         const keyToCheck = `${componentKeys.join(".")}.${canId}`
-        return parseData(d.canRaw, parsedData, parser, keyToCheck)
+        return decodeData(d.canRaw, parsedData, decoder, keyToCheck)
       }
     })
     return parsedData
