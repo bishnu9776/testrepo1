@@ -43,19 +43,10 @@ const decodeData = (canRaw, parsedData, decoder, keyToCheck) => {
   })
 }
 
-export const canDecoder = config => {
+export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
   const decoder = {}
   const defaultDecoder = {}
   const components = keys(config)
-
-  // get it from outside.
-  const defaultVariantToUseForEachComponent = {
-    can_charger: "MK3",
-    can_motor: "MAHLEX1",
-    can_bms: "v4_1_0",
-    can_mcu: "v1_0_0",
-    can_pod: "LPCv1"
-  }
 
   components.forEach(component => {
     const variants = keys(config[component])
