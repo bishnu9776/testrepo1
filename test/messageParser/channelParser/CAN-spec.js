@@ -62,7 +62,7 @@ describe("Parses CAN", () => {
     ])
   })
 
-  describe("VI_SHOULD_DECODE_CAN_DATA: true, should decode  and parse the message", () => {
+  describe("VI_SHOULD_DECODE_CAN_DATA: true, should decode and parse the message", () => {
     it("when channel is can", () => {
       env.VI_SHOULD_DECODE_CAN_DATA = true
       const messageWithoutCanParsed = {

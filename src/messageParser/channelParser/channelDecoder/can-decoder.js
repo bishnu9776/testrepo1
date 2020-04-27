@@ -1,4 +1,5 @@
-import {keys, isNil, head} from "ramda"
+import {keys, isNil} from "ramda"
+import {log} from "../../../logger"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -15,7 +16,7 @@ const convertHexToBytes = value =>
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
 
-const decodeData = (canRaw, parsedData, decoder, keyToCheck) => {
+const decodeData = (canRaw, decodedData, decoder, decoderKey) => {
   const {
     can_id: canId,
     data: value,
@@ -27,15 +28,15 @@ const decodeData = (canRaw, parsedData, decoder, keyToCheck) => {
   } = canRaw
 
   const bytes = convertHexToBytes(value)
-  const dataItemKeys = keys(decoder[keyToCheck])
+  const dataItems = keys(decoder[decoderKey])
 
-  return dataItemKeys.forEach(key => {
-    parsedData.push({
+  return dataItems.forEach(dataItem => {
+    decodedData.push({
       can_id: canId,
       timestamp,
       seq_num: seqNum,
-      key,
-      value: decoder[keyToCheck][key](bytes),
+      key: dataItem,
+      value: decoder[decoderKey][dataItem](bytes),
       bigsink_timestamp: bsTimestamp,
       bike_id: bikeId,
       ...(globalSeq && {global_seq: globalSeq})
@@ -79,22 +80,28 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
   })
 
   return event => {
-    const parsedData = []
+    const decodedData = []
     const {attributes, data} = event
 
     data.forEach(d => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
       if (attributes.channel === "can") {
-        const parserKeys = keys(defaultDecoder)
-        // TODO: log error if multiple components have same code or if code is not present.
-        const keyToCheck = head(parserKeys.filter(key => new RegExp(canId).test(key)))
-        return decodeData(d.canRaw, parsedData, defaultDecoder, keyToCheck)
+        const decoderKeys = keys(defaultDecoder)
+        const decoderKeyForCanId = decoderKeys.filter(key => new RegExp(canId).test(key))
+        if (decoderKeyForCanId.length !== 1) {
+          log.error(
+            {ctx: {event: JSON.stringify(event, null, 2), keyToCheck: decoderKeyForCanId}},
+            "Event does not map to one decoderKey for its can id"
+          )
+          return null
+        }
+        return decodeData(d.canRaw, decodedData, defaultDecoder, decoderKeyForCanId)
       } else {
-        const keyToCheck = `${componentKeys.join(".")}.${canId}`
-        return decodeData(d.canRaw, parsedData, decoder, keyToCheck)
+        const decoderKey = `${componentKeys.join(".")}.${canId}`
+        return decodeData(d.canRaw, decodedData, decoder, decoderKey)
       }
     })
-    return parsedData
+    return decodedData
   }
 }

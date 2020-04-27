@@ -9,7 +9,7 @@ export const parseCAN = message => {
 
   let decodedData = []
 
-  const shouldDecodeData = JSON.parse(env.VI_SHOULD_DECODE_CAN_DATA || "true")
+  const shouldDecodeData = JSON.parse(env.VI_SHOULD_DECODE_CAN_DATA || "false")
   const canDecoderConfigPath =
     env.VI_CAN_DECODER_CONFIG_PATH || "../../../test/fixtures/bike-channels/can-parser-config.json"
   const versionComponentConfigPath =

@@ -4,7 +4,7 @@ import {canMcu, canBms, legacyCanMcu} from "../fixtures/bike-channels/CAN"
 import canParserConfig from "../fixtures/bike-channels/can-parser-config.json"
 import componentVersionConfig from "../fixtures/bike-channels/component-version-config.json"
 
-describe("can parser", () => {
+describe("can decoder", () => {
   const sortBasedOnKey = arr => sortWith([ascend(prop(["key"]))])(arr)
   const assertActualEqualsExpected = (response, expected) =>
     expect(sortBasedOnKey(response)).to.eql(sortBasedOnKey(expected))
