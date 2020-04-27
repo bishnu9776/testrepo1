@@ -154,16 +154,6 @@ export const canBms = {
           global_seq: 741485778,
           bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
-          key: "BMS_2_Aux_Temp2",
-          value: 29.67
-        },
-        {
-          can_id: "0x158",
-          timestamp: 1587334363.055,
-          seq_num: 543232814,
-          global_seq: 741485778,
-          bigsink_timestamp: "2020-04-19T22:12:44.108",
-          bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp1",
           value: 29.57
         },
@@ -174,8 +164,8 @@ export const canBms = {
           global_seq: 741485778,
           bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
-          key: "BMS_2_Aux_Temp4",
-          value: 29.21
+          key: "BMS_2_Aux_Temp2",
+          value: 29.67
         },
         {
           can_id: "0x158",
@@ -186,6 +176,16 @@ export const canBms = {
           bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp3",
           value: 29.06
+        },
+        {
+          can_id: "0x158",
+          timestamp: 1587334363.055,
+          seq_num: 543232814,
+          global_seq: 741485778,
+          bigsink_timestamp: "2020-04-19T22:12:44.108",
+          bike_id: "BEAGLE-ESS-4",
+          key: "BMS_2_Aux_Temp4",
+          value: 29.21
         }
       ],
       canRaw: {

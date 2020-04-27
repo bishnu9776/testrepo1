@@ -16,7 +16,7 @@ const convertHexToBytes = value =>
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
 
-const decodeData = (canRaw, decodedData, decoder, decoderKey) => {
+const decodeData = (canRaw, decoder, decoderKey) => {
   const {
     can_id: canId,
     data: value,
@@ -30,18 +30,16 @@ const decodeData = (canRaw, decodedData, decoder, decoderKey) => {
   const bytes = convertHexToBytes(value)
   const dataItems = keys(decoder[decoderKey])
 
-  return dataItems.forEach(dataItem => {
-    decodedData.push({
-      can_id: canId,
-      timestamp,
-      seq_num: seqNum,
-      key: dataItem,
-      value: decoder[decoderKey][dataItem](bytes),
-      bigsink_timestamp: bsTimestamp,
-      bike_id: bikeId,
-      ...(globalSeq && {global_seq: globalSeq})
-    })
-  })
+  return dataItems.map(dataItem => ({
+    can_id: canId,
+    timestamp,
+    seq_num: seqNum,
+    key: dataItem,
+    value: decoder[decoderKey][dataItem](bytes),
+    bigsink_timestamp: bsTimestamp,
+    bike_id: bikeId,
+    ...(globalSeq && {global_seq: globalSeq})
+  }))
 }
 
 const populateDecoderConfig = config => {
@@ -88,10 +86,9 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
   const defaultDecoder = populateDefaultDecoderConfig(defaultVariantToUseForEachComponent, config)
 
   return event => {
-    const decodedData = []
     const {attributes, data} = event
 
-    data.forEach(d => {
+    return data.map(d => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
 
@@ -105,12 +102,11 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
           )
           return null
         }
-        return decodeData(d.canRaw, decodedData, defaultDecoder, decoderKeyForCanId)
+        return decodeData(d.canRaw, defaultDecoder, decoderKeyForCanId)
       } else {
         const decoderKey = `${componentKeys.join(".")}.${canId}`
-        return decodeData(d.canRaw, decodedData, decoder, decoderKey)
+        return decodeData(d.canRaw, decoder, decoderKey)
       }
     })
-    return decodedData
   }
 }

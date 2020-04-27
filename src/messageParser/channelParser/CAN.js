@@ -22,7 +22,7 @@ export const parseCAN = message => {
   const defaultVariantToComponentMapping = require(versionComponentConfigPath)
 
   if (shouldDecodeData) {
-    decodedData = canDecoder(canDecoderConfig, defaultVariantToComponentMapping)(message)
+    decodedData = flatten(canDecoder(canDecoderConfig, defaultVariantToComponentMapping)(message))
   } else {
     decodedData = flatten(data.map(e => e.parsed))
   }
