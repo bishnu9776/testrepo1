@@ -44,11 +44,9 @@ const decodeData = (canRaw, decodedData, decoder, decoderKey) => {
   })
 }
 
-export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
+const populateDecoderConfig = config => {
   const decoder = {}
-  const defaultDecoder = {}
   const components = keys(config)
-
   components.forEach(component => {
     const variants = keys(config[component])
     variants.forEach(variant => {
@@ -63,7 +61,11 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
       })
     })
   })
+  return decoder
+}
 
+const populateDefaultDecoderConfig = (defaultVariantToUseForEachComponent, config) => {
+  const defaultDecoder = {}
   const legacyComponents = keys(defaultVariantToUseForEachComponent)
 
   legacyComponents.forEach(component => {
@@ -78,6 +80,12 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
       })
     })
   })
+  return defaultDecoder
+}
+
+export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
+  const decoder = populateDecoderConfig(config)
+  const defaultDecoder = populateDefaultDecoderConfig(defaultVariantToUseForEachComponent, config)
 
   return event => {
     const decodedData = []
@@ -86,6 +94,7 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
     data.forEach(d => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
+
       if (attributes.channel === "can") {
         const decoderKeys = keys(defaultDecoder)
         const decoderKeyForCanId = decoderKeys.filter(key => new RegExp(canId).test(key))
