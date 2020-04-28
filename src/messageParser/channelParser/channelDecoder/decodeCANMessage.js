@@ -1,9 +1,12 @@
 import {keys, isNil} from "ramda"
 import {log} from "../../../logger"
 import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
+import {loadJSONFile} from "../../../utils/loadJSONFile"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
+
+const {env} = process
 
 const convertHexToBytes = value =>
   [
@@ -90,9 +93,14 @@ const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) 
   return defaultDecoder
 }
 
-export const decodeCANMessage = (config, defaultComponentToVersionMapping) => {
-  const decoder = populateDecoderConfig(config)
-  const defaultDecoder = populateDefaultDecoderConfig(config, defaultComponentToVersionMapping)
+export const decodeCANMessage = () => {
+  const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
+  const componentVersionConfigPath = env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH
+  const decoderConfig = loadJSONFile(decoderConfigPath)
+  const legacyComponentVersionMapping = loadJSONFile(componentVersionConfigPath)
+
+  const decoder = populateDecoderConfig(decoderConfig)
+  const defaultDecoder = populateDefaultDecoderConfig(decoderConfig, legacyComponentVersionMapping)
 
   return event => {
     const {attributes, data} = event
@@ -113,11 +121,10 @@ export const decodeCANMessage = (config, defaultComponentToVersionMapping) => {
         }
         const decoderForCanId = defaultDecoder[decoderKeyForCanId]
         return decodeCANRaw(d.canRaw, decoderForCanId)
-      } else {
-        const decoderKey = `${componentKeys.join(".")}.${canId}`
-        const decoderForCanId = decoder[decoderKey]
-        return decodeCANRaw(d.canRaw, decoderForCanId)
       }
+      const decoderKey = `${componentKeys.join(".")}.${canId}`
+      const decoderForCanId = decoder[decoderKey]
+      return decodeCANRaw(d.canRaw, decoderForCanId)
     })
   }
 }
