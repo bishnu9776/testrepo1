@@ -1,13 +1,13 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {CAN, canBms, legacyCanBms} from "../../fixtures/bike-channels/CAN"
+import {CAN, canBms, legacyCanBms} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv} from "../../utils"
 
 describe("Parses CAN", () => {
   const {env} = process
 
-  it("VI_SHOULD_DECODE_CAN_DATA: false, parses given messages without decoding", () => {
-    env.VI_SHOULD_DECODE_CAN_DATA = false
+  it("VI_SHOULD_DECODE_CAN_MESSAGE: false, parses given messages without decoding", () => {
+    env.VI_SHOULD_DECODE_CAN_MESSAGE = false
     expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
       {
         bigsink_timestamp: "2019-10-05T18:27:19.775Z",
@@ -52,11 +52,11 @@ describe("Parses CAN", () => {
     ])
   })
 
-  describe("VI_SHOULD_DECODE_CAN_DATA: true, should decode and parse the message", () => {
+  describe("VI_SHOULD_DECODE_CAN_MESSAGE: true, should decode and parse the message", () => {
     beforeEach(() => {
-      env.VI_SHOULD_DECODE_CAN_DATA = true
-      env.VI_CAN_DECODER_CONFIG_PATH = "../../test/fixtures/bike-channels/can-parser-config.json"
-      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../test/fixtures/bike-channels/component-version-config.json"
+      env.VI_SHOULD_DECODE_CAN_MESSAGE = true
+      env.VI_CAN_DECODER_CONFIG_PATH = "../../test/fixtures/bike-channels/canDecoderConfig.json"
+      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../test/fixtures/bike-channels/legacyComponentVersionConfig.json"
     })
 
     afterEach(() => {

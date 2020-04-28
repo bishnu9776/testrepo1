@@ -1,4 +1,4 @@
-import {SOH} from "../../fixtures/bike-channels/SOH"
+import {SOH} from "../../fixtures/bikeChannels/SOH"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 

@@ -1,4 +1,4 @@
-import {VCU} from "../../fixtures/bike-channels/VCU"
+import {VCU} from "../../fixtures/bikeChannels/VCU"
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 

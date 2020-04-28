@@ -2,7 +2,7 @@ import {bindNodeCallback, forkJoin, throwError, of, Observable, merge} from "rxj
 import {bufferTime, catchError, concatAll, concatMap, filter, flatMap} from "rxjs/operators"
 import {complement, isEmpty, has} from "ramda"
 import {errorFormatter} from "../utils/errorFormatter"
-import {getMessageKey, getRoutingConfig, getTopics} from "./routing-utils"
+import {getMessageKey, getRoutingConfig, getTopics} from "./routingUtils"
 import {ACK_MSG_TAG} from "../constants"
 import {getEventTags} from "../metrics/tags"
 

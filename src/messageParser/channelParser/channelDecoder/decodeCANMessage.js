@@ -90,7 +90,7 @@ const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) 
   return defaultDecoder
 }
 
-export const canDecoder = (config, defaultComponentToVersionMapping) => {
+export const decodeCANMessage = (config, defaultComponentToVersionMapping) => {
   const decoder = populateDecoderConfig(config)
   const defaultDecoder = populateDefaultDecoderConfig(config, defaultComponentToVersionMapping)
 
