@@ -19,7 +19,7 @@ describe("can decoder", () => {
     expect(parsedData).to.eql(legacyCanMcu.data.map(e => e.parsed))
   })
 
-  it("legacy bikes: can_bms, when canId is not present in default config ", () => {
+  it("legacy bikes: can_bms,should give emmpty array when canId is not present in default config ", () => {
     const parsedData = canDecoder(canParserConfig, componentVersionConfig)(legacyCanBms)
     expect(parsedData).to.eql([[]])
   })

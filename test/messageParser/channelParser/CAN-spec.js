@@ -1,20 +1,10 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
 import {CAN, canBms, legacyCanBms} from "../../fixtures/bike-channels/CAN"
 import probe from "../../fixtures/probe.json"
+import {clearEnv} from "../../utils"
 
 describe("Parses CAN", () => {
   const {env} = process
-
-  beforeEach("Setup envs", () => {
-    env.VI_CAN_DECODER_CONFIG_PATH = "../../../test/fixtures/bike-channels/can-parser-config.json"
-    env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../../test/fixtures/bike-channels/component-version-config.json"
-  })
-
-  afterEach("Clear setup", () => {
-    delete env.VI_SHOULD_DECODE_CAN_DATA
-    delete env.VI_CAN_DECODER_CONFIG_PATH
-    delete env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH
-  })
 
   it("VI_SHOULD_DECODE_CAN_DATA: false, parses given messages without decoding", () => {
     env.VI_SHOULD_DECODE_CAN_DATA = false
@@ -63,8 +53,17 @@ describe("Parses CAN", () => {
   })
 
   describe("VI_SHOULD_DECODE_CAN_DATA: true, should decode and parse the message", () => {
-    it("when channel is can", () => {
+    beforeEach(() => {
       env.VI_SHOULD_DECODE_CAN_DATA = true
+      env.VI_CAN_DECODER_CONFIG_PATH = "../../test/fixtures/bike-channels/can-parser-config.json"
+      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../test/fixtures/bike-channels/component-version-config.json"
+    })
+
+    afterEach(() => {
+      clearEnv()
+    })
+
+    it("when channel is can", () => {
       const messageWithoutCanParsed = {
         attributes: CAN.attributes,
         data: [{canRaw: CAN.data[0].canRaw}, {canRaw: CAN.data[1].canRaw}]
@@ -114,7 +113,6 @@ describe("Parses CAN", () => {
     })
 
     it("when channel contains component name and version", () => {
-      env.VI_SHOULD_DECODE_CAN_DATA = true
       const parsedData = [
         {
           bigsink_timestamp: "2020-04-19T22:12:44.108Z",
@@ -161,9 +159,13 @@ describe("Parses CAN", () => {
       expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
 
-    it("when channel is can, but canId is not present in default coonfig", () => {
-      env.VI_SHOULD_DECODE_CAN_DATA = true
+    it("when channel is can, but canId is not present in default config", () => {
       expect(createDataItemsFromMessage({...legacyCanBms, probe})).to.eql([])
+    })
+
+    it("when config paths are not given, should return empty array", () => {
+      env.VI_CAN_DECODER_CONFIG_PATH = undefined
+      expect(createDataItemsFromMessage({...canBms, probe})).to.eql([])
     })
   })
 })

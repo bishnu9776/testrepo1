@@ -1,5 +1,6 @@
 import {keys, isNil} from "ramda"
 import {log} from "../../../logger"
+import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -44,6 +45,10 @@ const decodeData = (canRaw, decoder, decoderKey) => {
 
 const populateDecoderConfig = config => {
   const decoder = {}
+
+  if (isNilOrEmpty(config)) {
+    return decoder
+  }
   const components = keys(config)
   components.forEach(component => {
     const versions = keys(config[component])
@@ -65,6 +70,10 @@ const populateDecoderConfig = config => {
 const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) => {
   const defaultDecoder = {}
   const legacyComponents = keys(defaultComponentToVersionMapping)
+
+  if (isNilOrEmpty(legacyComponents) || isNilOrEmpty(config)) {
+    return defaultDecoder
+  }
 
   legacyComponents.forEach(component => {
     const version = defaultComponentToVersionMapping[component]
