@@ -18,7 +18,7 @@ export const createDataItemsFromMessage = ({data, attributes}) => {
     case "gps_tpv":
       return parseGPSTPV({data, attributes})
     case (attributes.channel.match(/^can/) || {}).input: // any channel name starting with can
-      return parseCAN({data, attributes})
+      return parseCAN()({data, attributes})
     case "mcu":
       return parseMCU({data, attributes})
     case "heman":
