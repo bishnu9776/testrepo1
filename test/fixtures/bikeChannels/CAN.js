@@ -68,7 +68,7 @@ export const CAN = {
   ]
 }
 
-export const canMcu = {
+export const CAN_MCU = {
   attributes: {
     channel: "can_mcu/v1_0_0",
     bike_id: "s_2404",
@@ -138,7 +138,7 @@ export const canMcu = {
   ]
 }
 
-export const canBms = {
+export const CAN_BMS = {
   attributes: {
     channel: "can_bms/e55",
     bike_id: "BEAGLE-ESS-4",
@@ -201,7 +201,7 @@ export const canBms = {
   ]
 }
 
-export const legacyCanMcu = {
+export const LEGACY_CAN_MCU = {
   attributes: {
     channel: "can",
     bike_id: "s_2404",
@@ -271,7 +271,7 @@ export const legacyCanMcu = {
   ]
 }
 
-export const legacyCanBms = {
+export const LEGACY_CAN_BMS = {
   attributes: {
     channel: "can",
     bike_id: "BEAGLE-ESS-4",

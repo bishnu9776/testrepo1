@@ -17,7 +17,7 @@ const convertHexToBytes = value =>
     `${value[14]}${value[15]}`
   ].map(s => parseInt(s, 16))
 
-const decodeData = (canRaw, decoder, decoderKey) => {
+const decodeCANRaw = (canRaw, decoderForCanId) => {
   const {
     can_id: canId,
     data: value,
@@ -29,14 +29,14 @@ const decodeData = (canRaw, decoder, decoderKey) => {
   } = canRaw
 
   const bytes = convertHexToBytes(value)
-  const dataItems = keys(decoder[decoderKey])
+  const dataItems = keys(decoderForCanId)
 
   return dataItems.map(dataItem => ({
     can_id: canId,
     timestamp,
     seq_num: seqNum,
     key: dataItem,
-    value: decoder[decoderKey][dataItem](bytes),
+    value: decoderForCanId[dataItem](bytes),
     bigsink_timestamp: bsTimestamp,
     bike_id: bikeId,
     ...(globalSeq && {global_seq: globalSeq})
@@ -107,14 +107,16 @@ export const decodeCANMessage = (config, defaultComponentToVersionMapping) => {
         if (decoderKeyForCanId.length !== 1) {
           log.error(
             {ctx: {event: JSON.stringify(event, null, 2), keyToCheck: decoderKeyForCanId}},
-            "Event does not map to one decoderKey for its can id"
+            "Event does not map to one decoder for its can id"
           )
           return []
         }
-        return decodeData(d.canRaw, defaultDecoder, decoderKeyForCanId)
+        const decoderForCanId = defaultDecoder[decoderKeyForCanId]
+        return decodeCANRaw(d.canRaw, decoderForCanId)
       } else {
         const decoderKey = `${componentKeys.join(".")}.${canId}`
-        return decodeData(d.canRaw, decoder, decoderKey)
+        const decoderForCanId = decoder[decoderKey]
+        return decodeCANRaw(d.canRaw, decoderForCanId)
       }
     })
   }

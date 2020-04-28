@@ -1,5 +1,5 @@
 import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {CAN, canBms, legacyCanBms} from "../../fixtures/bikeChannels/CAN"
+import {CAN, CAN_BMS, LEGACY_CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv} from "../../utils"
 
@@ -55,8 +55,8 @@ describe("Parses CAN", () => {
   describe("VI_SHOULD_DECODE_CAN_MESSAGE: true, should decode and parse the message", () => {
     beforeEach(() => {
       env.VI_SHOULD_DECODE_CAN_MESSAGE = true
-      env.VI_CAN_DECODER_CONFIG_PATH = "../../test/fixtures/bike-channels/canDecoderConfig.json"
-      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../test/fixtures/bike-channels/legacyComponentVersionConfig.json"
+      env.VI_CAN_DECODER_CONFIG_PATH = "../../test/fixtures/configFiles/canDecoderConfig.json"
+      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "../../test/fixtures/configFiles/legacyComponentVersionConfig.json"
     })
 
     afterEach(() => {
@@ -155,17 +155,17 @@ describe("Parses CAN", () => {
           value: 29.21
         }
       ]
-      const messageWithoutCanParsed = {attributes: canBms.attributes, data: [{canRaw: canBms.data[0].canRaw}]}
+      const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: [{canRaw: CAN_BMS.data[0].canRaw}]}
       expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
 
     it("when channel is can, but canId is not present in default config", () => {
-      expect(createDataItemsFromMessage({...legacyCanBms, probe})).to.eql([])
+      expect(createDataItemsFromMessage({...LEGACY_CAN_BMS, probe})).to.eql([])
     })
 
     it("when config paths are not given, should return empty array", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
-      expect(createDataItemsFromMessage({...canBms, probe})).to.eql([])
+      expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([])
     })
   })
 })
