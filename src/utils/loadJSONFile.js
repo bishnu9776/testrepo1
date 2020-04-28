@@ -7,7 +7,7 @@ export const loadJSONFile = filePath => {
   try {
     return JSON.parse(fs.readFileSync(path.resolve(filePath), "utf8"))
   } catch (e) {
-    log.error({error: errorFormatter(e)}, `Error in reading JSON file ${filePath}. Using an empty mapping.`)
+    log.error({error: errorFormatter(e)}, `Error in reading JSON file ${filePath}.`)
     return {}
   }
 }
