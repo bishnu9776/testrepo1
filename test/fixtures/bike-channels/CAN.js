@@ -270,3 +270,66 @@ export const legacyCanMcu = {
     }
   ]
 }
+
+export const legacyCanBms = {
+  attributes: {
+    channel: "can",
+    bike_id: "BEAGLE-ESS-4",
+    version: "v1"
+  },
+  data: [
+    {
+      parsed: [
+        {
+          can_id: "0x158",
+          timestamp: 1587334363.055,
+          seq_num: 543232814,
+          global_seq: 741485778,
+          bigsink_timestamp: "2020-04-19T22:12:44.108",
+          bike_id: "BEAGLE-ESS-4",
+          key: "BMS_2_Aux_Temp1",
+          value: 29.57
+        },
+        {
+          can_id: "0x158",
+          timestamp: 1587334363.055,
+          seq_num: 543232814,
+          global_seq: 741485778,
+          bigsink_timestamp: "2020-04-19T22:12:44.108",
+          bike_id: "BEAGLE-ESS-4",
+          key: "BMS_2_Aux_Temp2",
+          value: 29.67
+        },
+        {
+          can_id: "0x158",
+          timestamp: 1587334363.055,
+          seq_num: 543232814,
+          global_seq: 741485778,
+          bigsink_timestamp: "2020-04-19T22:12:44.108",
+          bike_id: "BEAGLE-ESS-4",
+          key: "BMS_2_Aux_Temp3",
+          value: 29.06
+        },
+        {
+          can_id: "0x158",
+          timestamp: 1587334363.055,
+          seq_num: 543232814,
+          global_seq: 741485778,
+          bigsink_timestamp: "2020-04-19T22:12:44.108",
+          bike_id: "BEAGLE-ESS-4",
+          key: "BMS_2_Aux_Temp4",
+          value: 29.21
+        }
+      ],
+      canRaw: {
+        can_id: "0x158",
+        data: "8d0b970b5a0b690b",
+        timestamp: 1587334363.055,
+        seq_num: 543232814,
+        global_seq: 741485778,
+        bigsink_timestamp: "2020-04-19T22:12:44.108",
+        bike_id: "BEAGLE-ESS-4"
+      }
+    }
+  ]
+}

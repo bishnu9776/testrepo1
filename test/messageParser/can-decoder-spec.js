@@ -1,5 +1,5 @@
 import {canDecoder} from "../../src/messageParser/channelParser/channelDecoder/can-decoder"
-import {canMcu, canBms, legacyCanMcu} from "../fixtures/bike-channels/CAN"
+import {canMcu, canBms, legacyCanMcu, legacyCanBms} from "../fixtures/bike-channels/CAN"
 import canParserConfig from "../fixtures/bike-channels/can-parser-config.json"
 import componentVersionConfig from "../fixtures/bike-channels/component-version-config.json"
 
@@ -17,5 +17,10 @@ describe("can decoder", () => {
   it("legacy bikes: should parse can data for can_mcu message using default parser config ", () => {
     const parsedData = canDecoder(canParserConfig, componentVersionConfig)(legacyCanMcu)
     expect(parsedData).to.eql(legacyCanMcu.data.map(e => e.parsed))
+  })
+
+  it("legacy bikes: can_bms, when canId is not present in default config ", () => {
+    const parsedData = canDecoder(canParserConfig, componentVersionConfig)(legacyCanBms)
+    expect(parsedData).to.eql([[]])
   })
 })

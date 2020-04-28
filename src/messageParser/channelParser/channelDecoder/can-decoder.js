@@ -46,15 +46,15 @@ const populateDecoderConfig = config => {
   const decoder = {}
   const components = keys(config)
   components.forEach(component => {
-    const variants = keys(config[component])
-    variants.forEach(variant => {
-      const canIds = keys(config[component][variant])
+    const versions = keys(config[component])
+    versions.forEach(version => {
+      const canIds = keys(config[component][version])
       canIds.forEach(canId => {
-        config[component][variant][canId].forEach(e => {
-          if (isNil(decoder[`${component}.${variant}.${canId}`])) {
-            decoder[`${component}.${variant}.${canId}`] = {}
+        config[component][version][canId].forEach(e => {
+          if (isNil(decoder[`${component}.${version}.${canId}`])) {
+            decoder[`${component}.${version}.${canId}`] = {}
           }
-          decoder[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
+          decoder[`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
         })
       })
     })
@@ -62,28 +62,28 @@ const populateDecoderConfig = config => {
   return decoder
 }
 
-const populateDefaultDecoderConfig = (defaultVariantToUseForEachComponent, config) => {
+const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) => {
   const defaultDecoder = {}
-  const legacyComponents = keys(defaultVariantToUseForEachComponent)
+  const legacyComponents = keys(defaultComponentToVersionMapping)
 
   legacyComponents.forEach(component => {
-    const variant = defaultVariantToUseForEachComponent[component]
-    const canIds = keys(config[component][variant])
+    const version = defaultComponentToVersionMapping[component]
+    const canIds = keys(config[component][version])
     canIds.forEach(canId => {
-      config[component][variant][canId].forEach(e => {
-        if (isNil(defaultDecoder[`${component}.${variant}.${canId}`])) {
-          defaultDecoder[`${component}.${variant}.${canId}`] = {}
+      config[component][version][canId].forEach(e => {
+        if (isNil(defaultDecoder[`${component}.${version}.${canId}`])) {
+          defaultDecoder[`${component}.${version}.${canId}`] = {}
         }
-        defaultDecoder[`${component}.${variant}.${canId}`][e.params] = createFn(e.equation)
+        defaultDecoder[`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
       })
     })
   })
   return defaultDecoder
 }
 
-export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
+export const canDecoder = (config, defaultComponentToVersionMapping) => {
   const decoder = populateDecoderConfig(config)
-  const defaultDecoder = populateDefaultDecoderConfig(defaultVariantToUseForEachComponent, config)
+  const defaultDecoder = populateDefaultDecoderConfig(config, defaultComponentToVersionMapping)
 
   return event => {
     const {attributes, data} = event
@@ -100,7 +100,7 @@ export const canDecoder = (config, defaultVariantToUseForEachComponent) => {
             {ctx: {event: JSON.stringify(event, null, 2), keyToCheck: decoderKeyForCanId}},
             "Event does not map to one decoderKey for its can id"
           )
-          return null
+          return []
         }
         return decodeData(d.canRaw, defaultDecoder, decoderKeyForCanId)
       } else {

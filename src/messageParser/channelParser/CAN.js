@@ -1,6 +1,7 @@
-import {flatten} from "ramda"
+import {flatten, isNil} from "ramda"
 import {getDataItem} from "./helpers"
 import {canDecoder} from "./channelDecoder/can-decoder"
+import {log} from "../../logger"
 
 const {env} = process
 
@@ -19,10 +20,14 @@ export const parseCAN = message => {
   const canDecoderConfig = require(canDecoderConfigPath)
 
   // eslint-disable-next-line global-require,import/no-dynamic-require
-  const defaultVariantToComponentMapping = require(versionComponentConfigPath)
+  const defaultComponentToVersionMapping = require(versionComponentConfigPath)
+
+  if (isNil(canDecoderConfig) || isNil(defaultComponentToVersionMapping)) {
+    log.error("Required decoder configs are not present")
+  }
 
   if (shouldDecodeData) {
-    decodedData = flatten(canDecoder(canDecoderConfig, defaultVariantToComponentMapping)(message))
+    decodedData = flatten(canDecoder(canDecoderConfig, defaultComponentToVersionMapping)(message))
   } else {
     decodedData = flatten(data.map(e => e.parsed))
   }
