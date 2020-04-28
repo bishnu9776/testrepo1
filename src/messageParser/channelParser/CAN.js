@@ -1,17 +1,17 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
-import {decodeCANMessage} from "./channelDecoder/decodeCANMessage"
+import {getCANMessageDecoder} from "./channelDecoder/getCANMessageDecoder"
 
 export const parseCAN = () => {
   const {env} = process
-  let decodedMessage = []
   const shouldDecodeMessage = JSON.parse(env.VI_SHOULD_DECODE_CAN_MESSAGE || "false")
-  const getDecodeCanMessage = shouldDecodeMessage ? decodeCANMessage() : null
+  const decodeCANMessage = getCANMessageDecoder()
 
   return message => {
+    let decodedMessage = []
     const {data, attributes} = message
     if (shouldDecodeMessage) {
-      decodedMessage = flatten(getDecodeCanMessage(message))
+      decodedMessage = flatten(decodeCANMessage(message))
     } else {
       decodedMessage = flatten(data.map(e => e.parsed))
     }

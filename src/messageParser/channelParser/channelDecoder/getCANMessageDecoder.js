@@ -93,28 +93,29 @@ const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) 
   return defaultDecoder
 }
 
-export const decodeCANMessage = () => {
+export const getCANMessageDecoder = () => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
-  const componentVersionConfigPath = env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH
+  const legacyComponentVersionMappingPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_MAPPING_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
-  const legacyComponentVersionMapping = loadJSONFile(componentVersionConfigPath)
+  const legacyComponentVersionMapping = loadJSONFile(legacyComponentVersionMappingPath)
 
   const decoder = populateDecoderConfig(decoderConfig)
   const defaultDecoder = populateDefaultDecoderConfig(decoderConfig, legacyComponentVersionMapping)
+  const isLegacy = channel => channel === "can"
 
-  return event => {
-    const {attributes, data} = event
+  return message => {
+    const {attributes, data} = message
 
     return data.map(d => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
 
-      if (attributes.channel === "can") {
+      if (isLegacy(attributes.channel)) {
         const decoderKeys = keys(defaultDecoder)
         const decoderKeyForCanId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCanId.length !== 1) {
           log.error(
-            {ctx: {event: JSON.stringify(event, null, 2), keyToCheck: decoderKeyForCanId}},
+            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderKeyForCanId}},
             "Event does not map to one decoder for its can id"
           )
           return []

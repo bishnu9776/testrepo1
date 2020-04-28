@@ -56,7 +56,7 @@ describe("Parses CAN", () => {
     beforeEach(() => {
       env.VI_SHOULD_DECODE_CAN_MESSAGE = true
       env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
-      env.VI_CAN_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
+      env.VI_CAN_LEGACY_COMPONENT_VERSION_MAPPING_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
     })
 
     afterEach(() => {
