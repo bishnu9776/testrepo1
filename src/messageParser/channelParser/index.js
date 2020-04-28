@@ -12,8 +12,6 @@ import {parseBIKEINFO} from "./BIKEINFO"
 import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 
-// TODO: Rename data to message and remove passing attributes separately if it's present in the message itself
-
 export const getCreateDataItemFromMessageFn = () => {
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
@@ -31,17 +29,15 @@ export const getCreateDataItemFromMessageFn = () => {
 
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
 
-  return ({data, attributes}) => {
-    if (attributes.channel.match(/^can/)) {
-      return channelParserConfig.can({data, attributes})
+  return message => {
+    const {channel} = message.attributes
+    if (channel.match(/^can/)) {
+      return channelParserConfig.can(message)
     }
-    if (channelNotInParserConfig(attributes.channel)) {
-      log.warn(
-        {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes)}},
-        "No parser for message. Dropping event"
-      )
+    if (channelNotInParserConfig(channel)) {
+      log.warn({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
       return []
     }
-    return channelParserConfig[attributes.channel]({data, attributes})
+    return channelParserConfig[channel](message)
   }
 }
