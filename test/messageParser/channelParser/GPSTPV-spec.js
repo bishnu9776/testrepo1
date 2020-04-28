@@ -1,8 +1,10 @@
 import {GPSTPV} from "../../fixtures/bikeChannels/GPSTPV"
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses GPSTPV", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...GPSTPV, probe})).to.eql([
       {

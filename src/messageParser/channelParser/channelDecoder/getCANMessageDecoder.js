@@ -95,12 +95,12 @@ const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) 
 
 export const getCANMessageDecoder = () => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
-  const legacyComponentVersionMappingPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_MAPPING_PATH
+  const legacyComponentVersionConfigPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
-  const legacyComponentVersionMapping = loadJSONFile(legacyComponentVersionMappingPath)
+  const legacyComponentVersionConfig = loadJSONFile(legacyComponentVersionConfigPath)
 
   const decoder = populateDecoderConfig(decoderConfig)
-  const defaultDecoder = populateDefaultDecoderConfig(decoderConfig, legacyComponentVersionMapping)
+  const defaultDecoder = populateDefaultDecoderConfig(decoderConfig, legacyComponentVersionConfig)
   const isLegacy = channel => channel === "can"
 
   return message => {

@@ -1,8 +1,10 @@
 import {SESSION} from "../../fixtures/bikeChannels/SESSION"
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses SESSION", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...SESSION, probe})).to.eql([
       {

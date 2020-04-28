@@ -1,6 +1,6 @@
 import {flatten, pipe} from "ramda"
 import {getDecompresserFn} from "./decompressMessage"
-import {createDataItemsFromMessage} from "./channelParser"
+import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {mergeProbeInfo} from "./mergeProbeInfo"
@@ -32,6 +32,7 @@ const handleJSONParseFailures = (message, error, metricRegistry, log) => {
 export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
 
   return async message => {
     const decompressedMessage = await maybeDecompressMessage(message)
