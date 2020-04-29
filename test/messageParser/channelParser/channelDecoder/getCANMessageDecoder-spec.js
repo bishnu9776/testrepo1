@@ -27,12 +27,12 @@ describe("CAN decoder", () => {
   })
 
   describe("legacy bikes", () => {
-    it("legacy bikes: should parse can data for can_mcu message using default parser config ", () => {
+    it("should parse can data for can_mcu message using default parser config ", () => {
       const parsedData = getCANMessageDecoder()(LEGACY_CAN_MCU)
       expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
     })
 
-    it("legacy bikes: can_bms,should give empty array when canId is not present in default config ", () => {
+    it("should give empty array when canId is not present in default config ", () => {
       const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
       expect(parsedData).to.eql([[]])
     })

@@ -1,4 +1,4 @@
-import {keys, isNil} from "ramda"
+import {keys, isNil, head} from "ramda"
 import {log} from "../../../logger"
 import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../utils/loadJSONFile"
@@ -112,15 +112,15 @@ export const getCANMessageDecoder = () => {
 
       if (isLegacy(attributes.channel)) {
         const decoderKeys = keys(defaultDecoder)
-        const decoderKeyForCanId = decoderKeys.filter(key => new RegExp(canId).test(key))
-        if (decoderKeyForCanId.length !== 1) {
+        const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
+        if (decoderKeyForCANId.length !== 1) {
           log.error(
-            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderKeyForCanId}},
+            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderKeyForCANId}},
             "Event does not map to one decoder for its can id"
           )
           return []
         }
-        const decoderForCanId = defaultDecoder[decoderKeyForCanId]
+        const decoderForCanId = defaultDecoder[head(decoderKeyForCANId)]
         return decodeCANRaw(d.canRaw, decoderForCanId)
       }
       const decoderKey = `${componentKeys.join(".")}.${canId}`
