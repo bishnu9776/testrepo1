@@ -1,0 +1,7 @@
+{
+  "can_charger": "MK3",
+  "can_motor": "MAHLEX1",
+  "can_bms": "v4_1_0",
+  "can_mcu": "v1_0_0",
+  "can_pod": "LPCv1"
+}

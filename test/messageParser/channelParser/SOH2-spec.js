@@ -1,8 +1,10 @@
-import {SOH2} from "../../fixtures/bike-channels/SOH2"
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import {SOH2} from "../../fixtures/bikeChannels/SOH2"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses SOH2", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...SOH2, probe})).to.eql([
       {

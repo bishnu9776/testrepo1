@@ -1,8 +1,10 @@
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {EVENTS} from "../../fixtures/bike-channels/EVENTS"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
+import {EVENTS} from "../../fixtures/bikeChannels/EVENTS"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses EVENTS", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...EVENTS, probe})).to.eql([
       {

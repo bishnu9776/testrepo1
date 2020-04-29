@@ -1,8 +1,10 @@
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {HEMAN} from "../../fixtures/bike-channels/HEMAN"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
+import {HEMAN} from "../../fixtures/bikeChannels/HEMAN"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses HEMAN", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...HEMAN, probe})).to.eql([
       {

@@ -1,0 +1,101 @@
+{
+  "can_charger": {
+    "MK3": {
+      "0x190": [
+        {
+          "params": "CHA_MCR",
+          "HRN": "Maximum Current Ref",
+          "equation": "((bytes[1] *256)+bytes[0])"
+        },
+        {
+          "params": "CHA_OTS",
+          "HRN": "Over Temperature Secondary",
+          "equation": "(bytes[7] >> 1) & 1"
+        }
+      ]
+    }
+  },
+  "can_motor": {
+    "MAHLEX1": {
+      "0x18c": [
+        {
+          "params": "MOT_Mode",
+          "HRN": "Motor Mode Actual",
+          "equation": "bytes[0] & 3"
+        }
+      ]
+    }
+  },
+  "can_bms": {
+    "e55": {
+      "0x158": [
+        {
+          "params": "BMS_2_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ]
+    },
+    "v4_1_0": {
+      "0x148": [
+        {
+          "params": "BMS_Command_148_Byte0",
+          "HRN": "Command 148 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_148_Byte1",
+          "HRN": "Command 148 1",
+          "equation": "bytes[1]"
+        }
+      ]
+    }
+  },
+  "can_mcu": {
+    "v1_0_0": {
+      "0x100": [
+        {
+          "params": "MCU_SOC",
+          "HRN": "MCU SOC",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "MCU_CHARGER_TYPE",
+          "HRN": "MCU CHARGER TYPE",
+          "equation": "(bytes[3])"
+        }
+      ]
+    }
+  },
+  "can_pod": {
+    "LPCv1": {
+      "0x001": [
+        {
+          "params": "POD_Error",
+          "HRN": "POD Error",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "POD_ErrorValue",
+          "HRN": "POD Error Value",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ]
+    }
+  }
+}

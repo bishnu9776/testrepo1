@@ -1,8 +1,9 @@
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
-import {IMU} from "../../fixtures/bike-channels/IMU"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
+import {IMU} from "../../fixtures/bikeChannels/IMU"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses IMU", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...IMU, probe})).to.eql([
       {

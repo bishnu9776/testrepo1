@@ -1,8 +1,10 @@
-import {VCU} from "../../fixtures/bike-channels/VCU"
-import {createDataItemsFromMessage} from "../../../src/messageParser/channelParser"
+import {VCU} from "../../fixtures/bikeChannels/VCU"
+import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 
 describe("Parses VCU", () => {
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...VCU, probe})).to.eql([
       {
