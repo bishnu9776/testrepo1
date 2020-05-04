@@ -25,6 +25,7 @@
     "debug": "ELASTIC_APM_ACTIVE=false babel-node scripts/gcpConsumer.js",
     "debug-subscriber": "babel-node src/gcpSubscriber/index.js",
     "debug-publisher": "babel-node scripts/gcpProducer.js",
+    "create-device-level-config": "babel-node scripts/createDeviceLevelConfig",
     "start-dev-staging": "VI_MODE=dev VI_ES_HOST=s-elasticsearch-1.use1.systeminsights.com npm run start",
     "test": "test-mocha",
     "eslint": "eslint ./src ./test",
