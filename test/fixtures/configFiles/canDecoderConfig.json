@@ -1,5 +1,101 @@
 {
   "can_charger": {
+    "Enthalpy_CANProtocol_v5_0": {
+      "0x190": [
+        {
+          "params": "CHA_Mode",
+          "HRN": "Enthalpy Charger Mode",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "CHA_DeadBattery",
+          "HRN": "Dead Battery Mode",
+          "equation": "(bytes[1])"
+        },
+        {
+          "params": "CHA_Type",
+          "HRN": "Charger Type Identifier",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "CHA_AuthStatus",
+          "HRN": "Charger Auth Status",
+          "equation": "(bytes[3])"
+        },
+        {
+          "params": "CHA_Faults",
+          "HRN": "Charger Type Identifier",
+          "equation": "(bytes[4])"
+        },
+        {
+          "params": "CHA_UID",
+          "HRN": "Charger UID",
+          "equation": "(bytes[7]*256*256 + bytes[6]*256 + bytes[5])"
+        }
+      ],
+      "0x201": [
+        {
+          "params": "CHA_Vout",
+          "HRN": "Output Voltage",
+          "equation": "(bytes[3]*256*256*256 + bytes[2]*256*256 + bytes[1]*256 + bytes[0]) /1000.0"
+        },
+        {
+          "params": "CHA_Iout",
+          "HRN": "Output Current",
+          "equation": "(bytes[7]*256*256*256 + bytes[6]*256*256 + bytes[5]*256 + bytes[4]) /1000.0"
+        }
+      ],
+      "0x203": [
+        {
+          "params": "CHA_Vrms",
+          "HRN": "Input Voltage",
+          "equation": "(bytes[3]*256*256*256 + bytes[2]*256*256 + bytes[1]*256 + bytes[0]) /1000.0"
+        }
+      ],
+      "0x460": [
+        {
+          "params": "CHA_VehCANId",
+          "HRN": "Vehicle CAN Id",
+          "equation": "(bytes[1] * 256) + bytes[0]"
+        },
+        {
+          "params": "CHA_AckNack",
+          "HRN": "Ack Nack",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_NackReason",
+          "HRN": "Nack Reason",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_FWVer",
+          "HRN": "Firmware Version",
+          "equation": "bytes[4]"
+        }
+      ],
+      "0x420": [
+        {
+          "params": "CHA_Iref",
+          "HRN": "Current reference from VCU",
+          "equation": "(bytes[1] * 256) + (bytes[0])"
+        }
+      ],
+      "0x421": [
+        {
+          "params": "CHA_DoCV",
+          "HRN": "Do CV command from Vehicle",
+          "equation": "1"
+        }
+      ],
+      "0x422": [
+        {
+          "params": "CHA_StopCharging",
+          "HRN": "Stop charging command from Vehicle",
+          "equation": "bytes[0]"
+        }
+      ]
+    },
     "MK3": {
       "0x190": [
         {
@@ -8,26 +104,2098 @@
           "equation": "((bytes[1] *256)+bytes[0])"
         },
         {
+          "params": "CHA_CD",
+          "HRN": "",
+          "equation": "(bytes[3] >> 3) & 1"
+        },
+        {
+          "params": "CHA_RFC",
+          "HRN": "",
+          "equation": "(bytes[3] >> 2) & 1"
+        },
+        {
+          "params": "CHA_CC",
+          "HRN": "",
+          "equation": "(bytes[3] >> 0) & 1"
+        },
+        {
+          "params": "CHA_CV",
+          "HRN": "",
+          "equation": "(bytes[3] >> 1) & 1"
+        },
+        {
+          "params": "CHA_FFF",
+          "HRN": "Fan Failure Fault",
+          "equation": "(bytes[5] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OOVP",
+          "HRN": "Output Over Voltage Protection",
+          "equation": "(bytes[6] >> 7) & 1"
+        },
+        {
+          "params": "CHA_OLC",
+          "HRN": "Output Lower Current",
+          "equation": "(bytes[6] >> 6) & 1"
+        },
+        {
+          "params": "CHA_IUV",
+          "HRN": "Input Under Voltage Fault",
+          "equation": "(bytes[6] >> 5) & 1"
+        },
+        {
+          "params": "CHA_OSC",
+          "HRN": "Output Short Circuit",
+          "equation": "(bytes[6] >> 4) & 1"
+        },
+        {
+          "params": "CHA_OUV",
+          "HRN": "Output Under Voltage",
+          "equation": "(bytes[6] >> 3) & 1"
+        },
+        {
+          "params": "CHA_OOI",
+          "HRN": "Output Over Current",
+          "equation": "(bytes[6] >> 2) & 1"
+        },
+        {
+          "params": "CHA_OOV",
+          "HRN": "Output Over Voltage",
+          "equation": "(bytes[6] >> 1) & 1"
+        },
+        {
+          "params": "CHA_SPIF",
+          "HRN": "SPI Failure Fault",
+          "equation": "(bytes[6] >> 0) & 1"
+        },
+        {
+          "params": "CHA_PAOT",
+          "HRN": "PFC Ambient Over Temperature",
+          "equation": "(bytes[7] >> 7) & 1"
+        },
+        {
+          "params": "CHA_HW_PIOV",
+          "HRN": "HW Triggered Input Over Voltage",
+          "equation": "(bytes[7] >> 6) & 1"
+        },
+        {
+          "params": "CHA_PIUV",
+          "HRN": "PFC Input Under Voltage",
+          "equation": "(bytes[7] >> 5) & 1"
+        },
+        {
+          "params": "CHA_PIOT",
+          "HRN": "PFC Input Over Temperature",
+          "equation": "(bytes[7] >> 4) & 1"
+        },
+        {
+          "params": "CHA_SW_PIOV",
+          "HRN": "SW Triggered Input Over Voltage",
+          "equation": "(bytes[7] >> 3) & 1"
+        },
+        {
+          "params": "CHA_FLF",
+          "HRN": "Flyback Line Fault",
+          "equation": "(bytes[7] >> 2) & 1"
+        },
+        {
           "params": "CHA_OTS",
           "HRN": "Over Temperature Secondary",
           "equation": "(bytes[7] >> 1) & 1"
+        },
+        {
+          "params": "CHA_OTP",
+          "HRN": "Over Temperature Primary",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x201": [
+        {
+          "params": "CHA_Vout",
+          "HRN": "Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Iout",
+          "HRN": "Output Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x202": [
+        {
+          "params": "CHA_Vpfc_out",
+          "HRN": "PFC Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) "
+        },
+        {
+          "params": "CHA_PFC_Health",
+          "HRN": "PFC Health",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "CHA_PFC_AmbientTemp",
+          "HRN": "PFC Ambient Temperature",
+          "equation": "((bytes[5] *256)+bytes[4])"
+        }
+      ],
+      "0x203": [
+        {
+          "params": "CHA_Vrms",
+          "HRN": "Input Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Irms",
+          "HRN": "Input Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x204": [
+        {
+          "params": "CHA_PSFB_DiodeTemp",
+          "HRN": "PSFB Diode Temperature",
+          "equation": "((bytes[3] *256)+bytes[2])"
+        }
+      ],
+      "0x205": [
+        {
+          "params": "CHA_BMS_Diag",
+          "HRN": "BMS Diagnostics flag",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "CHA_FMS_Flag",
+          "HRN": "Fault management system flag",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_Mode",
+          "HRN": "Charger mode",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CHA_Cal_Status",
+          "HRN": "Charger calibration status",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_State_of_Protocol",
+          "HRN": "Charger State of Protocol",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "CHA_System_Status",
+          "HRN": "Charger System Status",
+          "equation": "bytes[5]"
+        }
+      ],
+      "0x206": [
+        {
+          "params": "CHA_Cal_Slope",
+          "HRN": "Charger Calibration Slope",
+          "equation": "((bytes[3]*4294967296)+ (bytes[2]*65536)+ (bytes[1]*256)+ bytes[0]) / 16777216.0"
+        },
+        {
+          "params": "CHA_Cal_Constant",
+          "HRN": "Charger Calibration Constant",
+          "equation": "(((bytes[4])) * 1 + ((bytes[5])) * 256 + ((bytes[6])) * 65536 + ((bytes[7])) * 16777216 - (bytes[7] >> 7) * 4294967296.0)*75/16777216.0"
+        }
+      ],
+      "0x208": [
+        {
+          "params": "CHA_PFC_Fan_Speed",
+          "HRN": "PFC Fan speed",
+          "equation": "(bytes[1] * 256) + bytes[0]"
+        },
+        {
+          "params": "CHA_PSFB_Fan_Speed",
+          "HRN": "PSFB Fan speed",
+          "equation": "(bytes[3] * 256) + bytes[2]"
+        }
+      ],
+      "0x216": [
+        {
+          "params": "CHA_WakeUp_Status",
+          "HRN": "Charger Wake Up Status",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_Limp_Mode",
+          "HRN": "Charger Limp Mode",
+          "equation": "bytes[5]"
+        }
+      ],
+      "0x460": [
+        {
+          "params": "CHA_Resp",
+          "HRN": "CC CV Stop resp ",
+          "equation": "(bytes[7] * 256) + bytes[6]"
+        }
+      ],
+      "0x420": [
+        {
+          "params": "CHA_Iref",
+          "HRN": "Current reference from VCU",
+          "equation": "(bytes[1] * 256) + (bytes[0])"
+        }
+      ],
+      "0x422": [
+        {
+          "params": "CHA_StopCV",
+          "HRN": "Stop CV command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x424": [
+        {
+          "params": "CHA_AskVersion",
+          "HRN": "Ask Charger Firmware Version",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x425": [
+        {
+          "params": "CHA_StartCalibration",
+          "HRN": "Start Calibration command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x426": [
+        {
+          "params": "CHA_AbortCalibration",
+          "HRN": "Abort Calibration command from VCU",
+          "equation": "(bytes[2] * 256) + bytes[3]"
+        }
+      ]
+    },
+    "MK2": {
+      "0x190": [
+        {
+          "params": "CHA_PIOI",
+          "HRN": "PFC Input Over Current Fault",
+          "equation": "(bytes[7] >> 5) & 1"
+        },
+        {
+          "params": "CHA_PIUV",
+          "HRN": "PFC Input Under Voltage Fault",
+          "equation": "(bytes[7] >> 4) & 1"
+        },
+        {
+          "params": "CHA_POT",
+          "HRN": "PFC Over Temperature Fault",
+          "equation": "(bytes[7] >> 3) & 1"
+        },
+        {
+          "params": "CHA_PIOV",
+          "HRN": "PFC Input Over Voltage Fault",
+          "equation": "(bytes[7] >> 2) & 1"
+        },
+        {
+          "params": "CHA_GI",
+          "HRN": "Good Input Status",
+          "equation": "(bytes[7] >> 1) & 1"
+        },
+        {
+          "params": "CHA_FAULT",
+          "HRN": "Fault in Charger",
+          "equation": "(bytes[7] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OOI",
+          "HRN": "O/P Over Current",
+          "equation": "(bytes[6] >> 2) & 1"
+        },
+        {
+          "params": "CHA_OOV",
+          "HRN": "O/P Over Voltage",
+          "equation": "(bytes[6] >> 1) & 1"
+        },
+        {
+          "params": "CHA_OSC",
+          "HRN": "O/P Short Circuit",
+          "equation": "(bytes[6] >> 4) & 1"
+        },
+        {
+          "params": "CHA_SPIF",
+          "HRN": "SPI Failure",
+          "equation": "(bytes[6] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OL",
+          "HRN": "Open Load",
+          "equation": "(bytes[6] >> 7) & 1"
+        },
+        {
+          "params": "CHA_OT",
+          "HRN": "Over Temperature",
+          "equation": "(bytes[6] >> 6) & 1"
+        },
+        {
+          "params": "CHA_IUV",
+          "HRN": "Input Under Voltage",
+          "equation": "(bytes[6] >> 5) & 1"
+        },
+        {
+          "params": "CHA_OUV",
+          "HRN": "Output Under Voltage",
+          "equation": "(bytes[6] >> 3) & 1"
+        },
+        {
+          "params": "CHA_CD",
+          "HRN": "Charging Done",
+          "equation": "(bytes[5] >> 3) & 1"
+        },
+        {
+          "params": "CHA_RFC",
+          "HRN": "Ready For Charge",
+          "equation": "(bytes[5] >> 2) & 1"
+        },
+        {
+          "params": "CHA_MCR",
+          "HRN": "Maximum Current Ref",
+          "equation": "((bytes[3] *256)+bytes[2])"
+        },
+        {
+          "params": "CHA_CV",
+          "HRN": "CV",
+          "equation": "(bytes[5] >> 1) & 1"
+        },
+        {
+          "params": "CHA_CC",
+          "HRN": "CC",
+          "equation": "(bytes[5] >> 0) & 1"
+        }
+      ],
+      "0x201": [
+        {
+          "params": "CHA_Vout",
+          "HRN": "Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Iout",
+          "HRN": "Output Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x202": [
+        {
+          "params": "CHA_Vpfc_out",
+          "HRN": "PFC Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) "
+        },
+        {
+          "params": "CHA_PFC_Health",
+          "HRN": "PFC Health",
+          "equation": "bytes[6]"
+        }
+      ],
+      "0x203": [
+        {
+          "params": "CHA_Vrms",
+          "HRN": "Input Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Irms",
+          "HRN": "Input Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x204": [
+        {
+          "params": "CHA_Temp1",
+          "HRN": "temp1",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CHA_Temp2",
+          "HRN": "temp2",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "CHA_Temp3",
+          "HRN": "temp3",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_Temp4",
+          "HRN": "temp4",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_Temp5",
+          "HRN": "temp5",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "CHA_Temp6",
+          "HRN": "temp5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "CHA_Temp7",
+          "HRN": "temp7",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "CHA_Temp8",
+          "HRN": "temp8",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x205": [
+        {
+          "params": "CHA_BMS_Diag",
+          "HRN": "BMS Diagnostics flag",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "CHA_FMS_Flag",
+          "HRN": "Fault management system flag",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_Mode",
+          "HRN": "Charger mode",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CHA_Cal_Status",
+          "HRN": "Charger calibration status",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_State_of_Protocol",
+          "HRN": "Charger State of Protocol",
+          "equation": "bytes[4]"
+        }
+      ],
+      "0x208": [
+        {
+          "params": "CHA_PFC_Fan_Speed",
+          "HRN": "PFC Fan speed",
+          "equation": "(bytes[1] * 256) + bytes[0]"
+        },
+        {
+          "params": "CHA_PSFB_Fan_Speed",
+          "HRN": "PSFB Fan speed",
+          "equation": "(bytes[3] * 256) + bytes[2]"
+        }
+      ],
+      "0x460": [
+        {
+          "params": "CHA_Resp",
+          "HRN": "CC CV Stop resp ",
+          "equation": "(bytes[7] * 256) + bytes[6]"
+        }
+      ],
+      "0x420": [
+        {
+          "params": "CHA_Iref",
+          "HRN": "Current reference from VCU",
+          "equation": "(bytes[0] * 256 * 256 * 256) + (bytes[1] * 256 * 256) + (bytes[2] * 256) + bytes[3]"
+        }
+      ],
+      "0x422": [
+        {
+          "params": "CHA_StopCV",
+          "HRN": "Stop CV command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x424": [
+        {
+          "params": "CHA_AskVersion",
+          "HRN": "Ask Charger Firmware Version",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x425": [
+        {
+          "params": "CHA_StartCalibration",
+          "HRN": "Start Calibration command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x426": [
+        {
+          "params": "CHA_AbortCalibration",
+          "HRN": "Abort Calibration command from VCU",
+          "equation": "(bytes[2] * 256) + bytes[3]"
+        }
+      ]
+    },
+    "MK1": {
+      "0x190": [
+        {
+          "params": "CHA_PIOI",
+          "HRN": "PFC Input Over Current Fault",
+          "equation": "(bytes[7] >> 7) & 1"
+        },
+        {
+          "params": "CHA_PIUV",
+          "HRN": "PFC Input Under Voltage Faulti",
+          "equation": "(bytes[7] >> 6) & 1"
+        },
+        {
+          "params": "CHA_POT",
+          "HRN": "PFC Over Temperature Fault",
+          "equation": "(bytes[7] >> 5) & 1"
+        },
+        {
+          "params": "CHA_PIOV",
+          "HRN": "PFC Input Over Voltage Fault",
+          "equation": "(bytes[7] >> 4) & 1"
+        },
+        {
+          "params": "CHA_GI",
+          "HRN": "Good Input Status",
+          "equation": "(bytes[7] >> 3) & 1"
+        },
+        {
+          "params": "CHA_FAULT",
+          "HRN": "Fault in Charger",
+          "equation": "(bytes[7] >> 2) & 1"
+        },
+        {
+          "params": "CHA_KC",
+          "HRN": "Keep Charge Status",
+          "equation": "(bytes[7] >> 1) & 1"
+        },
+        {
+          "params": "CHA_Start_CV",
+          "HRN": "Start CV flag",
+          "equation": "(bytes[7] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OOI",
+          "HRN": "O/P Over Current",
+          "equation": "(bytes[6] >> 2) & 1"
+        },
+        {
+          "params": "CHA_OOV",
+          "HRN": "O/P Over Voltage",
+          "equation": "(bytes[6] >> 1) & 1"
+        },
+        {
+          "params": "CHA_OSC",
+          "HRN": "O/P Short Circuit",
+          "equation": "(bytes[6] >> 4) & 1"
+        },
+        {
+          "params": "CHA_RMCCT",
+          "HRN": "Require Minimum CC Time",
+          "equation": "(bytes[6] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OUV",
+          "HRN": "Output Under Voltage",
+          "equation": "(bytes[6] >> 7) & 1"
+        },
+        {
+          "params": "CHA_OT",
+          "HRN": "Over Temperature",
+          "equation": "(bytes[6] >> 6) & 1"
+        },
+        {
+          "params": "CHA_IUV",
+          "HRN": "Input Under Voltage",
+          "equation": "(bytes[6] >> 5) & 1"
+        },
+        {
+          "params": "CHA_OCPP",
+          "HRN": "Open Connection Between PSFB and PFC",
+          "equation": "(bytes[6] >> 3) & 1"
+        },
+        {
+          "params": "CHA_CD",
+          "HRN": "Charging Done",
+          "equation": "(bytes[5] >> 4) & 1"
+        },
+        {
+          "params": "CHA_RFC",
+          "HRN": "Ready For Charge",
+          "equation": "(bytes[5] >> 3) & 1"
+        },
+        {
+          "params": "CHA_MCR",
+          "HRN": "Maximum Current Ref",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_CVT",
+          "HRN": "Transition is made by charger",
+          "equation": "(bytes[5] >> 2) & 1"
+        },
+        {
+          "params": "CHA_CV",
+          "HRN": "CV",
+          "equation": "(bytes[5] >> 1) & 1"
+        },
+        {
+          "params": "CHA_CC",
+          "HRN": "CC",
+          "equation": "(bytes[5] >> 0) & 1"
+        }
+      ],
+      "0x201": [
+        {
+          "params": "CHA_Vout",
+          "HRN": "Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Iout",
+          "HRN": "Output Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x202": [
+        {
+          "params": "CHA_Vpfc_out",
+          "HRN": "PFC Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) "
+        },
+        {
+          "params": "CHA_PFC_Health",
+          "HRN": "PFC Health",
+          "equation": "bytes[6]"
+        }
+      ],
+      "0x203": [
+        {
+          "params": "CHA_Vrms",
+          "HRN": "Input Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Irms",
+          "HRN": "Input Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x204": [
+        {
+          "params": "CHA_Temp1",
+          "HRN": "temp1",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CHA_Temp2",
+          "HRN": "temp2",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "CHA_Temp3",
+          "HRN": "temp3",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "CHA_Temp4",
+          "HRN": "temp4",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "CHA_Temp5",
+          "HRN": "temp5",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "CHA_Temp6",
+          "HRN": "temp5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "CHA_Temp7",
+          "HRN": "temp7",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "CHA_Temp8",
+          "HRN": "temp8",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x302": [
+        {
+          "params": "CHA_Resp",
+          "HRN": "CC CV Stop resp ",
+          "equation": "(bytes[7] * 256) + bytes[6]"
+        }
+      ],
+      "0x420": [
+        {
+          "params": "CHA_Iref",
+          "HRN": "Current reference from VCU",
+          "equation": "(bytes[0] * 256 * 256 * 256) + (bytes[1] * 256 * 256) + (bytes[2] * 256) + bytes[3]"
+        }
+      ],
+      "0x421": [
+        {
+          "params": "CHA_StartCV",
+          "HRN": "Start CV commad from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x422": [
+        {
+          "params": "CHA_StopCV",
+          "HRN": "Stop CV command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x426": [
+        {
+          "params": "CHA_Cycles",
+          "HRN": "Charge/discharge cycles",
+          "equation": "(bytes[2] * 256) + bytes[3]"
+        }
+      ],
+      "0x512": [
+        {
+          "params": "CHA_State_of_Protocol",
+          "HRN": "Chager State of Protocol",
+          "equation": "bytes[7]"
         }
       ]
     }
   },
   "can_motor": {
+    "EVO3": {
+      "0x11": [
+        {
+          "params": "MOT_SysConfig_StartDiag",
+          "HRN": "",
+          "equation": "(bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536"
+        }
+      ],
+      "0x120": [
+        {
+          "params": "MOT_Customer_ClearErrors",
+          "HRN": "",
+          "equation": "(bytes[1]*256 + bytes[0])"
+        }
+      ],
+      "0x100": [
+        {
+          "params": "MOT_Customer_Throttle",
+          "HRN": "",
+          "equation": "(bytes[1]*256 + bytes[0]) * 0.006103515625"
+        },
+        {
+          "params": "MOT_Customer_MotorStop",
+          "HRN": "",
+          "equation": "((bytes[3] >> 0) & 1)"
+        }
+      ],
+      "0x200": [
+        {
+          "params": "MOT_Customer_CustomerState",
+          "HRN": "",
+          "equation": "(bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536"
+        },
+        {
+          "params": "MOT_ThrottleOut_pct",
+          "HRN": "",
+          "equation": "(bytes[2] + bytes[3]*256) * 0.006103515625"
+        },
+        {
+          "params": "MOT_Customer_Ignition",
+          "HRN": "",
+          "equation": "(bytes[5] >> 0) & 1"
+        },
+        {
+          "params": "MOT_SysConfig_Killswitch",
+          "HRN": "",
+          "equation": "(bytes[5] >> 1) & 1"
+        },
+        {
+          "params": "MOT_UserStates_Precharged",
+          "HRN": "",
+          "equation": "(bytes[5] >> 2) & 1"
+        }
+      ],
+      "0x310": [
+        {
+          "params": "MOT_CanAbstraction_UxNorm",
+          "HRN": "",
+          "equation": "(bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536"
+        },
+        {
+          "params": "MOT_CanAbstraction_UyNorm",
+          "HRN": "",
+          "equation": "(bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536"
+        },
+        {
+          "params": "MOT_HallMech_PhiElePres",
+          "HRN": "",
+          "equation": "(bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536"
+        }
+      ],
+      "0x410": [
+        {
+          "params": "MOT_MeasSigs_IuPres",
+          "HRN": "",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_MeasSigs_IvPres",
+          "HRN": "",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_MeasSigs_IwPres",
+          "HRN": "",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_IBatt_A",
+          "HRN": "IbatPres",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536) * 0.024360000000"
+        }
+      ],
+      "0x510": [
+        {
+          "params": "MOT_N_Ctrl_NrRamp",
+          "HRN": "",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.833333333333"
+        },
+        {
+          "params": "MOT_NPres_RPM",
+          "HRN": "Motor RPM",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.833333333333"
+        },
+        {
+          "params": "MOT_U_Ctrl_Uqr",
+          "HRN": "",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.002929687500"
+        },
+        {
+          "params": "MOT_U_Ctrl_Udr",
+          "HRN": "",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536) * 0.002929687500"
+        }
+      ],
+      "0x620": [
+        {
+          "params": "MOT_Customer_MotorStopand",
+          "HRN": "Motor command",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "MOT_ParameterId",
+          "HRN": "Motor parameter id",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "MOT_ParameterValue",
+          "HRN": "Motor parameter id",
+          "equation": "bytes[4] + bytes[5] * 256"
+        }
+      ],
+      "0x630": [
+        {
+          "params": "MOT_Command",
+          "HRN": "Motor command",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "MOT_ParameterId",
+          "HRN": "Motor parameter id",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "MOT_ParameterValue",
+          "HRN": "Motor parameter id",
+          "equation": "bytes[4] + bytes[5] * 256"
+        }
+      ],
+      "0x710": [
+        {
+          "params": "MOT_IqPres_A",
+          "HRN": "IquadPres",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_I_Ctrl_IdPres",
+          "HRN": "",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_I_Ctrl_IqrRamp",
+          "HRN": "",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_I_Ctrl_Idr",
+          "HRN": "",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536) * 0.024360000000"
+        }
+      ],
+      "0x720": [
+        {
+          "params": "MOT_Motor_Ctrl_IqMaxPos",
+          "HRN": "",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_Motor_Ctrl_IqMaxNeg",
+          "HRN": "",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.024360000000"
+        },
+        {
+          "params": "MOT_Motor_Ctrl_ConstraintPosSrc",
+          "HRN": "",
+          "equation": "(bytes[0] >> 4) & 1"
+        },
+        {
+          "params": "MOT_Motor_Ctrl_ConstraintNegSrc",
+          "HRN": "",
+          "equation": "(bytes[0] >> 5) & 1"
+        }
+      ],
+      "0x730": [
+        {
+          "params": "MOT_MeasSigs_Uu_ind",
+          "HRN": "",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.002929687500"
+        },
+        {
+          "params": "MOT_MeasSigs_Uv_ind",
+          "HRN": "",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.002929687500"
+        },
+        {
+          "params": "MOT_UBatt_V",
+          "HRN": "UbatPres",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.007342529297"
+        },
+        {
+          "params": "MOT_MeasSigs_Uw_ind",
+          "HRN": "",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536) * 0.002929687500"
+        }
+      ],
+      "0x740": [
+        {
+          "params": "MOT_Failsafe_Enable",
+          "HRN": "",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_Customer_VCTimeout.ErrFlag",
+          "HRN": "CAN timeout error",
+          "equation": "((bytes[0] >> 1) & 1)"
+        },
+        {
+          "params": "MOT_Customer_OverVoltageCust.ErrFlag",
+          "HRN": "Over voltage error",
+          "equation": "((bytes[0] >> 2) & 1)"
+        },
+        {
+          "params": "MOT_Customer_UnderVoltageCust.ErrFlag",
+          "HRN": "Under voltage error",
+          "equation": "((bytes[0] >> 3) & 1)"
+        },
+        {
+          "params": "MOT_Customer_AnalogThr.ErrFlag",
+          "HRN": "Analog throttle error",
+          "equation": "((bytes[0] >> 4) & 1)"
+        },
+        {
+          "params": "MOT_MeasSigs_A_IN_1",
+          "HRN": "AnalogThrottle",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.000201416016"
+        },
+        {
+          "params": "MOT_MeasSigs_Vout",
+          "HRN": "",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.000402832031"
+        },
+        {
+          "params": "MOT_AT_ATStateInt",
+          "HRN": "",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        }
+      ],
+      "0x750": [
+        {
+          "params": "MOT_U_Ctrl_UqMax",
+          "HRN": "",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536) * 0.002929687500"
+        },
+        {
+          "params": "MOT_SysConfig_ExecutionTime",
+          "HRN": "",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536) * 0.016666666700"
+        },
+        {
+          "params": "MOT_Tpcb_C",
+          "HRN": "Controller temperature",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536) * 0.100000000000"
+        },
+        {
+          "params": "MOT_Tmot_C",
+          "HRN": "Motor temperature",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536) * 0.100000000000"
+        },
+        {
+          "params": "MOT_Tstat_C",
+          "HRN": "Stator temperature",
+          "equation": "0"
+        }
+      ]
+    },
+    "EVO4": {
+      "0x100": [
+        {
+          "params": "MOT_CANThrottleRef_V",
+          "HRN": "CAN Throttle Voltage",
+          "equation": "(bytes[0]) * 0.0625"
+        },
+        {
+          "params": "MOT_CANMaxRecu_pct",
+          "HRN": "CAN Max Recu Setting",
+          "equation": "(bytes[1]) * 1"
+        },
+        {
+          "params": "MOT_CANMaxAcc_pct",
+          "HRN": "CAN Max Acc Setting",
+          "equation": "(bytes[2]) * 1"
+        },
+        {
+          "params": "MOT_IBattMin_A",
+          "HRN": "CAN I Batt Min Setting",
+          "equation": "(bytes[3]) * 1"
+        },
+        {
+          "params": "MOT_IBattMax_A",
+          "HRN": "CAN I Batt Max Setting",
+          "equation": "(bytes[4]) * 1"
+        },
+        {
+          "params": "MOT_CANMotorStop",
+          "HRN": "CAN Motor Stop command",
+          "equation": "((bytes[6] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_CANDrivingDir",
+          "HRN": "CAN Motor driving direction command",
+          "equation": "((bytes[6] >> 1) & 1)"
+        },
+        {
+          "params": "MOT_CANMotorMap",
+          "HRN": "CAN Motor Map command",
+          "equation": "((bytes[6] >> 3) & 1)*2 + ((bytes[6] >> 2) & 1)"
+        },
+        {
+          "params": "MOT_CANMotorNmax",
+          "HRN": "CAN Motor Nmax command",
+          "equation": "(((bytes[6] >> 4) & 1) * 1 + ((bytes[6] >> 5) & 1) * 2 + ((bytes[6] >> 6) & 1) * 4 + ((bytes[6] >> 7) & 1) * 8 + ((bytes[7] >> 0) & 1) * 16 + ((bytes[7] >> 1) & 1) * 32 + ((bytes[7] >> 2) & 1) * 64 + ((bytes[7] >> 3) & 1) * 128 + ((bytes[7] >> 4) & 1) * 256 + ((bytes[7] >> 5) & 1) * 512 + ((bytes[7] >> 6) & 1) * 1024 + ((bytes[7] >> 7) & 1) * 2048) * 2"
+        }
+      ],
+      "0x150": [
+        {
+          "params": "MOT_NPres_RPM",
+          "HRN": "Motor RPM",
+          "equation": "((bytes[1]*256 + bytes[0]) - ((bytes[1] >> 7) & 1) * 65536) * 0.5"
+        },
+        {
+          "params": "MOT_IBatt_A",
+          "HRN": "Motor Current",
+          "equation": "((bytes[3]*256 + bytes[2]) - ((bytes[3] >> 7) & 1) * 65536)"
+        },
+        {
+          "params": "MOT_KillSwitchEcho",
+          "HRN": "Killswitch Status",
+          "equation": "((bytes[5] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_InternalFailure",
+          "HRN": "Internal Failure Status",
+          "equation": "((bytes[5] >> 1) & 1)"
+        },
+        {
+          "params": "MOT_TemperatureWarning",
+          "HRN": "Temperature Warning",
+          "equation": "((bytes[5] >> 2) & 1)"
+        },
+        {
+          "params": "MOT_TemperatureError",
+          "HRN": "Temperature Error",
+          "equation": "((bytes[5] >> 3) & 1)"
+        },
+        {
+          "params": "MOT_OverVoltageError",
+          "HRN": "Overvoltage Error",
+          "equation": "((bytes[5] >> 4) & 1)"
+        },
+        {
+          "params": "MOT_UnderVoltageError",
+          "HRN": "Undervoltage Error",
+          "equation": "((bytes[5] >> 5) & 1)"
+        },
+        {
+          "params": "MOT_IBattError",
+          "HRN": "Overcurrent Error",
+          "equation": "((bytes[5] >> 6) & 1)"
+        },
+        {
+          "params": "MOT_VCTimeoutError",
+          "HRN": "Can Timeout Error",
+          "equation": "((bytes[5] >> 7) & 1)"
+        },
+        {
+          "params": "MOT_AnalogThrottleError",
+          "HRN": "Analog Throttle Error",
+          "equation": "((bytes[6] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_RevCounter",
+          "HRN": "Motor Odometer",
+          "equation": "(((bytes[6] >> 1) & 1) * 1 + ((bytes[6] >> 2) & 1) * 2 + ((bytes[6] >> 3) & 1) * 4 + ((bytes[6] >> 4) & 1) * 8 + ((bytes[6] >> 5) & 1) * 16 + ((bytes[6] >> 6) & 1) * 32 + ((bytes[6] >> 7) & 1) * 64 + ((bytes[7] >> 0) & 1) * 128 + ((bytes[7] >> 1) & 1) * 256 + ((bytes[7] >> 2) & 1) * 512 + ((bytes[7] >> 3) & 1) * 1024 + ((bytes[7] >> 4) & 1) * 2048)"
+        },
+        {
+          "params": "MOT_DrivingDir",
+          "HRN": "Motor Driving Direction",
+          "equation": "((bytes[7] >> 5) & 1)"
+        },
+        {
+          "params": "MOT_PSOn",
+          "HRN": "Power Stage Status",
+          "equation": "((bytes[7] >> 6) & 1)"
+        },
+        {
+          "params": "MOT_IqPres_A",
+          "HRN": "Quadrature Current",
+          "equation": "(bytes[7] - ((bytes[7] >> 7) & 1) * 256) * 2"
+        }
+      ],
+      "0x200": [
+        {
+          "params": "MOT_ThrottleOut_pct",
+          "HRN": "Throttle Pct",
+          "equation": "(bytes[0]) - ((bytes[0] >> 7) & 1) * 256"
+        },
+        {
+          "params": "MOT_ThrottleRef_V",
+          "HRN": "Throttle Voltage",
+          "equation": "(bytes[1]) * 0.0625"
+        },
+        {
+          "params": "MOT_MaxAccTorque_pct",
+          "HRN": "",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "MOT_MaxBrakeTorque_pct",
+          "HRN": "",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "MOT_IqRef_A",
+          "HRN": "",
+          "equation": "(bytes[4] - ((bytes[4] >> 7) & 1) * 256) * 2"
+        },
+        {
+          "params": "MOT_IqLim_A",
+          "HRN": "",
+          "equation": "(bytes[5] - ((bytes[5] >> 7) & 1) * 256) * 2"
+        },
+        {
+          "params": "MOT_IqTemp_A",
+          "HRN": "",
+          "equation": "(bytes[6] - ((bytes[6] >> 7) & 1) * 256) * 2"
+        },
+        {
+          "params": "MOT_UBatt_V",
+          "HRN": "",
+          "equation": "bytes[7] * 0.5"
+        }
+      ],
+      "0x250": [
+        {
+          "params": "MOT_Tmot_C",
+          "HRN": "Motor temperature",
+          "equation": "((bytes[0] + ((bytes[1] >> 0) & 1)*256 + ((bytes[1] >> 1) & 1)*512 + ((bytes[1] >> 2) & 1)*1024 + ((bytes[1] >> 3) & 1)*2048) - ((bytes[1] >> 3) & 1) * 16) * 0.100000000000"
+        },
+        {
+          "params": "MOT_Tpcb_C",
+          "HRN": "Controller temperature",
+          "equation": "((bytes[2]*16 + ((bytes[1] >> 4) & 1)*1 + ((bytes[1] >> 5) & 1)*2 + ((bytes[1] >> 6) & 1)*4 + ((bytes[1] >> 7) & 1)*8) - ((bytes[2] >> 7) & 1) * 4096) * 0.100000000000"
+        },
+        {
+          "params": "MOT_Tstat_C",
+          "HRN": "Stator temperature",
+          "equation": "((bytes[3] + ((bytes[4] >> 0) & 1)*256 + ((bytes[4] >> 1) & 1)*512 + ((bytes[4] >> 2) & 1)*1024 + ((bytes[4] >> 3) & 1)*2048) - ((bytes[4] >> 3) & 1) * 16) * 0.100000000000"
+        }
+      ],
+      "0x400": [
+        {
+          "params": "MOT_BroadcastMode",
+          "HRN": "Motor Broadcast mode",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_BroadcastRate",
+          "HRN": "Motor Broadcast Rate",
+          "equation": "(((bytes[0] >> 1) & 1) * 1 + ((bytes[0] >> 2) & 1) * 2 + ((bytes[0] >> 3) & 1) * 4 + ((bytes[0] >> 4) & 1) * 8 + ((bytes[0] >> 5) & 1) * 16 + ((bytes[0] >> 6) & 1) * 32 + ((bytes[0] >> 7) & 1) * 64 + ((bytes[1] >> 0) & 1) * 128) * 2"
+        }
+      ],
+      "0x750": [
+        {
+          "params": "MOT_SWVersionID",
+          "HRN": "Motor SW Version ID",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "MOT_HWVersionID",
+          "HRN": "Motor HW Version ID",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "MOT_ManfDate",
+          "HRN": "Motor Manufacturing Date",
+          "equation": "bytes[5]*256*256*256 + bytes[4]*256*256 + bytes[3]*256 + bytes[2]"
+        },
+        {
+          "params": "MOT_SerialNumber",
+          "HRN": "Motor Serial Number",
+          "equation": "bytes[6]"
+        }
+      ]
+    },
+    "MAHLE": {
+      "0x18c": [
+        {
+          "params": "MOT_TorqueOut_Nm",
+          "HRN": "Motor Torque Output",
+          "equation": "((bytes[1]*256 + bytes[0])- ((bytes[1] >> 7) & 1)*65536)*0.01"
+        },
+        {
+          "params": "MOT_NPres_RPM",
+          "HRN": "Motor Speed in RPM",
+          "equation": "((bytes[3]*256 + bytes[2])- ((bytes[3] >> 7) & 1)*65536)"
+        },
+        {
+          "params": "MOT_UBatt_V",
+          "HRN": "Battery Voltage at motor",
+          "equation": "((bytes[5]*256 + bytes[4])- ((bytes[5] >> 7) & 1)*65536)*0.01"
+        },
+        {
+          "params": "MOT_IBatt_A",
+          "HRN": "Battery Current at Motor",
+          "equation": "((bytes[7]*256 + bytes[6]) - ((bytes[7] >> 7) & 1)*65536)*0.1"
+        }
+      ],
+      "0x28c": [
+        {
+          "params": "MOT_Vrms_V",
+          "HRN": "Motor Voltage RMS",
+          "equation": "((bytes[1]*256 + bytes[0])- ((bytes[1] >> 7) & 1)*65536)*0.1"
+        },
+        {
+          "params": "MOT_Irms_A",
+          "HRN": "Motor Current RMS",
+          "equation": "((bytes[3]*256 + bytes[2]) - ((bytes[3] >> 7) & 1)*65536)*0.1"
+        },
+        {
+          "params": "MOT_ThrottleVoltage_V",
+          "HRN": "Throttle Voltage",
+          "equation": "((bytes[5]*256 + bytes[4]) - ((bytes[5] >> 7) & 1)*65536 )*0.001"
+        },
+        {
+          "params": "MOT_ThrottleOut_pct",
+          "HRN": "Throttle Percentage",
+          "equation": "bytes[6]"
+        }
+      ],
+      "0x38c": [
+        {
+          "params": "MOT_Tpcb_C",
+          "HRN": "Motor Controller Temperature",
+          "equation": "((bytes[1]*256 + bytes[0]) - ((bytes[1] >> 7) & 1)*65536)"
+        },
+        {
+          "params": "MOT_Tmot_C",
+          "HRN": "Motor temperature",
+          "equation": "(bytes[3]*256 + bytes[2]) - ((bytes[3] >> 7) & 1)*65536"
+        },
+        {
+          "params": "MOT_ControllerStatus",
+          "HRN": "Motor Controller Status",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "MOT_KillSwitch",
+          "HRN": "Motor KillSwitch",
+          "equation": "((bytes[4] >> 0) & 1)"
+        },
+        {
+          "params": "MOT_DigitalOutput",
+          "HRN": "Motor Digital Output",
+          "equation": "((bytes[4] >> 1) & 1)"
+        },
+        {
+          "params": "MOT_ErrorCodes",
+          "HRN": "Motor Error Codes",
+          "equation": "bytes[5]"
+        }
+      ]
+    },
+    "MAHLEV2": {
+      "0x18c": [
+        {
+          "params": "MOT_Mode",
+          "HRN": "Motor Mode Actual",
+          "equation": "bytes[0] & 3"
+        },
+        {
+          "params": "MOT_PowerStage",
+          "HRN": "Motor Power Stage",
+          "equation": "(bytes[0] & 12) >> 2"
+        },
+        {
+          "params": "MOT_KillSwitchEcho",
+          "HRN": "Motor Kill Switch Echo",
+          "equation": "(bytes[0] & 16) >> 4"
+        },
+        {
+          "params": "MOT_NPres_RPM",
+          "HRN": "Motor Speed in RPM",
+          "equation": "((bytes[0] >> 5) | ((bytes[1] & 31) << 3)) * 1 + ((bytes[1] >> 5) | ((bytes[2] & 31) << 3)) * 256 - ((bytes[2] >> 4) & 1) * 65536"
+        },
+        {
+          "params": "MOT_Tmot_C",
+          "HRN": "Motor Temperature",
+          "equation": "((((bytes[4]) & 63) << 2) | ((bytes[3]) >> 6)) - 40"
+        },
+        {
+          "params": "MOT_Tpcb_C",
+          "HRN": "Motor Controller Temperature",
+          "equation": "((((bytes[5]) & 63) << 2) | ((bytes[4]) >> 6)) - 40"
+        },
+        {
+          "params": "MOT_ErrorCode",
+          "HRN": "Motor Error Code",
+          "equation": "((bytes[5] & 192) >> 6) | ((bytes[6] & 63) << 2)"
+        }
+      ],
+      "0x28c": [
+        {
+          "params": "MOT_TorqueRefIbat_Nm",
+          "HRN": "Motor Torque Ref Ibat",
+          "equation": "(bytes[1] | ((bytes[2] & 1) << 8))*0.1"
+        },
+        {
+          "params": "MOT_TorqueActual_Nm",
+          "HRN": "Motor Torque Ref Temp",
+          "equation": "(((bytes[5] >> 4) | ((bytes[6] & 15) << 4)) * 1 + ((((bytes[6] >> 4) | ((bytes[7] & 15) << 4)) & 1)) * 256 - ((bytes[6] >> 4) & 1) * 512)*0.1"
+        }
+      ],
+      "0x38c": [
+        {
+          "params": "MOT_ThrottleOut_pct",
+          "HRN": "Motor Torque Ref Temp",
+          "equation": "((bytes[3] & 252) >> 2) | ((bytes[4] & 1) << 6)"
+        }
+      ]
+    },
     "MAHLEX1": {
       "0x18c": [
         {
           "params": "MOT_Mode",
           "HRN": "Motor Mode Actual",
           "equation": "bytes[0] & 3"
+        },
+        {
+          "params": "MOT_PowerStage",
+          "HRN": "Motor Power Stage",
+          "equation": "(bytes[0] & 12) >> 2"
+        },
+        {
+          "params": "MOT_KillSwitchEcho",
+          "HRN": "Motor Kill Switch Echo",
+          "equation": "(bytes[0] & 16) >> 4"
+        },
+        {
+          "params": "MOT_NPres_RPM",
+          "HRN": "Motor Speed in RPM",
+          "equation": "((bytes[0] >> 5) | ((bytes[1] & 31) << 3)) * 1 + ((bytes[1] >> 5) | ((bytes[2] & 31) << 3)) * 256 - ((bytes[2] >> 4) & 1) * 65536"
+        },
+        {
+          "params": "MOT_IBatt_A",
+          "HRN": "Motor Battery Current",
+          "equation": "((bytes[2] >> 5) | ((bytes[3] & 31) << 3)) * 1 + ((((bytes[3] >> 5) | ((bytes[4] & 31) << 3)) & 1)) * 256 - ((bytes[3] >> 5) & 1) * 512"
+        },
+        {
+          "params": "MOT_Tmot_C",
+          "HRN": "Motor Temperature",
+          "equation": "((((bytes[4]) & 63) << 2) | ((bytes[3]) >> 6)) - 40"
+        },
+        {
+          "params": "MOT_Tpcb_C",
+          "HRN": "Motor Controller Temperature",
+          "equation": "((((bytes[5]) & 63) << 2) | ((bytes[4]) >> 6)) - 40"
+        },
+        {
+          "params": "MOT_ErrorCode",
+          "HRN": "Motor Error Code",
+          "equation": "((bytes[5] & 192) >> 6) | ((bytes[6] & 63) << 2)"
+        }
+      ],
+      "0x28c": [
+        {
+          "params": "MOT_TorqueMax_Nm",
+          "HRN": "Motor Max Torque",
+          "equation": "bytes[0]*0.1"
+        },
+        {
+          "params": "MOT_TorqueRefTemp_Nm",
+          "HRN": "Motor Torque Ref Temp",
+          "equation": "(((bytes[2] >> 1) | ((bytes[3] & 1) << 7)) * 1 + ((((bytes[3] >> 1) | ((bytes[4] & 1) << 7)) & 1)) * 256 - ((bytes[3] >> 1) & 1) * 512)*0.1"
+        },
+        {
+          "params": "MOT_TorqueRefInit_Nm",
+          "HRN": "Motor Torque Ref Init",
+          "equation": "(((bytes[3] >> 2) | ((bytes[4] & 3) << 6)) * 1 + ((((bytes[4] >> 2) | ((bytes[5] & 3) << 6)) & 1)) * 256 - ((bytes[4] >> 2) & 1) * 512)*0.1"
+        },
+        {
+          "params": "MOT_TorqueRef_Nm",
+          "HRN": "Motor Torque Ref",
+          "equation": "(((bytes[4] >> 3) | ((bytes[5] & 7) << 5)) * 1 + ((((bytes[5] >> 3) | ((bytes[6] & 7) << 5)) & 1)) * 256 - ((bytes[5] >> 3) & 1) * 512)*0.1"
+        },
+        {
+          "params": "MOT_TorqueRefIbat_Nm",
+          "HRN": "Motor Torque Ref Ibat",
+          "equation": "(((bytes[1])) * 1 + ((((bytes[2])) & 1)) * 256 - ((bytes[2] >> 0) & 1) * 512)*0.1"
+        },
+        {
+          "params": "MOT_TorqueActual_Nm",
+          "HRN": "Motor Torque Actual",
+          "equation": "(((bytes[5] >> 4) | ((bytes[6] & 15) << 4)) * 1 + ((((bytes[6] >> 4) | ((bytes[7] & 15) << 4)) & 1)) * 256 - ((bytes[6] >> 4) & 1) * 512)*0.1"
+        }
+      ],
+      "0x38c": [
+        {
+          "params": "MOT_ThrottleOut_pct",
+          "HRN": "Motor Throttle out pct",
+          "equation": "((bytes[3] >> 2) | ((bytes[4] & 3) << 6)) * 1 - ((bytes[4] >> 1) & 1) * 256"
+        },
+        {
+          "params": "MOT_ThrottleRef1_V",
+          "HRN": "Motor Throttle Ref 1",
+          "equation": "(((bytes[0])) * 1 + ((((bytes[1])) & 31)) * 256)*0.001"
+        },
+        {
+          "params": "MOT_ThrottleRef2_V",
+          "HRN": "Motor Throttle Ref 2",
+          "equation": "(((bytes[1] >> 5) | ((bytes[2] & 31) << 3)) * 1 + ((((bytes[2] >> 5) | ((bytes[3] & 31) << 3)) & 31)) * 256)*0.001"
+        },
+        {
+          "params": "MOT_UBatt_V",
+          "HRN": "Motor Battery Voltage",
+          "equation": "(((bytes[4] >> 2) | ((bytes[5] & 3) << 6)) * 1 + ((((bytes[5] >> 2) | ((bytes[6] & 3) << 6)) & 3)) * 256)*0.1"
         }
       ]
     }
   },
   "can_bms": {
     "e55": {
+      "0x148": [
+        {
+          "params": "BMS_Command_148_Byte0",
+          "HRN": "Command 148 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_148_Byte1",
+          "HRN": "Command 148 1",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_148_Byte2",
+          "HRN": "Command 148 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_148_Byte3",
+          "HRN": "Command 148 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_148_Byte4",
+          "HRN": "Command 148 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_148_Byte5",
+          "HRN": "Command 148 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_148_Byte6",
+          "HRN": "Command 148 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_148_Byte7",
+          "HRN": "Command 148 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x149": [
+        {
+          "params": "BMS_Command_149_Byte0",
+          "HRN": "Command 149 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_149_Byte1",
+          "HRN": "Command 149 1",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_149_Byte2",
+          "HRN": "Command 149 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_149_Byte3",
+          "HRN": "Command 149 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_149_Byte4",
+          "HRN": "Command 149 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_149_Byte5",
+          "HRN": "Command 149 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_149_Byte6",
+          "HRN": "Command 149 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_149_Byte7",
+          "HRN": "Command 149 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x125": [
+        {
+          "params": "BMS_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x126": [
+        {
+          "params": "BMS_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x127": [
+        {
+          "params": "BMS_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
+      "0x128": [
+        {
+          "params": "BMS_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x129": [
+        {
+          "params": "BMS_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Humidity",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12a": [
+        {
+          "params": "BMS_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12b": [
+        {
+          "params": "BMS_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12c": [
+        {
+          "params": "BMS_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12d": [
+        {
+          "params": "BMS_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12e": [
+        {
+          "params": "BMS_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x12f": [
+        {
+          "params": "BMS_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x134": [
+        {
+          "params": "BMS_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x131": [
+        {
+          "params": "BMS_131Status",
+          "HRN": "BMS 131 Status",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x130": [
+        {
+          "params": "BMS_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
+      ],
+      "0x155": [
+        {
+          "params": "BMS_2_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_2_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_2_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_2_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x156": [
+        {
+          "params": "BMS_2_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_2_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_2_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_2_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_2_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_2_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_2_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_2_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_2_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x157": [
+        {
+          "params": "BMS_2_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_2_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_2_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_2_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_2_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_2_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_2_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_2_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_2_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_2_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_2_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_2_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_2_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
       "0x158": [
         {
           "params": "BMS_2_Aux_Temp1",
@@ -49,6 +2217,967 @@
           "HRN": "temp4",
           "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
         }
+      ],
+      "0x159": [
+        {
+          "params": "BMS_2_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_Aux_Humidity",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x15a": [
+        {
+          "params": "BMS_2_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x15b": [
+        {
+          "params": "BMS_2_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x15c": [
+        {
+          "params": "BMS_2_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x15d": [
+        {
+          "params": "BMS_2_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x15e": [
+        {
+          "params": "BMS_2_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_2_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_2_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x15f": [
+        {
+          "params": "BMS_2_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_2_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_2_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_2_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_2_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_2_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x164": [
+        {
+          "params": "BMS_2_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x161": [
+        {
+          "params": "BMS_2_131Status",
+          "HRN": "BMS 131 Status",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x160": [
+        {
+          "params": "BMS_2_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_2_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_2_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_2_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_2_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_2_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_2_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
+      ],
+      "0x215": [
+        {
+          "params": "BMS_3_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_3_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_3_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_3_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x216": [
+        {
+          "params": "BMS_3_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_3_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_3_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_3_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_3_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_3_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_3_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_3_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_3_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x217": [
+        {
+          "params": "BMS_3_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_3_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_3_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_3_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_3_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_3_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_3_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_3_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_3_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_3_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_3_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_3_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_3_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
+      "0x218": [
+        {
+          "params": "BMS_3_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x219": [
+        {
+          "params": "BMS_3_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_Aux_Humidity",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x21a": [
+        {
+          "params": "BMS_3_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x21b": [
+        {
+          "params": "BMS_3_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x21c": [
+        {
+          "params": "BMS_3_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x21d": [
+        {
+          "params": "BMS_3_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x21e": [
+        {
+          "params": "BMS_3_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_3_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_3_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x21f": [
+        {
+          "params": "BMS_3_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_3_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_3_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_3_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_3_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_3_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x224": [
+        {
+          "params": "BMS_3_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x221": [
+        {
+          "params": "BMS_3_131Status",
+          "HRN": "BMS 131 Status",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x220": [
+        {
+          "params": "BMS_3_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_3_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_3_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_3_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_3_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_3_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_3_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
+      ],
+      "0x245": [
+        {
+          "params": "BMS_4_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_4_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_4_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_4_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x246": [
+        {
+          "params": "BMS_4_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_4_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_4_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_4_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_4_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_4_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_4_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_4_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_4_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x247": [
+        {
+          "params": "BMS_4_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_4_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_4_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_4_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_4_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_4_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_4_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_4_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_4_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_4_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_4_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_4_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_4_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
+      "0x248": [
+        {
+          "params": "BMS_4_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x249": [
+        {
+          "params": "BMS_4_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_Aux_Humidity",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x24a": [
+        {
+          "params": "BMS_4_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x24b": [
+        {
+          "params": "BMS_4_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x24c": [
+        {
+          "params": "BMS_4_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x24d": [
+        {
+          "params": "BMS_4_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x24e": [
+        {
+          "params": "BMS_4_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_4_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_4_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x24f": [
+        {
+          "params": "BMS_4_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_4_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_4_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_4_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_4_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_4_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x254": [
+        {
+          "params": "BMS_4_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x251": [
+        {
+          "params": "BMS_4_131Status",
+          "HRN": "BMS 131 Status",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x250": [
+        {
+          "params": "BMS_4_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_4_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_4_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_4_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_4_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_4_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_4_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
       ]
     },
     "v4_1_0": {
@@ -62,6 +3191,1289 @@
           "params": "BMS_Command_148_Byte1",
           "HRN": "Command 148 1",
           "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_148_Byte2",
+          "HRN": "Command 148 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_148_Byte3",
+          "HRN": "Command 148 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_148_Byte4",
+          "HRN": "Command 148 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_148_Byte5",
+          "HRN": "Command 148 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_148_Byte6",
+          "HRN": "Command 148 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_148_Byte7",
+          "HRN": "Command 148 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x149": [
+        {
+          "params": "BMS_Command_149_Byte0",
+          "HRN": "Command 149 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_149_Byte1",
+          "HRN": "Command 149 1",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_149_Byte2",
+          "HRN": "Command 149 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_149_Byte3",
+          "HRN": "Command 149 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_149_Byte4",
+          "HRN": "Command 149 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_149_Byte5",
+          "HRN": "Command 149 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_149_Byte6",
+          "HRN": "Command 149 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_149_Byte7",
+          "HRN": "Command 149 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x125": [
+        {
+          "params": "BMS_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x126": [
+        {
+          "params": "BMS_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x127": [
+        {
+          "params": "BMS_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        },
+        {
+          "params": "BMS_OCDL",
+          "HRN": "BMS Over Current Discharge Latch",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
+      "0x128": [
+        {
+          "params": "BMS_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x129": [
+        {
+          "params": "BMS_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Humidity",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12a": [
+        {
+          "params": "BMS_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12b": [
+        {
+          "params": "BMS_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12c": [
+        {
+          "params": "BMS_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12d": [
+        {
+          "params": "BMS_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12e": [
+        {
+          "params": "BMS_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x12f": [
+        {
+          "params": "BMS_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x134": [
+        {
+          "params": "BMS_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x131": [
+        {
+          "params": "BMS_FaultType",
+          "HRN": "BMS Fault Type",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "BMS_FaultLocation",
+          "HRN": "BMS Fault Location ",
+          "equation": "(bytes[1])"
+        },
+        {
+          "params": "BMS_FaultValue",
+          "HRN": "BMS Fault Location ",
+          "equation": "(bytes[3]*256.0 + bytes[2])"
+        }
+      ],
+      "0x130": [
+        {
+          "params": "BMS_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
+      ]
+    },
+    "v4_0_0": {
+      "0x148": [
+        {
+          "params": "BMS_Command_148_Byte0",
+          "HRN": "Command 148 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_148_Byte1",
+          "HRN": "Command 148 1",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_148_Byte2",
+          "HRN": "Command 148 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_148_Byte3",
+          "HRN": "Command 148 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_148_Byte4",
+          "HRN": "Command 148 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_148_Byte5",
+          "HRN": "Command 148 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_148_Byte6",
+          "HRN": "Command 148 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_148_Byte7",
+          "HRN": "Command 148 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x149": [
+        {
+          "params": "BMS_Command_149_Byte0",
+          "HRN": "Command 149 0",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Command_149_Byte1",
+          "HRN": "Command 149 1",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "BMS_Command_149_Byte2",
+          "HRN": "Command 149 2",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "BMS_Command_149_Byte3",
+          "HRN": "Command 149 3",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_Command_149_Byte4",
+          "HRN": "Command 149 4",
+          "equation": "bytes[4]"
+        },
+        {
+          "params": "BMS_Command_149_Byte5",
+          "HRN": "Command 149 5",
+          "equation": "bytes[5]"
+        },
+        {
+          "params": "BMS_Command_149_Byte6",
+          "HRN": "Command 149 6",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_Command_149_Byte7",
+          "HRN": "Command 149 7",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x125": [
+        {
+          "params": "BMS_xSCDTrigger_DebugPWRMCount",
+          "HRN": "Bms xSCDTrigger DebugPWRMCount",
+          "equation": "((bytes[0] + (bytes[1]*256)))"
+        },
+        {
+          "params": "BMS_xSCDReset_DebugMRSTCount",
+          "HRN": "Bms xSCDReset DebugMRSTCount",
+          "equation": "((bytes[2] + (bytes[3]*256)))"
+        },
+        {
+          "params": "BMS_xSCDLatch_DebugxSCDCount",
+          "HRN": "Bms xSCDLatch DebugxSCDCount",
+          "equation": "((bytes[4] + (bytes[5]*256)))"
+        },
+        {
+          "params": "BMS_PChgCount_DebugSafeCount",
+          "HRN": "Bms PChgCount DebugSafeCount",
+          "equation": "((bytes[6] + (bytes[7]*256)))"
+        }
+      ],
+      "0x126": [
+        {
+          "params": "BMS_PFStatus_VoltageFailure",
+          "HRN": "Bms PFStatus VoltageFailure",
+          "equation": "(bytes[4] - (bytes[4] >> 2)*4 + ((bytes[4] >> 5 - (bytes[4] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFStatus_CurrentFailure",
+          "HRN": "Bms PFStatus CurrentFailure",
+          "equation": "((bytes[4] >> 2) - (bytes[4] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFStatus_ThermalFailure",
+          "HRN": "Bms PFStatus ThermalFailure",
+          "equation": "((bytes[4] >> 4 - (bytes[4] >> 5)*2) + (bytes[5] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFStatus_FETFailure",
+          "HRN": "Bms PFStatus FETFailure",
+          "equation": "(bytes[4] >> 2)"
+        },
+        {
+          "params": "BMS_PFAlert_VoltageFailure",
+          "HRN": "Bms PFAlert VoltageFailure",
+          "equation": "(bytes[6] - (bytes[6] >> 2)*4 + ((bytes[6] >> 5 - (bytes[6] >> 6)*2)*4))"
+        },
+        {
+          "params": "BMS_PFAlert_CurrentFailure",
+          "HRN": "Bms PFAlert CurrentFailure",
+          "equation": "((bytes[6] >> 2) - (bytes[6] >> 4)*4)"
+        },
+        {
+          "params": "BMS_PFAlert_ThermalFailure",
+          "HRN": "Bms PFAlert ThermalFailure",
+          "equation": "((bytes[6] >> 4 - (bytes[6] >> 5)*2) + (bytes[7] >> 7)*2)"
+        },
+        {
+          "params": "BMS_PFAlert_FETFailure",
+          "HRN": "Bms PFAlert FETFailure",
+          "equation": "(bytes[6] >> 2)"
+        },
+        {
+          "params": "BMS_ChargingStatus_VCT",
+          "HRN": "Bms ChargingStatus VCT",
+          "equation": "(bytes[2] >> 7)"
+        }
+      ],
+      "0x127": [
+        {
+          "params": "BMS_State",
+          "HRN": "Bms State",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "BMS_Safety_Status",
+          "HRN": "Bms Safety Status",
+          "equation": "(bytes[1] + bytes[2]*256)"
+        },
+        {
+          "params": "BMS_VoltageFault",
+          "HRN": "BMS Voltage Fault",
+          "equation": "(bytes[1] - (bytes[1] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentFault",
+          "HRN": "BMS Current Fault",
+          "equation": "((bytes[1] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalFault",
+          "HRN": "BMS Thermal Fault",
+          "equation": "(bytes[2] - (bytes[2] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredFault",
+          "HRN": "BMS Aux Triggered Fault",
+          "equation": "(bytes[2] >> 7)"
+        },
+        {
+          "params": "BMS_VoltageAlert",
+          "HRN": "BMS Voltage Alert",
+          "equation": "(bytes[3] - (bytes[3] >> 2)*4)"
+        },
+        {
+          "params": "BMS_CurrentAlert",
+          "HRN": "BMS Current Alert",
+          "equation": "((bytes[3] >> 2))"
+        },
+        {
+          "params": "BMS_ThermalAlert",
+          "HRN": "BMS Thermal Alert",
+          "equation": "(bytes[4] - (bytes[4] >> 4)*16)"
+        },
+        {
+          "params": "BMS_AuxTriggeredAlert",
+          "HRN": "BMS Aux Triggered Alert",
+          "equation": "(bytes[4] >> 7)"
+        },
+        {
+          "params": "BMS_Keyin_Status",
+          "HRN": "Bms key in status",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_ShortCircuit",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[1] >> 3"
+        },
+        {
+          "params": "BMS_Shutdown_Impending",
+          "HRN": "BMS Short Circuit",
+          "equation": "bytes[4] >> 3"
+        }
+      ],
+      "0x128": [
+        {
+          "params": "BMS_Aux_Temp1",
+          "HRN": "temp1",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp2",
+          "HRN": "temp2",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp3",
+          "HRN": "temp3",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp4",
+          "HRN": "temp4",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x129": [
+        {
+          "params": "BMS_AFE_Temp1",
+          "HRN": "temp8",
+          "equation": "((bytes[6] + bytes[7]*256) - ((bytes[7] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp5",
+          "HRN": "temp5",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp6",
+          "HRN": "temp6",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_Aux_Temp7",
+          "HRN": "temp7",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12a": [
+        {
+          "params": "BMS_Cell1",
+          "HRN": "Cell Block 1 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell2",
+          "HRN": "Cell Block 2 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        },
+        {
+          "params": "BMS_AFE_Temp2",
+          "HRN": "temp9",
+          "equation": "((bytes[0] + bytes[1]*256) - ((bytes[1] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AFE_Temp3",
+          "HRN": "temp10",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        }
+      ],
+      "0x12b": [
+        {
+          "params": "BMS_Cell3",
+          "HRN": "Cell Block 3 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell4",
+          "HRN": "Cell Block 4 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell5",
+          "HRN": "Cell Block 5 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell6",
+          "HRN": "Cell Block 6 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12c": [
+        {
+          "params": "BMS_Cell7",
+          "HRN": "Cell Block 7 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell8",
+          "HRN": "Cell Block 8 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell9",
+          "HRN": "Cell Block 9 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell10",
+          "HRN": "Cell Block 10 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12d": [
+        {
+          "params": "BMS_Cell11",
+          "HRN": "Cell Block 11 Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell12",
+          "HRN": "Cell Block 12 Voltage",
+          "equation": "((bytes[2] + bytes[3]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell13",
+          "HRN": "Cell Block 13 Voltage",
+          "equation": "((bytes[4] + bytes[5]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Cell14",
+          "HRN": "Cell Block 14 Voltage",
+          "equation": "((bytes[6] + bytes[7]*256))/1000.0"
+        }
+      ],
+      "0x12e": [
+        {
+          "params": "BMS_Voltage",
+          "HRN": "Battery Pack Voltage",
+          "equation": "((bytes[0] + bytes[1]*256))/1000.0"
+        },
+        {
+          "params": "BMS_Current",
+          "HRN": "Pack Current",
+          "equation": "((bytes[2] + bytes[3]*256) - ((bytes[3] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_AvgCurrent",
+          "HRN": "Pack Average Current",
+          "equation": "((bytes[4] + bytes[5]*256) - ((bytes[5] >> 7) & 1) * 65536)/100.0"
+        },
+        {
+          "params": "BMS_RC",
+          "HRN": "Remaining Capacity",
+          "equation": "(bytes[6] + bytes[7]*256)/100.0"
+        }
+      ],
+      "0x12f": [
+        {
+          "params": "BMS_CC",
+          "HRN": "Cycle Count",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_SOH",
+          "HRN": "State Of Health",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "BMS_RSOC",
+          "HRN": "Relative State Of Charge",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "BMS_ASOC",
+          "HRN": "Absolute State of Charge",
+          "equation": "bytes[7]"
+        },
+        {
+          "params": "BMS_FETL",
+          "HRN": "DSG and CHG Mosfet Status",
+          "equation": "(((bytes[2] >> 1) & 1)*2) + ((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BMS_BS",
+          "HRN": "Battery Status",
+          "equation": "(bytes[0] + bytes[1] * 256)"
+        }
+      ],
+      "0x134": [
+        {
+          "params": "BMS_ResetSource",
+          "HRN": "BMS Reset Source",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x131": [
+        {
+          "params": "BMS_131Status",
+          "HRN": "BMS 131 Status",
+          "equation": "(bytes[1])"
+        }
+      ],
+      "0x130": [
+        {
+          "params": "BMS_FCC",
+          "HRN": "Full charge Capacity",
+          "equation": "(bytes[0] + bytes[1]*256)/100.0"
+        },
+        {
+          "params": "BMS_RTE",
+          "HRN": "Run Time to Empty",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "BMS_ATE",
+          "HRN": "Average Time to Empty",
+          "equation": "(bytes[4] + bytes[5]*256)"
+        },
+        {
+          "params": "BMS_ATF",
+          "HRN": "Average Time to Full   ",
+          "equation": "(bytes[6] + bytes[7]*256)"
+        },
+        {
+          "params": "BMS_MinCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[4] + (bytes[5] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_CellVoltageDelta",
+          "HRN": "Pack Delta Cell Voltage",
+          "equation": "((bytes[6] + (bytes[7] * 256))) / 1000.0"
+        },
+        {
+          "params": "BMS_MaxCellVoltage",
+          "HRN": "Pack Min Cell Voltage",
+          "equation": "((bytes[2] + (bytes[3] * 256))) / 1000.0"
+        }
+      ]
+    },
+    "pure_v1": {
+      "0x130": [
+        {
+          "params": "BMS_heartbeat",
+          "HRN": "Uptime",
+          "equation": "((bytes[0])) * 1 + ((bytes[1])) * 256 + ((bytes[2])) * 65536 + ((bytes[3])) * 16777216 + ((bytes[4])) * 4294967296 + ((bytes[5])) * 1099511627776 + ((bytes[6])) * 281474976710656 + ((bytes[7])) * 72057594037927936"
+        }
+      ],
+      "0x131": [
+        {
+          "params": "BMS_Data_Validity",
+          "HRN": "BMS Data Validity",
+          "equation": "((bytes[0])) * 1 + ((bytes[1])) * 256"
+        },
+        {
+          "params": "BMS_Status_Charge_FET",
+          "HRN": "Charge FET status",
+          "equation": " ((((bytes[2])) & 1))"
+        },
+        {
+          "params": "BMS_Status_Discharge_FET",
+          "HRN": "Discharge FET status",
+          "equation": "((((bytes[2] >> 1) | ((bytes[3] & 1) << 7)) & 1))"
+        },
+        {
+          "params": "BMS_Motor_controller_status",
+          "HRN": "Motor Controller Status",
+          "equation": "((((bytes[2] >> 3) | ((bytes[3] & 7) << 5)) & 1))"
+        },
+        {
+          "params": "BMS_Cell_Balancing_Status",
+          "HRN": "Cell Balancing Status",
+          "equation": "((((bytes[4] >> 4) | ((bytes[5] & 15) << 4)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_State_of_charge",
+          "HRN": "State Of Charge",
+          "equation": "((((bytes[4])) * 1 + ((bytes[5])) * 256)/100)"
+        }
+      ],
+      "0x132": [
+        {
+          "params": "BMS_Cell1",
+          "HRN": "Cell 1 voltage",
+          "equation": "((bytes[0] + (bytes[1]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell2",
+          "HRN": "Cell 2 voltage",
+          "equation": "((bytes[2] + (bytes[3]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell3",
+          "HRN": "Cell 3 voltage",
+          "equation": "((bytes[4] + (bytes[5]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell4",
+          "HRN": "Cell 4 voltage",
+          "equation": "((bytes[6] + (bytes[7]*256))/10000.0)"
+        }
+      ],
+      "0x133": [
+        {
+          "params": "BMS_Cell5",
+          "HRN": "Cell 5 voltage",
+          "equation": "((bytes[0] + (bytes[1]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell6",
+          "HRN": "Cell 6 voltage",
+          "equation": "((bytes[2] + (bytes[3]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell7",
+          "HRN": "Cell 7 voltage",
+          "equation": "((bytes[4] + (bytes[5]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell8",
+          "HRN": "Cell 8 voltage",
+          "equation": "((bytes[6] + (bytes[7]*256))/10000.0)"
+        }
+      ],
+      "0x134": [
+        {
+          "params": "BMS_Cell9",
+          "HRN": "Cell 9 voltage",
+          "equation": "((bytes[0] + (bytes[1]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell10",
+          "HRN": "Cell 10 voltage",
+          "equation": "((bytes[2] + (bytes[3]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell11",
+          "HRN": "Cell 11 voltage",
+          "equation": "((bytes[4] + (bytes[5]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell12",
+          "HRN": "Cell 12 voltage",
+          "equation": "((bytes[6] + (bytes[7]*256))/10000.0)"
+        }
+      ],
+      "0x135": [
+        {
+          "params": "BMS_Cell13",
+          "HRN": "Cell 13 voltage",
+          "equation": "((bytes[0] + (bytes[1]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_Cell14",
+          "HRN": "Cell 14 voltage",
+          "equation": "((bytes[2] + (bytes[3]*256))/10000.0)"
+        },
+        {
+          "params": "BMS_AFE_Die_Temperature",
+          "HRN": "AFE Die Temperature",
+          "equation": "((bytes[4] + (bytes[5]*256))/100.0)"
+        },
+        {
+          "params": "BMS_Current",
+          "HRN": "Bms Current",
+          "equation": "(((bytes[6])) * 1 + ((bytes[7])) * 256 - (bytes[7] >> 7) * 65536)/100.0"
+        }
+      ],
+      "0x136": [
+        {
+          "params": "BMS_AFE_Temp1",
+          "HRN": "AFE Temperature 1",
+          "equation": "((bytes[0] + (bytes[1]*256))/100.0)"
+        },
+        {
+          "params": "BMS_AFE_Temp2",
+          "HRN": "AFE Temperature 2",
+          "equation": "((bytes[2] + (bytes[3]*256))/100.0)"
+        },
+        {
+          "params": "BMS_AFE_Temp3",
+          "HRN": "AFE Temperature 3",
+          "equation": "((bytes[4] + (bytes[5]*256))/100.0)"
+        },
+        {
+          "params": "BMS_AFE_Temp4",
+          "HRN": "AFE Temperature 4",
+          "equation": "((bytes[6] + (bytes[7]*256))/100.0)"
+        }
+      ],
+      "0x137": [
+        {
+          "params": "BMS_AFE_Temp5",
+          "HRN": "AFE Temperature 5",
+          "equation": "((bytes[0] + (bytes[1]*256))/100.0)"
+        },
+        {
+          "params": "BMS_Aux_Temp1",
+          "HRN": "AUX Temperature 1",
+          "equation": "((bytes[2] + (bytes[3]*256))/100.0)"
+        },
+        {
+          "params": "BMS_Aux_Temp2",
+          "HRN": "AUX Temperature 2",
+          "equation": "((bytes[4] + (bytes[5]*256))/100.0)"
+        },
+        {
+          "params": "BMS_Aux_Temp3",
+          "HRN": "AUX Temperature 3",
+          "equation": "((bytes[6] + (bytes[7]*256))/100.0)"
+        }
+      ],
+      "0x138": [
+        {
+          "params": "BMS_CUV_fault",
+          "HRN": "CUV Fault",
+          "equation": "((((bytes[0])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OTD_fault",
+          "HRN": "OTD Fault",
+          "equation": "((((bytes[0] >> 1) | ((bytes[1] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_UTD_fault",
+          "HRN": "UTD Fault",
+          "equation": "((((bytes[0] >> 2) | ((bytes[1] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OCD_fault",
+          "HRN": "OCD Fault",
+          "equation": "((((bytes[0] >> 3) | ((bytes[1] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_Ext_dc_fault",
+          "HRN": "External discharge fault",
+          "equation": "((((bytes[0] >> 6) | ((bytes[1] & 63) << 2)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_SCD_fault",
+          "HRN": "SCD Fault",
+          "equation": "((((bytes[0] >> 7) | ((bytes[1] & 127) << 1)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OTC_fault",
+          "HRN": "OTC Fault",
+          "equation": "((((bytes[1])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_COV_fault",
+          "HRN": "COV Fault",
+          "equation": "((((bytes[1] >> 1) | ((bytes[2] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_UTC_fault",
+          "HRN": "UTC Fault",
+          "equation": "((((bytes[1] >> 2) | ((bytes[2] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OCC_fault",
+          "HRN": "OCC Fault",
+          "equation": "((((bytes[1] >> 3) | ((bytes[2] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_Ex_c_fault",
+          "HRN": "External charge Fault",
+          "equation": "((((bytes[1] >> 7) | ((bytes[2] & 127) << 1)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_CUV_alert",
+          "HRN": "CUV Alert",
+          "equation": "((((bytes[2])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OTD_alert",
+          "HRN": "OTD Alert",
+          "equation": "((((bytes[2] >> 1) | ((bytes[3] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_UTD_alert",
+          "HRN": "UTD Alert",
+          "equation": "((((bytes[2] >> 2) | ((bytes[3] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OCD_alert",
+          "HRN": "OCD Alert",
+          "equation": "((((bytes[2] >> 3) | ((bytes[3] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_Shutdown_alert",
+          "HRN": "Shutdown Alert",
+          "equation": "((((bytes[2] >> 7) | ((bytes[3] & 127) << 1)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OTC_alert",
+          "HRN": "OTC Alert",
+          "equation": "((((bytes[3])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_COV_alert",
+          "HRN": "COV Alert",
+          "equation": "((((bytes[3] >> 1) | ((bytes[4] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_UTC_alert",
+          "HRN": "UTC Alert",
+          "equation": "((((bytes[3] >> 2) | ((bytes[4] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_OCC_alert",
+          "HRN": "OCC Alert",
+          "equation": "((((bytes[3] >> 3) | ((bytes[4] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell1",
+          "HRN": "Balancing Status Cell 1",
+          "equation": "((((bytes[4])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell2",
+          "HRN": "Balancing Status Cell 2",
+          "equation": "((((bytes[4] >> 1) | ((bytes[5] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell3",
+          "HRN": "Balancing Status Cell 3",
+          "equation": "((((bytes[4] >> 2) | ((bytes[5] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell4",
+          "HRN": "Balancing Status Cell 4",
+          "equation": "((((bytes[4] >> 3) | ((bytes[5] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell5",
+          "HRN": "Balancing Status Cell 5",
+          "equation": "((((bytes[4] >> 4) | ((bytes[5] & 15) << 4)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell6",
+          "HRN": "Balancing Status Cell 6",
+          "equation": "((((bytes[4] >> 5) | ((bytes[5] & 31) << 3)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell7",
+          "HRN": "Balancing Status Cell 7",
+          "equation": "((((bytes[4] >> 6) | ((bytes[5] & 63) << 2)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell8",
+          "HRN": "Balancing Status Cell 8",
+          "equation": "((((bytes[4] >> 7) | ((bytes[5] & 127) << 1)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell9",
+          "HRN": "Balancing Status Cell 9",
+          "equation": "((((bytes[5])) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell10",
+          "HRN": "Balancing Status Cell 10",
+          "equation": "((((bytes[5] >> 1) | ((bytes[6] & 1) << 7)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell11",
+          "HRN": "Balancing Status Cell 11",
+          "equation": "((((bytes[5] >> 2) | ((bytes[6] & 3) << 6)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell12",
+          "HRN": "Balancing Status Cell 12",
+          "equation": "((((bytes[5] >> 3) | ((bytes[6] & 7) << 5)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell13",
+          "HRN": "Balancing Status Cell 13",
+          "equation": "((((bytes[5] >> 4) | ((bytes[6] & 15) << 4)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_BS_Cell14",
+          "HRN": "Balancing Status Cell 14",
+          "equation": "((((bytes[5] >> 5) | ((bytes[6] & 31) << 3)) & 1)) * 1"
+        },
+        {
+          "params": "BMS_Balancing_State",
+          "HRN": "Balancing State",
+          "equation": "((bytes[6])) * 1 + ((bytes[7])) * 256"
+        }
+      ],
+      "0x139": [
+        {
+          "params": "BMS_Derated_DChg_Current",
+          "HRN": "BMS Derated Discharge Current",
+          "equation": "(((bytes[0])) * 1 + ((bytes[1])) * 256 - (bytes[1] >> 7) * 65536)/100.0"
+        }
+      ],
+      "0x162": [
+        {
+          "params": "BMS_FW_version",
+          "HRN": "BMS FW version",
+          "equation": "((bytes[4])) * 1 + ((bytes[5])) * 256 + ((bytes[6])) * 65536 + ((bytes[7])) * 16777216"
         }
       ]
     }
@@ -79,6 +4491,65 @@
           "HRN": "MCU CHARGER TYPE",
           "equation": "(bytes[3])"
         }
+      ],
+      "0x562": [
+        {
+          "params": "MCU_SOH",
+          "HRN": "MCU_SOH",
+          "equation": "(bytes[3]*(16777216)+bytes[2]*(65536)+bytes[1]*(256)+bytes[0])/10000.0"
+        },
+        {
+          "params": "MCU_IBatt_Input",
+          "HRN": "MCU_IBatt_Input",
+          "equation": "(bytes[7]*(16777216)+bytes[6]*(65536)+bytes[5]*(256)+bytes[4])/10000.0"
+        }
+      ],
+      "0x20c": [
+        {
+          "params": "MCU_Motor_Torque_Multiplier_Setting",
+          "HRN": "MCU ping Motor Torque Setting",
+          "equation": "((((bytes[0])) & 127)) * 1"
+        },
+        {
+          "params": "MCU_Motor_Neutral_Braking_Setting",
+          "HRN": "MCU ping Motor Neutral braking Setting",
+          "equation": "(bytes[0] >> 7)"
+        },
+        {
+          "params": "MCU_Motor_Power_Stage_Setting",
+          "HRN": "MCU ping Motor Power Stage Setting",
+          "equation": "((bytes[1] >> 1) & 1)"
+        },
+        {
+          "params": "MCU_Motor_Brakes_On_Setting",
+          "HRN": "MCU ping Motor Brakes on Setting",
+          "equation": "((bytes[1] >> 2) & 1)"
+        },
+        {
+          "params": "MCU_Motor_Ibatt_Max_Setting",
+          "HRN": "MCU ping Motor Ibatt Max Setting",
+          "equation": "((bytes[1] >> 3) | ((bytes[2] & 7) << 5)) * 1"
+        },
+        {
+          "params": "MCU_Motor_Ibatt_Min_Setting",
+          "HRN": "MCU ping Motor Ibatt Min Setting",
+          "equation": "((bytes[2] >> 4) | ((bytes[3] & 15) << 4)) * 1"
+        },
+        {
+          "params": "MCU_Motor_Max_RPM_Setting",
+          "HRN": "MCU ping Motor Max RPM Setting",
+          "equation": "((bytes[3] >> 4) | ((bytes[4] & 15) << 4)) * 1 + ((((bytes[4] >> 4) | ((bytes[5] & 15) << 4)) & 31)) * 256"
+        },
+        {
+          "params": "MCU_Motor_Mode_Setting",
+          "HRN": "MCU ping Motor Mode Setting",
+          "equation": "((((bytes[5])) & 3)) * 1"
+        },
+        {
+          "params": "MCU_Motor_Ibatt_Bms_Setting",
+          "HRN": "MCU ping Motor Ibatt Bms Setting",
+          "equation": "((bytes[5] >> 2) | ((bytes[6] & 3) << 6)) * 1 + ((((bytes[6] >> 2) | ((bytes[7] & 3) << 6)) & 1)) * 256"
+        }
       ]
     }
   },
@@ -94,6 +4565,905 @@
           "params": "POD_ErrorValue",
           "HRN": "POD Error Value",
           "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_EarthFaultValue",
+          "HRN": "Earth Fault Value",
+          "condition": "(bytes[0] == 0x04)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_VehicleHeartbeatError",
+          "HRN": "Vehicle Heartbeat Error Value",
+          "condition": "(bytes[0] == 0x24)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x002": [
+        {
+          "params": "POD_ErrorRecovery",
+          "HRN": "POD Error Recovery",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "POD_ErrorRecoveryValue",
+          "HRN": "POD Error Recovery Value",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_EarthFaultRecoveryValue",
+          "HRN": "Earth EarthFault",
+          "condition": "(bytes[0] == 0x04)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_VehicleHeartbeatRecovery",
+          "HRN": "Vehicle Heartbeat Error Recovery Value",
+          "condition": "(bytes[0] == 0x24)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x003": [
+        {
+          "params": "POD_Boot",
+          "HRN": "POD Boot Up",
+          "equation": "1"
+        },
+        {
+          "params": "POD_ResetCause",
+          "HRN": "POD Reset Cause",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "POD_ResetCause_PowerOnReset",
+          "HRN": "POD Reset Cause Power On Reset",
+          "equation": "(bytes[1] >> 0) & 1"
+        },
+        {
+          "params": "POD_ResetCause_ExternalReset",
+          "HRN": "POD Reset Cause External Reset",
+          "equation": "(bytes[1] >> 1) & 1"
+        },
+        {
+          "params": "POD_ResetCause_WatchDogReset",
+          "HRN": "POD Reset Cause WatchDog Reset",
+          "equation": "(bytes[1] >> 2) & 1"
+        },
+        {
+          "params": "POD_ResetCause_BrownOutDetect",
+          "HRN": "POD Reset Cause Brown Out",
+          "equation": "(bytes[1] >> 3) & 1"
+        },
+        {
+          "params": "POD_HardwareVersion",
+          "HRN": "POD Hardware Version",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "POD_FirmwareVersion",
+          "HRN": "POD Firmware Version",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x006": [
+        {
+          "params": "POD_ResetTimerOverflow",
+          "HRN": "POD Reset Due to Timer Overflow (ms)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x007": [
+        {
+          "params": "POD_AtherVehicleConnected",
+          "HRN": "POD Ather Vehicle Connected Status",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "POD_CP_State",
+          "HRN": "POD CP State",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "POD_CP_Volts",
+          "HRN": "POD CP Volts",
+          "equation": "((bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) - 1290) * 0.0165099324"
+        }
+      ],
+      "0x023": [
+        {
+          "params": "POD_ResetBootloader",
+          "HRN": "POD Reset To Bootloader",
+          "equation": "1"
+        }
+      ],
+      "0x024": [
+        {
+          "params": "POD_ResetApp",
+          "HRN": "POD Reset To Application",
+          "equation": "1"
+        }
+      ],
+      "0x029": [
+        {
+          "params": "POD_WriteAppSign",
+          "HRN": "POD Write App Sign",
+          "equation": "1"
+        }
+      ],
+      "0x02b": [
+        {
+          "params": "POD_GetFirmwareVersion",
+          "HRN": "POD Get Firmware Version",
+          "equation": "1"
+        }
+      ],
+      "0x061": [
+        {
+          "params": "POD_Bootloader_ResponseFlashErase",
+          "HRN": "Pod Bootloader Response Flash Erase",
+          "condition": "(bytes[0] == 0x63)",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "POD_Bootloader_ResponseFlashCrc",
+          "HRN": "Pod Bootloader Response Flash Crc",
+          "condition": "(bytes[0] == 0x67)",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "POD_Bootloader_ResponseJumpToApp",
+          "HRN": "Pod Bootloader Response Jump to App",
+          "condition": "(bytes[0] == 0x68)",
+          "equation": "bytes[2]"
+        }
+      ],
+      "0x063": [
+        {
+          "params": "POD_Bootloader_FlashErase",
+          "HRN": "Pod Bootloader Flash Erase",
+          "equation": "1"
+        }
+      ],
+      "0x064": [
+        {
+          "params": "POD_Bootloader_PageNumber",
+          "HRN": "Pod Bootloader Page Number",
+          "equation": "1"
+        }
+      ],
+      "0x068": [
+        {
+          "params": "POD_Bootloader_JumpToApp",
+          "HRN": "Pod Bootloader Jump to Application",
+          "equation": "1"
+        }
+      ],
+      "0x06F": [
+        {
+          "params": "POD_Bootloader_Heartbeat",
+          "HRN": "Pod Bootloader Heartbeat",
+          "equation": "2"
+        }
+      ],
+      "0x070": [
+        {
+          "params": "POD_S340_ChargerType",
+          "HRN": "S340 Charger Type",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "POD_S340_McuChargingState",
+          "HRN": "S340 Mcu Charging State",
+          "equation": "bytes[1]"
+        }
+      ],
+      "0x071": [
+        {
+          "params": "POD_S340_StartAcCharging",
+          "HRN": "S340 Start Ac Charging",
+          "equation": "1"
+        }
+      ],
+      "0x072": [
+        {
+          "params": "POD_S340_StartDcCharging",
+          "HRN": "S340 Start DC Charging",
+          "equation": "1"
+        },
+        {
+          "params": "CC_rate",
+          "HRN": "CC rate",
+          "equation": "(bytes[0] + bytes[1]*256)"
+        }
+      ],
+      "0x073": [
+        {
+          "params": "POD_S340_StartCV",
+          "HRN": "S340 Start CV",
+          "equation": "1"
+        }
+      ],
+      "0x074": [
+        {
+          "params": "POD_S340_StopCharging",
+          "HRN": "S340 Stop Charging",
+          "equation": "1"
+        }
+      ],
+      "0x080": [
+        {
+          "params": "POD_ResponseCommand",
+          "HRN": "POD Response Command ID",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "POD_ResponseStatus",
+          "HRN": "POD Response Status (Ack/Nak)",
+          "equation": "bytes[2]"
+        },
+        {
+          "params": "POD_ResponseReason",
+          "HRN": "POD Response REASON",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "POD_ResponseValue",
+          "HRN": "POD Response Value",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x081": [
+        {
+          "params": "CI_Recoverable_Fault",
+          "HRN": "CI Recoverable Fault",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CI_NonRecoverable_Fault",
+          "HRN": "CI Non Recoverable Fault",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "OBC_Recoverable_Fault",
+          "HRN": "Off Board Fast Charger Recoverable Fault",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "OBC_NonRecoverable_Fault",
+          "HRN": "Off Board Fast Charger Non Recoverable Fault",
+          "equation": "bytes[7]"
+        }
+      ],
+      "0x082": [
+        {
+          "params": "OBC_ChargingMode",
+          "HRN": "Charging mode",
+          "equation": "(bytes[2] + bytes[3]*256)"
+        },
+        {
+          "params": "OBC_FaultStatus",
+          "HRN": "Fault status",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x083": [
+        {
+          "params": "OBC_Vout",
+          "HRN": "Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "OBC_Iout",
+          "HRN": "Output Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x084": [
+        {
+          "params": "CI_ChargingMode",
+          "HRN": "Charging mode",
+          "equation": "bytes[0]"
+        },
+        {
+          "params": "CI_DC_Available",
+          "HRN": "DC/Fast charging available or not",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "POD_Type",
+          "HRN": "POD Type",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "POD_Heartbeat_Public_Gen1",
+          "HRN": "POD Heartbeat",
+          "condition": "(bytes[2] == 0x01)",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "POD_Heartbeat_Private_Gen1",
+          "HRN": "POD Heartbeat",
+          "condition": "(bytes[2] == 0x81)",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "POD_AuthenticationStatus",
+          "HRN": "Authentication status",
+          "equation": "bytes[3]"
+        },
+        {
+          "params": "POD_ID",
+          "HRN": "Pod Id",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x085": [
+        {
+          "params": "POD_DeadBatteryChargingAttempt",
+          "HRN": "Dead battery charging attempt",
+          "condition": "(bytes[0] == 0x25)",
+          "equation": "bytes[1]"
+        },
+        {
+          "params": "POD_DeadBatteryChargeTime",
+          "HRN": "Dead battery charge time (secs)",
+          "condition": "(bytes[0] == 0x25)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)/1000.0"
+        },
+        {
+          "params": "POD_AmbientTemperature",
+          "condition": "(bytes[0] == 0x80)",
+          "HRN": "External temperature",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x086": [
+        {
+          "params": "CI_SessionEndReason",
+          "HRN": "Session end reason",
+          "equation": "bytes[0]"
+        }
+      ],
+      "0x089": [
+        {
+          "params": "POD_EarthAlgoType",
+          "HRN": "POD Earth Algo Type",
+          "condition": "(bytes[0] == 0x01)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_UserLedBrightness",
+          "HRN": "POD User Led Brightness",
+          "condition": "(bytes[0] == 0x02)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x090": [
+        {
+          "params": "POD_EarthAlgoType_SetValue",
+          "HRN": "POD Earth Algo Type",
+          "condition": "(bytes[0] == 0x01)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params": "POD_UserLedBrightness_SetValue",
+          "HRN": "POD User Led Brightness",
+          "condition": "(bytes[0] == 0x02)",
+          "equation": "(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ]
+    }
+  },
+  "can_bcm": {
+    "v1_0_0": {
+      "0x100": [
+        {
+          "params": "BCM_HB",
+          "HRN": "BCM Uptime",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24) | (bytes[4] << 32) | (bytes[5] << 40) | (bytes[6] << 48) | (bytes[7] << 56))"
+        }
+      ],
+      "0x101": [
+        {
+          "params": "BCM_VehState",
+          "HRN": "Vehicle State",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "BCM_DriveMode",
+          "HRN": "Actual Vehicle Drive Mode",
+          "equation": "(bytes[1])"
+        },
+        {
+          "params": "BCM_RstCause",
+          "HRN": "BCM reset cause",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "BCM_SidestandDisable",
+          "HRN": "Disable Sidestand Check for Standby to Riding State",
+          "equation": "((bytes[3] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_DistressMode",
+          "HRN": "Distress mode Status",
+          "equation": "((bytes[4] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_WarpAvail",
+          "HRN": "Warp mode availability Status",
+          "equation": "((bytes[4] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_forcedEco",
+          "HRN": "Vehicle Forced to Enter Eco Mode",
+          "equation": "((bytes[4] >> 1) & 1)"
+        }
+      ],
+      "0x102": [
+        {
+          "params": "BCM_InBrakeFront",
+          "HRN": "Front brake pressed status",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_InBrakeRear",
+          "HRN": "Rear brake pressed status",
+          "equation": "((bytes[0] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_InHBeamSwitch",
+          "HRN": "High Beam Pressed Status",
+          "equation": "((bytes[0] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_InStartSwitch",
+          "HRN": "Start switch Pressed Status",
+          "equation": "((bytes[0] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_InMotorKillSwitch",
+          "HRN": "Kill Switch Pressed Status",
+          "equation": "((bytes[0] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_InStorageSwitch",
+          "HRN": "Storage switch Pressed Status",
+          "equation": "((bytes[0] >> 6) & 1)"
+        },
+        {
+          "params": "BCM_InChaSolFeedback",
+          "HRN": "solenoid lock feedback pin Status",
+          "equation": "((bytes[1] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_InHornSwitch",
+          "HRN": "Horn switch Pressed Status",
+          "equation": "((bytes[1] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_InSpare1Switch",
+          "HRN": "Spare1 Switch Pressed Status",
+          "equation": "((bytes[1] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_InSpare2Switch",
+          "HRN": "Spare2 switch Pressed Status",
+          "equation": "((bytes[1] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_InIndLeftSwitch",
+          "HRN": "Indicator left Switch Pressed Status",
+          "equation": "((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_InIndRightSwitch",
+          "HRN": "Indicator Right switch Pressed Status",
+          "equation": "((bytes[2] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_InIndCentSwitch",
+          "HRN": "Indicator Center switch pin Status",
+          "equation": "((bytes[2] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_InMusCall",
+          "HRN": "Music and Call Status",
+          "equation": "((bytes[2] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_InModeLeft",
+          "HRN": "Mode Left Switch Pressed Status",
+          "equation": "((bytes[2] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_InModeRight",
+          "HRN": "Mode right switch Pressed Status",
+          "equation": "((bytes[2] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_InSidestand",
+          "HRN": "Sidestand Engaged status",
+          "equation": "((bytes[4] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_InPPStatus",
+          "HRN": "PP enabled status",
+          "equation": "((bytes[4] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_InHPDUStatus",
+          "HRN": "HPDU enabled Status",
+          "equation": "((bytes[4] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_InKeyStatus",
+          "HRN": "Key enabled Status",
+          "equation": "((bytes[4] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_InIMUInt1",
+          "HRN": "IMU Interrupt1 status",
+          "equation": "((bytes[5] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_InIMUInt2",
+          "HRN": "IMU Interrupt2 status",
+          "equation": "((bytes[5] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_InMagnInt",
+          "HRN": "Magneto Interrupt Status",
+          "equation": "((bytes[5] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_InPDUVolt",
+          "HRN": "PDU voltage in Volts",
+          "equation": "(((bytes[6]) | (bytes[7] << 8))/1000)"
+        }
+      ],
+      "0x103": [
+        {
+          "params": "BCM_OutDriverSleep1",
+          "HRN": "Hardware driver sleep status",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_OutKeyLoad",
+          "HRN": "Key routed loads enabled status",
+          "equation": "((bytes[0] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_OutHPDUEn",
+          "HRN": "HPDU enable pin Status",
+          "equation": "((bytes[0] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_OutIndLeftEn",
+          "HRN": "Indicator Left output Enabled Status",
+          "equation": "((bytes[0] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_OutIndRightEn",
+          "HRN": "Indicator Left output Enabled Status",
+          "equation": "((bytes[0] >> 6) & 1)"
+        },
+        {
+          "params": "BCM_OutIndChnlSel",
+          "HRN": "Indicator Channel Select Status",
+          "equation": "((bytes[1] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_OutSeatLock",
+          "HRN": "Seat Lock Enable pin Status",
+          "equation": "((bytes[1] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_OutChaSolEn1",
+          "HRN": "Cahrger Solenoid Lock Enable1 status",
+          "equation": "((bytes[1] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_OutChaSolEn2",
+          "HRN": "Cahrger Solenoid Lock Enable2 status",
+          "equation": "((bytes[1] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_OutDriverSleep2",
+          "HRN": "Driver SleepBack Enabled Status",
+          "equation": "((bytes[1] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_OutCanTrscvrEn",
+          "HRN": "CAN Transceiver Enabled Status",
+          "equation": "((bytes[1] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_OutHornEn",
+          "HRN": "Horn Enabled Status",
+          "equation": "((bytes[1] >> 6) & 1)"
+        },
+        {
+          "params": "BCM_OutSpareFet",
+          "HRN": "Spare FET Enabled Status",
+          "equation": "((bytes[1] >> 7) & 1)"
+        },
+        {
+          "params": "BCM_OutHBeam",
+          "HRN": "High Beam Enabled Status",
+          "equation": "((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_OutLBeam",
+          "HRN": "Low Beam Enabled Status",
+          "equation": "((bytes[2] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_OutTailLamp",
+          "HRN": "Tail lamp with 10% intensity",
+          "equation": "((bytes[2] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_OutBrakeLamp",
+          "HRN": "Tail lamp with 100% intensity",
+          "equation": "((bytes[2] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_OutMotorFan",
+          "HRN": "Motor Fan pwm duty",
+          "equation": "((bytes[2] >> 4) & 0xF)"
+        }
+      ],
+      "0x104": [
+        {
+          "params": "BCM_FtBMSHB",
+          "HRN": "No BMS heartbeat",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_FtMotorHB",
+          "HRN": "No Motor heartbeat",
+          "equation": "((bytes[0] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_FtDashHB",
+          "HRN": "No Dashboard heartbeat",
+          "equation": "((bytes[0] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_FtChaHB",
+          "HRN": "No Charger heartbeat",
+          "equation": "((bytes[0] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_FtHPDU",
+          "HRN": "HPDU turn On failed",
+          "equation": "((bytes[0] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_FtLPDU",
+          "HRN": "HPDU turn Off failed",
+          "equation": "((bytes[0] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_FtPP",
+          "HRN": "No PP detected",
+          "equation": "((bytes[1] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_FtTailLamp",
+          "HRN": "Tail lamp pin fault",
+          "equation": "((bytes[1] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_FtHorn",
+          "HRN": "Horn pin fault",
+          "equation": "((bytes[1] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_FtChaSol",
+          "HRN": "Solenoid pin fault",
+          "equation": "((bytes[1] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_FtMotorFan",
+          "HRN": "motor fan pin fault",
+          "equation": "((bytes[1] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_FtKeyLoad",
+          "HRN": "Key routed load fault",
+          "equation": "((bytes[1] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_FtIndDash",
+          "HRN": "Any Indicator fault",
+          "equation": "((bytes[2] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_FtIndHwPin",
+          "HRN": "Indicator hw pin fault",
+          "equation": "((bytes[2] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_FtIndLeftOpen",
+          "HRN": "Indicator left open fault",
+          "equation": "((bytes[2] >> 2) & 1)"
+        },
+        {
+          "params": "BCM_FtIndRightOpen",
+          "HRN": "Indicator right open fault",
+          "equation": "((bytes[2] >> 3) & 1)"
+        },
+        {
+          "params": "BCM_FtIndLeftShort",
+          "HRN": "Indicator left short fault",
+          "equation": "((bytes[2] >> 4) & 1)"
+        },
+        {
+          "params": "BCM_FtIndRightShort",
+          "HRN": "Indicator right short fault",
+          "equation": "((bytes[2] >> 5) & 1)"
+        },
+        {
+          "params": "BCM_FtIndLeftSingle",
+          "HRN": "Indicator left single fault",
+          "equation": "((bytes[2] >> 6) & 1)"
+        },
+        {
+          "params": "BCM_FtIndRightSingle",
+          "HRN": "Indicator right single fault",
+          "equation": "((bytes[2] >> 7) & 1)"
+        },
+        {
+          "params": "BCM_FtChaSolLock",
+          "HRN": "Solenoid lock fault",
+          "equation": "((bytes[3] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_FtChaSolUnlock",
+          "HRN": "Solenoid Unlock fault",
+          "equation": "((bytes[3] >> 1) & 1)"
+        }
+      ],
+      "0x105": [
+        {
+          "params": "BCM_ChaType",
+          "HRN": "Type of charger",
+          "equation": "(bytes[0])"
+        },
+        {
+          "params": "BCM_ChaState",
+          "HRN": "Charger state",
+          "equation": "(bytes[1])"
+        },
+        {
+          "params": "BCM_ChaVolt",
+          "HRN": "Charger voltage",
+          "equation": "((bytes[2] << 0) | (bytes[3] << 8)/100)"
+        },
+        {
+          "params": "BCM_ChaCur",
+          "HRN": "Charger Current",
+          "equation": "((bytes[4] << 0) | (bytes[5] << 8)/100)"
+        },
+        {
+          "params": "BCM_ChaAuth",
+          "HRN": "charger authentication status",
+          "equation": "((bytes[6] >> 0) & 1)"
+        },
+        {
+          "params": "BCM_ChaHB",
+          "HRN": "charger authentication status",
+          "equation": "((bytes[6] >> 1) & 1)"
+        },
+        {
+          "params": "BCM_ChaAlgoState",
+          "HRN": "Charger mbd algo state",
+          "equation": "(bytes[7])"
+        }
+      ],
+      "0x120": [
+        {
+          "params": "BCM_Req",
+          "HRN": "BCM requests",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8))"
+        },
+        {
+          "params": "BCM_ReqSub",
+          "HRN": "BCM sub requests",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "BCM_ReqData2",
+          "HRN": "BCM sub-sub requests",
+          "equation": "(bytes[3])"
+        },
+        {
+          "params": "BCM_ReqData",
+          "HRN": "BCM requests data",
+          "equation": "((bytes[4] << 0) | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7]) << 24)"
+        }
+      ],
+      "0x216": [
+        {
+          "params": "BCM_RespReq",
+          "HRN": "BCM response for the requests",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8))"
+        },
+        {
+          "params": "BCM_RspAck",
+          "HRN": "BCM ack for requests",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "BCM_RespData",
+          "HRN": "BCM error or data for request",
+          "equation": "((bytes[4] << 0) | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24))"
+        }
+      ]
+    }
+  },
+  "can_gtw": {
+    "v1_0_0": {
+      "0x210": [
+        {
+          "params": "GTW_HB",
+          "HRN": "Gateway Uptime",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24) | (bytes[4] << 32) | (bytes[5] << 40) | (bytes[6] << 48) | (bytes[7] << 56))"
+        }
+      ],
+      "0x211": [
+        {
+          "params": "GTW_GPIO1",
+          "HRN": "GPIO1 from Dashboard to GTW",
+          "equation": "((bytes[0] >> 0) & 1)"
+        },
+        {
+          "params": "GTW_GPIO2",
+          "HRN": "GPIO2 from Dashboard to GTW",
+          "equation": "((bytes[0] >> 1) & 1)"
+        },
+        {
+          "params": "GTW_GPIO3",
+          "HRN": "GPIO3 from Dashboard to GTW",
+          "equation": "((bytes[0] >> 2) & 1)"
+        },
+        {
+          "params": "GTW_DashVolt",
+          "HRN": "Dashboard Voltage via ADC in Volts",
+          "equation": "(bytes[1]/100)"
+        }
+      ],
+      "0x212": [
+        {
+          "params": "GTW_OdoData",
+          "HRN": "Odometer data",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24))"
+        }
+      ],
+      "0x215": [
+        {
+          "params": "GTW_Req",
+          "HRN": "GTW requests",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8))"
+        }
+      ],
+      "0x216": [
+        {
+          "params": "GTW_RespReq",
+          "HRN": "GTW response for the requests",
+          "equation": "((bytes[0] << 0) | (bytes[1] << 8))"
+        },
+        {
+          "params": "GTW_RespAck",
+          "HRN": "GTW ack for requests",
+          "equation": "(bytes[2])"
+        },
+        {
+          "params": "GTW_RespData",
+          "HRN": "GTW error or data for request",
+          "equation": "((bytes[4] << 0) | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24))"
         }
       ]
     }

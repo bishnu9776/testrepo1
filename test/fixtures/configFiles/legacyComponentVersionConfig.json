@@ -1,7 +1,317 @@
 {
-  "can_charger": "MK3",
-  "can_motor": "MAHLEX1",
-  "can_bms": "v4_1_0",
-  "can_mcu": "v1_0_0",
-  "can_pod": "LPCv1"
+  "S340-MULE1": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK2",
+    "can_bms": "v4_0_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MULE-2": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK2",
+    "can_bms": "v4_0_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-GES": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-A1": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-C": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-E": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-F": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-G": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "S340-MK3-H": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "SOLAR-ESS-1": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL1": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL2": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL3": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL4": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL5": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL6": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL9": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL11": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BMS-EOL12": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-1": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-2": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-3": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-4": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-5": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-6": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-7": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-8": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-9": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-10": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-11": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-12": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-13": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-14": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-ESS-15": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BATTERY-5": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BATTERY-8": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BATTERY-9": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-2": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-4": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-5": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-6": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-7": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-8": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "BEAGLE-BATTERY-9": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "pure_v1",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "DEFAULT": {
+    "can_motor": "MAHLEX1",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  }
 }

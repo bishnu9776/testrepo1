@@ -72,21 +72,25 @@ const populateDecoderConfig = config => {
 
 const populateDefaultDecoderConfig = (config, defaultComponentToVersionMapping) => {
   const defaultDecoder = {}
-  const legacyComponents = keys(defaultComponentToVersionMapping)
+  const devices = keys(defaultComponentToVersionMapping)
 
-  if (isNilOrEmpty(legacyComponents) || isNilOrEmpty(config)) {
+  if (isNilOrEmpty(devices) || isNilOrEmpty(config)) {
     return defaultDecoder
   }
 
-  legacyComponents.forEach(component => {
-    const version = defaultComponentToVersionMapping[component]
-    const canIds = keys(config[component][version])
-    canIds.forEach(canId => {
-      config[component][version][canId].forEach(e => {
-        if (isNil(defaultDecoder[`${component}.${version}.${canId}`])) {
-          defaultDecoder[`${component}.${version}.${canId}`] = {}
-        }
-        defaultDecoder[`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
+  devices.forEach(device => {
+    defaultDecoder[device] = {}
+    const components = keys(defaultComponentToVersionMapping[device])
+    components.forEach(component => {
+      const version = defaultComponentToVersionMapping[device][component]
+      const canIds = keys(config[component][version])
+      canIds.forEach(canId => {
+        config[component][version][canId].forEach(e => {
+          if (isNil(defaultDecoder[device][`${component}.${version}.${canId}`])) {
+            defaultDecoder[device][`${component}.${version}.${canId}`] = {}
+          }
+          defaultDecoder[device][`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
+        })
       })
     })
   })
@@ -105,13 +109,15 @@ export const getCANMessageDecoder = () => {
 
   return message => {
     const {attributes, data} = message
+    const device = attributes.bike_id
 
     return data.map(d => {
       const {can_id: canId} = d.canRaw
       const componentKeys = attributes.channel.split("/")
 
       if (isLegacy(attributes.channel)) {
-        const decoderKeys = keys(defaultDecoder)
+        const defaultDecoderForDevice = defaultDecoder[device] || defaultDecoder.DEFAULT
+        const decoderKeys = keys(defaultDecoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
           log.error(
@@ -120,7 +126,7 @@ export const getCANMessageDecoder = () => {
           )
           return []
         }
-        const decoderForCANId = defaultDecoder[head(decoderKeyForCANId)]
+        const decoderForCANId = defaultDecoderForDevice[head(decoderKeyForCANId)]
         return decodeCANRaw(d.canRaw, decoderForCANId)
       }
       const decoderKey = `${componentKeys.join(".")}.${canId}`
