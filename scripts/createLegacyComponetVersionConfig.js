@@ -6,7 +6,7 @@
 import readline from 'readline'
 import fs from "fs"
 
-const readInterface = readline.createInterface({
+const readLineInterface = readline.createInterface({
   input: fs.createReadStream('path/to/file/name.txt')
 })
 
@@ -18,7 +18,7 @@ const formatComponent = str => str.replace("(", "").split(",")
 const componentKeysLength = 5
 const parse = (str) => JSON.parse(str)
 
-const createDeviceLevelConfig = (line) => {
+const createLegacyComponetVersionConfig = (line) => {
   const deviceKey = JSON.parse(deviceKeyRegex.exec(line)[1])
   defaultConfig[deviceKey] = {}
 
@@ -33,10 +33,10 @@ const createDeviceLevelConfig = (line) => {
   }
 }
 
-readInterface.on('line', line => {
-  createDeviceLevelConfig(line)
+readLineInterface.on('line', line => {
+  createLegacyComponetVersionConfig(line)
 })
 
-readInterface.on('close', () => {
+readLineInterface.on('close', () => {
   fs.writeFileSync("path/to/file/output.json", JSON.stringify(defaultConfig, null, 2), {flag: "w"})
 })
