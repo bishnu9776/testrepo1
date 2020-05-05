@@ -32,9 +32,21 @@ describe("CAN decoder", () => {
       expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
     })
 
-    it("should give empty array when canId is not present in default config ", () => {
-      const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
+    it("should give empty array when canId is not present in default parser config ", () => {
+      const message = {
+        attributes: {...LEGACY_CAN_BMS.attributes, bike_id: "bike1"},
+        data: LEGACY_CAN_BMS.data
+      }
+
+      const parsedData = getCANMessageDecoder()(message)
       expect(parsedData).to.eql([[]])
+    })
+  })
+
+  describe("bikes with specific configs", () => {
+    it("BEAGLE-ESS-4 - should deecode using bike specific config in default parser config ", () => {
+      const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
+      expect(parsedData).to.eql(LEGACY_CAN_BMS.data.map(e => e.parsed))
     })
   })
 })
