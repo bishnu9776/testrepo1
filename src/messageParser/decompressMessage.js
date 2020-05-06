@@ -7,23 +7,26 @@ const {env} = process
 
 const avroDeserialize = message => {
   return new Promise((resolve, reject) => {
+    const output = []
     let md
     try {
       const decoder = new avro.streams.BlockDecoder({})
 
       decoder.on("metadata", metadata => {
-        // console.log("Got metadata for message id: ", message.id)
-        // console.log("Metadata: ", JSON.stringify(metadata))
+        console.log("Metadata: ", JSON.stringify(metadata))
         md = metadata
       })
 
       decoder.on("data", data => {
-        // console.log("Got data for message id: ", message.id)
-        // console.log("Got data", JSON.stringify(data))
-        // console.log("Usind md", JSON.stringify(md))
+        output.push(data)
+        console.log("Got data", JSON.stringify(data))
       })
 
       decoder.on("error", error => {
+        // fs.writeFileSync(
+        //   "/Users/subramanyam/work/svc-ather-collector/avro_mock_with_error",
+        //   JSON.stringify({data: message.data, attributes: message.attributes})
+        // )
         reject(error)
       })
 
@@ -33,13 +36,17 @@ const avroDeserialize = message => {
       })
 
       decoder.on("finish", () => {
-        // console.log("Message stream finished", message.id)
-        resolve()
+        console.log("Message stream finished")
+        // fs.writeFileSync(
+        //   "/Users/subramanyam/work/svc-ather-collector/avro_mock",
+        //   JSON.stringify({data: message.data, attributes: message.attributes})
+        // )
+        resolve(output)
       })
 
       decoder.on("close", () => {
-        console.log("Message stream closed", message.id)
-        resolve()
+        console.log("Message stream closed")
+        resolve(output)
       })
 
       // console.log("Calling end with message")
