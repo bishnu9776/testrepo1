@@ -1,59 +1,60 @@
 import zlib from "zlib"
-import fs from "fs"
+import Long from "long"
 import avro from "avsc"
-import {errorFormatter} from "../utils/errorFormatter"
 
 const {env} = process
+
+const longType = avro.types.LongType.__with({
+  fromBuffer: buf => {
+    return new Long(buf.readInt32LE(), buf.readInt32LE(4)).toString()
+  },
+  toBuffer: n => {
+    const buf = Buffer.alloc(8)
+    buf.writeInt32LE(n.getLowBits())
+    buf.writeInt32LE(n.getHighBits(), 4)
+    return buf
+  },
+  fromJSON: x => {
+    return Long.fromValue(x)
+  },
+  toJSON: n => {
+    return +n
+  },
+  isValid: x => {
+    return Long.isLong(x)
+  },
+  compare: (n1, n2) => n1.compare(n2)
+})
 
 const avroDeserialize = message => {
   return new Promise((resolve, reject) => {
     const output = []
-    let md
-    try {
-      const decoder = new avro.streams.BlockDecoder({})
 
-      decoder.on("metadata", metadata => {
-        console.log("Metadata: ", JSON.stringify(metadata))
-        md = metadata
-      })
+    const decoder = new avro.streams.BlockDecoder({
+      parseHook: schema => {
+        return avro.Type.forSchema(schema, {registry: {long: longType}})
+      }
+    })
 
-      decoder.on("data", data => {
-        output.push(data)
-        console.log("Got data", JSON.stringify(data))
-      })
+    // let md
+    // decoder.on("metadata", metadata => {
+    //   console.log("Metadata: ", JSON.stringify(metadata))
+    //   md = metadata
+    // })
 
-      decoder.on("error", error => {
-        // fs.writeFileSync(
-        //   "/Users/subramanyam/work/svc-ather-collector/avro_mock_with_error",
-        //   JSON.stringify({data: message.data, attributes: message.attributes})
-        // )
-        reject(error)
-      })
+    decoder.on("data", data => {
+      output.push(data)
+    })
 
-      decoder.on("end", () => {
-        // console.log("Message stream ended")
-        // resolve()
-      })
+    decoder.on("error", error => {
+      reject(error)
+    })
 
-      decoder.on("finish", () => {
-        console.log("Message stream finished")
-        // fs.writeFileSync(
-        //   "/Users/subramanyam/work/svc-ather-collector/avro_mock",
-        //   JSON.stringify({data: message.data, attributes: message.attributes})
-        // )
-        resolve(output)
-      })
+    decoder.on("finish", () => {
+      resolve(output)
+    })
 
-      decoder.on("close", () => {
-        console.log("Message stream closed")
-        resolve(output)
-      })
-
-      // console.log("Calling end with message")
-      decoder.end(message.data)
-    } catch (e) {
-      console.log("Error: ", e)
-    }
+    decoder.end(message.data)
   })
 }
 

@@ -28,6 +28,6 @@ describe("Decompresses gcp message", () => {
     const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
     const decompressMessage = getDecompresserFn({log})
     const output = await decompressMessage(message)
-    expect(output.length).to.eql(10)
+    expect(output.length).to.eql(100)
   })
 })

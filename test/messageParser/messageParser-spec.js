@@ -85,6 +85,7 @@ describe("Parse GCP message", () => {
     it("returns empty if unable to parse as json", () => {})
   })
 
+  // eslint-disable-next-line
   describe("Zlib inflate compressed data", () => {
     it("formats events and adds ack event to end of array", () => {})
 
