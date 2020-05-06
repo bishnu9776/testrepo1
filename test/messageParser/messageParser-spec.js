@@ -40,7 +40,7 @@ describe("Parse GCP message", () => {
     }
   ]
 
-  describe("Compressed data", () => {
+  describe("Zlib zip compressed data", () => {
     beforeEach(() => {
       process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
       messageParser = getMessageParser({log, metricRegistry, probe})
@@ -58,7 +58,7 @@ describe("Parse GCP message", () => {
     })
   })
 
-  describe("Decompressed data", () => {
+  describe("Uncompressed data", () => {
     beforeEach(() => {
       process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
       messageParser = getMessageParser({log, metricRegistry, probe})
@@ -74,5 +74,18 @@ describe("Parse GCP message", () => {
       const output = await messageParser({data: "foo"})
       expect(output).to.eql([])
     })
+  })
+
+  // TODO: Discuss with group if we're missing some abstractions in writing tests
+  describe("Avro data", () => {
+    it("formats events and adds ack event to end of array", () => {})
+
+    it("returns empty if unable to parse as json", () => {})
+  })
+
+  describe("Zlib inflate compressed data", () => {
+    it("formats events and adds ack event to end of array", () => {})
+
+    it("returns empty if unable to parse as json", () => {})
   })
 })

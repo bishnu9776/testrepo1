@@ -1,8 +1,8 @@
 import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
+import fs from "fs"
 import {from} from "rxjs"
 import {complement, isEmpty} from "ramda"
 import * as gcpSubscriber from "../gcpSubscriber/gcpStream"
-
 import {getMessageParser} from "../messageParser"
 import {getKafkaSender} from "../kafkaProducer"
 import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"
@@ -58,6 +58,20 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
   return stream
     .pipe(
       timeout(eventTimeout),
+      // filter(x => !x.attributes.subFolder.includes("v1")),
+      // tap(x => {
+      //   try {
+      //     fs.writeFileSync(
+      //       "/Users/subramanyam/work/svc-ather-collector/avro_mock",
+      //       JSON.stringify({data: x.data, attributes: x.attributes})
+      //     )
+      //     console.log("wrote to file")
+      //   } catch (e) {
+      //     console.log(e)
+      //   } finally {
+      //     console.log(x)
+      //   }
+      // }),
       mergeMap(event => from(parseMessage(event))),
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
