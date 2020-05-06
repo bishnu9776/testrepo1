@@ -5,7 +5,7 @@ import {getCANMessageDecoder} from "./channelDecoder/getCANMessageDecoder"
 export const parseCAN = () => {
   const {env} = process
   const shouldDecodeMessage = JSON.parse(env.VI_SHOULD_DECODE_CAN_MESSAGE || "false")
-  const decodeCANMessage = getCANMessageDecoder()
+  const decodeCANMessage = shouldDecodeMessage ? getCANMessageDecoder() : null
 
   return message => {
     let decodedMessage = []

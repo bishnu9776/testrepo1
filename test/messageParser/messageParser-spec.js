@@ -77,6 +77,8 @@ describe("Parse GCP message", () => {
   })
 
   // TODO: Discuss with group if we're missing some abstractions in writing tests
+  // There's tests for decompressMessage, then messageParser, then getPipeline.
+  // I think it's enough to cover every case in decompressMessage, and just one case in the rest of the functions
   describe("Avro data", () => {
     it("formats events and adds ack event to end of array", () => {})
 

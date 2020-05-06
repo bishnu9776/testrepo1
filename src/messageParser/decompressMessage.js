@@ -76,13 +76,16 @@ const deflate = message => {
 export const getDecompresserFn = ({log}) => {
   const isCompressedMessage = JSON.parse(env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG || "true")
   if (!isCompressedMessage) {
-    return async message => message.data
+    return async message => {
+      return JSON.parse(message.data.toString())
+    }
   }
 
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   if (!isPreBigSinkInput) {
     return async message => {
-      return unzip(message.data)
+      const decompressedMessage = await unzip(message.data)
+      return JSON.parse(decompressedMessage.toString())
     }
   }
 

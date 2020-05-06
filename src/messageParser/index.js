@@ -56,8 +56,11 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
       if (!decompressedMessage) {
         return []
       }
-      const messageJSON = JSON.parse(decompressedMessage.toString())
-      const dataItems = pipe(createDataItemsFromMessage, flatten, maybeDedupDataItems)({data: messageJSON, attributes})
+      const dataItems = pipe(
+        createDataItemsFromMessage,
+        flatten,
+        maybeDedupDataItems
+      )({data: decompressedMessage, attributes})
 
       return dataItems.map(mergeProbeInfo(probe)).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
