@@ -18,7 +18,7 @@ describe("Decompresses gcp message", () => {
 
     it("uses avro deserialization for v1", async () => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/MCU_WITHOUT_PRECISION_LOSS`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn({log})
       const output = await decompressMessage(message)
@@ -29,7 +29,7 @@ describe("Decompresses gcp message", () => {
 
     it("handles long type without precision loss loss errors when deserializing avro", async () => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU_WITH_PRECISION_LOSS`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn({log})
       const output = await decompressMessage(message)
