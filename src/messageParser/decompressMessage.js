@@ -26,7 +26,7 @@ const longType = avro.types.LongType.__with({
   compare: (n1, n2) => n1.compare(n2)
 })
 
-const avroDeserialize = message => {
+const deserializeAvro = message => {
   return new Promise((resolve, reject) => {
     const output = []
 
@@ -35,12 +35,6 @@ const avroDeserialize = message => {
         return avro.Type.forSchema(schema, {registry: {long: longType}})
       }
     })
-
-    // let md
-    // decoder.on("metadata", metadata => {
-    //   console.log("Metadata: ", JSON.stringify(metadata))
-    //   md = metadata
-    // })
 
     decoder.on("data", data => {
       output.push(data)
@@ -51,7 +45,7 @@ const avroDeserialize = message => {
     })
 
     decoder.on("finish", () => {
-      resolve(output)
+      resolve({data: output})
     })
 
     decoder.end(message.data)
@@ -104,6 +98,6 @@ export const getDecompresserFn = ({log}) => {
       log.error({ctx: {decompressedMessage}}, "Attribute subfolder does not contain v1.")
       return null
     }
-    return avroDeserialize(message)
+    return deserializeAvro(message)
   }
 }

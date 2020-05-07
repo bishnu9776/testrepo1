@@ -3,7 +3,7 @@ import {getDecompresserFn} from "./decompressMessage"
 import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
-import {mergeProbeInfo} from "./mergeProbeInfo"
+import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
 
 const {env} = process
@@ -45,6 +45,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
 
   return async message => {
@@ -62,7 +63,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         maybeDedupDataItems
       )({data: decompressedMessage, attributes})
 
-      return dataItems.map(mergeProbeInfo(probe)).concat({message, tag: ACK_MSG_TAG})
+      return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
       handleParseFailures(decompressedMessage, error, metricRegistry, log)
     }

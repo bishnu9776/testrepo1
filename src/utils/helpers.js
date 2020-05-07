@@ -13,7 +13,6 @@ export const isValid = log => event => {
   return false
 }
 
-// TODO: Rename this function
 export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */

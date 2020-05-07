@@ -9,25 +9,35 @@ describe("Decompresses gcp message", () => {
     clearEnv()
   })
 
-  it("uses zlib unzip for post big sink data", () => {})
-
-  it("uses zlib deflate non-v1 pre big sink data", () => {})
-
-  it("uses avro for v1 pre big sink data", async () => {
-    env.VI_PRE_BIG_SINK_INPUT = "true"
-    const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/MCU_WITHOUT_PRECISION_LOSS`))
-    const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-    const decompressMessage = getDecompresserFn({log})
-    const output = await decompressMessage(message)
-    expect(output.length).to.eql(10)
+  describe("Post big sink data", () => {
+    it("uses zlib unzip", () => {})
   })
 
-  it("handles precision loss errors when deserializing avro", async () => {
-    env.VI_PRE_BIG_SINK_INPUT = "true"
-    const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU_WITH_PRECISION_LOSS`))
-    const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-    const decompressMessage = getDecompresserFn({log})
-    const output = await decompressMessage(message)
-    expect(output.length).to.eql(100)
+  describe("Pre big sink data", () => {
+    it("uses zlib deflate non-v1 data", () => {})
+
+    it("uses avro deserialization for v1", async () => {
+      env.VI_PRE_BIG_SINK_INPUT = "true"
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/MCU_WITHOUT_PRECISION_LOSS`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const decompressMessage = getDecompresserFn({log})
+      const output = await decompressMessage(message)
+      expect(output.data.length).to.eql(10)
+    })
+
+    // TODO: Update mock names
+
+    it("handles long type without precision loss loss errors when deserializing avro", async () => {
+      env.VI_PRE_BIG_SINK_INPUT = "true"
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU_WITH_PRECISION_LOSS`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const decompressMessage = getDecompresserFn({log})
+      const output = await decompressMessage(message)
+      expect(output.data.length).to.eql(100)
+    })
+
+    it("logs error and returns null if unable to deserialize avro", () => {})
   })
+
+  it("returns message as is if compresssion flag is false", () => {})
 })

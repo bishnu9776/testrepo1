@@ -66,12 +66,6 @@ describe("Pipeline spec", () => {
     })
   })
 
-  describe("Pre big sink input", () => {
-    it("valid events flow through pipeline", () => {
-      // pass avro mock and zlib mock
-    })
-  })
-
   it.skip("retry's observable chain if producing to kafka fails", () => {})
 
   it.skip("retry's observable chain if error on gcp stream", () => {})

@@ -1,5 +1,4 @@
 import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
-import fs from "fs"
 import {from} from "rxjs"
 import {complement, isEmpty} from "ramda"
 import * as gcpSubscriber from "../gcpSubscriber/gcpStream"

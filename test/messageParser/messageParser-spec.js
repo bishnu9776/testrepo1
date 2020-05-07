@@ -2,13 +2,14 @@ import {getMessageParser} from "../../src/messageParser"
 import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {metricRegistry} from "../stubs/metricRegistry"
-import {getCompressedGCPEvent, getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {CAN} from "../fixtures/bikeChannels/CAN"
 import {log} from "../stubs/logger"
 import {clearEnv} from "../utils"
 
+const {env} = process
+
 describe("Parse GCP message", () => {
-  let messageParser
   afterEach(() => {
     clearEnv()
   })
@@ -40,55 +41,21 @@ describe("Parse GCP message", () => {
     }
   ]
 
-  describe("Zlib zip compressed data", () => {
-    beforeEach(() => {
-      process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
-      messageParser = getMessageParser({log, metricRegistry, probe})
-    })
-
-    it("formats events and adds ack event to end of array", async () => {
-      const message = getCompressedGCPEvent(CAN)
-      const output = await messageParser(message)
-      expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
-    })
-
-    it("returns empty if unable to decompress", async () => {
-      const output = await messageParser("foo")
-      expect(output).to.eql([])
-    })
+  it("post big sink data - formats events and adds ack event to end of array", async () => {
+    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
+    const messageParser = getMessageParser({log, metricRegistry, probe})
+    const message = getCompressedGCPEvent(CAN)
+    const output = await messageParser(message)
+    expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
   })
 
-  describe("Uncompressed data", () => {
-    beforeEach(() => {
-      process.env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
-      messageParser = getMessageParser({log, metricRegistry, probe})
-    })
+  it("pre big sink data - formats events and adds ack event to end of array", () => {})
 
-    it("formats events and adds ack event to end of array", async () => {
-      const message = getDecompressedGCPEvent(CAN)
-      const output = await messageParser(message)
-      expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
-    })
-
-    it("returns empty if unable to parse as json", async () => {
-      const output = await messageParser({data: "foo"})
-      expect(output).to.eql([])
-    })
+  it("logs error and returns empty if unable to decompress", async () => {
+    const messageParser = getMessageParser({log, metricRegistry, probe})
+    const output = await messageParser("foo")
+    expect(output).to.eql([])
   })
 
-  // TODO: Discuss with group if we're missing some abstractions in writing tests
-  // There's tests for decompressMessage, then messageParser, then getPipeline.
-  // I think it's enough to cover every case in decompressMessage, and just one case in the rest of the functions
-  describe("Avro data", () => {
-    it("formats events and adds ack event to end of array", () => {})
-
-    it("returns empty if unable to parse as json", () => {})
-  })
-
-  // eslint-disable-next-line
-  describe("Zlib inflate compressed data", () => {
-    it("formats events and adds ack event to end of array", () => {})
-
-    it("returns empty if unable to parse as json", () => {})
-  })
+  it("logs error and returns empty if unable to parse", () => {})
 })
