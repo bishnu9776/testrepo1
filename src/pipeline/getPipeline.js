@@ -57,20 +57,6 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
   return stream
     .pipe(
       timeout(eventTimeout),
-      // filter(x => !x.attributes.subFolder.includes("v1")),
-      // tap(x => {
-      //   try {
-      //     fs.writeFileSync(
-      //       "/Users/subramanyam/work/svc-ather-collector/avro_mock",
-      //       JSON.stringify({data: x.data, attributes: x.attributes})
-      //     )
-      //     console.log("wrote to file")
-      //   } catch (e) {
-      //     console.log(e)
-      //   } finally {
-      //     console.log(x)
-      //   }
-      // }),
       mergeMap(event => from(parseMessage(event))),
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array

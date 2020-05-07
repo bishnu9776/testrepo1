@@ -46,13 +46,11 @@ const deserializeAvro = message => {
 
     decoder.on("finish", () => {
       if (message.attributes.subFolder.includes("can")) {
-        resolve({
-          data: output.map(x => ({
-            canRaw: x
-          }))
-        })
+        resolve(output.map(x => ({canRaw: x})))
+        // Smell: This is so that we're able to support both pre and post big sink at the same time. We can remove this
+        // and update CAN parser to directly assume that data is of raw format once we listen only to pre big sink
       } else {
-        resolve({data: output})
+        resolve(output)
       }
     })
 
@@ -71,10 +69,10 @@ const unzip = message => {
   })
 }
 
-const deflate = message => {
+const inflate = message => {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line
-    zlib.deflate(message, (error, data) => {
+    zlib.inflate(message, (error, data) => {
       if (error) {
         reject(error)
       }
@@ -102,16 +100,19 @@ export const getDecompresserFn = ({log}) => {
   return async message => {
     const isLegacyMessage = !message.attributes.subFolder.includes("v1")
     if (isLegacyMessage) {
-      const decompressedMessage = await deflate(message.data)
-      let messageToLog
+      let decompressedMessage
+      // TODO: Remove this try catch. This is only to get the below message as we haven't yet seen deflate compressed data
       try {
-        messageToLog = decompressedMessage.toString()
+        decompressedMessage = await inflate(message.data)
+        const messageJSON = JSON.parse(decompressedMessage.toString())
+        if (message.attributes.subFolder === "can_raw") {
+          return messageJSON.map(x => ({canRaw: x})) // Smell: Move handling this to CAN parser module
+        }
+        return messageJSON
       } catch (e) {
-        messageToLog = decompressedMessage
-      } finally {
-        log.error({ctx: {message: JSON.stringify(messageToLog)}}, "Attribute subfolder does not contain v1.")
+        log.error({ctx: {message: JSON.stringify(decompressedMessage)}}, "Error decompressing legacy data.")
+        return null
       }
-      return null
     }
     return deserializeAvro(message)
   }

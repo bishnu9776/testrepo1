@@ -2,7 +2,7 @@ import {getMessageParser} from "../../src/messageParser"
 import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {metricRegistry} from "../stubs/metricRegistry"
-import {getCompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getZipCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {CAN} from "../fixtures/bikeChannels/CAN"
 import {log} from "../stubs/logger"
 import {clearEnv} from "../utils"
@@ -44,12 +44,12 @@ describe("Parse GCP message", () => {
   it("post big sink data - formats events and adds ack event to end of array", async () => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
     const messageParser = getMessageParser({log, metricRegistry, probe})
-    const message = getCompressedGCPEvent(CAN)
+    const message = getZipCompressedGCPEvent(CAN)
     const output = await messageParser(message)
     expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
   })
 
-  it("pre big sink data - formats events and adds ack event to end of array", () => {})
+  it.skip("pre big sink data - formats events and adds ack event to end of array", () => {})
 
   it("logs error and returns empty if unable to decompress", async () => {
     const messageParser = getMessageParser({log, metricRegistry, probe})
@@ -57,5 +57,5 @@ describe("Parse GCP message", () => {
     expect(output).to.eql([])
   })
 
-  it("logs error and returns empty if unable to parse", () => {})
+  it.skip("logs error and returns empty if unable to parse", () => {})
 })
