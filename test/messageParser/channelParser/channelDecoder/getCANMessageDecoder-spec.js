@@ -15,26 +15,40 @@ describe("CAN decoder", () => {
   })
 
   describe("latest bikes", () => {
-    it("should parse can data for can_mcu", () => {
+    it("should decode can data for can_mcu", () => {
       const parsedData = getCANMessageDecoder()(CAN_MCU)
       expect(parsedData).to.eql(CAN_MCU.data.map(e => e.parsed))
     })
 
-    it("should parse can data for can_bms", () => {
+    it("should decode can data for can_bms", () => {
       const parsedData = getCANMessageDecoder()(CAN_BMS)
       expect(parsedData).to.eql(CAN_BMS.data.map(e => e.parsed))
     })
   })
 
   describe("legacy bikes", () => {
-    it("should parse can data for can_mcu message using default parser config ", () => {
-      const parsedData = getCANMessageDecoder()(LEGACY_CAN_MCU)
-      expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
+    describe("when device is present in legacy decoder config", () => {
+      it("should decode message using bike specific config in legacy decoder config", () => {
+        const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
+        expect(parsedData).to.eql(LEGACY_CAN_BMS.data.map(e => e.parsed))
+      })
     })
 
-    it("should give empty array when canId is not present in default config ", () => {
-      const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
-      expect(parsedData).to.eql([[]])
+    describe("when device is not present in legacy decoder config", () => {
+      it("should decode message using default config in legacy decoder config", () => {
+        const parsedData = getCANMessageDecoder()(LEGACY_CAN_MCU)
+        expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
+      })
+
+      it("should give empty array when canId is not present in legacy decoder config ", () => {
+        const message = {
+          attributes: {...LEGACY_CAN_BMS.attributes, bike_id: "bike1"},
+          data: LEGACY_CAN_BMS.data
+        }
+
+        const parsedData = getCANMessageDecoder()(message)
+        expect(parsedData).to.eql([[]])
+      })
     })
   })
 })

@@ -1,7 +1,16 @@
 {
-  "can_charger": "MK3",
-  "can_motor": "MAHLEX1",
-  "can_bms": "v4_1_0",
-  "can_mcu": "v1_0_0",
-  "can_pod": "LPCv1"
+  "BEAGLE-ESS-4": {
+    "can_motor": "MAHLEV2",
+    "can_charger": "MK3",
+    "can_bms": "e55",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  },
+  "DEFAULT": {
+    "can_motor": "MAHLEX1",
+    "can_charger": "MK3",
+    "can_bms": "v4_1_0",
+    "can_mcu": "v1_0_0",
+    "can_pod": "LPCv1"
+  }
 }
