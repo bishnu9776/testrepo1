@@ -25,15 +25,16 @@ describe("Decompresses gcp message", () => {
       expect(output.data.length).to.eql(10)
     })
 
-    // TODO: Update mock names
-
-    it("handles long type without precision loss loss errors when deserializing avro", async () => {
+    it("puts can info under can raw and handles long type without precision loss when deserializing avro", async () => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn({log})
       const output = await decompressMessage(message)
       expect(output.data.length).to.eql(100)
+      output.data.forEach(e => {
+        expect(Object.keys(e.canRaw).length).to.eql(4)
+      })
     })
 
     it("logs error and returns null if unable to deserialize avro", () => {})

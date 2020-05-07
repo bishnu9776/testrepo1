@@ -45,7 +45,15 @@ const deserializeAvro = message => {
     })
 
     decoder.on("finish", () => {
-      resolve({data: output})
+      if (message.attributes.subFolder.includes("can")) {
+        resolve({
+          data: output.map(x => ({
+            canRaw: x
+          }))
+        })
+      } else {
+        resolve({data: output})
+      }
     })
 
     decoder.end(message.data)
@@ -92,10 +100,17 @@ export const getDecompresserFn = ({log}) => {
   }
 
   return async message => {
-    const legacyBike = !message.attributes.subFolder.includes("v1")
-    if (legacyBike) {
-      const decompressedMessage = deflate(message.data)
-      log.error({ctx: {decompressedMessage}}, "Attribute subfolder does not contain v1.")
+    const isLegacyMessage = !message.attributes.subFolder.includes("v1")
+    if (isLegacyMessage) {
+      const decompressedMessage = await deflate(message.data)
+      let messageToLog
+      try {
+        messageToLog = decompressedMessage.toString()
+      } catch (e) {
+        messageToLog = decompressedMessage
+      } finally {
+        log.error({ctx: {message: JSON.stringify(messageToLog)}}, "Attribute subfolder does not contain v1.")
+      }
       return null
     }
     return deserializeAvro(message)
