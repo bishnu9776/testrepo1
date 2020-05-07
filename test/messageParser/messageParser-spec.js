@@ -49,13 +49,19 @@ describe("Parse GCP message", () => {
     expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
   })
 
-  it.skip("pre big sink data - formats events and adds ack event to end of array", () => {})
+  it.skip("pre big sink data - formats events and adds ack event to end of array", () => {
+    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
+    env.VI_PRE_BIG_SINK_INPUT = "true"
 
-  it("logs error and returns empty if unable to decompress", async () => {
+    // have one deflate compressed message with channel gpstpv
+    // have one avro message with channel events
+    // have one deflate compressed message with channel can_bms with one can_id
+    // have one avro message with channel v1/can_*/v1_0 with one can_id
+  })
+
+  it("logs error and returns empty if unable to parse", async () => {
     const messageParser = getMessageParser({log, metricRegistry, probe})
     const output = await messageParser("foo")
     expect(output).to.eql([])
   })
-
-  it.skip("logs error and returns empty if unable to parse", () => {})
 })

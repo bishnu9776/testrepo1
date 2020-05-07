@@ -31,9 +31,16 @@ const handleParseFailures = (message, error, metricRegistry, log) => {
 
 const getFormattedAttributes = attributes => {
   const {subFolder, deviceId} = attributes
+  if (subFolder.includes("v1/")) {
+    return {
+      channel: subFolder.split("/").slice(1).join("/"),
+      version: subFolder.split("/")[0],
+      bike_id: deviceId
+    }
+  }
+
   return {
-    channel: subFolder.split("/").slice(1).join("/"),
-    version: subFolder.split("/")[0],
+    channel: subFolder,
     bike_id: deviceId
   }
 }
