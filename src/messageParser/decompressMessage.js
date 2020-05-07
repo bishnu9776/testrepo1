@@ -105,7 +105,7 @@ export const getDecompresserFn = ({log}) => {
       try {
         decompressedMessage = await inflate(message.data)
         const messageJSON = JSON.parse(decompressedMessage.toString())
-        if (message.attributes.subFolder === "can_raw") {
+        if (message.attributes.subFolder.includes("can")) {
           return messageJSON.map(x => ({canRaw: x})) // Smell: Move handling this to CAN parser module
         }
         return messageJSON
