@@ -1,4 +1,4 @@
-export const mcuDecoder = [
+export const mcuConfig = [
   {
     name: "left_brake",
     description: "bike left brake",
