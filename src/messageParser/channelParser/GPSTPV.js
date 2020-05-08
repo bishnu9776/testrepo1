@@ -34,7 +34,8 @@ export const parseGPSTPV = ({data, attributes}) => {
         device_uuid: bikeId,
         sequence: event.seq_num,
         mode: event.mode,
-        bigsink_timestamp: `${event.bigsink_timestamp}Z`
+        bigsink_timestamp: `${event.bigsink_timestamp}Z`,
+        channel: attributes.channel
       }
 
       const eventAndSampleDataItems = Object.keys(event)

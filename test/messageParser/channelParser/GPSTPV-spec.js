@@ -19,7 +19,8 @@ describe("Parses GPSTPV", () => {
         value: {
           lat: 12.910605,
           lon: 77.60284
-        }
+        },
+        channel: "gps_tpv"
       },
       {
         bigsink_timestamp: "2019-10-05T18:27:15.892Z",
