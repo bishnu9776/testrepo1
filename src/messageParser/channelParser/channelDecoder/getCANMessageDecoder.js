@@ -21,15 +21,7 @@ const convertHexToBytes = value =>
   ].map(s => parseInt(s, 16))
 
 const decodeCANRaw = (canRaw, decoderForCANId) => {
-  const {
-    can_id: canId,
-    data: value,
-    timestamp,
-    seq_num: seqNum,
-    bigsink_timestamp: bsTimestamp,
-    bike_id: bikeId,
-    global_seq: globalSeq
-  } = canRaw
+  const {can_id: canId, data: value, timestamp, seq_num: seqNum, bike_id: bikeId, global_seq: globalSeq} = canRaw
 
   const bytes = convertHexToBytes(value)
   const dataItems = keys(decoderForCANId)
@@ -40,7 +32,6 @@ const decodeCANRaw = (canRaw, decoderForCANId) => {
     seq_num: seqNum,
     key: dataItem,
     value: decoderForCANId[dataItem](bytes),
-    bigsink_timestamp: bsTimestamp,
     bike_id: bikeId,
     ...(globalSeq && {global_seq: globalSeq})
   }))

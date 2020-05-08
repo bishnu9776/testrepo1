@@ -3,7 +3,7 @@ import {getDecompresserFn} from "./decompressMessage"
 import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
-import {mergeProbeInfo} from "./mergeProbeInfo"
+import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
 
 const {env} = process
@@ -16,41 +16,55 @@ const getDedupFn = metricRegistry => {
   }
 }
 
-const handleJSONParseFailures = (message, error, metricRegistry, log) => {
+const handleParseFailures = (message, error, metricRegistry, log) => {
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-  let dataToLog
+  const dataToLog = JSON.stringify(message, null, 2)
+  log.error({ctx: {data: dataToLog}, error: errorFormatter(error)}, "Could not parse gcp message")
+}
 
-  try {
-    dataToLog = message.toString()
-  } catch (_) {
-    dataToLog = JSON.stringify(message, null, 2)
+const getFormattedAttributes = attributes => {
+  const {subFolder, deviceId} = attributes
+  const isNonLegacyMessage = subFolder.includes("v1/")
+  if (isNonLegacyMessage) {
+    return {
+      channel: subFolder.split("/").slice(1).join("/"),
+      version: subFolder.split("/")[0],
+      bike_id: deviceId
+    }
   }
 
-  log.error({ctx: {data: dataToLog}, error: errorFormatter(error)}, "Could not parse string to JSON")
+  return {
+    channel: subFolder,
+    bike_id: deviceId,
+    version: "legacy"
+  }
 }
 
 export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  const mergeProbeInfo = getMergeProbeInfoFn(probe)
+  const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
 
   return async message => {
-    const decompressedMessage = await maybeDecompressMessage(message)
-    if (!decompressedMessage) {
-      return []
-    }
+    let decompressedMessage
 
     try {
-      const messageJSON = JSON.parse(decompressedMessage.toString())
+      const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
+      decompressedMessage = await maybeDecompressMessage(message)
+      if (!decompressedMessage) {
+        return []
+      }
       const dataItems = pipe(
         createDataItemsFromMessage,
         flatten,
         maybeDedupDataItems
-      )({data: messageJSON, attributes: message.attributes})
+      )({data: decompressedMessage, attributes})
 
-      return dataItems.map(mergeProbeInfo(probe)).concat({message, tag: ACK_MSG_TAG})
+      return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
-      handleJSONParseFailures(decompressedMessage, error, metricRegistry, log)
+      handleParseFailures(decompressedMessage, error, metricRegistry, log)
     }
 
     return []

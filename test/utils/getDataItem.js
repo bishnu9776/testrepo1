@@ -11,7 +11,6 @@ export const getDataItem = ({
     timestamp: new Date().toISOString(),
     value,
     channel: "MCU",
-    sequence: 1,
-    bigsink_timestamp: new Date(Date.now() - 1000).toISOString()
+    sequence: 1
   }
 }

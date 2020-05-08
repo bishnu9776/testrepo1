@@ -1,4 +1,4 @@
-export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, bigSinkTimestamp}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
   return {
@@ -8,7 +8,6 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     timestamp,
     value,
     channel,
-    sequence,
-    bigsink_timestamp: bigSinkTimestamp
+    sequence
   }
 }

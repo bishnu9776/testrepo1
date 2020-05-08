@@ -13,7 +13,6 @@ export const HEMAN = {
       isvalid: -1,
       timestamp: 1570339273.807,
       global_seq: 503258175,
-      bigsink_timestamp: "2019-10-06T05:22:38.902",
       bike_id: "s_248"
     }
   ]

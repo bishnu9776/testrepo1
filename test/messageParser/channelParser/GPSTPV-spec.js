@@ -8,7 +8,6 @@ describe("Parses GPSTPV", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...GPSTPV, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-05T18:27:15.892Z",
         data_item_id: "location-v1",
         data_item_name: "location",
         data_item_type: "LOCATION",
@@ -19,10 +18,10 @@ describe("Parses GPSTPV", () => {
         value: {
           lat: 12.910605,
           lon: 77.60284
-        }
+        },
+        channel: "gps_tpv"
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:15.892Z",
         channel: "gps_tpv",
         data_item_id: "mode-v1",
         data_item_name: "mode",
@@ -32,7 +31,6 @@ describe("Parses GPSTPV", () => {
         value: 3
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:15.892Z",
         channel: "gps_tpv",
         data_item_id: "lat_deg-v1",
         data_item_name: "lat_deg",
@@ -42,7 +40,6 @@ describe("Parses GPSTPV", () => {
         value: 12.910605
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:15.892Z",
         channel: "gps_tpv",
         data_item_id: "lon_deg-v1",
         data_item_name: "lon_deg",

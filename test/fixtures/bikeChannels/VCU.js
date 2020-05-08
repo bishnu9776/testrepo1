@@ -12,7 +12,6 @@ export const VCU = {
       odometer: 221596,
       screen_brightness_control: 0,
       data: "foo",
-      bigsink_timestamp: "2019-10-12T21:24:07.927",
       bike_id: "s_194"
     }
   ]

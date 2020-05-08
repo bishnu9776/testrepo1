@@ -14,7 +14,6 @@ export const SESSION = {
       isvisible: 1,
       timestamp: 1570372286.646,
       global_seq: 506390658,
-      bigsink_timestamp: "2019-10-06T14:31:27.069",
       bike_id: "s_248"
     }
   ]

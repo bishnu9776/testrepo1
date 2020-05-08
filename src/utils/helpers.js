@@ -1,4 +1,3 @@
-import {omit} from "ramda"
 import {ACK_MSG_TAG} from "../constants"
 
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
@@ -13,7 +12,6 @@ export const isValid = log => event => {
   return false
 }
 
-// TODO: Rename this function
 export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */
@@ -23,7 +21,7 @@ export const getEventFormatter = () => {
 
     return {
       tag: "MTConnectDataItems",
-      ...omit(["bigsink_timestamp"], event),
+      ...event,
       received_at: new Date().toISOString(),
       agent: "ather",
       id,

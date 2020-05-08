@@ -1,6 +1,6 @@
 import {omit} from "ramda"
 
-const keysToOmit = ["timestamp", "bike_id", "seq_num", "bigsink_timestamp", "global_seq"]
+const keysToOmit = ["timestamp", "bike_id", "seq_num", "global_seq"]
 export const parseBIKEINFO = ({data, attributes}) => {
   return data.map(event => {
     const {version, bike_id, channel} = attributes // eslint-disable-line
@@ -14,8 +14,7 @@ export const parseBIKEINFO = ({data, attributes}) => {
       device_uuid: bike_id,
       value: null,
       channel,
-      sequence: event.seq_num,
-      bigsink_timestamp: `${event.bigsink_timestamp}Z`
+      sequence: event.seq_num
     }
   })
 }

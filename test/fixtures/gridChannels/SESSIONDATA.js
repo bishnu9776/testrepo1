@@ -18,7 +18,6 @@ export const SESSIONDATA = {
       seconds_ac_charged: 0,
       seconds_dc_charged: 20,
       vehicle_id: "s_2384\n",
-      bigsink_timestamp: "2020-04-03T10:20:35.186",
       db_id: "DB_001f7b100569"
     }
   ]

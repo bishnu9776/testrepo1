@@ -16,8 +16,7 @@ export const RMSDATA = {
       phase3_power: 0,
       energy_consumed_in_24hours: 0,
       frequency: 50,
-      rms_uptime: 5882376,
-      bigsink_timestamp: "2020-04-07T12:06:20.058"
+      rms_uptime: 5882376
     }
   ]
 }

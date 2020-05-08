@@ -13,7 +13,6 @@ export const CAN = {
           seq_num: 347731,
           key: "MCU_SOC",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         },
         {
@@ -22,7 +21,6 @@ export const CAN = {
           seq_num: 347731,
           key: "MCU_CHARGER_TYPE",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         }
       ],
@@ -31,7 +29,6 @@ export const CAN = {
         data: "0101000001040002",
         timestamp: 1570299991.477,
         seq_num: 347731,
-        bigsink_timestamp: "2019-10-05T18:27:19.775",
         bike_id: "s_2404"
       }
     },
@@ -43,7 +40,6 @@ export const CAN = {
           seq_num: 347733,
           key: "MCU_SOC",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         },
         {
@@ -52,7 +48,6 @@ export const CAN = {
           seq_num: 347733,
           key: "MCU_CHARGER_TYPE",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         }
       ],
@@ -61,7 +56,6 @@ export const CAN = {
         data: "0101000001040002",
         timestamp: 1570299991.978,
         seq_num: 347733,
-        bigsink_timestamp: "2019-10-05T18:27:19.775",
         bike_id: "s_2404"
       }
     }
@@ -83,7 +77,6 @@ export const CAN_MCU = {
           seq_num: 347731,
           key: "MCU_SOC",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         },
         {
@@ -92,7 +85,6 @@ export const CAN_MCU = {
           seq_num: 347731,
           key: "MCU_CHARGER_TYPE",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         }
       ],
@@ -101,7 +93,6 @@ export const CAN_MCU = {
         data: "0101000001040002",
         timestamp: 1570299991.477,
         seq_num: 347731,
-        bigsink_timestamp: "2019-10-05T18:27:19.775",
         bike_id: "s_2404"
       }
     },
@@ -113,7 +104,6 @@ export const CAN_MCU = {
           seq_num: 347733,
           key: "MCU_SOC",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         },
         {
@@ -122,7 +112,6 @@ export const CAN_MCU = {
           seq_num: 347733,
           key: "MCU_CHARGER_TYPE",
           value: 0,
-          bigsink_timestamp: "2019-10-05T18:27:19.775",
           bike_id: "s_2404"
         }
       ],
@@ -131,7 +120,6 @@ export const CAN_MCU = {
         data: "0101000001040002",
         timestamp: 1570299991.978,
         seq_num: 347733,
-        bigsink_timestamp: "2019-10-05T18:27:19.775",
         bike_id: "s_2404"
       }
     }
@@ -152,7 +140,6 @@ export const CAN_BMS = {
           timestamp: 1587334363.055,
           seq_num: 543232814,
           global_seq: 741485778,
-          bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp1",
           value: 29.57
@@ -162,7 +149,6 @@ export const CAN_BMS = {
           timestamp: 1587334363.055,
           seq_num: 543232814,
           global_seq: 741485778,
-          bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp2",
           value: 29.67
@@ -172,7 +158,6 @@ export const CAN_BMS = {
           timestamp: 1587334363.055,
           seq_num: 543232814,
           global_seq: 741485778,
-          bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp3",
           value: 29.06
@@ -182,7 +167,6 @@ export const CAN_BMS = {
           timestamp: 1587334363.055,
           seq_num: 543232814,
           global_seq: 741485778,
-          bigsink_timestamp: "2020-04-19T22:12:44.108",
           bike_id: "BEAGLE-ESS-4",
           key: "BMS_2_Aux_Temp4",
           value: 29.21
@@ -194,7 +178,6 @@ export const CAN_BMS = {
         timestamp: 1587334363.055,
         seq_num: 543232814,
         global_seq: 741485778,
-        bigsink_timestamp: "2020-04-19T22:12:44.108",
         bike_id: "BEAGLE-ESS-4"
       }
     }

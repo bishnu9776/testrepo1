@@ -13,7 +13,6 @@ export const GPSTPV = {
       lon_deg: 77.60284,
       gpstime_utc: "2019-10-05 18:27:04 +0000 UTC",
       global_seq: 501618010,
-      bigsink_timestamp: "2019-10-05T18:27:15.892",
       bike_id: "s_248"
     }
   ]

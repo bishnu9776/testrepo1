@@ -2,7 +2,6 @@ import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
 import {complement, isEmpty} from "ramda"
 import * as gcpSubscriber from "../gcpSubscriber/gcpStream"
-
 import {getMessageParser} from "../messageParser"
 import {getKafkaSender} from "../kafkaProducer"
 import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"

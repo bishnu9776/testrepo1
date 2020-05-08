@@ -15,8 +15,7 @@ export const parseHEMAN = ({data, attributes}) => {
         condition_level: event.end_timestamp ? "NORMAL" : "FAULT",
         is_valid: event.isvalid,
         channel,
-        sequence: event.seq_num,
-        bigsink_timestamp: `${event.bigsink_timestamp}Z`
+        sequence: event.seq_num
       }
     })
   ).filter(e => !!e)

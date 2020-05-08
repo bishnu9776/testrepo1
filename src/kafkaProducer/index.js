@@ -63,7 +63,6 @@ const createProduceRequests = ({kafkaProducer, routingConfig, metricRegistry, lo
   return merge(...getObservables({kafkaProducer, event, topics, metricRegistry, log}))
 }
 
-// TODO: Rename this function
 export const getKafkaSender = ({kafkaProducer, log, metricRegistry}) => {
   const routingConfig = getRoutingConfig()
   const createProduceRequestsForEvent = createProduceRequests({kafkaProducer, routingConfig, metricRegistry, log})

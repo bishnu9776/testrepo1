@@ -8,7 +8,6 @@ describe("Parses SESSION", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...SESSION, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-06T14:31:27.069Z",
         channel: "session",
         data_item_id: "vehicle_status-v1",
         data_item_name: "vehicle_status",

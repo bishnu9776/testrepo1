@@ -6,8 +6,14 @@ export const getDecompressedGCPEvent = event => ({
   publishTime: new Date()
 })
 
-export const getCompressedGCPEvent = event => ({
+export const getZipCompressedGCPEvent = event => ({
   data: zlib.gzipSync(Buffer.from(JSON.stringify(event.data))),
+  attributes: event.attributes,
+  publishTime: new Date()
+})
+
+export const getDeflateCompressedGCPEvent = event => ({
+  data: zlib.deflateSync(Buffer.from(JSON.stringify(event.data))),
   attributes: event.attributes,
   publishTime: new Date()
 })

@@ -10,8 +10,7 @@ export const parseSOH2 = ({data, attributes}) => {
         attributes,
         timestamp,
         value: e.value,
-        sequence: e.seq_num,
-        bigSinkTimestamp: `${e.bigsink_timestamp}Z`
+        sequence: e.seq_num
       })
     })
   ).filter(e => !!e)
