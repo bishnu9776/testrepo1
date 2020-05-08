@@ -8,7 +8,6 @@ describe("Parses VCU", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...VCU, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-12T21:24:07.927Z",
         channel: "vcu",
         data_item_id: "bluetooth_device_status-v1",
         data_item_name: "bluetooth_device_status",
@@ -18,7 +17,6 @@ describe("Parses VCU", () => {
         value: 0
       },
       {
-        bigsink_timestamp: "2019-10-12T21:24:07.927Z",
         channel: "vcu",
         data_item_id: "odometer-v1",
         data_item_name: "odometer",
@@ -28,7 +26,6 @@ describe("Parses VCU", () => {
         value: 221596
       },
       {
-        bigsink_timestamp: "2019-10-12T21:24:07.927Z",
         channel: "vcu",
         data_item_id: "screen_brightness_control-v1",
         data_item_name: "screen_brightness_control",

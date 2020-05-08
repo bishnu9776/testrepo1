@@ -8,7 +8,6 @@ describe("Parses EVENTS", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...EVENTS, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-06T05:22:38.848Z",
         channel: "events",
         data_item_id: "beta_motorMode2-v1",
         data_item_name: "beta_motorMode2",
@@ -18,7 +17,6 @@ describe("Parses EVENTS", () => {
         value: "2.443957"
       },
       {
-        bigsink_timestamp: "2019-10-06T05:22:38.848Z",
         channel: "events",
         data_item_id: "intercept_motorMode2-v1",
         data_item_name: "intercept_motorMode2",

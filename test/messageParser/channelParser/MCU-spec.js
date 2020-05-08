@@ -8,7 +8,6 @@ describe("Parses MCU", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...MCU, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-05T18:27:02.974Z",
         channel: "mcu",
         data_item_id: "right_brake-v1",
         data_item_name: "right_brake",
@@ -18,7 +17,6 @@ describe("Parses MCU", () => {
         value: 0
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:02.974Z",
         channel: "mcu",
         data_item_id: "left_brake-v1",
         data_item_name: "left_brake",
@@ -28,7 +26,6 @@ describe("Parses MCU", () => {
         value: 0
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:02.974Z",
         channel: "mcu",
         data_item_id: "stop_lamp-v1",
         data_item_name: "stop_lamp",
@@ -38,7 +35,6 @@ describe("Parses MCU", () => {
         value: 0
       },
       {
-        bigsink_timestamp: "2019-10-05T18:27:02.974Z",
         channel: "mcu",
         data_item_id: "vcu_status-v1",
         data_item_name: "vcu_status",

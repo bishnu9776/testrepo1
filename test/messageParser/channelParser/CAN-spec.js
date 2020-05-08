@@ -22,7 +22,6 @@ describe("Parses CAN", () => {
     it("parses given messages without decoding", () => {
       expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
         {
-          bigsink_timestamp: "2019-10-05T18:27:19.775Z",
           channel: "can",
           data_item_id: "MCU_SOC-v1",
           data_item_name: "MCU_SOC",
@@ -32,7 +31,6 @@ describe("Parses CAN", () => {
           value: 0
         },
         {
-          bigsink_timestamp: "2019-10-05T18:27:19.775Z",
           channel: "can",
           data_item_id: "MCU_CHARGER_TYPE-v1",
           data_item_name: "MCU_CHARGER_TYPE",
@@ -42,7 +40,6 @@ describe("Parses CAN", () => {
           value: 0
         },
         {
-          bigsink_timestamp: "2019-10-05T18:27:19.775Z",
           channel: "can",
           data_item_id: "MCU_SOC-v1",
           data_item_name: "MCU_SOC",
@@ -52,7 +49,6 @@ describe("Parses CAN", () => {
           value: 0
         },
         {
-          bigsink_timestamp: "2019-10-05T18:27:19.775Z",
           channel: "can",
           data_item_id: "MCU_CHARGER_TYPE-v1",
           data_item_name: "MCU_CHARGER_TYPE",
@@ -82,7 +78,6 @@ describe("Parses CAN", () => {
     it("should decode and parse the message", () => {
       const parsedData = [
         {
-          bigsink_timestamp: "2020-04-19T22:12:44.108Z",
           channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp1-v1",
           data_item_name: "BMS_2_Aux_Temp1",
@@ -92,7 +87,6 @@ describe("Parses CAN", () => {
           value: 29.57
         },
         {
-          bigsink_timestamp: "2020-04-19T22:12:44.108Z",
           channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp2-v1",
           data_item_name: "BMS_2_Aux_Temp2",
@@ -102,7 +96,6 @@ describe("Parses CAN", () => {
           value: 29.67
         },
         {
-          bigsink_timestamp: "2020-04-19T22:12:44.108Z",
           channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp3-v1",
           data_item_name: "BMS_2_Aux_Temp3",
@@ -112,7 +105,6 @@ describe("Parses CAN", () => {
           value: 29.06
         },
         {
-          bigsink_timestamp: "2020-04-19T22:12:44.108Z",
           channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp4-v1",
           data_item_name: "BMS_2_Aux_Temp4",

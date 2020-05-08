@@ -8,7 +8,6 @@ describe("Parses HEMAN", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...HEMAN, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-06T05:22:38.902Z",
         channel: "heman",
         data_item_id: "heman-v1",
         data_item_name: "error_code",

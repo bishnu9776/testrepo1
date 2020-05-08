@@ -12,7 +12,6 @@ export const getMockDataItems = (numEvents, deviceUUID, dataItemName = "mode") =
       value_event: "abc",
       category: "EVENT",
       channel: "gps",
-      bigsink_timestamp: "2019-01-01T00:05:00.000Z",
       tag: "MTConnectDataItems"
     },
     numEvents

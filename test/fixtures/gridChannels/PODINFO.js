@@ -7,8 +7,7 @@ export const PODINFO = {
       db_id: "DB_D81910297370019",
       pod1_id: "1048451",
       pod1_firmware_version: "1337275329",
-      pod1_hardware_version: "1",
-      bigsink_timestamp: "2020-04-06T08:48:22.478"
+      pod1_hardware_version: "1"
     }
   ]
 }

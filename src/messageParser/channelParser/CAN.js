@@ -23,8 +23,7 @@ export const parseCAN = () => {
         attributes,
         timestamp,
         value: e.value,
-        sequence: e.seq_num,
-        bigSinkTimestamp: `${e.bigsink_timestamp}Z`
+        sequence: e.seq_num
       })
     })
   }

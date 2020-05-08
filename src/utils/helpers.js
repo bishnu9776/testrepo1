@@ -1,4 +1,3 @@
-import {omit} from "ramda"
 import {ACK_MSG_TAG} from "../constants"
 
 const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
@@ -22,7 +21,7 @@ export const getEventFormatter = () => {
 
     return {
       tag: "MTConnectDataItems",
-      ...omit(["bigsink_timestamp"], event),
+      ...event,
       received_at: new Date().toISOString(),
       agent: "ather",
       id,

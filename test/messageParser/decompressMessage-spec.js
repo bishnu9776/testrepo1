@@ -20,7 +20,7 @@ describe("Decompresses gcp message", () => {
       const output = await decompressMessage(input)
       expect(output.length).to.eql(2)
       output.forEach(e => {
-        expect(Object.keys(e.canRaw).length).to.eql(6)
+        expect(Object.keys(e.canRaw).length).to.eql(5)
         expect(e.parsed.length).to.eql(2)
       })
     })
@@ -37,7 +37,7 @@ describe("Decompresses gcp message", () => {
         const decompressMessage = getDecompresserFn({log})
         const output = await decompressMessage(input)
         expect(output.length).to.eql(1)
-        expect(Object.keys(output[0]).length).to.eql(9)
+        expect(Object.keys(output[0]).length).to.eql(8)
       })
 
       it("puts can info under canRaw", async () => {
@@ -50,7 +50,7 @@ describe("Decompresses gcp message", () => {
         const output = await decompressMessage(input)
         expect(output.length).to.eql(2)
         output.forEach(e => {
-          expect(Object.keys(e.canRaw).length).to.eql(6)
+          expect(Object.keys(e.canRaw).length).to.eql(5)
         })
       })
     })

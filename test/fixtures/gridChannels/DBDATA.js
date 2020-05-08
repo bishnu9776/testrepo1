@@ -27,8 +27,7 @@ export const DBDATA = {
       POD_Uptime: 46978001,
       phase1_error: false,
       is_pod1_live: true,
-      is_obc_live: true,
-      bigsink_timestamp: "2020-04-07T12:08:41.442"
+      is_obc_live: true
     }
   ]
 }

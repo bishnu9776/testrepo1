@@ -22,7 +22,6 @@ describe("Parse GCP message", () => {
 
   const parsedGCPEvents = [
     {
-      bigsink_timestamp: "2019-10-05T18:27:15.892Z",
       data_item_id: "location-v1",
       data_item_name: "location",
       data_item_type: "LOCATION",
@@ -37,7 +36,6 @@ describe("Parse GCP message", () => {
       channel: "gps_tpv"
     },
     {
-      bigsink_timestamp: "2019-10-05T18:27:15.892Z",
       channel: "gps_tpv",
       data_item_id: "mode-v1",
       data_item_name: "mode",
@@ -47,7 +45,6 @@ describe("Parse GCP message", () => {
       value: 3
     },
     {
-      bigsink_timestamp: "2019-10-05T18:27:15.892Z",
       channel: "gps_tpv",
       data_item_id: "lat_deg-v1",
       data_item_name: "lat_deg",
@@ -57,7 +54,6 @@ describe("Parse GCP message", () => {
       value: 12.910605
     },
     {
-      bigsink_timestamp: "2019-10-05T18:27:15.892Z",
       channel: "gps_tpv",
       data_item_id: "lon_deg-v1",
       data_item_name: "lon_deg",

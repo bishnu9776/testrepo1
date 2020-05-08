@@ -8,7 +8,6 @@ describe("Parses BIKEINFO", () => {
   it("parses given messages", () => {
     expect(createDataItemsFromMessage({...BIKEINFO, probe})).to.eql([
       {
-        bigsink_timestamp: "2019-10-07T11:20:34.634Z",
         channel: "bike_info",
         data_item_id: "bike_info-v1",
         data_item_name: "bike_info",

@@ -12,7 +12,6 @@ export const EVENTS = {
       value: "2.443957",
       start_timestamp: "1.570338665313e+09",
       end_timestamp: "1.570338665313e+09",
-      bigsink_timestamp: "2019-10-06T05:22:38.848",
       bike_id: "s_248"
     },
     {
@@ -22,7 +21,6 @@ export const EVENTS = {
       value: "7.5228567",
       start_timestamp: "1.570338665314e+09",
       end_timestamp: "1.570338665314e+09",
-      bigsink_timestamp: "2019-10-06T05:22:38.848",
       bike_id: "s_248"
     }
   ]

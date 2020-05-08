@@ -17,7 +17,6 @@ export const NETWORKDATA = {
       pod2_session_id: 0,
       pod3_session_id: 0,
       reset_type: 0,
-      bigsink_timestamp: "2020-04-07T12:06:49.087",
       db_id: "DB_001f7b100e8f"
     }
   ]

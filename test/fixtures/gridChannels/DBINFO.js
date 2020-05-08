@@ -10,8 +10,7 @@ export const DBINFO = {
       rms_firmware_version: "HE518086",
       obc_firmware_version: "37.15.05",
       gsm_modem_status: 1,
-      reset_cause: 0,
-      bigsink_timestamp: "2020-04-09T22:51:11.401"
+      reset_cause: 0
     }
   ]
 }

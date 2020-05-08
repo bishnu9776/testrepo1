@@ -6,7 +6,6 @@ export const SOH2 = {
       timestamp: 1570614524.689,
       key: "FinalSoHCapacityEstimate_CellBlock_Cell1",
       value: 1,
-      bigsink_timestamp: "2019-10-09T09:48:46.770",
       bike_id: "s_194"
     },
     {
@@ -14,7 +13,6 @@ export const SOH2 = {
       timestamp: 1570614524.689,
       key: "FinalSoHCapacityEstimate_CellBlock_Cell2",
       value: 1,
-      bigsink_timestamp: "2019-10-09T09:48:46.770",
       bike_id: "s_194"
     }
   ]

@@ -7,7 +7,6 @@ export const SOH = {
       avg_soh_cap: 3.4,
       soh_starttime: 1570600972.589,
       global_seq: 57981817,
-      bigsink_timestamp: "2019-10-09T07:03:03.397",
       bike_id: "BMS-EOL1"
     }
   ]
