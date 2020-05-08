@@ -1,5 +1,6 @@
 import avro from "avsc"
 import Long from "long"
+import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
 
 const longType = avro.types.LongType.__with({
   fromBuffer: buf => {
@@ -42,13 +43,7 @@ export const deserializeAvro = message => {
     })
 
     decoder.on("finish", () => {
-      if (message.attributes.subFolder.includes("can")) {
-        resolve(output.map(x => ({canRaw: x})))
-        // Smell: This is so that we're able to support both pre and post big sink at the same time. We can remove this
-        // and update CAN parser to directly assume that data is of raw format once we listen only to pre big sink
-      } else {
-        resolve(output)
-      }
+      resolve(formatDecompressedMessageJSON({decompressedMessage: output, attributes: message.attributes}))
     })
 
     decoder.end(message.data)

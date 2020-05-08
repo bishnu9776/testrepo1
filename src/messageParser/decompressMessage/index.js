@@ -1,5 +1,6 @@
 import zlib from "zlib"
 import {deserializeAvro} from "./deserializeAvro"
+import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
 
 const {env} = process
 
@@ -51,10 +52,7 @@ export const getDecompresserFn = ({log}) => {
       try {
         decompressedMessage = await inflate(message.data)
         const messageJSON = JSON.parse(decompressedMessage.toString())
-        if (message.attributes.subFolder.includes("can")) {
-          return messageJSON.map(x => ({canRaw: x})) // Smell: Move handling this to CAN parser module
-        }
-        return messageJSON
+        return formatDecompressedMessageJSON({decompressedMessage: messageJSON, attributes: message.attributes})
       } catch (e) {
         log.error({ctx: {message: JSON.stringify(decompressedMessage)}}, "Error decompressing legacy data.")
         return null

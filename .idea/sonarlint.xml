@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SonarLintProjectSettings">
+    <option name="bindingEnabled" value="true" />
     <option name="fileExclusions">
       <list>
         <option value="DIRECTORY:scripts" />
@@ -8,5 +9,7 @@
         <option value="DIRECTORY:coverage" />
       </list>
     </option>
+    <option name="projectKey" value="svc-ather-collector" />
+    <option name="serverId" value="systeminsights" />
   </component>
 </project>

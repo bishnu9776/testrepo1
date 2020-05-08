@@ -24,7 +24,8 @@ const handleParseFailures = (message, error, metricRegistry, log) => {
 
 const getFormattedAttributes = attributes => {
   const {subFolder, deviceId} = attributes
-  if (subFolder.includes("v1/")) {
+  const isV1Message = subFolder.includes("v1/")
+  if (isV1Message) {
     return {
       channel: subFolder.split("/").slice(1).join("/"),
       version: subFolder.split("/")[0],
