@@ -1,7 +1,7 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {CAN, CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
-import {clearEnv} from "../../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
 
 describe("Parses CAN", () => {
   const {env} = process
@@ -66,8 +66,7 @@ describe("Parses CAN", () => {
 
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = true
-      env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
-      env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
+      setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 

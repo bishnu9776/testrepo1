@@ -2,7 +2,7 @@ import {difference} from "ramda"
 import {MCU, PRE_BIG_SINK_MCU} from "../../fixtures/bikeChannels/MCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
-import {clearEnv} from "../../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
 
 describe("Parses MCU", () => {
   const {env} = process
@@ -66,7 +66,7 @@ describe("Parses MCU", () => {
 
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
-      env.VI_MCU_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/mcuDecoderConfig.js"
+      setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
