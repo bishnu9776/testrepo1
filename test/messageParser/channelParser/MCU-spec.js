@@ -66,6 +66,7 @@ describe("Parses MCU", () => {
 
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
+      env.VI_NUMBER_OF_BYTES_MCU = "104"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
@@ -89,6 +90,12 @@ describe("Parses MCU", () => {
       parsedMessage.forEach(e => {
         expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
       })
+    })
+
+    it("when config paths are not given, should return empty array", () => {
+      env.VI_MCU_DECODER_CONFIG_PATH = undefined
+      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      expect(createDataItemsFromMessage({...PRE_BIG_SINK_MCU, probe})).to.eql([])
     })
   })
 })

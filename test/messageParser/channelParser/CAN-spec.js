@@ -10,8 +10,6 @@ describe("Parses CAN", () => {
     let createDataItemsFromMessage
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = false
-      env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
-      env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
@@ -66,6 +64,7 @@ describe("Parses CAN", () => {
 
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = true
+      env.VI_NUMBER_OF_BYTES_CAN = "16"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })

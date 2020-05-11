@@ -57,6 +57,7 @@ describe("Parses VCU", () => {
 
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
+      env.VI_NUMBER_OF_BYTES_CAN = "268"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
@@ -80,6 +81,12 @@ describe("Parses VCU", () => {
       parsedMessage.forEach(e => {
         expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
       })
+    })
+
+    it("when config paths are not given, should return empty array", () => {
+      env.VI_VCU_DECODER_CONFIG_PATH = undefined
+      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      expect(createDataItemsFromMessage({...PRE_BIG_SINK_VCU, probe})).to.eql([])
     })
   })
 })
