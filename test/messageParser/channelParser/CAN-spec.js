@@ -6,10 +6,10 @@ import {clearEnv} from "../../utils"
 describe("Parses CAN", () => {
   const {env} = process
 
-  describe("VI_SHOULD_DECODE_CAN_MESSAGE: false", () => {
+  describe("VI_PRE_BIG_SINK_INPUT: false", () => {
     let createDataItemsFromMessage
     before(() => {
-      env.VI_SHOULD_DECODE_CAN_MESSAGE = false
+      env.VI_PRE_BIG_SINK_INPUT = false
       env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
       env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
@@ -61,11 +61,11 @@ describe("Parses CAN", () => {
     })
   })
 
-  describe("VI_SHOULD_DECODE_CAN_MESSAGE: true", () => {
+  describe("VI_PRE_BIG_SINK_INPUT: true", () => {
     let createDataItemsFromMessage
 
     beforeEach(() => {
-      env.VI_SHOULD_DECODE_CAN_MESSAGE = true
+      env.VI_PRE_BIG_SINK_INPUT = true
       env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
       env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
