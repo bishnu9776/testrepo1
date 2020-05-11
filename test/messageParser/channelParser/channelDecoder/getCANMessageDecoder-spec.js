@@ -8,6 +8,7 @@ describe("CAN decoder", () => {
   beforeEach(() => {
     env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
     env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
+    env.VI_NUMBER_OF_BYTES_CAN = "16"
   })
 
   afterEach(() => {

@@ -6,7 +6,7 @@ export const getVCUDecoder = () => {
   const decoderConfigPath = process.env.VI_VCU_DECODER_CONFIG_PATH
   const decoderConfig = loadFile(decoderConfigPath).vcuConfig
   const decoder = populateDecoderConfig(decoderConfig)
-  const numberOfBytes = 268
+  const numberOfBytes = parseInt(process.env.VI_NUMBER_OF_BYTES_VCU || "268", 10)
 
   return message => {
     const {data} = message

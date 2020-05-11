@@ -6,7 +6,7 @@ export const getMCUDecoder = () => {
   const decoderConfigPath = process.env.VI_MCU_DECODER_CONFIG_PATH
   const decoderConfig = loadFile(decoderConfigPath).mcuConfig
   const decoder = populateDecoderConfig(decoderConfig)
-  const numberOfBytes = 104
+  const numberOfBytes = parseInt(process.env.VI_NUMBER_OF_BYTES_CAN || 104, 10)
 
   return message => {
     const {data} = message
