@@ -1,15 +1,6 @@
 import {keys} from "ramda"
-import path from "path"
 import {convertHexToBytes} from "./utils/convertHexToBytes"
-import {errorFormatter} from "../../../utils/errorFormatter"
-
-const loadFile = (filePath, log) => {
-  try {
-    return require(path.resolve(filePath)) // eslint-disable-line global-require, import/no-dynamic-require
-  } catch (e) {
-    log.error({error: errorFormatter(e)}, "Could not load config file.")
-  }
-}
+import {loadFile} from "../../../utils/loadFile"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)

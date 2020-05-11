@@ -1,10 +1,22 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./helpers"
 import {nonDataItemKeys} from "../../constants"
+import {getVCUDecoder} from "./channelDecoder/getVCUDecoder"
 
-export const parseVCU = ({data, attributes}) => {
+export const parseVCU = message => {
+  const {env} = process
+  const shouldDecodeMessage = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
+  const decodeVCUMessage = shouldDecodeMessage ? getVCUDecoder() : null
+
+  const {data, attributes} = message
+  let decodedMessage = data
+
+  if (shouldDecodeMessage) {
+    decodedMessage = decodeVCUMessage(message)
+  }
+
   return flatten(
-    data.map(event => {
+    decodedMessage.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
       return Object.keys(event)
         .filter(dataItemName => !nonDataItemKeys.includes(dataItemName))

@@ -1,4 +1,4 @@
-export const vcuDecoder = [
+export const vcuConfig = [
   {
     name: "network_status",
     description: "dashboard network status",
