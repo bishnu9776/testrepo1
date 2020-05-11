@@ -1,4 +1,5 @@
-import {MCU, PRE_BIG_SINK_MCU, parsedData} from "../../fixtures/bikeChannels/MCU"
+import {difference} from "ramda"
+import {MCU, PRE_BIG_SINK_MCU} from "../../fixtures/bikeChannels/MCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {clearEnv} from "../../utils"
@@ -74,7 +75,20 @@ describe("Parses MCU", () => {
     })
 
     it("should decode and parse message", () => {
-      expect(createDataItemsFromMessage({...PRE_BIG_SINK_MCU, probe})).to.eql(parsedData)
+      const requiredKeys = [
+        "channel",
+        "data_item_id",
+        "data_item_name",
+        "device_uuid",
+        "sequence",
+        "timestamp",
+        "value"
+      ]
+      const parsedMessage = createDataItemsFromMessage({...PRE_BIG_SINK_MCU, probe})
+      expect(parsedMessage.length).to.eql(47)
+      parsedMessage.forEach(e => {
+        expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
+      })
     })
   })
 })
