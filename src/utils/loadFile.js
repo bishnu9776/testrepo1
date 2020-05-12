@@ -7,6 +7,6 @@ export const loadFile = filePath => {
     return require(path.resolve(filePath)) // eslint-disable-line global-require, import/no-dynamic-require
   } catch (e) {
     log.error({error: errorFormatter(e)}, "Could not load config file.")
-    return {}
+    return []
   }
 }

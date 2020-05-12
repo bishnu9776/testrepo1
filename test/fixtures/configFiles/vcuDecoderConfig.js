@@ -1,4 +1,4 @@
-export const vcuConfig = [
+module.exports = [
   {
     name: "network_status",
     description: "dashboard network status",

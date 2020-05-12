@@ -1,4 +1,4 @@
-export const mcuConfig = [
+module.exports = [
   {
     name: "left_brake",
     description: "bike left brake",
