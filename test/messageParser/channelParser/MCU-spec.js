@@ -8,11 +8,8 @@ describe("Parses MCU", () => {
   const {env} = process
 
   describe("VI_PRE_BIG_SINK_INPUT: false", () => {
-    let createDataItemsFromMessage
-
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = "false"
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
     after(() => {
@@ -20,6 +17,7 @@ describe("Parses MCU", () => {
     })
 
     it("parses given messages", () => {
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       expect(createDataItemsFromMessage({...MCU, probe})).to.eql([
         {
           channel: "mcu",
@@ -62,13 +60,10 @@ describe("Parses MCU", () => {
   })
 
   describe("VI_PRE_BIG_SINK_INPUT: true", () => {
-    let createDataItemsFromMessage
-
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
       env.VI_MCU_MESSAGE_BYTE_LENGTH = "104"
       setChannelDecoderConfigFileEnvs()
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
     afterEach(() => {
@@ -85,7 +80,9 @@ describe("Parses MCU", () => {
         "timestamp",
         "value"
       ]
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       const parsedMessage = createDataItemsFromMessage({...PRE_BIG_SINK_MCU, probe})
+
       expect(parsedMessage.length).to.eql(47)
       parsedMessage.forEach(e => {
         expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
@@ -94,7 +91,7 @@ describe("Parses MCU", () => {
 
     it("when config paths are not given, should return empty array", () => {
       env.VI_MCU_DECODER_CONFIG_PATH = undefined
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       expect(createDataItemsFromMessage({...PRE_BIG_SINK_MCU, probe})).to.eql([])
     })
   })

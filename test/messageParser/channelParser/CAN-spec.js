@@ -7,10 +7,8 @@ describe("Parses CAN", () => {
   const {env} = process
 
   describe("VI_PRE_BIG_SINK_INPUT: false", () => {
-    let createDataItemsFromMessage
     before(() => {
       env.VI_PRE_BIG_SINK_INPUT = false
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
     after(() => {
@@ -18,6 +16,7 @@ describe("Parses CAN", () => {
     })
 
     it("parses given messages without decoding", () => {
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
         {
           channel: "can",
@@ -60,13 +59,10 @@ describe("Parses CAN", () => {
   })
 
   describe("VI_PRE_BIG_SINK_INPUT: true", () => {
-    let createDataItemsFromMessage
-
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = true
       env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
       setChannelDecoderConfigFileEnvs()
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
     after(() => {
@@ -113,12 +109,14 @@ describe("Parses CAN", () => {
         }
       ]
       const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: [{canRaw: CAN_BMS.data[0].canRaw}]}
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+
       expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
 
     it("when config paths are not given, should return empty array", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
-      createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([])
     })
   })
