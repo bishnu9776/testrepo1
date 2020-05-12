@@ -11,7 +11,7 @@ const {env} = process
 
 const decodeCANRaw = (canRaw, decoderForCANId) => {
   const {can_id: canId, data: value, timestamp, seq_num: seqNum, bike_id: bikeId, global_seq: globalSeq} = canRaw
-  const numberOfBytes = parseInt(env.VI_NUMBER_OF_BYTES_CAN || "16", 10)
+  const numberOfBytes = parseInt(env.VI_CAN_MESSAGE_BYTE_LENGTH || "16", 10)
   const bytes = convertHexToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
@@ -77,7 +77,7 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
   return legacyDecoder
 }
 
-export const getCANMessageDecoder = () => {
+export const getCANDecoder = () => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
   const legacyComponentVersionConfigPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)

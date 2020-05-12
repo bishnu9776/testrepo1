@@ -8,7 +8,7 @@ describe("VCU decoder", () => {
   before(() => {
     env.VI_PRE_BIG_SINK_INPUT = "true"
     env.VI_VCU_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/vcuDecoderConfig.js"
-    env.VI_NUMBER_OF_BYTES_VCU = "64"
+    env.VI_VCU_MESSAGE_BYTE_LENGTH = "64"
   })
 
   after(() => {

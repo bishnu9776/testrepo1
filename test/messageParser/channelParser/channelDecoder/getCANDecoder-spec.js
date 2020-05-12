@@ -1,4 +1,4 @@
-import {getCANMessageDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getCANMessageDecoder"
+import {getCANDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getCANDecoder"
 import {CAN_MCU, CAN_BMS, LEGACY_CAN_MCU, LEGACY_CAN_BMS} from "../../../fixtures/bikeChannels/CAN"
 import {clearEnv} from "../../../utils"
 
@@ -8,7 +8,7 @@ describe("CAN decoder", () => {
   beforeEach(() => {
     env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
     env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
-    env.VI_NUMBER_OF_BYTES_CAN = "16"
+    env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
   })
 
   afterEach(() => {
@@ -17,12 +17,12 @@ describe("CAN decoder", () => {
 
   describe("latest bikes", () => {
     it("should decode can data for can_mcu", () => {
-      const parsedData = getCANMessageDecoder()(CAN_MCU)
+      const parsedData = getCANDecoder()(CAN_MCU)
       expect(parsedData).to.eql(CAN_MCU.data.map(e => e.parsed))
     })
 
     it("should decode can data for can_bms", () => {
-      const parsedData = getCANMessageDecoder()(CAN_BMS)
+      const parsedData = getCANDecoder()(CAN_BMS)
       expect(parsedData).to.eql(CAN_BMS.data.map(e => e.parsed))
     })
   })
@@ -30,14 +30,14 @@ describe("CAN decoder", () => {
   describe("legacy bikes", () => {
     describe("when device is present in legacy decoder config", () => {
       it("should decode message using bike specific config in legacy decoder config", () => {
-        const parsedData = getCANMessageDecoder()(LEGACY_CAN_BMS)
+        const parsedData = getCANDecoder()(LEGACY_CAN_BMS)
         expect(parsedData).to.eql(LEGACY_CAN_BMS.data.map(e => e.parsed))
       })
     })
 
     describe("when device is not present in legacy decoder config", () => {
       it("should decode message using default config in legacy decoder config", () => {
-        const parsedData = getCANMessageDecoder()(LEGACY_CAN_MCU)
+        const parsedData = getCANDecoder()(LEGACY_CAN_MCU)
         expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
       })
 
@@ -47,7 +47,7 @@ describe("CAN decoder", () => {
           data: LEGACY_CAN_BMS.data
         }
 
-        const parsedData = getCANMessageDecoder()(message)
+        const parsedData = getCANDecoder()(message)
         expect(parsedData).to.eql([[]])
       })
     })

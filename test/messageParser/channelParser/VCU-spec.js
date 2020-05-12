@@ -57,7 +57,7 @@ describe("Parses VCU", () => {
 
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
-      env.VI_NUMBER_OF_BYTES_CAN = "268"
+      env.VI_VCU_MESSAGE_BYTE_LENGTH = "64"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })

@@ -64,7 +64,7 @@ describe("Parses CAN", () => {
 
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = true
-      env.VI_NUMBER_OF_BYTES_CAN = "16"
+      env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })

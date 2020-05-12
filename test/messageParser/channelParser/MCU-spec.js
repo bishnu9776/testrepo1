@@ -66,7 +66,7 @@ describe("Parses MCU", () => {
 
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
-      env.VI_NUMBER_OF_BYTES_MCU = "104"
+      env.VI_MCU_MESSAGE_BYTE_LENGTH = "104"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
