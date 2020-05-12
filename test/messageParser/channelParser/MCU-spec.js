@@ -64,14 +64,14 @@ describe("Parses MCU", () => {
   describe("VI_PRE_BIG_SINK_INPUT: true", () => {
     let createDataItemsFromMessage
 
-    before(() => {
+    beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
       env.VI_NUMBER_OF_BYTES_MCU = "104"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
-    after(() => {
+    afterEach(() => {
       clearEnv()
     })
 

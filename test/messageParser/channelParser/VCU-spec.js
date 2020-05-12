@@ -55,14 +55,14 @@ describe("Parses VCU", () => {
   describe("VI_PRE_BIG_SINK_INPUT: true", () => {
     let createDataItemsFromMessage
 
-    before(() => {
+    beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
       env.VI_NUMBER_OF_BYTES_CAN = "268"
       setChannelDecoderConfigFileEnvs()
       createDataItemsFromMessage = getCreateDataItemFromMessageFn()
     })
 
-    after(() => {
+    afterEach(() => {
       clearEnv()
     })
 
