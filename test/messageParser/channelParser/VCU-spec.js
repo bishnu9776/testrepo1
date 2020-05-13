@@ -3,13 +3,14 @@ import {VCU, PRE_BIG_SINK_VCU} from "../../fixtures/bikeChannels/VCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
+import {formatParsedMessage} from "../../utils/formatParsedMessage"
 
 describe("Parses VCU", () => {
   const {env} = process
 
-  describe("VI_PRE_BIG_SINK_INPUT: false", () => {
+  describe("should not decode message", () => {
     before(() => {
-      env.VI_PRE_BIG_SINK_INPUT = "false"
+      env.VI_SHOULD_DECODE_MESSAGE = "false"
     })
 
     after(() => {
@@ -17,42 +18,33 @@ describe("Parses VCU", () => {
     })
 
     it("parses given messages", () => {
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
-      expect(createDataItemsFromMessage({...VCU, probe})).to.eql([
+      const parsedMessage = [
         {
-          channel: "vcu",
           data_item_id: "bluetooth_device_status-v1",
           data_item_name: "bluetooth_device_status",
-          device_uuid: "s_194",
-          sequence: 6389,
-          timestamp: "2019-10-12T21:23:13.027Z",
           value: 0
         },
         {
-          channel: "vcu",
           data_item_id: "odometer-v1",
           data_item_name: "odometer",
-          device_uuid: "s_194",
-          sequence: 6389,
-          timestamp: "2019-10-12T21:23:13.027Z",
           value: 221596
         },
         {
-          channel: "vcu",
           data_item_id: "screen_brightness_control-v1",
           data_item_name: "screen_brightness_control",
-          device_uuid: "s_194",
-          sequence: 6389,
-          timestamp: "2019-10-12T21:23:13.027Z",
           value: 0
         }
-      ])
+      ].map(
+        formatParsedMessage({sequence: 6389, timestamp: "2019-10-12T21:23:13.027Z", device: "s_194", channel: "vcu"})
+      )
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      expect(createDataItemsFromMessage({...VCU, probe})).to.eql(parsedMessage)
     })
   })
 
-  describe("VI_PRE_BIG_SINK_INPUT: true", () => {
+  describe("should decode mesage", () => {
     beforeEach(() => {
-      env.VI_PRE_BIG_SINK_INPUT = "true"
+      env.VI_SHOULD_DECODE_MESSAGE = "true"
       env.VI_VCU_MESSAGE_BYTE_LENGTH = "64"
       setChannelDecoderConfigFileEnvs()
     })
@@ -61,7 +53,7 @@ describe("Parses VCU", () => {
       clearEnv()
     })
 
-    it("should decode and parse message", () => {
+    it("parses given message", () => {
       const requiredKeys = [
         "channel",
         "data_item_id",

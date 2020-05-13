@@ -5,7 +5,7 @@ import {getMCUDecoder} from "./channelDecoder/getMCUDecoder"
 
 export const parseMCU = () => {
   const {env} = process
-  const shouldDecodeMessage = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
+  const shouldDecodeMessage = JSON.parse(env.VI_SHOULD_DECODE_MESSAGE || "false")
   const decodeMCUMessage = shouldDecodeMessage ? getMCUDecoder() : null
 
   return message => {

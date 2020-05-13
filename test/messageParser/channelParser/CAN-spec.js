@@ -2,13 +2,14 @@ import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channel
 import {CAN, CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
+import {formatParsedMessage} from "../../utils/formatParsedMessage"
 
 describe("Parses CAN", () => {
   const {env} = process
 
-  describe("VI_PRE_BIG_SINK_INPUT: false", () => {
+  describe("should not decode message", () => {
     before(() => {
-      env.VI_PRE_BIG_SINK_INPUT = false
+      env.VI_SHOULD_DECODE_MESSAGE = "false"
     })
 
     after(() => {
@@ -17,50 +18,43 @@ describe("Parses CAN", () => {
 
     it("parses given messages without decoding", () => {
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
-      expect(createDataItemsFromMessage({...CAN, probe})).to.eql([
+      const parsedMessage = [
         {
-          channel: "can",
           data_item_id: "MCU_SOC-v1",
           data_item_name: "MCU_SOC",
-          device_uuid: "s_2404",
           sequence: 347731,
           timestamp: "2019-10-05T18:26:31.477Z",
           value: 0
         },
         {
-          channel: "can",
           data_item_id: "MCU_CHARGER_TYPE-v1",
           data_item_name: "MCU_CHARGER_TYPE",
-          device_uuid: "s_2404",
           sequence: 347731,
           timestamp: "2019-10-05T18:26:31.477Z",
           value: 0
         },
         {
-          channel: "can",
           data_item_id: "MCU_SOC-v1",
           data_item_name: "MCU_SOC",
-          device_uuid: "s_2404",
           sequence: 347733,
           timestamp: "2019-10-05T18:26:31.978Z",
           value: 0
         },
         {
-          channel: "can",
           data_item_id: "MCU_CHARGER_TYPE-v1",
           data_item_name: "MCU_CHARGER_TYPE",
-          device_uuid: "s_2404",
           sequence: 347733,
           timestamp: "2019-10-05T18:26:31.978Z",
           value: 0
         }
-      ])
+      ].map(formatParsedMessage({channel: "can", device: "s_2404"}))
+      expect(createDataItemsFromMessage({...CAN, probe})).to.eql(parsedMessage)
     })
   })
 
-  describe("VI_PRE_BIG_SINK_INPUT: true", () => {
+  describe("should decode message", () => {
     beforeEach(() => {
-      env.VI_PRE_BIG_SINK_INPUT = true
+      env.VI_SHOULD_DECODE_MESSAGE = "true"
       env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
       setChannelDecoderConfigFileEnvs()
     })
@@ -69,45 +63,36 @@ describe("Parses CAN", () => {
       clearEnv()
     })
 
-    it("should decode and parse the message", () => {
+    it("parses given message", () => {
       const parsedData = [
         {
-          channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp1-v1",
           data_item_name: "BMS_2_Aux_Temp1",
-          device_uuid: "BEAGLE-ESS-4",
-          sequence: 543232814,
-          timestamp: "2020-04-19T22:12:43.055Z",
           value: 29.57
         },
         {
-          channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp2-v1",
           data_item_name: "BMS_2_Aux_Temp2",
-          device_uuid: "BEAGLE-ESS-4",
-          sequence: 543232814,
-          timestamp: "2020-04-19T22:12:43.055Z",
           value: 29.67
         },
         {
-          channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp3-v1",
           data_item_name: "BMS_2_Aux_Temp3",
-          device_uuid: "BEAGLE-ESS-4",
-          sequence: 543232814,
-          timestamp: "2020-04-19T22:12:43.055Z",
           value: 29.06
         },
         {
-          channel: "can_bms/e55",
           data_item_id: "BMS_2_Aux_Temp4-v1",
           data_item_name: "BMS_2_Aux_Temp4",
-          device_uuid: "BEAGLE-ESS-4",
-          sequence: 543232814,
-          timestamp: "2020-04-19T22:12:43.055Z",
           value: 29.21
         }
-      ]
+      ].map(
+        formatParsedMessage({
+          sequence: 543232814,
+          timestamp: "2020-04-19T22:12:43.055Z",
+          device: "BEAGLE-ESS-4",
+          channel: "can_bms/e55"
+        })
+      )
       const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: [{canRaw: CAN_BMS.data[0].canRaw}]}
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
 
