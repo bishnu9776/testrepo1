@@ -1,6 +1,4 @@
-import {flatten} from "ramda"
-import {getDataItem} from "./helpers"
-import {nonDataItemKeys} from "../../constants"
+import {parseMessage} from "./utils/parseMessage"
 import {getMCUDecoder} from "./channelDecoder/getMCUDecoder"
 
 export const parseMCU = () => {
@@ -16,22 +14,6 @@ export const parseMCU = () => {
       decodedMessage = decodeMCUMessage(message)
     }
 
-    return flatten(
-      decodedMessage.map(event => {
-        const timestamp = new Date(event.timestamp * 1000).toISOString()
-        return Object.keys(event)
-          .filter(dataItemName => !nonDataItemKeys.includes(dataItemName))
-          .map(dataItemName => {
-            return getDataItem({
-              timestamp,
-              attributes,
-              dataItemName,
-              value: event[dataItemName],
-              sequence: event.seq_num
-            })
-          })
-          .filter(e => !!e)
-      })
-    )
+    return parseMessage(decodedMessage, attributes)
   }
 }

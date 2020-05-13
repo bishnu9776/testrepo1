@@ -1,5 +1,5 @@
 import {flatten} from "ramda"
-import {getDataItem} from "./helpers"
+import {getDataItem} from "./utils/getDataItem"
 import {getCANDecoder} from "./channelDecoder/getCANDecoder"
 
 export const parseCAN = () => {
