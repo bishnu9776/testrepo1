@@ -122,5 +122,13 @@ describe("Parse GCP message", () => {
       expect(output.length).to.eql(277)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
+
+    it("should return empty array if channel is logs", async () => {
+      const messageParser = getMessageParser({log, metricRegistry, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const message = {data: Buffer.from(input.data.data), attributes: {...input.attributes, subFolder: "v1/logs"}}
+      const output = await messageParser(message)
+      expect(output).to.eql([])
+    })
   })
 })

@@ -17,9 +17,12 @@ const getDedupFn = metricRegistry => {
 }
 
 const handleParseFailures = (message, error, metricRegistry, log) => {
+  const {data, attributes} = message
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-  const dataToLog = JSON.stringify(message, null, 2)
-  log.error({ctx: {data: dataToLog}, error: errorFormatter(error)}, "Could not parse gcp message")
+  log.error(
+    {ctx: {data: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(error)},
+    "Could not parse gcp message"
+  )
 }
 
 const getFormattedAttributes = attributes => {
@@ -46,6 +49,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
+  const isChannelLog = channel => channel === "logs"
 
   return async message => {
     let decompressedMessage
@@ -53,7 +57,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
     try {
       const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
       decompressedMessage = await maybeDecompressMessage(message)
-      if (!decompressedMessage) {
+      if (!decompressedMessage || isChannelLog(attributes.channel)) {
         return []
       }
       const dataItems = pipe(
@@ -64,7 +68,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
-      handleParseFailures(decompressedMessage, error, metricRegistry, log)
+      handleParseFailures(message, error, metricRegistry, log)
     }
 
     return []
