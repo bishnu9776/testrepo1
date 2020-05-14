@@ -47,11 +47,11 @@
   },
   "devDependencies": {
     "@babel/node": "7.8.7",
-    "babel-preset-vi-node": "1.0.143",
+    "babel-preset-vi-node": "1.0.145",
     "chai": "4.2.0",
     "choma": "1.2.1",
     "csvtojson": "2.0.10",
-    "eslint-config-vi-node": "1.2.218",
+    "eslint-config-vi-node": "1.2.219",
     "husky": "4.2.5",
     "mocha": "7.1.2",
     "sinon": "9.0.2",
