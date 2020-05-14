@@ -54,7 +54,7 @@ export const getDecompresserFn = ({log}) => {
         const messageJSON = JSON.parse(decompressedMessage.toString())
         return formatDecompressedMessageJSON({decompressedMessage: messageJSON, attributes: message.attributes})
       } catch (e) {
-        log.error({ctx: {message: JSON.stringify(decompressedMessage)}}, "Error decompressing legacy data.")
+        log.error({ctx: {message: JSON.stringify(message)}}, "Error decompressing legacy data.")
         return null
       }
     }
