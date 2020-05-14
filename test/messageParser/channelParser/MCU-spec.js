@@ -3,7 +3,7 @@ import {MCU, PRE_BIG_SINK_MCU} from "../../fixtures/bikeChannels/MCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
-import {formatParsedMessage} from "../../utils/formatParsedMessage"
+import {getParsedMessageFn} from "../../utils/getParsedMessage"
 
 describe("Parses MCU", () => {
   const {env} = process
@@ -19,30 +19,13 @@ describe("Parses MCU", () => {
 
     it("parses given messages", () => {
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+      const getParsedMessage = getParsedMessageFn("mcu", "s_248")
       const parsedMessage = [
-        {
-          data_item_id: "right_brake-v1",
-          data_item_name: "right_brake",
-          value: 0
-        },
-        {
-          data_item_id: "left_brake-v1",
-          data_item_name: "left_brake",
-          value: 0
-        },
-        {
-          data_item_id: "stop_lamp-v1",
-          data_item_name: "stop_lamp",
-          value: 0
-        },
-        {
-          data_item_id: "vcu_status-v1",
-          data_item_name: "vcu_status",
-          value: 1
-        }
-      ].map(
-        formatParsedMessage({sequence: 120468, timestamp: "2019-10-05T18:26:15.493Z", channel: "mcu", device: "s_248"})
-      )
+        getParsedMessage("right_brake-v1", "right_brake", 0, 1, 1),
+        getParsedMessage("left_brake-v1", "left_brake", 0, 1, 1),
+        getParsedMessage("stop_lamp-v1", "stop_lamp", 0, 1, 1),
+        getParsedMessage("vcu_status-v1", "vcu_status", 1, 1, 1)
+      ]
       expect(createDataItemsFromMessage({...MCU, probe})).to.eql(parsedMessage)
     })
   })

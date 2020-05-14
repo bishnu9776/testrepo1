@@ -6,8 +6,8 @@ export const MCU = {
   },
   data: [
     {
-      seq_num: 120468,
-      timestamp: 1570299975.493,
+      seq_num: 1,
+      timestamp: 1,
       right_brake: 0,
       left_brake: 0,
       stop_lamp: 0,
@@ -22,8 +22,8 @@ export const MCU = {
 export const PRE_BIG_SINK_MCU = {
   data: [
     {
-      seq_num: 1041,
-      timestamp: 1583749326.076,
+      seq_num: 1,
+      timestamp: 1,
       data: "01000000000000010000000101000101010100010001010000000101000000000000000001000001010103030201010002000000"
     }
   ],

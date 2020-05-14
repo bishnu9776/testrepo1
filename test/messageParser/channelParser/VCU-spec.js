@@ -3,7 +3,7 @@ import {VCU, PRE_BIG_SINK_VCU} from "../../fixtures/bikeChannels/VCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
-import {formatParsedMessage} from "../../utils/formatParsedMessage"
+import {getParsedMessageFn} from "../../utils/getParsedMessage"
 
 describe("Parses VCU", () => {
   const {env} = process
@@ -18,25 +18,12 @@ describe("Parses VCU", () => {
     })
 
     it("parses given messages", () => {
+      const getParsedMessage = getParsedMessageFn("vcu", "s_194")
       const parsedMessage = [
-        {
-          data_item_id: "bluetooth_device_status-v1",
-          data_item_name: "bluetooth_device_status",
-          value: 0
-        },
-        {
-          data_item_id: "odometer-v1",
-          data_item_name: "odometer",
-          value: 221596
-        },
-        {
-          data_item_id: "screen_brightness_control-v1",
-          data_item_name: "screen_brightness_control",
-          value: 0
-        }
-      ].map(
-        formatParsedMessage({sequence: 6389, timestamp: "2019-10-12T21:23:13.027Z", device: "s_194", channel: "vcu"})
-      )
+        getParsedMessage("bluetooth_device_status-v1", "bluetooth_device_status", 0, 1, 1),
+        getParsedMessage("odometer-v1", "odometer", 1000, 1, 1),
+        getParsedMessage("screen_brightness_control-v1", "screen_brightness_control", 0, 1, 1)
+      ]
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       expect(createDataItemsFromMessage({...VCU, probe})).to.eql(parsedMessage)
     })
