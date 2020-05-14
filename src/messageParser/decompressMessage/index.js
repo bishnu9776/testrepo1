@@ -44,17 +44,21 @@ export const getDecompresserFn = ({log}) => {
   }
 
   return async message => {
-    const isLegacyMessage = !message.attributes.subFolder.includes("v1")
+    const {data, attributes} = message
+    const isLegacyMessage = !attributes.subFolder.includes("v1")
     if (isLegacyMessage) {
       let decompressedMessage
       // TODO: Remove this try catch after validating legacy data on staging/production
       // This is only to get the below log message as we haven't yet seen deflate compressed data
       try {
-        decompressedMessage = await inflate(message.data)
+        decompressedMessage = await inflate(data)
         const messageJSON = JSON.parse(decompressedMessage.toString())
-        return formatDecompressedMessageJSON({decompressedMessage: messageJSON, attributes: message.attributes})
+        return formatDecompressedMessageJSON({decompressedMessage: messageJSON, attributes})
       } catch (e) {
-        log.error({ctx: {message: JSON.stringify(message)}}, "Error decompressing legacy data.")
+        log.error(
+          {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
+          "Error decompressing legacy data."
+        )
         return null
       }
     }
