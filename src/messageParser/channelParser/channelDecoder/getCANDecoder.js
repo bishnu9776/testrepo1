@@ -2,28 +2,17 @@ import {keys, isNil, head} from "ramda"
 import {log} from "../../../logger"
 import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../utils/loadJSONFile"
+import {convertHexToBytes} from "./utils/convertHexToBytes"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
 const {env} = process
 
-const convertHexToBytes = value =>
-  [
-    `${value[0]}${value[1]}`,
-    `${value[2]}${value[3]}`,
-    `${value[4]}${value[5]}`,
-    `${value[6]}${value[7]}`,
-    `${value[8]}${value[9]}`,
-    `${value[10]}${value[11]}`,
-    `${value[12]}${value[13]}`,
-    `${value[14]}${value[15]}`
-  ].map(s => parseInt(s, 16))
-
 const decodeCANRaw = (canRaw, decoderForCANId) => {
   const {can_id: canId, data: value, timestamp, seq_num: seqNum, bike_id: bikeId, global_seq: globalSeq} = canRaw
-
-  const bytes = convertHexToBytes(value)
+  const numberOfBytes = parseInt(env.VI_CAN_MESSAGE_BYTE_LENGTH || "16", 10)
+  const bytes = convertHexToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
   return dataItems.map(dataItem => ({
@@ -88,7 +77,7 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
   return legacyDecoder
 }
 
-export const getCANMessageDecoder = () => {
+export const getCANDecoder = () => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
   const legacyComponentVersionConfigPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)

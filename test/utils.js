@@ -16,3 +16,11 @@ export const setEnv = config => {
     process.env[`${envPrefix}_${envVar}`] = config[k]
   })
 }
+
+export const setChannelDecoderConfigFileEnvs = () => {
+  const {env} = process
+  env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
+  env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
+  env.VI_MCU_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/mcuDecoderConfig.js"
+  env.VI_VCU_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/vcuDecoderConfig.js"
+}

@@ -1,5 +1,5 @@
 import {flatten} from "ramda"
-import {getDataItem} from "./helpers"
+import {getDataItem} from "./utils/getDataItem"
 
 const eventAndSampleKeys = [
   "mode",

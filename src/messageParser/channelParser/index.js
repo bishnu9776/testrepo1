@@ -16,11 +16,11 @@ export const getCreateDataItemFromMessageFn = () => {
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
     can: parseCAN(),
-    mcu: parseMCU,
+    mcu: parseMCU(),
     heman: parseHEMAN,
     imu: parseIMU,
     events: parseEVENTS,
-    vcu: parseVCU,
+    vcu: parseVCU(),
     session: parseSESSION,
     bike_info: parseBIKEINFO,
     soh: parseSOH,

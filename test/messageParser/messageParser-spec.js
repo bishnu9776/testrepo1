@@ -6,7 +6,7 @@ import {ACK_MSG_TAG} from "../../src/constants"
 import {metricRegistry} from "../stubs/metricRegistry"
 import {getDeflateCompressedGCPEvent, getZipCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {log} from "../stubs/logger"
-import {clearEnv} from "../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
 import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
 
 const {env} = process
@@ -83,6 +83,7 @@ describe("Parse GCP message", () => {
   describe("Pre big sink data", () => {
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
+      setChannelDecoderConfigFileEnvs()
     })
 
     it("formats attributes for legacy data and parses correctly", async () => {
