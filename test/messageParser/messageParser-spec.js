@@ -124,9 +124,10 @@ describe("Parse GCP message", () => {
     })
 
     it("should return empty array if channel is logs", async () => {
+      env.VI_CHANNELS_TO_DROP = "gps_tpv"
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: {...input.attributes, subFolder: "v1/logs"}}
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
       expect(output).to.eql([])
     })

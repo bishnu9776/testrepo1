@@ -49,15 +49,21 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
-  const isChannelLog = channel => channel === "logs"
+  const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
+
+  const shouldDropChannel = channel => channelsToDrop.includes(channel)
 
   return async message => {
     let decompressedMessage
 
     try {
       const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
+      if (shouldDropChannel(attributes.channel)) {
+        return []
+      }
+
       decompressedMessage = await maybeDecompressMessage(message)
-      if (!decompressedMessage || isChannelLog(attributes.channel)) {
+      if (!decompressedMessage) {
         return []
       }
       const dataItems = pipe(
