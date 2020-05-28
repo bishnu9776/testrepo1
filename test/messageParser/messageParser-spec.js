@@ -86,6 +86,10 @@ describe("Parse GCP message", () => {
       setChannelDecoderConfigFileEnvs()
     })
 
+    afterEach(() => {
+      clearEnv()
+    })
+
     it("formats attributes for legacy data and parses correctly", async () => {
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const message = getDeflateCompressedGCPEvent({
@@ -123,10 +127,20 @@ describe("Parse GCP message", () => {
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("should return empty array if channel is logs", async () => {
+    it("should return empty array if channel is gps_tpv", async () => {
       env.VI_CHANNELS_TO_DROP = "gps_tpv"
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const output = await messageParser(message)
+      expect(output).to.eql([])
+    })
+
+    it("should return empty array if bike_id doesnt ends with 00", async () => {
+      env.VI_DEVICE_FILTER_REGEX = "00$"
+      env.VI_SHOULD_FILTER_DEVICE = "true"
+      const messageParser = getMessageParser({log, metricRegistry, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV_DEVICE_SPECIFIC`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
       expect(output).to.eql([])

@@ -50,15 +50,18 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
+  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
+  const deviceFilterRegex = env.VI_DEVICE_FILTER_REGEX ? new RegExp(env.VI_DEVICE_FILTER_REGEX) : ""
 
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
+  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.exec(device) : false)
 
   return async message => {
     let decompressedMessage
 
     try {
       const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
-      if (shouldDropChannel(attributes.channel)) {
+      if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
         return []
       }
 
