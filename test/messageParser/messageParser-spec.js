@@ -133,7 +133,8 @@ describe("Parse GCP message", () => {
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
-      expect(output).to.eql([])
+      expect(output.length).to.eql(1)
+      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
     it("should return empty array if bike_id doesnt ends with 00", async () => {
@@ -143,7 +144,8 @@ describe("Parse GCP message", () => {
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV_DEVICE_SPECIFIC`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
-      expect(output).to.eql([])
+      expect(output.length).to.eql(1)
+      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
   })
 })

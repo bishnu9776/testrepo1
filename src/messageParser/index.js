@@ -62,7 +62,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
     try {
       const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
-        return []
+        return [{message, tag: ACK_MSG_TAG}]
       }
 
       decompressedMessage = await maybeDecompressMessage(message)
