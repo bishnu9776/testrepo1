@@ -72,7 +72,7 @@ export const CAN_MCU = {
     {
       parsed: [
         {
-          can_id: "0x100",
+          can_id: "256",
           timestamp: 1,
           seq_num: 1,
           key: "MCU_SOC",
@@ -80,7 +80,7 @@ export const CAN_MCU = {
           bike_id: "s_2404"
         },
         {
-          can_id: "0x100",
+          can_id: "256",
           timestamp: 1,
           seq_num: 1,
           key: "MCU_CHARGER_TYPE",
@@ -89,7 +89,7 @@ export const CAN_MCU = {
         }
       ],
       canRaw: {
-        can_id: "0x100",
+        can_id: "256",
         data: "0101000001040002",
         timestamp: 1,
         seq_num: 1,
@@ -99,7 +99,7 @@ export const CAN_MCU = {
     {
       parsed: [
         {
-          can_id: "0x100",
+          can_id: "256",
           timestamp: 2,
           seq_num: 3,
           key: "MCU_SOC",
@@ -107,7 +107,7 @@ export const CAN_MCU = {
           bike_id: "s_2404"
         },
         {
-          can_id: "0x100",
+          can_id: "256",
           timestamp: 2,
           seq_num: 3,
           key: "MCU_CHARGER_TYPE",
@@ -116,7 +116,7 @@ export const CAN_MCU = {
         }
       ],
       canRaw: {
-        can_id: "0x100",
+        can_id: "256",
         data: "0101000001040002",
         timestamp: 2,
         seq_num: 3,
@@ -136,7 +136,7 @@ export const CAN_BMS = {
     {
       parsed: [
         {
-          can_id: "0x158",
+          can_id: "344",
           timestamp: 1,
           seq_num: 1,
           global_seq: 1,
@@ -145,7 +145,7 @@ export const CAN_BMS = {
           value: 29.57
         },
         {
-          can_id: "0x158",
+          can_id: "344",
           timestamp: 1,
           seq_num: 1,
           global_seq: 1,
@@ -154,7 +154,7 @@ export const CAN_BMS = {
           value: 29.67
         },
         {
-          can_id: "0x158",
+          can_id: "344",
           timestamp: 1,
           seq_num: 1,
           global_seq: 1,
@@ -163,7 +163,7 @@ export const CAN_BMS = {
           value: 29.06
         },
         {
-          can_id: "0x158",
+          can_id: "344",
           timestamp: 1,
           seq_num: 1,
           global_seq: 1,
@@ -173,7 +173,7 @@ export const CAN_BMS = {
         }
       ],
       canRaw: {
-        can_id: "0x158",
+        can_id: "344",
         data: "8d0b970b5a0b690b",
         timestamp: 1,
         seq_num: 1,
@@ -190,7 +190,62 @@ export const LEGACY_CAN_MCU = {
     bike_id: "s_2404",
     version: "v1"
   },
-  data: CAN_MCU.data
+  data: [
+    {
+      parsed: [
+        {
+          can_id: "256",
+          timestamp: 1,
+          seq_num: 1,
+          key: "MCU_SOC",
+          value: 0,
+          bike_id: "s_2404"
+        },
+        {
+          can_id: "256",
+          timestamp: 1,
+          seq_num: 1,
+          key: "MCU_CHARGER_TYPE",
+          value: 0,
+          bike_id: "s_2404"
+        }
+      ],
+      canRaw: {
+        can_id: "256",
+        data: "0101000001040002",
+        timestamp: 1,
+        seq_num: 1,
+        bike_id: "s_2404"
+      }
+    },
+    {
+      parsed: [
+        {
+          can_id: "256",
+          timestamp: 2,
+          seq_num: 3,
+          key: "MCU_SOC",
+          value: 0,
+          bike_id: "s_2404"
+        },
+        {
+          can_id: "256",
+          timestamp: 2,
+          seq_num: 3,
+          key: "MCU_CHARGER_TYPE",
+          value: 0,
+          bike_id: "s_2404"
+        }
+      ],
+      canRaw: {
+        can_id: "256",
+        data: "0101000001040002",
+        timestamp: 2,
+        seq_num: 3,
+        bike_id: "s_2404"
+      }
+    }
+  ]
 }
 
 export const LEGACY_CAN_BMS = {

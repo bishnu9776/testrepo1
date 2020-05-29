@@ -38,11 +38,12 @@ const populateDecoderConfig = config => {
     versions.forEach(version => {
       const canIds = keys(config[component][version])
       canIds.forEach(canId => {
+        const decimalCanId = parseInt(canId, 16)
         config[component][version][canId].forEach(e => {
-          if (isNil(decoder[`${component}.${version}.${canId}`])) {
-            decoder[`${component}.${version}.${canId}`] = {}
+          if (isNil(decoder[`${component}.${version}.${decimalCanId}`])) {
+            decoder[`${component}.${version}.${decimalCanId}`] = {}
           }
-          decoder[`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
+          decoder[`${component}.${version}.${decimalCanId}`][e.params] = createFn(e.equation)
         })
       })
     })
@@ -65,11 +66,12 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
       const version = defaultComponentToVersionMapping[device][component]
       const canIds = keys(config[component][version])
       canIds.forEach(canId => {
+        const decimalCanId = parseInt(canId, 16)
         config[component][version][canId].forEach(e => {
-          if (isNil(legacyDecoder[device][`${component}.${version}.${canId}`])) {
-            legacyDecoder[device][`${component}.${version}.${canId}`] = {}
+          if (isNil(legacyDecoder[device][`${component}.${version}.${decimalCanId}`])) {
+            legacyDecoder[device][`${component}.${version}.${decimalCanId}`] = {}
           }
-          legacyDecoder[device][`${component}.${version}.${canId}`][e.params] = createFn(e.equation)
+          legacyDecoder[device][`${component}.${version}.${decimalCanId}`][e.params] = createFn(e.equation)
         })
       })
     })

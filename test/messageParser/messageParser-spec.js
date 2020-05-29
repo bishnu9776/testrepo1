@@ -103,7 +103,7 @@ describe("Parse GCP message", () => {
       expect(output).to.eql(expected)
     })
 
-    it("formats attributes for v1 data and parses correctly", async () => {
+    it("formats attributes for v1 data and parses correctly for GPS_TPV", async () => {
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
@@ -127,13 +127,13 @@ describe("Parse GCP message", () => {
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("should ack message when decoder doesn not have the canId ", async () => {
+    it("formats attributes for v1 data and parses correctly for CAN ", async () => {
       env.VI_SHOULD_DECODE_MESSAGE = true
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
-      expect(output.length).to.eql(1)
+      expect(output.length).to.eql(21)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
