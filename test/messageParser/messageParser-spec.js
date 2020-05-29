@@ -127,25 +127,37 @@ describe("Parse GCP message", () => {
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("should return message with ack if data is from VI_CHANNELS_TO_DROP", async () => {
-      env.VI_CHANNELS_TO_DROP = "gps_tpv"
+    it("should ack message when decoder doesn not have the canId ", async () => {
+      env.VI_SHOULD_DECODE_MESSAGE = true
       const messageParser = getMessageParser({log, metricRegistry, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
       expect(output.length).to.eql(1)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("should return message with ack if bike_id doesnt satisfies VI_DEVICE_FILTER_REGEX, when filter device is enabled", async () => {
-      env.VI_SHOULD_FILTER_DEVICE = "true"
-      env.VI_DEVICE_FILTER_REGEX = "00$"
-      const messageParser = getMessageParser({log, metricRegistry, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV_DEVICE_SPECIFIC`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser(message)
-      expect(output.length).to.eql(1)
-      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+    describe("should ack message without decompressing or parsing", () => {
+      it("when message contains channel specified to drop", async () => {
+        env.VI_CHANNELS_TO_DROP = "gps_tpv"
+        const messageParser = getMessageParser({log, metricRegistry, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser(message)
+        expect(output.length).to.eql(1)
+        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+      })
+
+      it("when message contains bike_id which doesn't match the regex device filter", async () => {
+        env.VI_SHOULD_FILTER_DEVICE = "true"
+        env.VI_DEVICE_FILTER_REGEX = "00$"
+        const messageParser = getMessageParser({log, metricRegistry, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV_DEVICE_SPECIFIC`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser(message)
+        expect(output.length).to.eql(1)
+        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+      })
     })
   })
 })

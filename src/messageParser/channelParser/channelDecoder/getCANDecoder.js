@@ -111,6 +111,13 @@ export const getCANDecoder = () => {
       }
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
+      if (isNilOrEmpty(decoderForCANId)) {
+        log.warn(
+          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderForCANId}},
+          "Event does not map to a decoder for its CAN id"
+        )
+        return []
+      }
       return decodeCANRaw(d.canRaw, decoderForCANId)
     })
   }
