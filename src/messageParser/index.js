@@ -54,7 +54,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
 
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
-  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.exec(device) : false)
+  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
   return async message => {
     let decompressedMessage
