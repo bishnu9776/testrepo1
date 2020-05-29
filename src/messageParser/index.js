@@ -51,7 +51,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
-  const deviceFilterRegex = env.VI_DEVICE_FILTER_REGEX ? new RegExp(env.VI_DEVICE_FILTER_REGEX) : ""
+  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
 
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
   const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.exec(device) : false)
