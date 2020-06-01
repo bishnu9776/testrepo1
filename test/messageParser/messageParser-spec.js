@@ -146,7 +146,7 @@ describe("Parse GCP message", () => {
         const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
         const output = await messageParser(message)
         expect(output.length).to.eql(1)
-        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+        expect(output[0].tag).to.eql(ACK_MSG_TAG)
       })
 
       it("when message contains bike_id which doesn't match the regex device filter", async () => {
@@ -157,7 +157,7 @@ describe("Parse GCP message", () => {
         const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
         const output = await messageParser(message)
         expect(output.length).to.eql(1)
-        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+        expect(output[0].tag).to.eql(ACK_MSG_TAG)
       })
     })
   })

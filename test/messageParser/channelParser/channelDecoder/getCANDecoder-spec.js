@@ -25,6 +25,77 @@ describe("CAN decoder", () => {
       const parsedData = getCANDecoder()(CAN_BMS)
       expect(parsedData).to.eql(CAN_BMS.data.map(e => e.parsed))
     })
+
+    describe("should return empty array when decoder config doesn't contain", () => {
+      it("component", () => {
+        const dataWithAbsentComponent = {
+          attributes: {
+            channel: "can_foo",
+            bike_id: "s_2404",
+            version: "v1"
+          },
+          data: [
+            {
+              canRaw: {
+                can_id: "256",
+                data: "0101000001040002",
+                timestamp: 1,
+                seq_num: 1,
+                bike_id: "s_2404"
+              }
+            }
+          ]
+        }
+        const parsedData = getCANDecoder()(dataWithAbsentComponent)
+        expect(parsedData).to.eql([[]])
+      })
+
+      it("version for the component", () => {
+        const dataWithAbsentVersion = {
+          attributes: {
+            channel: "can_motor/foo",
+            bike_id: "s_2404",
+            version: "v1"
+          },
+          data: [
+            {
+              canRaw: {
+                can_id: "256",
+                data: "0101000001040002",
+                timestamp: 1,
+                seq_num: 1,
+                bike_id: "s_2404"
+              }
+            }
+          ]
+        }
+        const parsedData = getCANDecoder()(dataWithAbsentVersion)
+        expect(parsedData).to.eql([[]])
+      })
+
+      it("canId for the component/version", () => {
+        const dataWithAbsentCanId = {
+          attributes: {
+            channel: "can_motor/MAHLEV2",
+            bike_id: "s_2404",
+            version: "v1"
+          },
+          data: [
+            {
+              canRaw: {
+                can_id: "1",
+                data: "0101000001040002",
+                timestamp: 1,
+                seq_num: 1,
+                bike_id: "s_2404"
+              }
+            }
+          ]
+        }
+        const parsedData = getCANDecoder()(dataWithAbsentCanId)
+        expect(parsedData).to.eql([[]])
+      })
+    })
   })
 
   describe("legacy bikes", () => {
