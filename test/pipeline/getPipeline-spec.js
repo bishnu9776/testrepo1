@@ -46,10 +46,10 @@ describe("Pipeline spec", () => {
         output.push(e)
       },
       complete: () => {
-        expect(output.length).to.eql(3)
+        expect(output.length).to.eql(4)
         expect(output.filter(e => e.channel === "can").length).to.eql(2) // Two deduped CAN events
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1) // One Ack event
-        expect(acknowledgeMessageSpy.callCount).to.eql(1)
+        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
+        expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
       }
     }

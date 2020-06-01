@@ -67,7 +67,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       decompressedMessage = await maybeDecompressMessage(message)
       if (!decompressedMessage) {
-        return []
+        return [{message, tag: ACK_MSG_TAG}]
       }
       const dataItems = pipe(
         createDataItemsFromMessage,
@@ -78,8 +78,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
       return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
       handleParseFailures(message, error, metricRegistry, log)
+      return [{message, tag: ACK_MSG_TAG}]
     }
-
-    return []
   }
 }

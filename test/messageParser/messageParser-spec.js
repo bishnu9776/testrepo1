@@ -74,10 +74,11 @@ describe("Parse GCP message", () => {
     })
   })
 
-  it("logs error and returns empty if unable to parse", async () => {
+  it("logs error and ack the message if unable to parse", async () => {
     const messageParser = getMessageParser({log, metricRegistry, probe})
     const output = await messageParser("foo")
-    expect(output).to.eql([])
+    expect(output.length).to.eql(1)
+    expect(output[0].tag).to.eql(ACK_MSG_TAG)
   })
 
   describe("Pre big sink data", () => {
