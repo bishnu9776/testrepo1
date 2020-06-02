@@ -135,7 +135,7 @@ describe("Parse GCP message", () => {
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
       expect(output.length).to.eql(21)
-      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+      expect(output[20].tag).to.eql(ACK_MSG_TAG)
     })
 
     describe("should ack message without decompressing or parsing", () => {
@@ -143,7 +143,7 @@ describe("Parse GCP message", () => {
         env.VI_CHANNELS_TO_DROP = "gps_tpv"
         const messageParser = getMessageParser({log, metricRegistry, probe})
         const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
         const output = await messageParser(message)
         expect(output.length).to.eql(1)
         expect(output[0].tag).to.eql(ACK_MSG_TAG)
@@ -153,8 +153,8 @@ describe("Parse GCP message", () => {
         env.VI_SHOULD_FILTER_DEVICE = "true"
         env.VI_DEVICE_FILTER_REGEX = "00$"
         const messageParser = getMessageParser({log, metricRegistry, probe})
-        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV_DEVICE_SPECIFIC`))
-        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+        const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
         const output = await messageParser(message)
         expect(output.length).to.eql(1)
         expect(output[0].tag).to.eql(ACK_MSG_TAG)

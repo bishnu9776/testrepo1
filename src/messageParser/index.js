@@ -67,6 +67,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       decompressedMessage = await maybeDecompressMessage(message)
       if (!decompressedMessage) {
+        metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
         return [{message, tag: ACK_MSG_TAG}]
       }
       const dataItems = pipe(
