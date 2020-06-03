@@ -50,21 +50,25 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
+  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
+  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
 
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
+  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
   return async message => {
     let decompressedMessage
 
     try {
       const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
-      if (shouldDropChannel(attributes.channel)) {
-        return []
+      if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
+        return [{message, tag: ACK_MSG_TAG}]
       }
 
       decompressedMessage = await maybeDecompressMessage(message)
       if (!decompressedMessage) {
-        return []
+        metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
+        return [{message, tag: ACK_MSG_TAG}]
       }
       const dataItems = pipe(
         createDataItemsFromMessage,
@@ -75,8 +79,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
       return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {
       handleParseFailures(message, error, metricRegistry, log)
+      return [{message, tag: ACK_MSG_TAG}]
     }
-
-    return []
   }
 }
