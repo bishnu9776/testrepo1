@@ -12,6 +12,7 @@ const {env} = process
 const decodeCANRaw = (canRaw, decoderForCANId) => {
   const {can_id: canId, data: value, timestamp, seq_num: seqNum, bike_id: bikeId, global_seq: globalSeq} = canRaw
   const numberOfBytes = parseInt(env.VI_CAN_MESSAGE_BYTE_LENGTH || "16", 10)
+  // const bytes = convertLongToBytes(value, numberOfBytes)
   const bytes = convertHexToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
