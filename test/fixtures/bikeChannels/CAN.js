@@ -90,7 +90,7 @@ export const CAN_MCU = {
       ],
       canRaw: {
         can_id: "256",
-        data: "0101000001040002",
+        data: "72339069031677954",
         timestamp: 1,
         seq_num: 1,
         bike_id: "s_2404"
@@ -117,7 +117,7 @@ export const CAN_MCU = {
       ],
       canRaw: {
         can_id: "256",
-        data: "0101000001040002",
+        data: "72339069031677954",
         timestamp: 2,
         seq_num: 3,
         bike_id: "s_2404"
@@ -174,7 +174,7 @@ export const CAN_BMS = {
       ],
       canRaw: {
         can_id: "344",
-        data: "8d0b970b5a0b690b",
+        data: "10163383059102787851",
         timestamp: 1,
         seq_num: 1,
         global_seq: 1,
@@ -212,7 +212,7 @@ export const LEGACY_CAN_MCU = {
       ],
       canRaw: {
         can_id: "256",
-        data: "0101000001040002",
+        data: "72339069031677954",
         timestamp: 1,
         seq_num: 1,
         bike_id: "s_2404"
@@ -239,7 +239,7 @@ export const LEGACY_CAN_MCU = {
       ],
       canRaw: {
         can_id: "256",
-        data: "0101000001040002",
+        data: "72339069031677954",
         timestamp: 2,
         seq_num: 3,
         bike_id: "s_2404"

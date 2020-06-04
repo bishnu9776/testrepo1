@@ -1,17 +1,12 @@
 /* eslint-disable no-bitwise*/
 
-export const convertLongToBytes = (value, numberOfBytes) => {
-  let longValue = value
-  const isValueNegative = value < 0
-  if (isValueNegative) {
-    // 2's complement
-    longValue = ~longValue
-    longValue += 1
-  }
+export const convertLongToBytes = value => {
+  // eslint-disable-next-line no-undef
+  let longValue = BigInt(value)
   const byteArray = []
-  for (let i = numberOfBytes; i > 0; i -= 1) {
-    byteArray[numberOfBytes] = longValue & 255
-    longValue >>= 8
+  for (let i = 7; i >= 0; i -= 1) {
+    byteArray[i] = Number(longValue & 255n)
+    longValue >>= 8n
   }
   return byteArray
 }
