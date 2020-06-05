@@ -57,7 +57,7 @@ export const endSpan = ({message, spanName, labels = {}}) => {
   const span = messageIdSpansMap[`${message.id}.${spanName}`]
   if (span) {
     Object.keys(labels).forEach(label => {
-      span.setLabel("label", labels[label])
+      span.setLabel(label, labels[label])
     })
     span.end(Date.now())
   }
