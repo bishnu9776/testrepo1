@@ -5,6 +5,7 @@ import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
+import {endSpan, startSpan} from "../apm"
 
 const {env} = process
 
@@ -65,16 +66,20 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         return [{message, tag: ACK_MSG_TAG}]
       }
 
+      startSpan({message, spanName: "decompression", spanType: "decompression"})
       decompressedMessage = await maybeDecompressMessage(message)
+      endSpan({message, spanName: "decompression"})
+
       if (!decompressedMessage) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
         return [{message, tag: ACK_MSG_TAG}]
       }
+
       const dataItems = pipe(
         createDataItemsFromMessage,
         flatten,
         maybeDedupDataItems
-      )({data: decompressedMessage, attributes})
+      )({data: decompressedMessage, attributes, id: message.id})
 
       return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {

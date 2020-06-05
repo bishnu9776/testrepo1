@@ -27,7 +27,6 @@ const longType = avro.types.LongType.__with({
 export const deserializeAvro = message => {
   return new Promise((resolve, reject) => {
     const output = []
-    // start span for avro deserialization for message id
 
     const decoder = new avro.streams.BlockDecoder({
       parseHook: schema => {
@@ -44,7 +43,6 @@ export const deserializeAvro = message => {
     })
 
     decoder.on("finish", () => {
-      // end span for avro deserialization for message id
       resolve(formatDecompressedMessageJSON({decompressedMessage: output, attributes: message.attributes}))
     })
 

@@ -11,10 +11,11 @@ import {collectSubscriptionStats} from "../metrics/subscriptionStats"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
-import {endSpan, endTransaction, startTransaction} from "../apm"
+import {endSpan, endTransaction, startSpan, startTransaction} from "../apm"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
+const kafkaDelaySpanName = "kafka-delay"
 
 const getPipelineRetryConfig = () => ({
   retryDelayCap: parseInt(env.VI_COLLECTOR_PIPELINE_RETRY_DELAY_CAP_MS, 10) || 30000,
@@ -57,11 +58,11 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
 
   let messageCounter = 0
 
-  const apmSamplingFrequency = parseInt("VI_APM_SAMPLING_FREQUENCY" || "1", 10) // once every so many messages, create a transaction
+  const apmSamplingFrequency = parseInt(process.env.VI_APM_SAMPLING_FREQUENCY || "0", 10) // once every so many messages, create a transaction
 
   const shouldSampleMessage = () => {
     messageCounter += 1
-    if (messageCounter % apmSamplingFrequency === 0) {
+    if ((messageCounter % apmSamplingFrequency === 0 || messageCounter === 1) && apmSamplingFrequency !== 0) {
       return true
     }
     return false
@@ -75,20 +76,29 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
           startTransaction(message)
         }
       }),
-      // start span of parsing for message id
+      tap(message => {
+        startSpan({message, spanName: "parsing", spanType: "parsing"})
+      }),
       mergeMap(event => from(parseMessage(event))),
-      // end span of parsing for message id
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
+      tap(event => {
+        if (event.tag === ACK_MSG_TAG) {
+          endSpan({message: event.message, spanName: "parsing"})
+        }
+      }),
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
+      tap(event => {
+        if (event.tag === ACK_MSG_TAG) {
+          startSpan({message: event.message, spanName: kafkaDelaySpanName, spanType: kafkaDelaySpanName})
+        }
+      }),
       // start span of sending to kafka
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
-          // end span of sending to kafka
-          // end transaction for message id
-          endSpan({message: event.message, spanName: "collector-to-kafka-delay"})
+          endSpan({message: event.message, spanName: kafkaDelaySpanName})
           endTransaction(event.message)
           acknowledgeMessage(event.message)
         }

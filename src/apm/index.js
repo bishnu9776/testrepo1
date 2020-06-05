@@ -33,7 +33,7 @@ export const endTransaction = message => {
   }
 }
 
-export const startSpan = ({message, spanName, spanType, labels}) => {
+export const startSpan = ({message, spanName, spanType, labels = {}}) => {
   const parentTransaction = messageIdTransactionMap[message.id]
 
   if (parentTransaction) {
@@ -46,16 +46,19 @@ export const startSpan = ({message, spanName, spanType, labels}) => {
     span.setLabel("messageId", message.id)
 
     Object.keys(labels).forEach(label => {
-      span.setLabel("label", labels[label])
+      span.setLabel(label, labels[label])
     })
 
     messageIdSpansMap[`${message.id}.${spanName}`] = span
   }
 }
 
-export const endSpan = ({message, spanName}) => {
+export const endSpan = ({message, spanName, labels = {}}) => {
   const span = messageIdSpansMap[`${message.id}.${spanName}`]
   if (span) {
+    Object.keys(labels).forEach(label => {
+      span.setLabel("label", labels[label])
+    })
     span.end(Date.now())
   }
 }

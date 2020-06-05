@@ -6,9 +6,7 @@ const {env} = process
 
 const unzip = message => {
   return new Promise((resolve, reject) => {
-    // start span for zlib decompression
     zlib.unzip(message, (error, data) => {
-      // end span for zlib decompression
       if (error) {
         reject(error)
       }
@@ -46,7 +44,6 @@ export const getDecompresserFn = ({log}) => {
   }
 
   return async message => {
-    // start span for decompression for message id
     const {data, attributes} = message
     const isLegacyMessage = !attributes.subFolder.includes("v1")
     if (isLegacyMessage) {
