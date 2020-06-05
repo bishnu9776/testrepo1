@@ -11,6 +11,7 @@ import {collectSubscriptionStats} from "../metrics/subscriptionStats"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
+import {endSpan, endTransaction, startTransaction} from "../apm"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -54,17 +55,41 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
   const parseMessage = getMessageParser({log, metricRegistry, probe})
   const formatEvent = getEventFormatter()
 
+  let messageCounter = 0
+
+  const apmSamplingFrequency = parseInt("VI_APM_SAMPLING_FREQUENCY" || "1", 10) // once every so many messages, create a transaction
+
+  const shouldSampleMessage = () => {
+    messageCounter += 1
+    if (messageCounter % apmSamplingFrequency === 0) {
+      return true
+    }
+    return false
+  }
+
   return stream
     .pipe(
       timeout(eventTimeout),
+      tap(message => {
+        if (shouldSampleMessage()) {
+          startTransaction(message)
+        }
+      }),
+      // start span of parsing for message id
       mergeMap(event => from(parseMessage(event))),
+      // end span of parsing for message id
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
+      // start span of sending to kafka
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
+          // end span of sending to kafka
+          // end transaction for message id
+          endSpan({message: event.message, spanName: "collector-to-kafka-delay"})
+          endTransaction(event.message)
           acknowledgeMessage(event.message)
         }
       }),

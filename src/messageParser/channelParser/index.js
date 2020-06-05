@@ -30,14 +30,19 @@ export const getCreateDataItemFromMessageFn = () => {
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
 
   return message => {
+    // start span for message id
+    // can log how many data items a single message was split to here as context
     const {channel} = message.attributes
     if (channel.match(/^can/)) {
+      // end span for message id
       return channelParserConfig.can(message)
     }
     if (channelNotInParserConfig(channel)) {
+      // end span for message id
       log.warn({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
       return []
     }
+    // end span for message id
     return channelParserConfig[channel](message)
   }
 }

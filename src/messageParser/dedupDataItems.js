@@ -4,7 +4,10 @@ const valueKeys = ["value", "value_event", "value_sample", "value_location"]
 
 export const dedupDataItems = metricRegistry => {
   return dataItems => {
+    // start span for dedup message id
     const groupedDIs = groupBy(e => `${e.data_item_name}`, dataItems)
+
+    // end span for dedup message id
     return flatten(
       Object.values(groupedDIs).map(groupedDIValues => {
         const {channel} = groupedDIValues[0]
