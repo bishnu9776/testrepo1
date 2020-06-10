@@ -31,7 +31,8 @@
     "eslint-fix": "eslint ./src ./test --fix",
     "tc:eslint": "tc-eslint",
     "tc:coverage": "tc-coverage-mocha",
-    "tc:build": "tc-build"
+    "tc:build": "tc-build",
+    "test-local": "mocha --recursive test"
   },
   "dependencies": {
     "@google-cloud/monitoring": "2.0.0",
@@ -56,7 +57,8 @@
     "mocha": "7.2.0",
     "sinon": "9.0.2",
     "sinon-chai": "3.5.0",
-    "snake-case": "3.0.3"
+    "snake-case": "3.0.3",
+    "dotenv": "8.2.0"
   },
   "mocha": {
     "require": [
