@@ -76,7 +76,7 @@ export const getGRIDCANDecoder = () => {
   const decoder = populateDecoderConfig(decoderConfig)
 
   return message => {
-    const {attributes, data} = message
+    const {data} = message
 
     return data.map(d => {
       const {can_id: canId} = d.canRaw
