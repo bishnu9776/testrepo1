@@ -1,0 +1,82 @@
+{
+    "Pod":{
+      "LPCv1":{
+        "0x05e":[
+          {
+            "params":"POD_IrStatus",
+            "HRN":"POD Infrared/Dock Status",
+            "condition":"(bytes[0] == 0x07)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_DpmStatus",
+            "HRN":"POD DPM Relay Status",
+            "condition":"(bytes[0] == 0x08)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_AtherStatus",
+            "HRN":"POD S340 AC Relay",
+            "condition":"(bytes[0] == 0x09)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_FastStatus",
+            "HRN":"POD DC Relay Status",
+            "condition":"(bytes[0] == 0x0a)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_UserLedColour",
+            "HRN":"POD User LED Status",
+            "condition":"(bytes[0] == 0x0b)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_VehicleHeartbeat",
+            "HRN":"POD Vehicle Heartbeat",
+            "condition":"(bytes[0] == 0x24)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_ExternalTemp",
+            "HRN":"POD External Temp",
+            "condition":"(bytes[0] == 0x80)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_ExtHumidity",
+            "HRN":"POD External Humidity",
+            "condition":"(bytes[0] == 0x81)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_InternalTemp",
+            "HRN":"POD Internal / On board temp",
+            "condition":"(bytes[0] == 0x82)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+          },
+          {
+            "params":"POD_AC_Voltage",
+            "HRN":"POD AC Voltage",
+            "condition":"(bytes[0] == 0x91)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+          },
+          {
+            "params":"POD_AC_Current",
+            "HRN":"POD AC Current",
+            "condition":"(bytes[0] == 0x92)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+          },
+          {
+            "params":"POD_DC_Voltage",
+            "HRN":"POD DC Voltage",
+            "condition":"(bytes[0] == 0x93)",
+            "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+          }
+        ]
+      }
+    }
+  }
+  
+  

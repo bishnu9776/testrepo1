@@ -1,5 +1,7 @@
+const attributes = {channel: "can", db_id: "DB_001f7b100e91", version: "v1"}
+
 export const CAN = {
-  attributes: {channel: "can", bike_id: "DB_001f7b100e91", version: "v1"},
+  attributes,
   data: [
     {
       parsed: [
