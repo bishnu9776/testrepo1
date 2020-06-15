@@ -1,4 +1,4 @@
-export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
   return {
@@ -8,6 +8,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     timestamp,
     value,
     channel,
-    sequence
+    sequence,
+    ...(canId && {can_id: canId})
   }
 }
