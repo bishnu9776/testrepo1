@@ -134,7 +134,7 @@ describe("CAN decoder", () => {
 
         const parsedData = getCANDecoder(metricRegistry)(message)
         expect(parsedData).to.eql([[]])
-        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, "can_344")
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, "can/344")
       })
     })
   })

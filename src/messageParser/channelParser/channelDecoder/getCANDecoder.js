@@ -105,7 +105,7 @@ export const getCANDecoder = metricRegistry => {
             {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}${canId}`}},
             "Event does not map to one decoder for its CAN id"
           )
-          metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, `${attributes.channel}_${canId}`)
+          metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, `${attributes.channel}/${canId}`)
           return []
         }
         const decoderForCANId = decoderForDevice[head(decoderKeyForCANId)]
