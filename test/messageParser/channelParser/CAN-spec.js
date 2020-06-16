@@ -42,7 +42,7 @@ describe("Parses CAN", () => {
     })
 
     it("parses given message", () => {
-      const getParsedMessage = getParsedMessageFn("can_bms/e55", "BEAGLE-ESS-4", "344")
+      const getParsedMessage = getParsedMessageFn("can_bms/e55", "BEAGLE-ESS-4", "0x158")
 
       const parsedData = [
         getParsedMessage("BMS_2_Aux_Temp1-v1", "BMS_2_Aux_Temp1", 29.57, 1, 1),

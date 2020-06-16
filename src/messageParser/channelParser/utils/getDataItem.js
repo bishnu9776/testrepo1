@@ -1,3 +1,9 @@
+const formatCanId = canId => {
+  const hexRegex = new RegExp("^0x")
+  const isHex = hexRegex.test(canId)
+  return isHex ? canId : `0x${Number(canId).toString(16)}`
+}
+
 export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
@@ -9,6 +15,6 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     value,
     channel,
     sequence,
-    ...(canId && {can_id: canId})
+    ...(canId && {can_id: formatCanId(canId)})
   }
 }
