@@ -3,7 +3,7 @@ import {log} from "../../../logger"
 import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../utils/loadJSONFile"
 import {convertLongToBytes} from "./utils/convertLongToBytes"
-
+import {convertToHexCanId} from "./utils/convertToHexCanId"
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
@@ -107,7 +107,7 @@ export const getCANDecoder = metricRegistry => {
           )
           metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
             channel: attributes.channel,
-            can_id: `0x${Number(canId).toString(16)}`
+            can_id: convertToHexCanId(canId)
           })
           return []
         }
@@ -123,7 +123,7 @@ export const getCANDecoder = metricRegistry => {
         )
         metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
           channel: attributes.channel,
-          can_id: `0x${Number(canId).toString(16)}`
+          can_id: convertToHexCanId(canId)
         })
         return []
       }

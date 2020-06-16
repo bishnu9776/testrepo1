@@ -105,7 +105,7 @@ describe("CAN decoder", () => {
         expect(parsedData).to.eql([[]])
         expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
           channel: "can_motor/MAHLEV2",
-          can_id: "0x1"
+          can_id: "0x001"
         })
       })
     })
