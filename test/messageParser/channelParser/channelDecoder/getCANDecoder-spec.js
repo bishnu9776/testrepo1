@@ -49,7 +49,10 @@ describe("CAN decoder", () => {
         }
         const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentComponent)
         expect(parsedData).to.eql([[]])
-        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, "can_foo/256")
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_foo",
+          can_id: "0x100"
+        })
       })
 
       it("version for the component", () => {
@@ -73,12 +76,10 @@ describe("CAN decoder", () => {
         }
         const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentVersion)
         expect(parsedData).to.eql([[]])
-        expect(metricRegistry.updateStat).to.have.been.calledWith(
-          "Counter",
-          "can_message_ignored",
-          1,
-          "can_motor/foo/256"
-        )
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_motor/foo",
+          can_id: "0x100"
+        })
       })
 
       it("canId for the component/version", () => {
@@ -102,12 +103,10 @@ describe("CAN decoder", () => {
         }
         const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentCanId)
         expect(parsedData).to.eql([[]])
-        expect(metricRegistry.updateStat).to.have.been.calledWith(
-          "Counter",
-          "can_message_ignored",
-          1,
-          "can_motor/MAHLEV2/1"
-        )
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_motor/MAHLEV2",
+          can_id: "0x1"
+        })
       })
     })
   })
@@ -134,7 +133,10 @@ describe("CAN decoder", () => {
 
         const parsedData = getCANDecoder(metricRegistry)(message)
         expect(parsedData).to.eql([[]])
-        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, "can/344")
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, {
+          can_id: "0x158",
+          channel: "can"
+        })
       })
     })
   })
