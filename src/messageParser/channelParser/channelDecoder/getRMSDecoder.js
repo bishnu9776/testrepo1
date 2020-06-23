@@ -3,12 +3,7 @@ import {loadFile} from "../../../utils/loadFile"
 import {populateDecoderConfig} from "./utils/populateDecoderConfig"
 
 const decodeTripFlag = (data, decoder) => {
-  const {seq_num: seqNum, timestamp, trip_flag: tripFlag} = data
-  const decodedData = {
-    seq_num: seqNum,
-    timestamp,
-    ...data
-  }
+  const {trip_flag: tripFlag, ...decodedData} = data
 
   const dataItems = keys(decoder)
   dataItems.forEach(dataItem => {

@@ -43,7 +43,6 @@ describe("RMS decoder", () => {
       phase1_imax: 0.0,
       phase2_imax: 0.0,
       phase3_imax: 0.0,
-      trip_flag: 144,
       neatural_current: 0.07,
       reset_cause: 2,
       health: 8,
