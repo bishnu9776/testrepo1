@@ -1,9 +1,9 @@
-import {convertToHexCanId} from "../channelDecoder/utils/convertToHexCanId"
+import {convertIntCANIdToHex} from "../channelDecoder/utils/convertIntCANIdToHex"
 
 const getHexCanId = canId => {
   const hexRegex = new RegExp("^0x")
   const isHex = hexRegex.test(canId)
-  return isHex ? canId : convertToHexCanId(canId)
+  return isHex ? canId : convertIntCANIdToHex(canId)
 }
 
 export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
