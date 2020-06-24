@@ -2,7 +2,7 @@ import {flatten} from "ramda"
 import {nonDataItemKeys} from "../../../constants"
 import {getDataItem} from "./getDataItem"
 
-export const parseMessage = (message, attributes) => {
+export const parseMessage = (message, attributes, deployProfile) => {
   return flatten(
     message.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
@@ -14,7 +14,8 @@ export const parseMessage = (message, attributes) => {
             attributes,
             dataItemName,
             value: event[dataItemName],
-            sequence: event.seq_num
+            sequence: event.seq_num,
+            deployProfile
           })
         })
         .filter(e => !!e)

@@ -1,12 +1,17 @@
 import {flatten, pipe} from "ramda"
 import {getDecompresserFn} from "./decompressMessage"
-import {getCreateDataItemFromMessageFn} from "./channelParser"
+import {getVehicleMessageParserFn} from "./channelParser/vehicleChannelParser"
+import {getGridMessageParserFn} from "./channelParser/gridChannelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
 
 const {env} = process
+
+const getMessageParserFromEnv = () => {
+  return env.VI_DEPLOY_PROFILE === "grid" ? getGridMessageParserFn() : getVehicleMessageParserFn()
+}
 
 const getDedupFn = metricRegistry => {
   const shouldDedupData = JSON.parse(env.VI_SHOULD_DEDUP_DATA || "true")
@@ -46,12 +51,9 @@ const getFormattedAttributes = attributes => {
 export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  const createDataItemsFromMessage = getMessageParserFromEnv()
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
-  const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
-  const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
-  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
-  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
+  const {channelsToDrop, shouldFilterDevice, deviceFilterRegex, isPreBigSinkInput} = readEnvFlags()
 
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
   const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
@@ -83,4 +85,12 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
       return [{message, tag: ACK_MSG_TAG}]
     }
   }
+}
+
+function readEnvFlags() {
+  const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
+  const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
+  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
+  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
+  return {channelsToDrop, shouldFilterDevice, deviceFilterRegex, isPreBigSinkInput}
 }

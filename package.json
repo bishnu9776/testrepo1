@@ -52,13 +52,13 @@
     "chai": "4.2.0",
     "choma": "1.2.1",
     "csvtojson": "2.0.10",
+    "dotenv": "8.2.0",
     "eslint-config-vi-node": "1.2.219",
     "husky": "4.2.5",
     "mocha": "8.0.1",
     "sinon": "9.0.2",
     "sinon-chai": "3.5.0",
-    "snake-case": "3.0.3",
-    "dotenv": "8.2.0"
+    "snake-case": "3.0.3"
   },
   "mocha": {
     "require": [

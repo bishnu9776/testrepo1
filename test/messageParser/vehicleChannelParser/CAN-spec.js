@@ -17,7 +17,7 @@ describe("Parses CAN", () => {
     })
 
     it("parses given messages without decoding", () => {
-      const getParsedMessage = getParsedMessageFn("can", "s_2404", "0x100")
+      const getParsedMessage = getParsedMessageFn("can", "s_2404")
       const createDataItemsFromMessage = getVehicleMessageParserFn()
       const parsedMessage = [
         getParsedMessage("MCU_SOC-v1", "MCU_SOC", 0, 1, 0),
@@ -41,7 +41,7 @@ describe("Parses CAN", () => {
     })
 
     it("parses given message", () => {
-      const getParsedMessage = getParsedMessageFn("can_bms/e55", "BEAGLE-ESS-4", "0x158")
+      const getParsedMessage = getParsedMessageFn("can_bms/e55", "BEAGLE-ESS-4")
 
       const parsedData = [
         getParsedMessage("BMS_2_Aux_Temp1-v1", "BMS_2_Aux_Temp1", 29.57, 1, 1),
@@ -57,7 +57,6 @@ describe("Parses CAN", () => {
 
     it("when config paths are not given, should return empty array", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
-
       const createDataItemsFromMessage = getVehicleMessageParserFn()
       expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([])
     })
