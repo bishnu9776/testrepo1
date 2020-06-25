@@ -1,19 +1,25 @@
 export const BIKEINFO = {
-  attributes: {
-    version: "v1",
-    channel: "bike_info",
-    bike_id: "s_248"
-  },
   data: [
     {
+      timestamp: 1,
       seq_num: 1,
-      session_id: 2215,
-      start_timestamp: "1.57044723436e+09",
-      end_timestamp: "",
-      vehicle_status: "Riding",
-      isvisible: -1,
-      timestamp: 1.57044723436e9,
-      bike_id: "s_194"
+      release_name: "tintin2-release-24-Jul-2019-559857",
+      bms_version: "6_2_0",
+      charger_version: "v1",
+      sim_ccid: "8991000900036378837",
+      sim_cimi: "404450950629614",
+      system_boot_time: "         system boot  Feb 24 14:27",
+      mender_artifact_ver: "s340-narita-img-4.0.0.559857-dev",
+      mcu_version: "4a234895",
+      global_seq: "6666169",
+      vin: "",
+      bike_type: "Gen1.5_450",
+      motor_version: "3_6_8"
     }
-  ]
+  ],
+  attributes: {
+    channel: "bike_info",
+    version: "v1",
+    bike_id: "s_100"
+  }
 }
