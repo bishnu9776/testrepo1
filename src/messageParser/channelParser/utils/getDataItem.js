@@ -1,4 +1,12 @@
-export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence}) => {
+import {convertIntCANIdToHex} from "../channelDecoder/utils/convertIntCANIdToHex"
+
+const getHexCanId = canId => {
+  const hexRegex = new RegExp("^0x")
+  const isHex = hexRegex.test(canId)
+  return isHex ? canId : convertIntCANIdToHex(canId)
+}
+
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
   return {
@@ -8,6 +16,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     timestamp,
     value,
     channel,
-    sequence
+    sequence,
+    ...(canId && {can_id: getHexCanId(canId)})
   }
 }

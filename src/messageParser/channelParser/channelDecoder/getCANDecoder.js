@@ -3,7 +3,7 @@ import {log} from "../../../logger"
 import {isNilOrEmpty} from "../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../utils/loadJSONFile"
 import {convertLongToBytes} from "./utils/convertLongToBytes"
-
+import {convertIntCANIdToHex} from "./utils/convertIntCANIdToHex"
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
@@ -78,7 +78,7 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
   return legacyDecoder
 }
 
-export const getCANDecoder = () => {
+export const getCANDecoder = metricRegistry => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
   const legacyComponentVersionConfigPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
@@ -102,9 +102,13 @@ export const getCANDecoder = () => {
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
           log.error(
-            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderKeyForCANId}},
+            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}${canId}`}},
             "Event does not map to one decoder for its CAN id"
           )
+          metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
+            channel: attributes.channel,
+            can_id: convertIntCANIdToHex(canId)
+          })
           return []
         }
         const decoderForCANId = decoderForDevice[head(decoderKeyForCANId)]
@@ -117,6 +121,10 @@ export const getCANDecoder = () => {
           {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderForCANId}},
           "Event does not map to a decoder for its CAN id"
         )
+        metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
+          channel: attributes.channel,
+          can_id: convertIntCANIdToHex(canId)
+        })
         return []
       }
       return decodeCANRaw(d.canRaw, decoderForCANId)

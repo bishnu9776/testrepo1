@@ -1,6 +1,7 @@
 import {getCANDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getCANDecoder"
 import {CAN_MCU, CAN_BMS, LEGACY_CAN_MCU, LEGACY_CAN_BMS} from "../../../fixtures/bikeChannels/CAN"
 import {clearEnv} from "../../../utils"
+import {metricRegistry} from "../../../stubs/metricRegistry"
 
 describe("CAN decoder", () => {
   const {env} = process
@@ -46,8 +47,12 @@ describe("CAN decoder", () => {
             }
           ]
         }
-        const parsedData = getCANDecoder()(dataWithAbsentComponent)
+        const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentComponent)
         expect(parsedData).to.eql([[]])
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_foo",
+          can_id: "0x100"
+        })
       })
 
       it("version for the component", () => {
@@ -69,8 +74,12 @@ describe("CAN decoder", () => {
             }
           ]
         }
-        const parsedData = getCANDecoder()(dataWithAbsentVersion)
+        const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentVersion)
         expect(parsedData).to.eql([[]])
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_motor/foo",
+          can_id: "0x100"
+        })
       })
 
       it("canId for the component/version", () => {
@@ -92,8 +101,12 @@ describe("CAN decoder", () => {
             }
           ]
         }
-        const parsedData = getCANDecoder()(dataWithAbsentCanId)
+        const parsedData = getCANDecoder(metricRegistry)(dataWithAbsentCanId)
         expect(parsedData).to.eql([[]])
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_message_ignored", 1, {
+          channel: "can_motor/MAHLEV2",
+          can_id: "0x001"
+        })
       })
     })
   })
@@ -118,8 +131,12 @@ describe("CAN decoder", () => {
           data: LEGACY_CAN_BMS.data
         }
 
-        const parsedData = getCANDecoder()(message)
+        const parsedData = getCANDecoder(metricRegistry)(message)
         expect(parsedData).to.eql([[]])
+        expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, {
+          can_id: "0x158",
+          channel: "can"
+        })
       })
     })
   })

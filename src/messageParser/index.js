@@ -46,7 +46,7 @@ const getFormattedAttributes = attributes => {
 export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
