@@ -5,7 +5,9 @@ const {env} = process
 
 export const dedupDataItems = metricRegistry => {
   const nonDedupDataItems = env.VI_NON_DEDUP_DATAITEM_LIST ? env.VI_NON_DEDUP_DATAITEM_LIST.split(",") : []
-  const isNonDedupDataitem = e => nonDedupDataItems.includes(e.data_item_name)
+  const shouldNotDedupDataItem = e => nonDedupDataItems.includes(e.data_item_name)
+  const shouldDedupDataItem = (currentEvent, previousEvent, valueKey) =>
+    !shouldNotDedupDataItem(currentEvent) && equals(currentEvent[valueKey], previousEvent[valueKey])
 
   return dataItems => {
     const groupedDIs = groupBy(e => `${e.data_item_name}`, dataItems)
@@ -22,7 +24,7 @@ export const dedupDataItems = metricRegistry => {
 
           const previousEvent = acc[acc.length - 1]
           const valueKey = intersection(Object.keys(currentEvent), valueKeys)[0]
-          if (!isNonDedupDataitem(currentEvent) && equals(currentEvent[valueKey], previousEvent[valueKey])) {
+          if (shouldDedupDataItem(currentEvent, previousEvent, valueKey)) {
             return acc
           }
           acc.push(currentEvent)
