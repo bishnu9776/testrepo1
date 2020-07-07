@@ -35,7 +35,7 @@ describe("Helpers spec", () => {
     })
 
     it("should not dedup selected dataitems", () => {
-      process.env.VI_NON_DEDUP_DATAITEM_LIST = "a,c"
+      process.env.VI_DATAITEM_LIST_TO_NOT_DEDUP = "a,c"
       const dedupFn = dedupDataItems(metricRegistry)
       const dataItems = [
         getDataItems({timestamp: 1, value: 1, dataItemName: "a"}),

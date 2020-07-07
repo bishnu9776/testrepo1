@@ -4,7 +4,7 @@ const valueKeys = ["value", "value_event", "value_sample", "value_location"]
 const {env} = process
 
 export const dedupDataItems = metricRegistry => {
-  const nonDedupDataItems = env.VI_NON_DEDUP_DATAITEM_LIST ? env.VI_NON_DEDUP_DATAITEM_LIST.split(",") : []
+  const nonDedupDataItems = env.VI_DATAITEM_LIST_TO_NOT_DEDUP ? env.VI_DATAITEM_LIST_TO_NOT_DEDUP.split(",") : []
   const shouldNotDedupDataItem = e => nonDedupDataItems.includes(e.data_item_name)
   const shouldDedupDataItem = (currentEvent, previousEvent, valueKey) =>
     !shouldNotDedupDataItem(currentEvent) && equals(currentEvent[valueKey], previousEvent[valueKey])
