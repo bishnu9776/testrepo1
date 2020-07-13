@@ -12,10 +12,10 @@ import {parseBIKEINFO} from "./BIKEINFO"
 import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 
-export const getVehicleMessageParserFn = () => {
+export const getVehicleMessageParserFn = metricRegistry => {
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
-    can: parseCAN(),
+    can: parseCAN(metricRegistry),
     mcu: parseMCU(),
     heman: parseHEMAN,
     imu: parseIMU,

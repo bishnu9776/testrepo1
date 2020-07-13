@@ -1,8 +1,14 @@
 import {ascend, equals, flatten, groupBy, intersection, prop, sortWith} from "ramda"
 
 const valueKeys = ["value", "value_event", "value_sample", "value_location"]
+const {env} = process
 
 export const dedupDataItems = metricRegistry => {
+  const nonDedupDataItems = env.VI_DATAITEM_LIST_TO_NOT_DEDUP ? env.VI_DATAITEM_LIST_TO_NOT_DEDUP.split(",") : []
+  const shouldNotDedupDataItem = e => nonDedupDataItems.includes(e.data_item_name)
+  const shouldDedupDataItem = (currentEvent, previousEvent, valueKey) =>
+    !shouldNotDedupDataItem(currentEvent) && equals(currentEvent[valueKey], previousEvent[valueKey])
+
   return dataItems => {
     const groupedDIs = groupBy(e => `${e.data_item_name}`, dataItems)
     return flatten(
@@ -18,7 +24,7 @@ export const dedupDataItems = metricRegistry => {
 
           const previousEvent = acc[acc.length - 1]
           const valueKey = intersection(Object.keys(currentEvent), valueKeys)[0]
-          if (equals(currentEvent[valueKey], previousEvent[valueKey])) {
+          if (shouldDedupDataItem(currentEvent, previousEvent, valueKey)) {
             return acc
           }
           acc.push(currentEvent)

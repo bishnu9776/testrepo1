@@ -3,6 +3,7 @@ import {CAN, CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
 import {getParsedMessageFn} from "../../utils/getParsedMessage"
+import {metricRegistry} from "../../stubs/metricRegistry"
 
 describe("Parses CAN", () => {
   const {env} = process
@@ -51,14 +52,12 @@ describe("Parses CAN", () => {
       ]
       const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: [{canRaw: CAN_BMS.data[0].canRaw}]}
       const createDataItemsFromMessage = getVehicleMessageParserFn()
-
       expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
 
     it("when config paths are not given, should return empty array", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
-
-      const createDataItemsFromMessage = getVehicleMessageParserFn()
+      const createDataItemsFromMessage = getVehicleMessageParserFn(metricRegistry)
       expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([])
     })
   })

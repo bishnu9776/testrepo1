@@ -2,10 +2,10 @@ import {flatten} from "ramda"
 import {getDataItem} from "../utils/getDataItem"
 import {getCANDecoder} from "./channelDecoder/getCANDecoder"
 
-export const parseCAN = () => {
+export const parseCAN = metricRegistry => {
   const {env} = process
   const shouldDecodeMessage = JSON.parse(env.VI_SHOULD_DECODE_MESSAGE || "false")
-  const decodeCANMessage = shouldDecodeMessage ? getCANDecoder() : null
+  const decodeCANMessage = shouldDecodeMessage ? getCANDecoder(metricRegistry) : null
 
   return message => {
     let decodedMessage = []
@@ -23,7 +23,8 @@ export const parseCAN = () => {
         attributes,
         timestamp,
         value: e.value,
-        sequence: e.seq_num
+        sequence: e.seq_num,
+        canId: e.can_id
       })
     })
   }
