@@ -138,6 +138,16 @@ describe("Parse GCP message", () => {
       expect(output[20].tag).to.eql(ACK_MSG_TAG)
     })
 
+    it("formats attributes for v1 data and parses correctly for LOG ", async () => {
+      env.VI_SHOULD_DECODE_MESSAGE = true
+      const messageParser = getMessageParser({log, metricRegistry, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const output = await messageParser(message)
+      expect(output.length).to.eql(13)
+      expect(output[12].tag).to.eql(ACK_MSG_TAG)
+    })
+
     describe("should ack message without decompressing or parsing", () => {
       it("when message contains channel specified to drop", async () => {
         env.VI_CHANNELS_TO_DROP = "gps_tpv"
