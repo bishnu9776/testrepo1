@@ -19,7 +19,7 @@ const getDedupFn = metricRegistry => {
 const handleParseFailures = (message, error, metricRegistry, log) => {
   const {data, attributes} = message
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-  log.error(
+  log.warn(
     {ctx: {data: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(error)},
     "Could not parse gcp message"
   )
@@ -65,21 +65,14 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         return [{message, tag: ACK_MSG_TAG}]
       }
 
-      try {
-        decompressedMessage = await maybeDecompressMessage(message)
-      } catch (error) {
-        if (isNil(decompressedMessage)) {
-          metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-          log.warn(
-            {
-              ctx: {data: JSON.stringify(message.data), attributes: JSON.stringify(attributes, null, 2)},
-              error: errorFormatter(error)
-            },
-            "Could not deserialise message"
-          )
-          return [{message, tag: ACK_MSG_TAG}]
-        }
+      decompressedMessage = await maybeDecompressMessage(message)
+
+      // This is never called in case of and error. It goes to catch
+      if (isNil(decompressedMessage)) {
+        metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
+        return [{message, tag: ACK_MSG_TAG}]
       }
+
       const dataItems = pipe(
         createDataItemsFromMessage,
         flatten,

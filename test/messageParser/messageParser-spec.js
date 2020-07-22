@@ -154,7 +154,7 @@ describe("Parse GCP message", () => {
       const output = await messageParser(message)
       expect(output.length).to.eql(1)
       expect(output[0].tag).to.eql(ACK_MSG_TAG)
-      expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
+      expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "parse_failures", 1, {})
     })
 
     describe("should ack message without decompressing or parsing", () => {
