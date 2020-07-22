@@ -6,93 +6,18 @@ export const LOGS = {
   },
   data: [
     {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321833.237,
+      message: "log message1",
+      timestamp: 0,
       _comm: "vcu-s340-app"
     },
     {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321838.238,
+      message: "log message2",
+      timestamp: 1,
       _comm: "vcu-s340-app"
     },
     {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321839.674,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321843.239,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321848.239,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321849.914,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321853.24,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321858.241,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321860.154,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321863.241,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321868.242,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321870.394,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321873.242,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321878.243,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321880.634,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321883.244,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "backlight file open failedopen /sys/class/backlight/backlight.16/brightness: no such file or directory",
-      timestamp: 1595321888.245,
-      _comm: "vcu-s340-app"
-    },
-    {
-      message: "State transistion failed cmd:0 Err:Timeout while reading packet in readNBytes EOFState:0",
-      timestamp: 1595321890.875,
+      message: "log message3",
+      timestamp: 2,
       _comm: "vcu-s340-app"
     }
   ]
