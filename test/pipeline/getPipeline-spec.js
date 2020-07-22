@@ -38,8 +38,6 @@ describe("Pipeline spec", () => {
   })
 
   afterEach(() => {
-    // gcpSubscriberStub.restore()
-    // kafkaProducerStub.restore()
     clearEnv()
     clearStub()
   })
