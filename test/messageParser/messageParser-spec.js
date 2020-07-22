@@ -138,7 +138,9 @@ describe("Parse GCP message", () => {
       expect(output[20].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("formats attributes for v1 data and parses correctly for LOG ", async () => {
+    // TODO: add one test for failing parsing message for LOGS.
+
+    it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
       env.VI_SHOULD_DECODE_MESSAGE = true
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
