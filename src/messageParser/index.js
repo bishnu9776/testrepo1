@@ -1,4 +1,4 @@
-import {flatten, pipe} from "ramda"
+import {flatten, pipe, isNil} from "ramda"
 import {getDecompresserFn} from "./decompressMessage"
 import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
@@ -65,11 +65,20 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         return [{message, tag: ACK_MSG_TAG}]
       }
 
-      decompressedMessage = await maybeDecompressMessage(message)
-
-      if (!decompressedMessage) {
-        metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-        return [{message, tag: ACK_MSG_TAG}]
+      try {
+        decompressedMessage = await maybeDecompressMessage(message)
+      } catch (error) {
+        if (isNil(decompressedMessage)) {
+          metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
+          log.warn(
+            {
+              ctx: {data: JSON.stringify(message.data), attributes: JSON.stringify(attributes, null, 2)},
+              error: errorFormatter(error)
+            },
+            "Could not deserialise message"
+          )
+          return [{message, tag: ACK_MSG_TAG}]
+        }
       }
       const dataItems = pipe(
         createDataItemsFromMessage,

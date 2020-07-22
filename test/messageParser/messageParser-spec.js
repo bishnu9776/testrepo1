@@ -72,18 +72,19 @@ describe("Parse GCP message", () => {
       const output = await messageParser(message)
       expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
     })
-  })
 
-  it("logs error and ack the message if unable to parse", async () => {
-    const messageParser = getMessageParser({log, metricRegistry, probe})
-    const output = await messageParser("foo")
-    expect(output.length).to.eql(1)
-    expect(output[0].tag).to.eql(ACK_MSG_TAG)
+    it("log and ack the message if unable to parse", async () => {
+      const messageParser = getMessageParser({log, metricRegistry, probe})
+      const output = await messageParser("foo")
+      expect(output.length).to.eql(1)
+      expect(output[0].tag).to.eql(ACK_MSG_TAG)
+    })
   })
 
   describe("Pre big sink data", () => {
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
+      env.VI_SHOULD_DECODE_MESSAGE = true
       setChannelDecoderConfigFileEnvs()
     })
 
@@ -129,7 +130,6 @@ describe("Parse GCP message", () => {
     })
 
     it("formats attributes for v1 data and parses correctly for CAN ", async () => {
-      env.VI_SHOULD_DECODE_MESSAGE = true
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
@@ -138,16 +138,23 @@ describe("Parse GCP message", () => {
       expect(output[20].tag).to.eql(ACK_MSG_TAG)
     })
 
-    // TODO: add one test for failing parsing message for LOGS.
-
     it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
-      env.VI_SHOULD_DECODE_MESSAGE = true
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
       expect(output.length).to.eql(13)
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
+    })
+
+    it("it should log and ack the message if unable to parse", async () => {
+      const messageParser = getMessageParser({log, metricRegistry, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const output = await messageParser(message)
+      expect(output.length).to.eql(1)
+      expect(output[0].tag).to.eql(ACK_MSG_TAG)
+      expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
     })
 
     describe("should ack message without decompressing or parsing", () => {
