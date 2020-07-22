@@ -1,9 +1,10 @@
 import {from} from "rxjs"
 import {clearEnv} from "../utils"
 import {getKafkaSender} from "../../src/kafkaProducer"
-import {metricRegistry} from "../stubs/metricRegistry"
-import {log} from "../stubs/logger"
+import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
+import {getMockLog} from "../stubs/logger"
 import {getAckEvent, getMockDataItems} from "../utils/getMockDataItems"
+import {clearStub} from "../stubs/clearStub"
 
 const {env} = process
 
@@ -13,10 +14,20 @@ describe("Kafka producer", () => {
     produce: () => {}
   }
 
+  let appContext
+
+  beforeEach(() => {
+    appContext = {
+      metricRegistry: getMockMetricRegistry(),
+      log: getMockLog()
+    }
+  })
+
   afterEach(() => {
     kafkaProducerStub.flush.restore()
     kafkaProducerStub.produce.restore()
     clearEnv()
+    clearStub()
   })
 
   describe("sends events correctly", () => {
@@ -35,7 +46,7 @@ describe("Kafka producer", () => {
       env.VI_DATAITEM_WHITELIST = "mode"
       env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
 
-      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, metricRegistry, log})
+      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, ...appContext})
 
       const sourceEvents = [
         ...getMockDataItems(1, "device-1", "mode"),
@@ -92,7 +103,10 @@ describe("Kafka producer", () => {
       env.VI_KAFKA_SINK_DATA_TOPIC = "test"
 
       const sourceEvents = getMockDataItems(1, "device-1")
-      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, metricRegistry, log})
+      const sendToKafka = getKafkaSender({
+        kafkaProducer: kafkaProducerStub,
+        ...appContext
+      })
 
       sendToKafka(from(sourceEvents)).subscribe({
         error: error => {

@@ -1,19 +1,23 @@
 import {getCANDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getCANDecoder"
 import {CAN_MCU, CAN_BMS, LEGACY_CAN_MCU, LEGACY_CAN_BMS} from "../../../fixtures/bikeChannels/CAN"
 import {clearEnv} from "../../../utils"
-import {metricRegistry} from "../../../stubs/metricRegistry"
+import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
+import {clearStub} from "../../../stubs/clearStub"
 
 describe("CAN decoder", () => {
   const {env} = process
+  let metricRegistry
 
   beforeEach(() => {
     env.VI_CAN_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/canDecoderConfig.json"
     env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH = "./test/fixtures/configFiles/legacyComponentVersionConfig.json"
     env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
+    metricRegistry = getMockMetricRegistry()
   })
 
   afterEach(() => {
     clearEnv()
+    clearStub()
   })
 
   describe("latest bikes", () => {

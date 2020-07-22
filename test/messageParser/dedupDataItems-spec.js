@@ -1,9 +1,13 @@
 import {dedupDataItems} from "../../src/messageParser/dedupDataItems"
 import {clearEnv} from "../utils"
+import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
+import {clearStub} from "../stubs/clearStub"
 
 describe("Helpers spec", () => {
-  const metricRegistry = sinon.stub({
-    updateStat: () => {}
+  let metricRegistry
+
+  beforeEach(() => {
+    metricRegistry = getMockMetricRegistry()
   })
 
   const getDataItems = ({timestamp, value, dataItemName}) => ({
@@ -14,6 +18,7 @@ describe("Helpers spec", () => {
 
   afterEach(() => {
     clearEnv()
+    clearStub()
   })
 
   describe("dedup data", () => {
