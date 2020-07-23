@@ -3,7 +3,8 @@ import {CAN, CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
 import {getParsedMessageFn} from "../../utils/getParsedMessage"
-import {metricRegistry} from "../../stubs/metricRegistry"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
+import {clearStub} from "../../stubs/clearStub"
 
 describe("Parses CAN", () => {
   const {env} = process
@@ -15,6 +16,7 @@ describe("Parses CAN", () => {
 
     after(() => {
       clearEnv()
+      clearStub()
     })
 
     it("parses given messages without decoding", () => {
@@ -31,14 +33,18 @@ describe("Parses CAN", () => {
   })
 
   describe("should decode message", () => {
+    let metricRegistry
+
     beforeEach(() => {
       env.VI_SHOULD_DECODE_MESSAGE = "true"
       env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
       setChannelDecoderConfigFileEnvs()
+      metricRegistry = getMockMetricRegistry()
     })
 
     after(() => {
       clearEnv()
+      clearStub()
     })
 
     it("parses given message", () => {

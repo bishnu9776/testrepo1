@@ -17,6 +17,11 @@ const getValueKey = ({probeInfo}) => {
     return "value_location"
   }
 
+  // TODO make it generic after the discussion
+  if (probeInfo.category === "LOG") {
+    return "values"
+  }
+
   return "value"
 }
 

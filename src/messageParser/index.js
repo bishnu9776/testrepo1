@@ -1,4 +1,4 @@
-import {flatten, pipe} from "ramda"
+import {flatten, pipe, isNil} from "ramda"
 import {getDecompresserFn} from "./decompressMessage"
 import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
@@ -67,10 +67,11 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       decompressedMessage = await maybeDecompressMessage(message)
 
-      if (!decompressedMessage) {
+      if (isNil(decompressedMessage)) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
         return [{message, tag: ACK_MSG_TAG}]
       }
+
       const dataItems = pipe(
         createDataItemsFromMessage,
         flatten,

@@ -11,6 +11,7 @@ import {parseSESSION} from "./SESSION"
 import {parseBIKEINFO} from "./BIKEINFO"
 import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
+import {parseLOG} from "./LOGS"
 
 export const getCreateDataItemFromMessageFn = metricRegistry => {
   const channelParserConfig = {
@@ -24,7 +25,8 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
     session: parseSESSION,
     bike_info: parseBIKEINFO,
     soh: parseSOH,
-    soh2: parseSOH2
+    soh2: parseSOH2,
+    logs: parseLOG
   }
 
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])

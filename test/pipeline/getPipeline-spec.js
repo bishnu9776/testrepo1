@@ -3,40 +3,43 @@ import * as gcpSubscriber from "../../src/gcpSubscriber/gcpStream"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {CAN} from "../fixtures/bikeChannels/CAN"
 import {getPipeline} from "../../src/pipeline/getPipeline"
-import {log} from "../stubs/logger"
+import {getMockLog} from "../stubs/logger"
 import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {clearEnv} from "../utils"
+import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
+import {clearStub} from "../stubs/clearStub"
 
 const {env} = process
 
 describe("Pipeline spec", () => {
-  let gcpSubscriberStub
-  let kafkaProducerStub
   let probePath
+  let appContext
   const acknowledgeMessageSpy = sinon.spy()
 
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
-
+    appContext = {
+      metricRegistry: getMockMetricRegistry(),
+      log: getMockLog()
+    }
     probePath = `${process.cwd()}/test/fixtures/probe`
-    gcpSubscriberStub = sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
+    sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
       return {
         stream: from([getDecompressedGCPEvent(CAN), "foobar"]),
         acknowledgeMessage: acknowledgeMessageSpy
       }
     })
 
-    kafkaProducerStub = sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
+    sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
     })
   })
 
   afterEach(() => {
-    gcpSubscriberStub.restore()
-    kafkaProducerStub.restore()
     clearEnv()
+    clearStub()
   })
 
   it("valid events flow through pipeline", done => {
@@ -55,12 +58,11 @@ describe("Pipeline spec", () => {
     }
 
     getPipeline({
-      log,
       observer,
       probePath,
       subscriptionConfig: {},
-      metricRegistry: {statsInterval: 0, updateStat: sinon.stub()},
-      kafkaProducer
+      kafkaProducer,
+      ...appContext
     })
   })
 
