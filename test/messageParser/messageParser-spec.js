@@ -150,7 +150,6 @@ describe("Parse GCP message", () => {
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
-      console.log(output)
       expect(output.length).to.eql(13)
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
     })
@@ -162,7 +161,6 @@ describe("Parse GCP message", () => {
       const output = await messageParser(message)
       expect(output.length).to.eql(1)
       expect(output[0].tag).to.eql(ACK_MSG_TAG)
-      expect(log.info).to.have.been.calledOnce
       expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
     })
 
