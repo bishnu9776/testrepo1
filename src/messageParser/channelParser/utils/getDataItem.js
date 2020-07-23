@@ -6,7 +6,7 @@ const getHexCanId = canId => {
   return isHex ? canId : convertIntCANIdToHex(canId)
 }
 
-export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
+export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId, _comm}) => {
   const {version, bike_id: bikeId, channel} = attributes
 
   return {
@@ -17,6 +17,7 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     value,
     channel,
     ...(sequence && {sequence}),
-    ...(canId && {can_id: getHexCanId(canId)})
+    ...(canId && {can_id: getHexCanId(canId)}),
+    ...(_comm && {_comm})
   }
 }

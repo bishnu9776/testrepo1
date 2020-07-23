@@ -150,6 +150,7 @@ describe("Parse GCP message", () => {
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser(message)
+      console.log(output)
       expect(output.length).to.eql(13)
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
     })

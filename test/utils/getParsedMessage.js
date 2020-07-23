@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {mergeDeepLeft} from "ramda"
 import {iso} from "./iso"
 
@@ -6,9 +7,7 @@ export const formatParsedMessage = ({sequence, timestamp, channel, device}) => m
 }
 
 export const getParsedMessageFn = (channel, device, canId) => (
-  // eslint-disable-next-line camelcase
   data_item_id,
-  // eslint-disable-next-line camelcase
   data_item_name,
   value,
   timestamp,

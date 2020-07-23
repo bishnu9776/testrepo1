@@ -17,6 +17,10 @@ const getValueKey = ({probeInfo}) => {
     return "value_location"
   }
 
+  if (probeInfo.category === "LOG") {
+    return "value_log"
+  }
+
   return "value"
 }
 
@@ -25,7 +29,9 @@ export const getMergeProbeInfoFn = probe => {
     const probeInfo = probe[event.data_item_name]
     const valueKey = getValueKey({probeInfo})
     let {value} = event
-    if (valueKey === "value_event" && typeof value !== "string") {
+    if (valueKey === "value_log") {
+      value = {message: value, source: event.source}
+    } else if (valueKey === "value_event" && typeof value !== "string") {
       value = JSON.stringify(event.value)
     }
 
