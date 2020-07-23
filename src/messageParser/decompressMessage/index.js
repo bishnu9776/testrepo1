@@ -1,5 +1,5 @@
 import zlib from "zlib"
-import {getDeserializeAvroFn} from "./getDeserializeAvroFn"
+import {deserializeAvroMessage} from "./deserializeAvroMessage"
 import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
 
 const {env} = process
@@ -27,7 +27,8 @@ const inflate = message => {
   })
 }
 
-const decompressLegacyData = async ({data, attributes, log}) => {
+const decompressLegacyData = async ({message, log}) => {
+  const {data, attributes} = message
   // TODO: Remove this try catch after validating legacy data on staging/production
   // This is only to get the below log message as we haven't yet seen deflate compressed data
   try {
@@ -46,11 +47,7 @@ const decompressLegacyData = async ({data, attributes, log}) => {
 const deserializeAvro = async ({message, log}) => {
   const {data, attributes} = message
   try {
-    const decompressedMessage = await getDeserializeAvroFn(message)
-    if (!decompressedMessage) {
-      return null
-    }
-    return decompressedMessage
+    return await deserializeAvroMessage(message)
   } catch (e) {
     log.info(
       {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
@@ -80,7 +77,7 @@ export const getDecompresserFn = ({log}) => {
     const {attributes} = message
     const isLegacyMessage = !attributes.subFolder.includes("v1")
     if (isLegacyMessage) {
-      return decompressLegacyData({...message, log})
+      return decompressLegacyData({message, log})
     }
     return deserializeAvro({message, log})
   }

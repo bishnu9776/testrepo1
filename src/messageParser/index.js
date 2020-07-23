@@ -19,7 +19,7 @@ const getDedupFn = metricRegistry => {
 const handleParseFailures = (message, error, metricRegistry, log) => {
   const {data, attributes} = message
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-  log.warn(
+  log.error(
     {ctx: {data: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(error)},
     "Could not parse gcp message"
   )

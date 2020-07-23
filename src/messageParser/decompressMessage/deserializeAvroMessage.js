@@ -24,7 +24,7 @@ const longType = avro.types.LongType.__with({
   compare: (n1, n2) => n1.compare(n2)
 })
 
-export const getDeserializeAvroFn = message => {
+export const deserializeAvroMessage = message => {
   return new Promise((resolve, reject) => {
     const output = []
 
