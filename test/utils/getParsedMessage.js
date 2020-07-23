@@ -11,15 +11,15 @@ export const getParsedMessageFn = (channel, device, canId) => (
   // eslint-disable-next-line camelcase
   data_item_name,
   value,
-  sequence,
-  timestamp
+  timestamp,
+  sequence
 ) => ({
   data_item_id,
   data_item_name,
-  sequence,
   timestamp: iso(timestamp),
   value,
   channel,
   device_uuid: device,
+  ...(sequence && {sequence}),
   ...(canId && {can_id: canId})
 })
