@@ -9,10 +9,9 @@ describe("Parses LOGS", () => {
     data_item_id,
     data_item_name,
     timestamp: iso(timestamp),
-    value,
+    value: {log: {message: value, source}},
     channel,
-    device_uuid: device,
-    source
+    device_uuid: device
   })
 
   it("parses given messages", () => {

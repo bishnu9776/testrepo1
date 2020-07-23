@@ -67,7 +67,6 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       decompressedMessage = await maybeDecompressMessage(message)
 
-      // This is never called in case of and error. It goes to catch
       if (isNil(decompressedMessage)) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
         return [{message, tag: ACK_MSG_TAG}]
