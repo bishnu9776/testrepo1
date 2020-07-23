@@ -23,10 +23,10 @@ describe("Parses CAN", () => {
       const getParsedMessage = getParsedMessageFn("can", "s_2404", "0x100")
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
       const parsedMessage = [
-        getParsedMessage("MCU_SOC-v1", "MCU_SOC", 0, 0, 1),
-        getParsedMessage("MCU_CHARGER_TYPE-v1", "MCU_CHARGER_TYPE", 0, 0, 1),
-        getParsedMessage("MCU_SOC-v1", "MCU_SOC", 0, 1, 3),
-        getParsedMessage("MCU_CHARGER_TYPE-v1", "MCU_CHARGER_TYPE", 0, 1, 3)
+        getParsedMessage("MCU_SOC-v1", "MCU_SOC", 0, 1, 0),
+        getParsedMessage("MCU_CHARGER_TYPE-v1", "MCU_CHARGER_TYPE", 0, 1, 0),
+        getParsedMessage("MCU_SOC-v1", "MCU_SOC", 0, 3, 1),
+        getParsedMessage("MCU_CHARGER_TYPE-v1", "MCU_CHARGER_TYPE", 0, 3, 1)
       ]
       expect(createDataItemsFromMessage({...CAN, probe})).to.eql(parsedMessage)
     })

@@ -10,8 +10,8 @@ export const getParsedMessageFn = (channel, device, canId) => (
   data_item_id,
   data_item_name,
   value,
-  timestamp,
-  sequence
+  sequence,
+  timestamp
 ) => ({
   data_item_id,
   data_item_name,
@@ -19,6 +19,6 @@ export const getParsedMessageFn = (channel, device, canId) => (
   value,
   channel,
   device_uuid: device,
-  ...(sequence && {sequence}),
+  sequence,
   ...(canId && {can_id: canId})
 })
