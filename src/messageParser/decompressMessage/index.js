@@ -46,9 +46,13 @@ const decompressLegacyData = async ({data, attributes, log}) => {
 const deserializeAvro = async ({message, log}) => {
   const {data, attributes} = message
   try {
-    return getDeserializeAvroFn(message)
+    const decompressedMessage = await getDeserializeAvroFn(message)
+    if (!decompressedMessage) {
+      return null
+    }
+    return decompressedMessage
   } catch (e) {
-    log.error(
+    log.info(
       {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
       "Error deserializing avro message."
     )
