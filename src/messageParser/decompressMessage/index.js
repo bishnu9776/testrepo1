@@ -1,6 +1,7 @@
 import zlib from "zlib"
 import {deserializeAvroMessage} from "./deserializeAvroMessage"
 import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
+import {errorFormatter} from "../../utils/errorFormatter"
 
 const {env} = process
 
@@ -50,7 +51,7 @@ const deserializeAvro = async ({message, log}) => {
     return await deserializeAvroMessage(message)
   } catch (e) {
     log.info(
-      {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
+      {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(e)},
       "Error deserializing avro message."
     )
     return null
