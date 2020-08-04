@@ -2,12 +2,11 @@ import fs from "fs"
 import {getDecompresserFn} from "../../src/messageParser/decompressMessage"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv} from "../utils"
-import {getDecompressedGCPEvent, getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 
-const {env} = process
 describe("Decompresses gcp message", () => {
   let appContext
 
@@ -52,12 +51,5 @@ describe("Decompresses gcp message", () => {
         expect(Object.keys(e).length).to.eql(4)
       })
     })
-  })
-
-  it("converts buffer to string if compression flag is false", async () => {
-    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
-    const decompressMessage = getDecompresserFn(appContext)
-    const output = await decompressMessage(getDecompressedGCPEvent({data: {foo: "bar"}, attributes: "baz"}))
-    expect(output).to.eql({foo: "bar"})
   })
 })

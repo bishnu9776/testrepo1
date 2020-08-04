@@ -1,26 +1,3 @@
-export const CAN_WITH_SUBFOLDER = {
-  attributes: {
-    subFolder: "v1/can_mcu/v1_0_0",
-    deviceId: "s_2404"
-  },
-  data: [
-    {
-      can_id: "256",
-      data: "72339069031677954",
-      timestamp: 1,
-      seq_num: 1,
-      bike_id: "s_2404"
-    },
-    {
-      can_id: "256",
-      data: "72339069031677954",
-      timestamp: 2,
-      seq_num: 3,
-      bike_id: "s_2404"
-    }
-  ]
-}
-
 export const CAN_MCU = {
   attributes: {
     channel: "can_mcu/v1_0_0",
