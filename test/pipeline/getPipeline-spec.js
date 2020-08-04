@@ -6,7 +6,7 @@ import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
 import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../../src/constants"
-import {clearEnv} from "../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 
@@ -20,6 +20,7 @@ describe("Pipeline spec", () => {
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
+    setChannelDecoderConfigFileEnvs()
     appContext = {
       metricRegistry: getMockMetricRegistry(),
       log: getMockLog()

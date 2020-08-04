@@ -71,16 +71,16 @@ export const CAN_WITH_SUBFOLDER = {
     {
       parsed: [
         {
-          can_id: "0x100",
-          timestamp: 0,
+          can_id: "256",
+          timestamp: 1,
           seq_num: 1,
           key: "MCU_SOC",
           value: 0,
           bike_id: "s_2404"
         },
         {
-          can_id: "0x100",
-          timestamp: 0,
+          can_id: "256",
+          timestamp: 1,
           seq_num: 1,
           key: "MCU_CHARGER_TYPE",
           value: 0,
@@ -88,9 +88,9 @@ export const CAN_WITH_SUBFOLDER = {
         }
       ],
       canRaw: {
-        can_id: "0x100",
-        data: "0101000001040002",
-        timestamp: 0,
+        can_id: "256",
+        data: "72339069031677954",
+        timestamp: 1,
         seq_num: 1,
         bike_id: "s_2404"
       }
@@ -98,16 +98,16 @@ export const CAN_WITH_SUBFOLDER = {
     {
       parsed: [
         {
-          can_id: "0x100",
-          timestamp: 1,
+          can_id: "256",
+          timestamp: 2,
           seq_num: 3,
           key: "MCU_SOC",
           value: 0,
           bike_id: "s_2404"
         },
         {
-          can_id: "0x100",
-          timestamp: 1,
+          can_id: "256",
+          timestamp: 2,
           seq_num: 3,
           key: "MCU_CHARGER_TYPE",
           value: 0,
@@ -115,9 +115,9 @@ export const CAN_WITH_SUBFOLDER = {
         }
       ],
       canRaw: {
-        can_id: "0x100",
-        data: "0101000001040002",
-        timestamp: 1,
+        can_id: "256",
+        data: "72339069031677954",
+        timestamp: 2,
         seq_num: 3,
         bike_id: "s_2404"
       }
