@@ -33,7 +33,7 @@ describe("Parses CAN", () => {
         getParsedMessage("BMS_2_Aux_Temp3-v1", "BMS_2_Aux_Temp3", 29.06, 1, 1),
         getParsedMessage("BMS_2_Aux_Temp4-v1", "BMS_2_Aux_Temp4", 29.21, 1, 1)
       ]
-      const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: [{canRaw: CAN_BMS.data[0].canRaw}]}
+      const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: CAN_BMS.data}
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
 
       expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)

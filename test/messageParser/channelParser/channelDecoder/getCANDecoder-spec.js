@@ -3,6 +3,7 @@ import {CAN_MCU, CAN_BMS, LEGACY_CAN_MCU, LEGACY_CAN_BMS} from "../../../fixture
 import {clearEnv} from "../../../utils"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {clearStub} from "../../../stubs/clearStub"
+import {getCanDecodedMessageFn} from "../../../utils/getParsedMessage"
 
 describe("CAN decoder", () => {
   const {env} = process
@@ -20,15 +21,89 @@ describe("CAN decoder", () => {
     clearStub()
   })
 
+  const getBMSDecodedData = () => {
+    const getCanDecodedMessage = getCanDecodedMessageFn("BEAGLE-ESS-4", "344")
+    return [
+      [
+        getCanDecodedMessage({
+          timestamp: 1,
+          seq_num: 1,
+          global_seq: 1,
+          key: "BMS_2_Aux_Temp1",
+          value: 29.57
+        }),
+        getCanDecodedMessage({
+          timestamp: 1,
+          seq_num: 1,
+          global_seq: 1,
+          key: "BMS_2_Aux_Temp2",
+          value: 29.67
+        }),
+        getCanDecodedMessage({
+          timestamp: 1,
+          seq_num: 1,
+          global_seq: 1,
+          key: "BMS_2_Aux_Temp3",
+          value: 29.06
+        }),
+        getCanDecodedMessage({
+          timestamp: 1,
+          seq_num: 1,
+          global_seq: 1,
+          key: "BMS_2_Aux_Temp4",
+          value: 29.21
+        })
+      ]
+    ]
+  }
+  const MCU_PARSED_DATA = [
+    [
+      {
+        bike_id: "s_2404",
+        can_id: "256",
+        key: "MCU_SOC",
+        seq_num: 1,
+        timestamp: 1,
+        value: 0
+      },
+      {
+        bike_id: "s_2404",
+        can_id: "256",
+        key: "MCU_CHARGER_TYPE",
+        seq_num: 1,
+        timestamp: 1,
+        value: 0
+      }
+    ],
+    [
+      {
+        bike_id: "s_2404",
+        can_id: "256",
+        key: "MCU_SOC",
+        seq_num: 3,
+        timestamp: 2,
+        value: 0
+      },
+      {
+        bike_id: "s_2404",
+        can_id: "256",
+        key: "MCU_CHARGER_TYPE",
+        seq_num: 3,
+        timestamp: 2,
+        value: 0
+      }
+    ]
+  ]
+
   describe("latest bikes", () => {
     it("should decode can data for can_mcu", () => {
       const parsedData = getCANDecoder()(CAN_MCU)
-      expect(parsedData).to.eql(CAN_MCU.data.map(e => e.parsed))
+      expect(parsedData).to.eql(MCU_PARSED_DATA)
     })
 
     it("should decode can data for can_bms", () => {
       const parsedData = getCANDecoder()(CAN_BMS)
-      expect(parsedData).to.eql(CAN_BMS.data.map(e => e.parsed))
+      expect(parsedData).to.eql(getBMSDecodedData())
     })
 
     describe("should return empty array when decoder config doesn't contain", () => {
@@ -41,13 +116,10 @@ describe("CAN decoder", () => {
           },
           data: [
             {
-              canRaw: {
-                can_id: "256",
-                data: "0101000001040002",
-                timestamp: 1,
-                seq_num: 1,
-                bike_id: "s_2404"
-              }
+              can_id: "256",
+              data: "0101000001040002",
+              timestamp: 1,
+              seq_num: 1
             }
           ]
         }
@@ -68,13 +140,10 @@ describe("CAN decoder", () => {
           },
           data: [
             {
-              canRaw: {
-                can_id: "256",
-                data: "0101000001040002",
-                timestamp: 1,
-                seq_num: 1,
-                bike_id: "s_2404"
-              }
+              can_id: "256",
+              data: "0101000001040002",
+              timestamp: 1,
+              seq_num: 1
             }
           ]
         }
@@ -95,13 +164,10 @@ describe("CAN decoder", () => {
           },
           data: [
             {
-              canRaw: {
-                can_id: "1",
-                data: "0101000001040002",
-                timestamp: 1,
-                seq_num: 1,
-                bike_id: "s_2404"
-              }
+              can_id: "1",
+              data: "0101000001040002",
+              timestamp: 1,
+              seq_num: 1
             }
           ]
         }
@@ -119,14 +185,14 @@ describe("CAN decoder", () => {
     describe("when device is present in legacy decoder config", () => {
       it("should decode message using bike specific config in legacy decoder config", () => {
         const parsedData = getCANDecoder()(LEGACY_CAN_BMS)
-        expect(parsedData).to.eql(LEGACY_CAN_BMS.data.map(e => e.parsed))
+        expect(parsedData).to.eql(getBMSDecodedData())
       })
     })
 
     describe("when device is not present in legacy decoder config", () => {
       it("should decode message using default config in legacy decoder config", () => {
         const parsedData = getCANDecoder()(LEGACY_CAN_MCU)
-        expect(parsedData).to.eql(LEGACY_CAN_MCU.data.map(e => e.parsed))
+        expect(parsedData).to.eql(MCU_PARSED_DATA)
       })
 
       it("should give empty array when canId is not present in legacy decoder config ", () => {

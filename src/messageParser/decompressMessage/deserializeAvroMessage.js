@@ -1,6 +1,5 @@
 import avro from "avsc"
 import Long from "long"
-import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
 
 const longType = avro.types.LongType.__with({
   fromBuffer: buf => {
@@ -43,7 +42,7 @@ export const deserializeAvroMessage = message => {
     })
 
     decoder.on("finish", () => {
-      resolve(formatDecompressedMessageJSON({decompressedMessage: output, attributes: message.attributes}))
+      resolve(output)
     })
 
     decoder.end(message.data)

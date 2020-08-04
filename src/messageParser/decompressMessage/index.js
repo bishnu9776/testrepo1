@@ -1,6 +1,5 @@
 import zlib from "zlib"
 import {deserializeAvroMessage} from "./deserializeAvroMessage"
-import {formatDecompressedMessageJSON} from "./formatDecompressedMessageJSON"
 import {errorFormatter} from "../../utils/errorFormatter"
 
 const {env} = process
@@ -23,8 +22,7 @@ const decompressLegacyData = async ({message, log}) => {
   // This is only to get the below log message as we haven't yet seen deflate compressed data
   try {
     const decompressedMessage = await inflate(data)
-    const messageJSON = JSON.parse(decompressedMessage.toString())
-    return formatDecompressedMessageJSON({decompressedMessage: messageJSON, attributes})
+    return JSON.parse(decompressedMessage.toString())
   } catch (e) {
     log.error(
       {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
