@@ -93,7 +93,7 @@ export const getCANDecoder = metricRegistry => {
     const device = attributes.bike_id
 
     return data.map(d => {
-      const {can_id: canId} = d.canRaw
+      const {can_id: canId} = d
       const componentKeys = attributes.channel.split("/")
 
       if (isLegacy(attributes.channel)) {
@@ -112,7 +112,7 @@ export const getCANDecoder = metricRegistry => {
           return []
         }
         const decoderForCANId = decoderForDevice[head(decoderKeyForCANId)]
-        return decodeCANRaw(d.canRaw, decoderForCANId)
+        return decodeCANRaw(d, decoderForCANId)
       }
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
@@ -127,7 +127,7 @@ export const getCANDecoder = metricRegistry => {
         })
         return []
       }
-      return decodeCANRaw(d.canRaw, decoderForCANId)
+      return decodeCANRaw(d, decoderForCANId)
     })
   }
 }

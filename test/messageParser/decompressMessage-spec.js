@@ -32,20 +32,6 @@ describe("Decompresses gcp message", () => {
       expect(output.length).to.eql(1)
       expect(Object.keys(output[0]).length).to.eql(8)
     })
-
-    it("puts can info under canRaw", async () => {
-      const CANRawData = CAN.data.map(x => x.canRaw)
-      const input = getDeflateCompressedGCPEvent({
-        data: CANRawData,
-        attributes: {subFolder: "can_raw"}
-      })
-      const decompressMessage = getDecompresserFn(appContext)
-      const output = await decompressMessage(input)
-      expect(output.length).to.eql(2)
-      output.forEach(e => {
-        expect(Object.keys(e.canRaw).length).to.eql(5)
-      })
-    })
   })
 
   describe("v1", () => {
@@ -57,14 +43,14 @@ describe("Decompresses gcp message", () => {
       expect(output.length).to.eql(10)
     })
 
-    it("puts can info under canRaw and handles long type without precision loss when deserializing avro", async () => {
+    it("handles long type without precision loss when deserializing avro", async () => {
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn(appContext)
       const output = await decompressMessage(message)
       expect(output.length).to.eql(100)
       output.forEach(e => {
-        expect(Object.keys(e.canRaw).length).to.eql(4)
+        expect(Object.keys(e).length).to.eql(4)
       })
     })
   })
