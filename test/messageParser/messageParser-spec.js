@@ -3,7 +3,7 @@ import {difference} from "ramda"
 import {getMessageParser} from "../../src/messageParser"
 import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
-import {getDeflateCompressedGCPEvent, getZipCompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
 import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
@@ -70,23 +70,6 @@ describe("Parse GCP message", () => {
       value: 77.60284
     }
   ]
-
-  describe("post big sink data", () => {
-    it("post big sink data - formats events and adds ack event to end of array", async () => {
-      env.VI_PRE_BIG_SINK_INPUT = "false"
-      const messageParser = getMessageParser({log, metricRegistry, probe})
-      const message = getZipCompressedGCPEvent(GPSTPV)
-      const output = await messageParser(message)
-      expect(output).to.eql(parsedGCPEvents.concat({tag: ACK_MSG_TAG, message}))
-    })
-
-    it("log and ack the message if unable to parse", async () => {
-      const messageParser = getMessageParser({log, metricRegistry, probe})
-      const output = await messageParser("foo")
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
-    })
-  })
 
   describe("Pre big sink data", () => {
     beforeEach(() => {
