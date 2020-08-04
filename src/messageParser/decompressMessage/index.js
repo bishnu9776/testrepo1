@@ -5,17 +5,6 @@ import {errorFormatter} from "../../utils/errorFormatter"
 
 const {env} = process
 
-const unzip = message => {
-  return new Promise((resolve, reject) => {
-    zlib.unzip(message, (error, data) => {
-      if (error) {
-        reject(error)
-      }
-      resolve(data)
-    })
-  })
-}
-
 const inflate = message => {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line
@@ -63,14 +52,6 @@ export const getDecompresserFn = ({log}) => {
   if (!isCompressedMessage) {
     return async message => {
       return JSON.parse(message.data.toString())
-    }
-  }
-
-  const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
-  if (!isPreBigSinkInput) {
-    return async message => {
-      const decompressedMessage = await unzip(message.data)
-      return JSON.parse(decompressedMessage.toString())
     }
   }
 
