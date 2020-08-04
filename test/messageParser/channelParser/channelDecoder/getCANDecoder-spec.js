@@ -22,34 +22,28 @@ describe("CAN decoder", () => {
   })
 
   const getBMSDecodedData = () => {
-    const getCanDecodedMessage = getCanDecodedMessageFn("BEAGLE-ESS-4", "344")
+    const getCanDecodedMessage = getCanDecodedMessageFn({
+      bike_id: "BEAGLE-ESS-4",
+      can_id: "344",
+      timestamp: 1,
+      seq_num: 1,
+      global_seq: 1
+    })
     return [
       [
         getCanDecodedMessage({
-          timestamp: 1,
-          seq_num: 1,
-          global_seq: 1,
           key: "BMS_2_Aux_Temp1",
           value: 29.57
         }),
         getCanDecodedMessage({
-          timestamp: 1,
-          seq_num: 1,
-          global_seq: 1,
           key: "BMS_2_Aux_Temp2",
           value: 29.67
         }),
         getCanDecodedMessage({
-          timestamp: 1,
-          seq_num: 1,
-          global_seq: 1,
           key: "BMS_2_Aux_Temp3",
           value: 29.06
         }),
         getCanDecodedMessage({
-          timestamp: 1,
-          seq_num: 1,
-          global_seq: 1,
           key: "BMS_2_Aux_Temp4",
           value: 29.21
         })

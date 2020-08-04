@@ -23,7 +23,7 @@ export const getParsedMessageFn = (channel, device, canId) => (
   ...(canId && {can_id: canId})
 })
 
-export const getCanDecodedMessageFn = (bike_id, can_id) => ({timestamp, seq_num, key, value}) => ({
+export const getCanDecodedMessageFn = ({bike_id, can_id, timestamp, seq_num}) => ({key, value}) => ({
   can_id,
   timestamp,
   seq_num,
