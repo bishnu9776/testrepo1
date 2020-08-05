@@ -1,7 +1,7 @@
 import {collectSubscriptionStats} from "../../metrics/subscriptionStats"
 import {getGCPStream} from "./gcpStream"
 
-export const getGCPSource = ({log, metricRegistry}) => {
+const gcp = ({log, metricRegistry}) => {
   const {env} = process
   const subscriptionConfig = {
     subscriptionName: env.VI_GCP_PUBSUB_BIKE_SUBSCRIPTION,
@@ -21,3 +21,5 @@ export const getGCPSource = ({log, metricRegistry}) => {
 
   return {acknowledgeMessage, stream}
 }
+
+export default gcp
