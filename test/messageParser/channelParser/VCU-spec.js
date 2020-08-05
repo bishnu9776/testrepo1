@@ -8,7 +8,6 @@ describe("Parses VCU", () => {
   const {env} = process
 
   beforeEach(() => {
-    env.VI_SHOULD_DECODE_MESSAGE = "true"
     env.VI_VCU_MESSAGE_BYTE_LENGTH = "64"
     setChannelDecoderConfigFileEnvs()
   })

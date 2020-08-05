@@ -8,7 +8,6 @@ describe("Parses MCU", () => {
   const {env} = process
 
   beforeEach(() => {
-    env.VI_SHOULD_DECODE_MESSAGE = "true"
     env.VI_MCU_MESSAGE_BYTE_LENGTH = "104"
     setChannelDecoderConfigFileEnvs()
   })
