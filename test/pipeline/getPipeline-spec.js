@@ -1,5 +1,4 @@
 import {from} from "rxjs"
-import * as gcpSubscriber from "../../src/source/gcp/gcpStream"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
@@ -14,6 +13,7 @@ const {env} = process
 describe("Pipeline spec", () => {
   let probePath
   let appContext
+  let source
   const acknowledgeMessageSpy = sinon.spy()
 
   beforeEach(() => {
@@ -25,12 +25,10 @@ describe("Pipeline spec", () => {
       log: getMockLog()
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
-    sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
-      return {
-        stream: from([getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), "foobar"]),
-        acknowledgeMessage: acknowledgeMessageSpy
-      }
-    })
+    source = {
+      stream: from([getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), "foobar"]),
+      acknowledgeMessage: acknowledgeMessageSpy
+    }
 
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
@@ -58,9 +56,9 @@ describe("Pipeline spec", () => {
     }
 
     getPipeline({
+      source,
       observer,
       probePath,
-      subscriptionConfig: {},
       kafkaProducer,
       ...appContext
     })
