@@ -1,5 +1,5 @@
 import {dissoc} from "ramda"
-import {PRE_BIG_SINK_VCU} from "../../../fixtures/bikeChannels/VCU"
+import {VCU} from "../../../fixtures/bikeChannels/VCU"
 import {clearEnv} from "../../../utils"
 import {getVCUDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getVCUDecoder"
 
@@ -40,9 +40,9 @@ describe("VCU decoder", () => {
       lcd_power_fault: 0,
       display_status: 0
     }
-    const expected = {...decodedDataItems, ...dissoc("data", PRE_BIG_SINK_VCU.data[0])}
+    const expected = {...decodedDataItems, ...dissoc("data", VCU.data[0])}
 
-    const parsedData = getVCUDecoder()(PRE_BIG_SINK_VCU)
+    const parsedData = getVCUDecoder()(VCU)
     expect(parsedData).to.eql([expected])
   })
 })

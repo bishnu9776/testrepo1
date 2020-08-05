@@ -3,18 +3,12 @@ import {getDataItem} from "./utils/getDataItem"
 import {getCANDecoder} from "./channelDecoder/getCANDecoder"
 
 export const parseCAN = metricRegistry => {
-  const {env} = process
-  const shouldDecodeMessage = JSON.parse(env.VI_SHOULD_DECODE_MESSAGE || "false")
-  const decodeCANMessage = shouldDecodeMessage ? getCANDecoder(metricRegistry) : null
+  const decodeCANMessage = getCANDecoder(metricRegistry)
 
   return message => {
     let decodedMessage = []
-    const {data, attributes} = message
-    if (shouldDecodeMessage) {
-      decodedMessage = flatten(decodeCANMessage(message))
-    } else {
-      decodedMessage = flatten(data.map(e => e.parsed))
-    }
+    const {attributes} = message
+    decodedMessage = flatten(decodeCANMessage(message))
 
     return decodedMessage.map(e => {
       const timestamp = new Date(e.timestamp * 1000).toISOString()

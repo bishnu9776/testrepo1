@@ -48,7 +48,6 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
-  const isPreBigSinkInput = JSON.parse(env.VI_PRE_BIG_SINK_INPUT || "false")
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
@@ -60,7 +59,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
     let decompressedMessage
 
     try {
-      const attributes = isPreBigSinkInput ? getFormattedAttributes(message.attributes) : message.attributes
+      const attributes = getFormattedAttributes(message.attributes)
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
         return [{message, tag: ACK_MSG_TAG}]
       }
