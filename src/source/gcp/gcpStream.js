@@ -1,8 +1,8 @@
 import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
-import {errorFormatter} from "../utils/errorFormatter"
+import {errorFormatter} from "../../utils/errorFormatter"
 import {getSubscriberOptions} from "./config"
-import {getGCPMessageTags} from "../metrics/tags"
+import {getGCPMessageTags} from "../../metrics/tags"
 
 const acknowledgeMessage = message => {
   message.ack()

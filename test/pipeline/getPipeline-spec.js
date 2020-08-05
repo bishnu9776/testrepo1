@@ -1,5 +1,5 @@
 import {from} from "rxjs"
-import * as gcpSubscriber from "../../src/gcpSubscriber/gcpStream"
+import * as gcpSubscriber from "../../src/source/gcp/gcpStream"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"

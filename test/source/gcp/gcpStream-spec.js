@@ -1,9 +1,9 @@
 import EventEmitter from "events"
 import {PubSub} from "@google-cloud/pubsub"
-import {getGCPStream} from "../../src/gcpSubscriber/gcpStream"
-import {getMockLog} from "../stubs/logger"
-import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
-import {clearStub} from "../stubs/clearStub"
+import {getGCPStream} from "../../../src/source/gcp/gcpStream"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
+import {clearStub} from "../../stubs/clearStub"
 
 describe("GCP subscriber", () => {
   let appContext
