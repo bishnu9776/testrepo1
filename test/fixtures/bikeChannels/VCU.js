@@ -1,23 +1,4 @@
 export const VCU = {
-  attributes: {
-    channel: "vcu",
-    bike_id: "s_194",
-    version: "v1"
-  },
-  data: [
-    {
-      timestamp: 1,
-      seq_num: 1,
-      bluetooth_device_status: 0,
-      odometer: 1000,
-      screen_brightness_control: 0,
-      data: "foo",
-      bike_id: "s_194"
-    }
-  ]
-}
-
-export const PRE_BIG_SINK_VCU = {
   data: [
     {
       timestamp: 1,

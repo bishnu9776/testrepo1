@@ -1,5 +1,5 @@
 import {dissoc} from "ramda"
-import {PRE_BIG_SINK_MCU} from "../../../fixtures/bikeChannels/MCU"
+import {MCU} from "../../../fixtures/bikeChannels/MCU"
 import {getMCUDecoder} from "../../../../src/messageParser/channelParser/channelDecoder/getMCUDecoder"
 import {clearEnv} from "../../../utils"
 
@@ -65,9 +65,9 @@ describe("MCU decoder", () => {
       motor_fan: 0,
       left_indicator_switch: 0
     }
-    const expected = {...decodedDataItems, ...dissoc("data", PRE_BIG_SINK_MCU.data[0])}
+    const expected = {...decodedDataItems, ...dissoc("data", MCU.data[0])}
 
-    const parsedData = getMCUDecoder()(PRE_BIG_SINK_MCU)
+    const parsedData = getMCUDecoder()(MCU)
     expect(parsedData).to.eql([expected])
   })
 })

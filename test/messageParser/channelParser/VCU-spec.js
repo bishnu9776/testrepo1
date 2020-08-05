@@ -1,5 +1,5 @@
 import {difference} from "ramda"
-import {PRE_BIG_SINK_VCU} from "../../fixtures/bikeChannels/VCU"
+import {VCU} from "../../fixtures/bikeChannels/VCU"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
@@ -21,7 +21,7 @@ describe("Parses VCU", () => {
     const requiredKeys = ["channel", "data_item_id", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
 
-    const parsedMessage = createDataItemsFromMessage({...PRE_BIG_SINK_VCU, probe})
+    const parsedMessage = createDataItemsFromMessage({...VCU, probe})
     expect(parsedMessage.length).to.eql(22)
     parsedMessage.forEach(e => {
       expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
@@ -31,6 +31,6 @@ describe("Parses VCU", () => {
   it("when config paths are not given, should return empty array", () => {
     env.VI_VCU_DECODER_CONFIG_PATH = undefined
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
-    expect(createDataItemsFromMessage({...PRE_BIG_SINK_VCU, probe})).to.eql([])
+    expect(createDataItemsFromMessage({...VCU, probe})).to.eql([])
   })
 })
