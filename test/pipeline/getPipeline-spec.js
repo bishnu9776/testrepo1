@@ -17,6 +17,7 @@ describe("Pipeline spec", () => {
   const acknowledgeMessageSpy = sinon.spy()
 
   beforeEach(() => {
+    env.VI_ATHER_COLLECTOR_SOURCE_MODE = "gcp"
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
     setChannelDecoderConfigFileEnvs()

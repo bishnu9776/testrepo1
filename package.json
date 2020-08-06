@@ -23,6 +23,7 @@
     "start": "ELASTIC_APM_ACTIVE=false babel-node src/main.js",
     "generate-probe": "babel-node scripts/parseCSVtoJSON.js",
     "debug": "ELASTIC_APM_ACTIVE=false babel-node scripts/gcpConsumer.js",
+    "kafka": "ELASTIC_APM_ACTIVE=false babel-node scripts/kafkaConsumer.js",
     "debug-subscriber": "babel-node src/source/gcp/index.js",
     "debug-publisher": "babel-node scripts/gcpProducer.js",
     "create-legacy-component-version-config": "babel-node scripts/createLegacyComponentVersionConfig",
