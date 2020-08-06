@@ -44,7 +44,7 @@ const deserializeAvro = async ({message, log}) => {
 export const getDecompresserFn = ({log}) => {
   return async message => {
     const {attributes} = message
-    const isLegacyMessage = !attributes.subFolder.includes("v1")
+    const isLegacyMessage = attributes?.subFolder ? !attributes?.subFolder?.includes("v1") : false
     if (isLegacyMessage) {
       return decompressLegacyData({message, log})
     }
