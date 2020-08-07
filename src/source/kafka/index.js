@@ -21,15 +21,10 @@ const kafka = appContext => {
   }
 
   const stream = new Observable(observer => {
-    const handleMessage = appContext => {
-      return event => {
-        const {value, headers} = event
-        const topicObj = JSON.parse(JSON.stringify(headers[0].inputTopic))
-        const topic = getDevice(topicObj.data)
-        observer.next({value, topic})
-      }
-    }
-    const {destroy: unsubscribeConsumer} = createConsumer({...kafkaProps, ...clientConfig}, handleMessage(appContext))
+    const {destroy: unsubscribeConsumer} = createConsumer(
+      {...kafkaProps, ...clientConfig},
+      getKafkaStream(appContext, observer)
+    )
     return () => {
       unsubscribeConsumer()
     }

@@ -20,7 +20,7 @@ export const startPipelines = async () => {
 
   metricRegistry.startStatsReporting()
   collectProcessStats(metricRegistry)
-  const source = getSourceStream({log, metricRegistry})
+  const source = await getSourceStream({log, metricRegistry})
 
   pipelines.push(
     getPipeline({
