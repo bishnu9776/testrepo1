@@ -37,7 +37,7 @@ describe("GCP subscriber", () => {
     })
 
     getGCPStream(appContext).stream.subscribe({
-      next: x => actualEvents.push(x),
+      next: ({message}) => actualEvents.push(message),
       error: e => {
         expect(e.message).to.eql("Error on GCP")
       }

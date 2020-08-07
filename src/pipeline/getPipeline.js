@@ -34,7 +34,7 @@ const defaultObserver = log => ({
 export const getPipeline = ({log, observer, metricRegistry, probePath, source, kafkaProducer}) => {
   const probe = loadProbe(probePath, log)
 
-  const {acknowledgeMessage, stream} = source
+  const {stream} = source
 
   const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
   const parseMessage = getMessageParser({log, metricRegistry, probe})
@@ -51,7 +51,7 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, source, k
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
-          acknowledgeMessage(event.message)
+          event.acknowledgeMessage(event.message)
         }
       }),
       retryWithExponentialBackoff({

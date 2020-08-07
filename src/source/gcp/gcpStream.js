@@ -3,10 +3,10 @@ import {Observable} from "rxjs"
 import {errorFormatter} from "../../utils/errorFormatter"
 import {getSubscriberOptions} from "./config"
 import {getGCPMessageTags} from "../../metrics/tags"
-
-const acknowledgeMessage = message => {
-  message.ack()
-}
+//
+// const acknowledgeMessage = message => {
+//   message.ack()
+// }
 
 export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
   const stream = new Observable(observer => {
@@ -24,8 +24,11 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
     )
 
     subscription.on("message", msg => {
+      const acknowledgeMessage = () => {
+        msg.ack()
+      }
       metricRegistry.updateStat("Counter", "num_messages_received", 1, getGCPMessageTags(msg))
-      observer.next(msg)
+      observer.next({message: msg, acknowledgeMessage})
     })
 
     subscription.on("error", error => {
@@ -49,7 +52,6 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log,
   })
 
   return {
-    acknowledgeMessage,
     stream
   }
 }

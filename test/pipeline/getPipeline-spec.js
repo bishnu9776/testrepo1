@@ -27,8 +27,10 @@ describe("Pipeline spec", () => {
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
     source = {
-      stream: from([getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), "foobar"]),
-      acknowledgeMessage: acknowledgeMessageSpy
+      stream: from([
+        {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+      ])
     }
 
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
@@ -44,8 +46,8 @@ describe("Pipeline spec", () => {
   it("valid events flow through pipeline", done => {
     const output = []
     const observer = {
-      next: e => {
-        output.push(e)
+      next: ({message}) => {
+        output.push(message)
       },
       complete: () => {
         expect(output.length).to.eql(22)

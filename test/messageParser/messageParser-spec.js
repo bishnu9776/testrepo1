@@ -72,6 +72,8 @@ describe("Parse GCP message", () => {
   ]
 
   describe("Pre big sink data", () => {
+    const acknowledgeMessage = () => {}
+
     beforeEach(() => {
       env.VI_PRE_BIG_SINK_INPUT = "true"
       env.VI_SHOULD_DECODE_MESSAGE = true
@@ -88,10 +90,10 @@ describe("Parse GCP message", () => {
         data: GPSTPV.data,
         attributes: {subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id}
       })
-      const output = await messageParser(message)
+      const output = await messageParser({message, acknowledgeMessage})
       const expected = parsedGCPEvents
         .map(x => ({...x, data_item_id: `${x.data_item_name}-legacy`}))
-        .concat({tag: ACK_MSG_TAG, message})
+        .concat({tag: ACK_MSG_TAG, message, acknowledgeMessage})
       expect(output).to.eql(expected)
     })
 
@@ -108,7 +110,7 @@ describe("Parse GCP message", () => {
         "timestamp",
         "value"
       ]
-      const output = await messageParser(message)
+      const output = await messageParser({message, acknowledgeMessage})
 
       output.forEach(e => {
         if (e.tag !== ACK_MSG_TAG) {
@@ -123,7 +125,7 @@ describe("Parse GCP message", () => {
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser(message)
+      const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(21)
       expect(output[20].tag).to.eql(ACK_MSG_TAG)
     })
@@ -132,7 +134,7 @@ describe("Parse GCP message", () => {
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser(message)
+      const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(13)
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
     })
@@ -141,7 +143,7 @@ describe("Parse GCP message", () => {
       const messageParser = getMessageParser({log, metricRegistry, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser(message)
+      const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(1)
       expect(output[0].tag).to.eql(ACK_MSG_TAG)
       expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
@@ -153,7 +155,7 @@ describe("Parse GCP message", () => {
         const messageParser = getMessageParser({log, metricRegistry, probe})
         const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
         const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
-        const output = await messageParser(message)
+        const output = await messageParser({message, acknowledgeMessage})
         expect(output.length).to.eql(1)
         expect(output[0].tag).to.eql(ACK_MSG_TAG)
       })
@@ -164,7 +166,7 @@ describe("Parse GCP message", () => {
         const messageParser = getMessageParser({log, metricRegistry, probe})
         const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
         const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
-        const output = await messageParser(message)
+        const output = await messageParser({message, acknowledgeMessage})
         expect(output.length).to.eql(1)
         expect(output[0].tag).to.eql(ACK_MSG_TAG)
       })

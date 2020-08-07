@@ -55,20 +55,22 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const shouldDropChannel = channel => channelsToDrop.includes(channel)
   const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
-  return async message => {
+  return async event => {
+    const {message, acknowledgeMessage} = event
     let decompressedMessage
+    const lastMessage = {message, tag: ACK_MSG_TAG, acknowledgeMessage}
 
     try {
       const attributes = getFormattedAttributes(message.attributes)
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
-        return [{message, tag: ACK_MSG_TAG}]
+        return [lastMessage]
       }
 
       decompressedMessage = await maybeDecompressMessage(message)
 
       if (isNil(decompressedMessage)) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})
-        return [{message, tag: ACK_MSG_TAG}]
+        return [lastMessage]
       }
 
       const dataItems = pipe(
@@ -77,10 +79,10 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         maybeDedupDataItems
       )({data: decompressedMessage, attributes})
 
-      return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
+      return dataItems.map(mergeProbeInfo).concat(lastMessage)
     } catch (error) {
       handleParseFailures(message, error, metricRegistry, log)
-      return [{message, tag: ACK_MSG_TAG}]
+      return [lastMessage]
     }
   }
 }

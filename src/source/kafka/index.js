@@ -1,4 +1,5 @@
 import {createConsumer} from "node-microservice/dist/kafka"
+import {Observable} from "rxjs"
 import {getKafkaStream} from "./getKafkaStream"
 
 const kafka = appContext => {
@@ -19,7 +20,22 @@ const kafka = appContext => {
     }
   }
 
-  createConsumer({...kafkaProps, ...clientConfig}, getKafkaStream(appContext))
+  const stream = new Observable(observer => {
+    const handleMessage = appContext => {
+      return event => {
+        const {value, headers} = event
+        const topicObj = JSON.parse(JSON.stringify(headers[0].inputTopic))
+        const topic = getDevice(topicObj.data)
+        observer.next({value, topic})
+      }
+    }
+    const {destroy: unsubscribeConsumer} = createConsumer({...kafkaProps, ...clientConfig}, handleMessage(appContext))
+    return () => {
+      unsubscribeConsumer()
+    }
+  })
+
+  return {stream}
 }
 
 export default kafka
