@@ -46,7 +46,7 @@ describe("Pipeline spec", () => {
   it("valid events flow through pipeline", done => {
     const output = []
     const observer = {
-      next: ({message}) => {
+      next: message => {
         output.push(message)
       },
       complete: () => {
