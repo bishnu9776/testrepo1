@@ -1,67 +1,44 @@
-import {createProducer} from "node-microservice/dist/kafka/producer/create-producer"
+import {Observable} from "rxjs"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {clearStub} from "../../stubs/clearStub"
-import kafka from "../../../src/source/kafka"
-import {log} from "../../../src/logger"
-import {createTopic, deleteTopic, produceMessage} from "../../utils/kafka"
+import {getMockLog} from "../../stubs/logger"
+import {getKafkaStream} from "../../../src/source/kafka/getKafkaStream"
+import kafkaEvent from "../../fixtures/kafkaEvent.json"
 
-describe.skip("Kafka Stream", () => {
-  const {env} = process
+describe("Kafka Stream", () => {
   let appContext
-  const kafkaUrl = "localhost:9092"
-  const producerClientConfig = {
-    "metadata.broker.list": kafkaUrl,
-    "client.id": "test-producer"
-  }
-
-  const producerTopicConfig = {
-    "request.required.acks": "1"
-  }
-
-  const topic = "test-archive-topic-ather"
-  const eventsToProduce = ["a", "b", "c"]
-  let producer
 
   beforeEach(async () => {
-    env.VI_KAFKA_URL = "localhost:9092"
-    env.VI_ATHER_COLLECTOR_KAFKA_CONSUMER_TOPIC = topic
-    env.VI_KAFKA_CONSUMER_CLIENT_GROUP_ID = `groupid-${Math.random().toFixed(6) * 10 ** 6}`
-    env.VI_KAFKA_CONSUMER_TOPIC_AUTO_OFFSET_RESET = "earliest"
     appContext = {
-      log,
+      log: getMockLog(),
       metricRegistry: getMockMetricRegistry()
     }
-    await deleteTopic(kafkaUrl, topic)
-    await createTopic(kafkaUrl, topic)
-    producer = await createProducer({
-      parentLog: appContext.log,
-      clientConfig: producerClientConfig,
-      topicConfig: producerTopicConfig
-    })
-    await Promise.all(eventsToProduce.map(e => produceMessage(producer, e, topic)))
   })
 
   afterEach(async () => {
     clearStub()
-    producer.disconnect()
-    await deleteTopic(kafkaUrl, topic)
   })
 
-  it("get kafka stream", done => {
-    // const actualEvents = []
-    // subscribe to kafka.stream and see if data is coming
-    kafka(appContext).stream.subscribe({
-      next: ({message}) => {
-        // actualEvents.push(message)
-        console.log(message)
-      },
-      error: e => {
-        console.log(e)
-      },
-      complete: () => {
-        console.log("Observer got a complete notification")
-        done()
+  const getKafkaInput = event => ({
+    ...event,
+    value: Buffer.from(event.value.data),
+    headers: [
+      {
+        inputTopic: Buffer.from(event.headers[0].inputTopic.data)
       }
+    ],
+    key: Buffer.from(event.key.data)
+  })
+
+  it("send data on observable streamm", () => {
+    const stream = new Observable(observer => {
+      const kafkaInput = getKafkaInput(kafkaEvent)
+      getKafkaStream(appContext, observer)(kafkaInput)
     })
-  }).timeout(10000)
+
+    stream.subscribe(event => {
+      expect(event.message.data).to.eql(kafkaEvent.value.data)
+      expect(event.message.attributes.bike_id).to.eql(".devices.foo.bar")
+    })
+  })
 })
