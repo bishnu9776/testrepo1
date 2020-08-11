@@ -48,8 +48,9 @@ describe("Kafka Stream", () => {
   })
 
   it("throw error when regex doesnt match any device", done => {
+    // inputTopic = "/a/b/c"
+    const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
     const stream = new Observable(observer => {
-      const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
       const kafkaInput = getKafkaInput(kafkaInputWithWrongTopic)
       getKafkaStream(appContext, observer)(kafkaInput)
     })
