@@ -4,14 +4,15 @@ import {clearStub} from "../../stubs/clearStub"
 import {getMockLog} from "../../stubs/logger"
 import {getKafkaStream} from "../../../src/source/kafka/getKafkaStream"
 import kafkaEvent from "../../fixtures/kafkaEvent.json"
+import {clearEnv} from "../../utils"
 
 const {env} = process
 
 describe("Kafka Stream", () => {
   let appContext
-  env.VI_REGEX_DEVICE_FROM_TOPIC = "\\..*\\.(.*)\\..*"
 
   beforeEach(async () => {
+    env.VI_REGEX_DEVICE_FROM_TOPIC = "\\..*\\.(.*)\\..*"
     appContext = {
       log: getMockLog(),
       metricRegistry: getMockMetricRegistry()
@@ -20,6 +21,7 @@ describe("Kafka Stream", () => {
 
   afterEach(async () => {
     clearStub()
+    clearEnv()
   })
 
   const getKafkaInput = event => ({
@@ -33,7 +35,7 @@ describe("Kafka Stream", () => {
     key: Buffer.from(event.key.data)
   })
 
-  it("send data on observable streamm", () => {
+  it("send data on observable stream", () => {
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaEvent)
       getKafkaStream(appContext, observer)(kafkaInput)
@@ -42,6 +44,21 @@ describe("Kafka Stream", () => {
     stream.subscribe(event => {
       expect(event.message.data).to.eql(kafkaEvent.value.data)
       expect(event.message.attributes.bike_id).to.eql("foo")
+    })
+  })
+
+  it("throw error when regex doesnt match any device", done => {
+    const stream = new Observable(observer => {
+      const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
+      const kafkaInput = getKafkaInput(kafkaInputWithWrongTopic)
+      getKafkaStream(appContext, observer)(kafkaInput)
+    })
+
+    stream.subscribe({
+      next: () => {
+        expect(appContext.log.warn).to.have.been.calledOnce
+        done()
+      }
     })
   })
 })

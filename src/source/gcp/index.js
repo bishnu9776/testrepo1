@@ -13,13 +13,13 @@ const gcp = ({log, metricRegistry}) => {
   if (statsInterval) {
     collectSubscriptionStats({metricRegistry, ...subscriptionConfig, statsInterval, log})
   }
-  const {acknowledgeMessage, stream} = getGCPStream({
+  const {stream} = getGCPStream({
     ...subscriptionConfig,
     metricRegistry,
     log
   })
 
-  return {acknowledgeMessage, stream}
+  return {stream}
 }
 
 export default gcp
