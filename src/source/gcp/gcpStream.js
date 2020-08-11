@@ -3,12 +3,9 @@ import {Observable} from "rxjs"
 import {errorFormatter} from "../../utils/errorFormatter"
 import {getSubscriberOptions} from "./config"
 import {getGCPMessageTags} from "../../metrics/tags"
-//
-// const acknowledgeMessage = message => {
-//   message.ack()
-// }
 
-export const getGCPStream = ({subscriptionName, credentialsPath, projectId, log, metricRegistry}) => {
+export const getGCPStream = ({subscriptionName, credentialsPath, projectId, appContext}) => {
+  const {log, metricRegistry} = appContext
   const stream = new Observable(observer => {
     const pubsubClient = new PubSub({
       projectId,

@@ -12,7 +12,7 @@ describe("Kafka Stream", () => {
   let appContext
 
   beforeEach(async () => {
-    env.VI_REGEX_DEVICE_FROM_TOPIC = "\\..*\\.(.*)\\..*"
+    env.VI_KAFKA_SOURCE_DEVICE_REGEX = "\\..*\\.(.*)\\..*"
     appContext = {
       log: getMockLog(),
       metricRegistry: getMockMetricRegistry()
@@ -58,6 +58,33 @@ describe("Kafka Stream", () => {
     stream.subscribe({
       next: () => {
         expect(appContext.log.warn).to.have.been.calledOnce
+        expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
+          "Counter",
+          "num_events_dropped",
+          1,
+          "regex_mismatch"
+        )
+        done()
+      }
+    })
+  })
+
+  it("throw error when parsing fails", done => {
+    const stream = new Observable(observer => {
+      const kafkaInput = getKafkaInput(kafkaEvent)
+      const inputWithInvalidData = {...kafkaInput, value: undefined}
+      getKafkaStream(appContext, observer)(inputWithInvalidData)
+    })
+
+    stream.subscribe({
+      next: () => {
+        expect(appContext.log.warn).to.have.been.calledOnce
+        expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
+          "Counter",
+          "num_events_dropped",
+          1,
+          "parse_failure"
+        )
         done()
       }
     })
