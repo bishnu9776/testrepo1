@@ -1,6 +1,6 @@
 import {createConsumer} from "node-microservice/dist/kafka"
 import {Observable} from "rxjs"
-import {getKafkaStream} from "./getKafkaStream"
+import {kafkaStream} from "./kafkaStream"
 
 const kafka = appContext => {
   const {env} = process
@@ -23,7 +23,7 @@ const kafka = appContext => {
   const stream = new Observable(observer => {
     const {destroy: unsubscribeConsumer} = createConsumer(
       {...kafkaProps, ...clientConfig},
-      getKafkaStream(appContext, observer)
+      kafkaStream(appContext, observer)
     )
     return () => {
       unsubscribeConsumer()

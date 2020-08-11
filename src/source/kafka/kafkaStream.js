@@ -21,7 +21,7 @@ const parseMessage = (value, metricRegistry) => {
   }
 }
 
-export const getKafkaStream = (appContext, observer) => {
+export const kafkaStream = (appContext, observer) => {
   const {log, metricRegistry} = appContext
 
   return event => {

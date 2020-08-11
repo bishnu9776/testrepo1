@@ -2,7 +2,7 @@ import {Observable} from "rxjs"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {clearStub} from "../../stubs/clearStub"
 import {getMockLog} from "../../stubs/logger"
-import {getKafkaStream} from "../../../src/source/kafka/getKafkaStream"
+import {kafkaStream} from "../../../src/source/kafka/kafkaStream"
 import kafkaEvent from "../../fixtures/kafkaEvent.json"
 import {clearEnv} from "../../utils"
 
@@ -38,7 +38,7 @@ describe("Kafka Stream", () => {
   it("send data on observable stream", () => {
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaEvent)
-      getKafkaStream(appContext, observer)(kafkaInput)
+      kafkaStream(appContext, observer)(kafkaInput)
     })
 
     stream.subscribe(event => {
@@ -52,7 +52,7 @@ describe("Kafka Stream", () => {
     const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaInputWithWrongTopic)
-      getKafkaStream(appContext, observer)(kafkaInput)
+      kafkaStream(appContext, observer)(kafkaInput)
     })
 
     stream.subscribe({
@@ -73,7 +73,7 @@ describe("Kafka Stream", () => {
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaEvent)
       const inputWithInvalidData = {...kafkaInput, value: undefined}
-      getKafkaStream(appContext, observer)(inputWithInvalidData)
+      kafkaStream(appContext, observer)(inputWithInvalidData)
     })
 
     stream.subscribe({

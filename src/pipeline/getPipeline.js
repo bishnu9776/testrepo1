@@ -51,7 +51,7 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, source, k
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
-          event.acknowledgeMessage(event.message)
+          event.acknowledgeMessage()
         }
       }),
       retryWithExponentialBackoff({
