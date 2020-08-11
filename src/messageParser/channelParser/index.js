@@ -12,6 +12,7 @@ import {parseBIKEINFO} from "./BIKEINFO"
 import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 import {parseLOG} from "./LOGS"
+import {parseGen2Data} from "./GEN2"
 
 export const getCreateDataItemFromMessageFn = metricRegistry => {
   const channelParserConfig = {
@@ -32,6 +33,12 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
 
   return message => {
+    const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
+
+    if (isGen2Data) {
+      return parseGen2Data(message)
+    }
+
     const {channel} = message.attributes
     if (channel.match(/^can/)) {
       return channelParserConfig.can(message)

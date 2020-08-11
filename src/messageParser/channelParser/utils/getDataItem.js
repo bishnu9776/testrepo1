@@ -15,8 +15,8 @@ export const getDataItem = ({attributes, dataItemName, timestamp, value, sequenc
     data_item_id: `${dataItemName}-${version}`,
     timestamp,
     value,
-    channel,
-    sequence,
+    ...(channel && {channel}),
+    ...(sequence && {sequence}),
     ...(canId && {can_id: getHexCanId(canId)})
   }
 }

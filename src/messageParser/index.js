@@ -27,6 +27,10 @@ const handleParseFailures = (message, error, metricRegistry, log) => {
 
 const getFormattedAttributes = attributes => {
   const {subFolder, deviceId} = attributes
+  if (!subFolder) {
+    return attributes
+  }
+
   const isNonLegacyMessage = subFolder.includes("v1/")
   if (isNonLegacyMessage) {
     return {
@@ -52,7 +56,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
 
-  const shouldDropChannel = channel => channelsToDrop.includes(channel)
+  const shouldDropChannel = channel => Array.isArray(channelsToDrop) && channelsToDrop.includes(channel)
   const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
   return async message => {
