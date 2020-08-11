@@ -11,6 +11,7 @@ const nonDataItemKeys = [
   "can_id",
   "start_timestamp",
   "end_timestamp",
+  "timestamp",
   "key",
   "value"
 ]
@@ -33,8 +34,8 @@ export const parseGen2Data = ({data, attributes}) => {
             sequence: event.seq_num
           })
         })
-        .filter(e => !!e)
         .concat([getDataItem({timestamp, attributes, dataItemName: canKey, value: canValue, sequence: event.seq_num})])
+        .filter(e => !!e)
     })
   )
 }
