@@ -1,5 +1,10 @@
-// use regex to get the bike_id
-const getDevice = topic => String.fromCharCode.apply(null, new Uint16Array(topic))
+const {env} = process
+
+const getDevice = topic => {
+  const regex = env.VI_REGEX_DEVICE_FROM_TOPIC
+  const decodedTopic = String.fromCharCode.apply(null, new Uint16Array(topic))
+  return decodedTopic.match(regex)[1]
+}
 
 const parseMessage = value => JSON.parse(JSON.stringify(value))
 

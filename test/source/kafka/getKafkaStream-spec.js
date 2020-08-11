@@ -5,8 +5,11 @@ import {getMockLog} from "../../stubs/logger"
 import {getKafkaStream} from "../../../src/source/kafka/getKafkaStream"
 import kafkaEvent from "../../fixtures/kafkaEvent.json"
 
+const {env} = process
+
 describe("Kafka Stream", () => {
   let appContext
+  env.VI_REGEX_DEVICE_FROM_TOPIC = "\\..*\\.(.*)\\..*"
 
   beforeEach(async () => {
     appContext = {
@@ -38,7 +41,7 @@ describe("Kafka Stream", () => {
 
     stream.subscribe(event => {
       expect(event.message.data).to.eql(kafkaEvent.value.data)
-      expect(event.message.attributes.bike_id).to.eql(".devices.foo.bar")
+      expect(event.message.attributes.bike_id).to.eql("foo")
     })
   })
 })
