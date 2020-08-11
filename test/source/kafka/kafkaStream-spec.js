@@ -52,11 +52,10 @@ describe("Kafka Stream", () => {
     const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaInputWithWrongTopic)
-      kafkaStream(appContext, observer)(kafkaInput)
-    })
-
-    stream.subscribe({
-      next: () => {
+      kafkaStream(
+        appContext,
+        observer
+      )(kafkaInput).then(() => {
         expect(appContext.log.warn).to.have.been.calledOnce
         expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
           "Counter",
@@ -65,19 +64,20 @@ describe("Kafka Stream", () => {
           "regex_mismatch"
         )
         done()
-      }
+      })
     })
+
+    stream.subscribe()
   })
 
   it("throw error when parsing fails", done => {
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaEvent)
       const inputWithInvalidData = {...kafkaInput, value: undefined}
-      kafkaStream(appContext, observer)(inputWithInvalidData)
-    })
-
-    stream.subscribe({
-      next: () => {
+      kafkaStream(
+        appContext,
+        observer
+      )(inputWithInvalidData).then(() => {
         expect(appContext.log.warn).to.have.been.calledOnce
         expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
           "Counter",
@@ -86,7 +86,9 @@ describe("Kafka Stream", () => {
           "parse_failure"
         )
         done()
-      }
+      })
     })
+
+    stream.subscribe()
   })
 })

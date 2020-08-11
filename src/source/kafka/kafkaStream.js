@@ -32,11 +32,11 @@ export const kafkaStream = (appContext, observer) => {
         const topicObj = headers ? parseMessage(headers[0].inputTopic) : null
         const device = getDevice(topicObj?.data, metricRegistry)
         const {data} = parseMessage(value, metricRegistry)
-        metricRegistry.updateStat("Counter", "num_events_consumed", 1, "")
+        metricRegistry.updateStat("Counter", "num_messages_received", 1)
         observer.next({message: {data, attributes: {bike_id: device}}, acknowledgeMessage})
       } catch (e) {
         log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
-        observer.next()
+        resolve(event)
       }
     })
   }

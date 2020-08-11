@@ -9,8 +9,6 @@ const {env} = process
 
 const pipelines = []
 
-const getProbeMapping = () => env.VI_COLLECTOR_PROBE_PATH
-
 export const startPipelines = async () => {
   const kafkaProps = {
     parentLog: log
@@ -27,7 +25,7 @@ export const startPipelines = async () => {
     getPipeline({
       source,
       appContext,
-      probePath: getProbeMapping(),
+      probePath: env.VI_COLLECTOR_PROBE_PATH,
       kafkaProducer
     })
   )
