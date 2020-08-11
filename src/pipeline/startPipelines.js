@@ -17,16 +17,16 @@ export const startPipelines = async () => {
   }
   const kafkaProducer = await createProducer(kafkaProps)
   const metricRegistry = getMetricRegistry(log)
+  const appContext = {log, metricRegistry}
 
   metricRegistry.startStatsReporting()
   collectProcessStats(metricRegistry)
-  const source = await getSourceStream({log, metricRegistry})
+  const source = await getSourceStream(appContext)
 
   pipelines.push(
     getPipeline({
       source,
-      log,
-      metricRegistry,
+      appContext,
       probePath: getProbeMapping(),
       kafkaProducer
     })

@@ -63,7 +63,7 @@ describe("Pipeline spec", () => {
       observer,
       probePath,
       kafkaProducer,
-      ...appContext
+      appContext
     })
   })
 

@@ -31,13 +31,14 @@ const defaultObserver = log => ({
   }
 })
 
-export const getPipeline = ({log, observer, metricRegistry, probePath, source, kafkaProducer}) => {
+export const getPipeline = ({appContext, observer, probePath, source, kafkaProducer}) => {
+  const {log} = appContext
   const probe = loadProbe(probePath, log)
 
   const {stream} = source
 
-  const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
-  const parseMessage = getMessageParser({log, metricRegistry, probe})
+  const sendToKafka = getKafkaSender({kafkaProducer, appContext})
+  const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
 
   return stream

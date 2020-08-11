@@ -16,7 +16,8 @@ const getDedupFn = metricRegistry => {
   }
 }
 
-const handleParseFailures = (message, error, metricRegistry, log) => {
+const handleParseFailures = (message, error, appContext) => {
+  const {metricRegistry, log} = appContext
   const {data, attributes} = message
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
   log.error(
@@ -43,9 +44,10 @@ const getFormattedAttributes = attributes => {
   }
 }
 
-export const getMessageParser = ({log, metricRegistry, probe}) => {
+export const getMessageParser = ({appContext, probe}) => {
+  const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
-  const maybeDecompressMessage = getDecompresserFn({log, metricRegistry})
+  const maybeDecompressMessage = getDecompresserFn(appContext)
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
@@ -81,7 +83,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
 
       return dataItems.map(mergeProbeInfo).concat(messageWithACK)
     } catch (error) {
-      handleParseFailures(message, error, metricRegistry, log)
+      handleParseFailures(message, error, appContext)
       return messageWithACK
     }
   }
