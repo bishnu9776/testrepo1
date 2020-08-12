@@ -51,5 +51,16 @@ describe("Decompresses gcp message", () => {
         expect(Object.keys(e).length).to.eql(4)
       })
     })
+
+    it("handles gen2 data when deserializing avro", async () => {
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
+      const decompressMessage = getDecompresserFn(appContext)
+      const output = await decompressMessage(message)
+      expect(output.length).to.eql(9)
+      output.forEach(e => {
+        expect(Object.keys(e).length).to.eql(28)
+      })
+    })
   })
 })
