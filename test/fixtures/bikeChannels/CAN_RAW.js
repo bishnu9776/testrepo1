@@ -6,6 +6,13 @@ export const CAN_RAW = {
       timestamp: 1595321899.501,
       seq_num: 1509075,
       global_seq: "49719812"
+    },
+    {
+      can_id: 305,
+      data: "72131264154501120",
+      timestamp: 1595321899.501,
+      seq_num: 1509076,
+      global_seq: "49719813"
     }
   ],
   attributes: {
