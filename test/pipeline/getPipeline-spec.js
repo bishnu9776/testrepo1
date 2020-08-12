@@ -1,5 +1,5 @@
 import {from} from "rxjs"
-import * as gcpSubscriber from "../../src/gcpSubscriber/gcpStream"
+import fs from "fs"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
@@ -25,12 +25,6 @@ describe("Pipeline spec", () => {
       log: getMockLog()
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
-    sinon.stub(gcpSubscriber, "getGCPStream").callsFake(() => {
-      return {
-        stream: from([getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), "foobar"]),
-        acknowledgeMessage: acknowledgeMessageSpy
-      }
-    })
 
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
@@ -42,11 +36,17 @@ describe("Pipeline spec", () => {
     clearStub()
   })
 
-  it("valid events flow through pipeline", done => {
+  it("valid events flow through pipeline from source gcp", done => {
+    const source = {
+      stream: from([
+        {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+      ])
+    }
     const output = []
     const observer = {
-      next: e => {
-        output.push(e)
+      next: message => {
+        output.push(message)
       },
       complete: () => {
         expect(output.length).to.eql(22)
@@ -58,11 +58,41 @@ describe("Pipeline spec", () => {
     }
 
     getPipeline({
+      source,
       observer,
       probePath,
-      subscriptionConfig: {},
       kafkaProducer,
-      ...appContext
+      appContext
+    })
+  })
+
+  it.skip("valid events flow through pipeline from source kafka", done => {
+    const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+    const source = {
+      stream: from([
+        {message: input, acknowledgeMessage: acknowledgeMessageSpy},
+        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+      ])
+    }
+    const output = []
+    const observer = {
+      next: message => {
+        output.push(message)
+      },
+      complete: () => {
+        expect(output.length).to.eql(22)
+        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
+        expect(acknowledgeMessageSpy.callCount).to.eql(2)
+        done()
+      }
+    }
+
+    getPipeline({
+      source,
+      observer,
+      probePath,
+      kafkaProducer,
+      appContext
     })
   })
 

@@ -46,7 +46,7 @@ describe("Kafka producer", () => {
       env.VI_DATAITEM_WHITELIST = "mode"
       env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
 
-      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, ...appContext})
+      const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, appContext})
 
       const sourceEvents = [
         ...getMockDataItems(1, "device-1", "mode"),
@@ -105,7 +105,7 @@ describe("Kafka producer", () => {
       const sourceEvents = getMockDataItems(1, "device-1")
       const sendToKafka = getKafkaSender({
         kafkaProducer: kafkaProducerStub,
-        ...appContext
+        appContext
       })
 
       sendToKafka(from(sourceEvents)).subscribe({

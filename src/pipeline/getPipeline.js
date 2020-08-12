@@ -1,13 +1,11 @@
 import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
 import {complement, isEmpty} from "ramda"
-import * as gcpSubscriber from "../gcpSubscriber/gcpStream"
 import {getMessageParser} from "../messageParser"
 import {getKafkaSender} from "../kafkaProducer"
 import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"
 import {ACK_MSG_TAG} from "../constants"
 import {getEventFormatter, isValid} from "../utils/helpers"
-import {collectSubscriptionStats} from "../metrics/subscriptionStats"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
@@ -33,25 +31,14 @@ const defaultObserver = log => ({
   }
 })
 
-export const getPipeline = ({log, observer, metricRegistry, probePath, subscriptionConfig, kafkaProducer}) => {
+export const getPipeline = ({appContext, observer, probePath, source, kafkaProducer}) => {
+  const {log} = appContext
   const probe = loadProbe(probePath, log)
-  const {subscriptionName, projectId, credentialsPath} = subscriptionConfig
 
-  const {acknowledgeMessage, stream} = gcpSubscriber.getGCPStream({
-    subscriptionName,
-    projectId,
-    credentialsPath,
-    metricRegistry,
-    log
-  })
+  const {stream} = source
 
-  const {statsInterval} = metricRegistry
-  if (statsInterval) {
-    collectSubscriptionStats({metricRegistry, subscriptionName, projectId, credentialsPath, statsInterval, log})
-  }
-
-  const sendToKafka = getKafkaSender({kafkaProducer, log, metricRegistry})
-  const parseMessage = getMessageParser({log, metricRegistry, probe})
+  const sendToKafka = getKafkaSender({kafkaProducer, appContext})
+  const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
 
   return stream
@@ -65,7 +52,7 @@ export const getPipeline = ({log, observer, metricRegistry, probePath, subscript
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
-          acknowledgeMessage(event.message)
+          event.acknowledgeMessage()
         }
       }),
       retryWithExponentialBackoff({

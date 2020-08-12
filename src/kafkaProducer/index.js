@@ -30,7 +30,8 @@ const flushAndThrow = ({kafkaProducer, log}) => err => {
 }
 
 // TODO: Rename this function
-const getObservables = ({event, topics, kafkaProducer, metricRegistry, log}) => {
+const getObservables = ({event, topics, kafkaProducer, appContext}) => {
+  const {metricRegistry, log} = appContext
   const key = getMessageKey(event)
 
   return topics.map(
@@ -53,19 +54,20 @@ const getObservables = ({event, topics, kafkaProducer, metricRegistry, log}) => 
   )
 }
 
-const createProduceRequests = ({kafkaProducer, routingConfig, metricRegistry, log}) => event => {
+const createProduceRequests = ({kafkaProducer, routingConfig, appContext}) => event => {
   const topics = getTopics(event, routingConfig)
   const shouldNotSendEvent = topics.length === 0 || event.tag === ACK_MSG_TAG
   if (shouldNotSendEvent) {
     return of(event)
   }
 
-  return merge(...getObservables({kafkaProducer, event, topics, metricRegistry, log}))
+  return merge(...getObservables({kafkaProducer, event, topics, appContext}))
 }
 
-export const getKafkaSender = ({kafkaProducer, log, metricRegistry}) => {
+export const getKafkaSender = ({kafkaProducer, appContext}) => {
+  const {log} = appContext
   const routingConfig = getRoutingConfig()
-  const createProduceRequestsForEvent = createProduceRequests({kafkaProducer, routingConfig, metricRegistry, log})
+  const createProduceRequestsForEvent = createProduceRequests({kafkaProducer, routingConfig, appContext})
   const bufferTimeSpan = parseInt(env.VI_PRODUCER_BUFFER_TIME_SPAN, 10) || 5000
 
   return stream =>

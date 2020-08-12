@@ -1,9 +1,9 @@
 import EventEmitter from "events"
 import {PubSub} from "@google-cloud/pubsub"
-import {getGCPStream} from "../../src/gcpSubscriber/gcpStream"
-import {getMockLog} from "../stubs/logger"
-import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
-import {clearStub} from "../stubs/clearStub"
+import {getGCPStream} from "../../../src/source/gcp/gcpStream"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
+import {clearStub} from "../../stubs/clearStub"
 
 describe("GCP subscriber", () => {
   let appContext
@@ -36,8 +36,8 @@ describe("GCP subscriber", () => {
       return eventEmitter
     })
 
-    getGCPStream(appContext).stream.subscribe({
-      next: x => actualEvents.push(x),
+    getGCPStream({appContext}).stream.subscribe({
+      next: ({message}) => actualEvents.push(message),
       error: e => {
         expect(e.message).to.eql("Error on GCP")
       }
