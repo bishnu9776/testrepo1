@@ -23,5 +23,8 @@
     "data_item_name": "message",
     "data_item_type": "LOG",
     "category": "LOG"
+  },
+  "can_raw": {
+    "data_item_name": "can_raw"
   }
 }
