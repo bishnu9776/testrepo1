@@ -1,5 +1,6 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./utils/getDataItem"
+import {getValues} from "./utils/getValues"
 
 const nonDataItemKeys = [
   "timestamp",
@@ -16,23 +17,27 @@ const nonDataItemKeys = [
   "value"
 ]
 
-export const parseGen2Data = ({message, probe}) => {
+export const parseGen2Data = ({message, probe, log}) => {
+  // Data items w/o direct mapping in the data
+  const syntheticDataItemNameList = Object.values(probe)
+    .filter(dataItemProbe => dataItemProbe.isSynthetic)
+    .map(dataItemProbe => dataItemProbe.data_item_name)
+
   const {data, attributes} = message
   return flatten(
     data.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
-      const canKey = event.key
-      const canValue = event.value
-      const embellishedEvent = {...event, [canKey]: canValue}
-      return Object.keys(embellishedEvent)
+      const {key, value} = event // maybe special case for can channel
+      const embellishedEvent = {...event, [key]: value}
+      return [...Object.keys(embellishedEvent), ...syntheticDataItemNameList]
         .filter(dataItemName => !nonDataItemKeys.includes(dataItemName))
-        .filter(dataItemName => event[dataItemName] !== null)
+        .filter(dataItemName => embellishedEvent[dataItemName] !== null)
         .map(dataItemName => {
           return getDataItem({
             timestamp,
             attributes,
             dataItemName,
-            value: getValue(event, dataItemName, probe),
+            value: getValues({event: embellishedEvent, dataItemName, probe, log}),
             sequence: event.seq_num
           })
         })
@@ -40,30 +45,3 @@ export const parseGen2Data = ({message, probe}) => {
     })
   )
 }
-
-const getValue = (event, dataItemName, probe) => {
-  let probeForDataItem = probe[dataItemName]
-  if (!probeForDataItem) {
-    // log here
-    probeForDataItem = {}
-  }
-  const {values_keys: valuesKeys} = probeForDataItem
-
-  if (!valuesKeys) {
-    return event[dataItemName] || null
-  }
-
-  if (valuesKeys.length > 1) {
-    return valuesKeys.reduce((acc, {key, value}) => {
-      return {...acc, [key]: event[value] || null}
-    }, {})
-  }
-
-  return event[valuesKeys[0].value] || null
-}
-
-/**
- * values_keys = {
- *   lat: {"key": "lat_deg", "value": "lat_deg"}
- * }
- */
