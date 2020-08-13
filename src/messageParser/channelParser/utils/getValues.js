@@ -27,14 +27,18 @@ const schema = {
 }
 
 const defaultValuesKeys = dataItemName => [{value: dataItemName}]
+const defaultValueSchema = "UNKNOWN"
 
 export const getValues = ({event, dataItemName, probe, log}) => {
   let probeForDataItem = probe[dataItemName]
   if (!probeForDataItem) {
     log.warn(`Data item: ${dataItemName} is not present in the probe.`)
-    probeForDataItem = {values_schema: "UNKNOWN"}
+    probeForDataItem = {}
   }
 
-  const {values_keys: valuesKeys = defaultValuesKeys(dataItemName), values_schema: valuesSchema} = probeForDataItem
+  const {
+    values_keys: valuesKeys = defaultValuesKeys(dataItemName),
+    values_schema: valuesSchema = defaultValueSchema
+  } = probeForDataItem
   return schema[valuesSchema]({event, valuesKeys, dataItemName})
 }
