@@ -2,14 +2,8 @@ import {path, pipe} from "ramda"
 import monitoring from "@google-cloud/monitoring"
 import errorFormatter from "../utils/errorFormatter"
 
-export const collectSubscriptionStats = ({
-  metricRegistry,
-  credentialsPath,
-  projectId,
-  subscriptionName,
-  statsInterval,
-  log
-}) => {
+export const collectSubscriptionStats = ({appContext, credentialsPath, projectId, subscriptionName, statsInterval}) => {
+  const {log, metricRegistry} = appContext
   const client = new monitoring.MetricServiceClient({keyFilename: credentialsPath})
 
   return setInterval(async () => {
