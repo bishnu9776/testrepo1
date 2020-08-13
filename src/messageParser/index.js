@@ -79,7 +79,7 @@ export const getMessageParser = ({log, metricRegistry, probe}) => {
         createDataItemsFromMessage,
         flatten,
         maybeDedupDataItems
-      )({data: decompressedMessage, attributes})
+      )({message: {data: decompressedMessage, attributes}, probe})
 
       return dataItems.map(mergeProbeInfo).concat({message, tag: ACK_MSG_TAG})
     } catch (error) {

@@ -32,11 +32,11 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
 
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
 
-  return message => {
+  return ({message, probe}) => {
     const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
 
     if (isGen2Data) {
-      return parseGen2Data(message)
+      return parseGen2Data({message, probe})
     }
 
     const {channel} = message.attributes
@@ -50,3 +50,28 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
     return channelParserConfig[channel](message)
   }
 }
+
+// const createCompositeDataItems = (dataItems, attributes, probe) => {
+//   const compositeDataItems = {
+//     location: {lat: "lat_deg", lon: "lon_deg"},
+//     acceleration: {x: "ACC_X_MPS2", y: "ACC_Y_MPS2", z: "ACC_Z_MPS2"}
+//   }
+//
+//   const getValue = (dataItemName, values) => {
+//     const schema = compositeDataItems[dataItemName]
+//     return Object.keys(schema).reduce((acc, val, index) => {
+//       return {...acc, [val]: values[index]}
+//     }, {})
+//   }
+//
+//   return Object.keys(compositeDataItems).map(compositeDataItemName => {
+//     const keysToGetValueOf = Object.values(compositeDataItems[compositeDataItemName]);
+//     const values = keysToGetValueOf.map(key => dataItems.find(dataItem => dataItem.data_item_name === key).value)
+//     return getDataItem({
+//       attributes,
+//       dataItemName: compositeDataItemName,
+//       timestamp: values[0].timestamp,
+//       value: getValue(compositeDataItemName, values)
+//     })
+//   })
+// }
