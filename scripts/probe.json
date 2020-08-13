@@ -1348,5 +1348,8 @@
     "sub_type": "",
     "category": "",
     "units": ""
+  },
+  "can_raw": {
+    "data_item_name": "can_raw"
   }
 }
