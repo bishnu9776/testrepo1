@@ -2,11 +2,22 @@ import {BIKEINFO} from "../../fixtures/bikeChannels/BIKEINFO"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {getParsedMessageFn} from "../../utils/getParsedMessage"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses BIKEINFO", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let appContext
+  let log
+  let metricRegistry
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
 
   it("parses given messages", () => {
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+
     const getParsedMessage = getParsedMessageFn("bike_info", "s_100")
     const parsedMessage = [
       getParsedMessage("release_name-v1", "release_name", "tintin2-release-24-Jul-2019-559857", 1, 1),
@@ -21,6 +32,6 @@ describe("Parses BIKEINFO", () => {
       getParsedMessage("bike_type-v1", "bike_type", "Gen1.5_450", 1, 1),
       getParsedMessage("motor_version-v1", "motor_version", "3_6_8", 1, 1)
     ]
-    expect(createDataItemsFromMessage({...BIKEINFO, probe})).to.eql(parsedMessage)
+    expect(createDataItemsFromMessage({message: BIKEINFO, probe})).to.eql(parsedMessage)
   })
 })

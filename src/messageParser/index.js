@@ -52,7 +52,7 @@ export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn(appContext)
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")

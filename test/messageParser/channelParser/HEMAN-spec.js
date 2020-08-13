@@ -1,12 +1,22 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {HEMAN} from "../../fixtures/bikeChannels/HEMAN"
 import probe from "../../fixtures/probe.json"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses HEMAN", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let metricRegistry
+  let appContext
+  let log
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
 
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...HEMAN, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    expect(createDataItemsFromMessage({message: HEMAN, probe})).to.eql([
       {
         channel: "heman",
         data_item_id: "heman-v1",

@@ -1,12 +1,22 @@
 import {SOH2} from "../../fixtures/bikeChannels/SOH2"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses SOH2", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let metricRegistry
+  let appContext
+  let log
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
 
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...SOH2, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    expect(createDataItemsFromMessage({message: SOH2, probe})).to.eql([
       {
         channel: "soh2",
         data_item_id: "FinalSoHCapacityEstimate_CellBlock_Cell1-v1",

@@ -1,12 +1,23 @@
 import {GPSTPV} from "../../fixtures/bikeChannels/GPSTPV"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses GPSTPV", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let metricRegistry
+  let appContext
+  let log
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
 
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...GPSTPV, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+
+    expect(createDataItemsFromMessage({message: GPSTPV, probe})).to.eql([
       {
         data_item_id: "location-v1",
         data_item_name: "location",

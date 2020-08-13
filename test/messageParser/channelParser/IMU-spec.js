@@ -1,11 +1,21 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {IMU} from "../../fixtures/bikeChannels/IMU"
 import probe from "../../fixtures/probe.json"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses IMU", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let metricRegistry
+  let appContext
+  let log
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...IMU, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    expect(createDataItemsFromMessage({message: IMU, probe})).to.eql([
       {
         channel: "imu",
         data_item_id: "acc_x_mps2-v1",

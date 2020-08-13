@@ -1,5 +1,4 @@
 import {isNil} from "ramda"
-import {log} from "../../logger"
 import {parseGPSTPV} from "./GPSTPV"
 import {parseCAN} from "./CAN"
 import {parseMCU} from "./MCU"
@@ -14,7 +13,8 @@ import {parseSOH} from "./SOH"
 import {parseLOG} from "./LOGS"
 import {parseGen2Data} from "./GEN2"
 
-export const getCreateDataItemFromMessageFn = metricRegistry => {
+export const getCreateDataItemFromMessageFn = appContext => {
+  const {log, metricRegistry} = appContext
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
     can: parseCAN(metricRegistry),
@@ -36,7 +36,7 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
     const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
 
     if (isGen2Data) {
-      return parseGen2Data({message, probe})
+      return parseGen2Data({message, probe, log})
     }
 
     const {channel} = message.attributes
