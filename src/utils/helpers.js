@@ -1,6 +1,6 @@
 import {ACK_MSG_TAG} from "../constants"
 
-const requiredKeys = ["data_item_name", "data_item_id", "timestamp", "device_uuid", "sequence"]
+const requiredKeys = ["data_item_name", "timestamp", "device_uuid"]
 
 export const isValid = log => event => {
   const eventKeys = Object.keys(event)
@@ -12,6 +12,7 @@ export const isValid = log => event => {
   return false
 }
 
+// TODO: is agent, instance_id, id etc are required by down stream applictaion
 export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */
