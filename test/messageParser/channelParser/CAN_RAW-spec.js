@@ -1,12 +1,11 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {CAN_RAW} from "../../fixtures/bikeChannels/CAN_RAW"
-import probe from "../../fixtures/probe.json"
 
 describe("Parses CAN_RAW", () => {
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
 
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...CAN_RAW, probe})).to.eql([
+    expect(createDataItemsFromMessage({...CAN_RAW})).to.eql([
       {
         attributes: {
           bike_id: "BMS-EOL5",
