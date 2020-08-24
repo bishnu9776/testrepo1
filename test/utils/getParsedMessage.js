@@ -23,6 +23,19 @@ export const getParsedMessageFn = (channel, device, canId) => (
   ...(canId && {can_id: canId})
 })
 
+export const getParserCANRAWMessageFn = (device, timestamp, channel) => value => ({
+  attributes: {
+    bike_id: device,
+    channel,
+    version: "v1"
+  },
+  channel,
+  value,
+  data_item_name: "can_raw",
+  device_uuid: device,
+  timestamp: iso(timestamp)
+})
+
 export const getCanDecodedMessageFn = ({bike_id, can_id, timestamp, seq_num}) => ({key, value}) => ({
   can_id,
   timestamp,

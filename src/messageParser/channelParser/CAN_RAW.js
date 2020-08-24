@@ -8,6 +8,7 @@ export const parseCANRAW = ({data, attributes}) => {
         data_item_name: "can_raw",
         value: {...e},
         attributes,
+        channel: attributes.channel,
         device_uuid: attributes.bike_id,
         timestamp
       }
