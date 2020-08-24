@@ -17,7 +17,7 @@ const nonDataItemKeys = [
   "value"
 ]
 
-export const parseGen2Data = ({message, probe, log}) => {
+export const parseGen2BufferedData = ({message, probe, log}) => {
   // Data items w/o direct mapping in the data
   const syntheticDataItemNameList = Object.values(probe)
     .filter(dataItemProbe => dataItemProbe.synthetic)

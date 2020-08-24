@@ -12,9 +12,16 @@ import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 import {parseLOG} from "./LOGS"
 import {parseCANRAW} from "./CAN_RAW"
-import {parseGen2Data} from "./GEN2"
+import {parseGen2BufferedData} from "./GEN2"
 
-export const getCreateDataItemFromMessageFn = appContext => {
+const getGen2DataParser = appContext => {
+  const {log} = appContext
+  return ({message, probe}) => {
+    return parseGen2BufferedData({message, probe, log})
+  }
+}
+
+const getGen1DataParser = appContext => {
   const {log, metricRegistry} = appContext
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
@@ -31,16 +38,8 @@ export const getCreateDataItemFromMessageFn = appContext => {
     logs: parseLOG,
     can_raw: parseCANRAW
   }
-
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
-
-  return ({message, probe}) => {
-    const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
-
-    if (isGen2Data) {
-      return parseGen2Data({message, probe, log})
-    }
-
+  return ({message}) => {
     const {channel} = message.attributes
     if (channel !== "can_raw" && channel.match(/^can/)) {
       return channelParserConfig.can(message)
@@ -50,6 +49,19 @@ export const getCreateDataItemFromMessageFn = appContext => {
       return []
     }
     return channelParserConfig[channel](message)
+  }
+}
+
+export const getCreateDataItemFromMessageFn = appContext => {
+  const parseGen1Data = getGen1DataParser(appContext)
+  const parseGen2Data = getGen2DataParser(appContext)
+
+  return ({message, probe}) => {
+    const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
+    if (isGen2Data) {
+      return parseGen2Data({message, probe})
+    }
+    return parseGen1Data({message})
   }
 }
 
