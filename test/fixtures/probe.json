@@ -24,6 +24,9 @@
     "data_item_type": "LOG",
     "category": "LOG"
   },
+  "can_raw": {
+    "data_item_name": "can_raw"
+  },
   "ACC_X_MPS2": {
     "data_item_name": "ACC_X_MPS2",
     "data_item_type": "ACCELERATION",

@@ -140,6 +140,15 @@ describe("Parse GCP message", () => {
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
     })
 
+    it("formats attributes for v1 data and parses correctly for CAN_RAW ", async () => {
+      const messageParser = getMessageParser({appContext, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_RAW`))
+      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const output = await messageParser({message, acknowledgeMessage})
+      expect(output.length).to.eql(186)
+      expect(output[185].tag).to.eql(ACK_MSG_TAG)
+    })
+
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
       process.env.IS_GEN_2_DATA = "true"
       const messageParser = getMessageParser({appContext, probe})

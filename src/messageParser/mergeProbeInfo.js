@@ -17,8 +17,7 @@ const getValueKey = ({probeInfo}) => {
     return "value_location"
   }
 
-  // TODO make it generic after the discussion
-  if (probeInfo.category === "LOG") {
+  if (probeInfo.category === "LOG" || probeInfo.data_item_name === "can_raw") {
     return "values"
   }
 
