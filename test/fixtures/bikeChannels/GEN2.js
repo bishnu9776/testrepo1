@@ -1,6 +1,8 @@
 export const GEN2 = {
   attributes: {
-    bike_id: "s_123"
+    bike_id: "s_123",
+    channel: "buffered_channel",
+    version: "v1"
   },
   data: [
     {

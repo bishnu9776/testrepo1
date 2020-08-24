@@ -28,10 +28,6 @@ const handleParseFailures = (message, error, appContext) => {
 
 const getFormattedAttributes = attributes => {
   const {subFolder, deviceId} = attributes
-  if (!subFolder) {
-    return attributes
-  }
-
   const isNonLegacyMessage = subFolder.includes("v1/")
   if (isNonLegacyMessage) {
     return {
