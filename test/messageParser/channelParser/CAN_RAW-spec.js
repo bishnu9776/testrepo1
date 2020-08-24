@@ -1,11 +1,21 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {CAN_RAW} from "../../fixtures/bikeChannels/CAN_RAW"
+import {getMockLog} from "../../stubs/logger"
+import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
 describe("Parses CAN_RAW", () => {
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
+  let metricRegistry
+  let appContext
+  let log
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
 
   it("parses given messages", () => {
-    expect(createDataItemsFromMessage({...CAN_RAW})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    expect(createDataItemsFromMessage({message: CAN_RAW})).to.eql([
       {
         attributes: {
           bike_id: "BMS-EOL5",
