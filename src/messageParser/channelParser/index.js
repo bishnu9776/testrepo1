@@ -13,11 +13,24 @@ import {parseSOH} from "./SOH"
 import {parseLOG} from "./LOGS"
 import {parseCANRAW} from "./CAN_RAW"
 import {parseGen2BufferedData} from "./GEN2"
+import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
 const getGen2DataParser = appContext => {
   const {log} = appContext
+  const channelParserConfig = {
+    buffered_channel: parseGen2BufferedData,
+    unbuffered_channel: parseGen2UnbufferedData
+  }
+  const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
+
   return ({message, probe}) => {
-    return parseGen2BufferedData({message, probe, log})
+    const {channel} = message.attributes
+
+    if (channelNotInParserConfig(channel)) {
+      log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      return []
+    }
+    return channelParserConfig[channel]({message, probe, log})
   }
 }
 
