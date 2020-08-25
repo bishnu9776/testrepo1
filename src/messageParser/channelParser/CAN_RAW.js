@@ -8,7 +8,7 @@ export const parseCANRAW = ({data, attributes}) => {
         data_item_name: "can_raw",
         value: {...e},
         attributes,
-        device_uuid: process.env.IS_GEN_2_DATA ? attributes.deviceId : attributes.bike_id,
+        device_uuid: attributes.bike_id,
         timestamp
       }
     })

@@ -12,9 +12,8 @@ export const GEN2_CAN_RAW = {
     }
   ],
   attributes: {
-    deviceId: "s_3739",
-    deviceRegistryId: "vehicle-gen2",
-    deviceNumId: "2604039160582631",
-    channel: "buffered_channel"
+    bike_id: "s_3739",
+    channel: "buffered_channel",
+    version: "v1"
   }
 }

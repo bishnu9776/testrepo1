@@ -50,8 +50,7 @@ describe("Parses GEN2", () => {
         attributes: {
           deviceId: "s_3739",
           channel: "buffered_channel",
-          deviceNumId: "2604039160582631",
-          deviceRegistryId: "vehicle-gen2"
+          version: "v1"
         },
         data_item_name: "can_raw",
         device_uuid: "s_3739",
@@ -66,8 +65,7 @@ describe("Parses GEN2", () => {
         attributes: {
           deviceId: "s_3739",
           channel: "buffered_channel",
-          deviceNumId: "2604039160582631",
-          deviceRegistryId: "vehicle-gen2"
+          version: "v1"
         },
         data_item_name: "can_raw",
         device_uuid: "s_3739",
