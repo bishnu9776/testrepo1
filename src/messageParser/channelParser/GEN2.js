@@ -1,4 +1,4 @@
-import {flatten} from "ramda"
+import {flatten, isNil} from "ramda"
 import {getDataItem} from "./utils/getDataItem"
 import {getValues} from "./utils/getValues"
 import {parseCANRAW} from "./CAN_RAW"
@@ -19,7 +19,7 @@ const nonDataItemKeys = [
 ]
 
 const isCANRAW = event => {
-  return event.can_id !== null && event.data !== null
+  return !isNil(event.can_id) && !isNil(event.data)
 }
 
 export const parseGen2BufferedData = ({message, probe, log}) => {
@@ -33,7 +33,10 @@ export const parseGen2BufferedData = ({message, probe, log}) => {
     data.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
       const {key, value} = event
-      const embellishedEvent = {...event, [key]: value}
+      const embellishedEvent = {...event}
+      if (!isNil(key)) {
+        embellishedEvent[key] = value
+      }
       if (isCANRAW(event)) {
         return parseCANRAW({data: [event], attributes})
       }
@@ -45,11 +48,12 @@ export const parseGen2BufferedData = ({message, probe, log}) => {
             timestamp,
             attributes,
             dataItemName,
+            // TODO: value -> values
             value: getValues({event: embellishedEvent, dataItemName, probe, log}),
             sequence: event.seq_num
           })
         })
-        .filter(e => !!e)
+        .filter(e => !!e && !isNil(e.value))
     })
   )
 }

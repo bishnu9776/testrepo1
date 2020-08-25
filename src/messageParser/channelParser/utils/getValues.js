@@ -1,8 +1,11 @@
+import {isNil} from "ramda"
+
 const getSingleValue = ({event, valuesKeys}) => event[valuesKeys[0].value] || null
 const getCompositeValue = ({event, valuesKeys}) => {
-  return valuesKeys.reduce((acc, {key, value}) => {
+  const compositeValue = valuesKeys.reduce((acc, {key, value}) => {
     return {...acc, [key]: event[value] || null}
   }, {})
+  return maybeReturnValue(compositeValue)
 }
 
 const schema = {
@@ -12,22 +15,40 @@ const schema = {
   SPATIAL: getCompositeValue,
   LOCATION: getCompositeValue,
   JSON: ({event, valuesKeys, dataItemName}) => {
-    return valuesKeys.reduce(
+    const jsonValue = valuesKeys.reduce(
       (acc, {key, value}) => {
         const dataItemValue = {...acc[dataItemName], [key]: event[value] || null}
         return {...acc, [dataItemName]: dataItemValue}
       },
       {[dataItemName]: {}}
     )
+    return isNil(maybeReturnValue(jsonValue[dataItemName])) ? null : jsonValue
   },
   UNKNOWN: ({event, valuesKeys}) => {
     const value = getSingleValue({event, valuesKeys})
+    if (isNil(value)) {
+      return null
+    }
     return typeof value === "string" ? value : JSON.stringify(value)
   }
 }
 
 const defaultValuesKeys = dataItemName => [{value: dataItemName}]
 const defaultValueSchema = "UNKNOWN"
+
+const maybeReturnValue = value => {
+  const shouldReturnNull = Object.values(value).reduce((acc, val) => {
+    if (!acc) {
+      return acc
+    }
+    if (!isNil(val)) {
+      return false
+    }
+    return acc
+  }, true)
+
+  return shouldReturnNull ? null : value
+}
 
 export const getValues = ({event, dataItemName, probe, log}) => {
   let probeForDataItem = probe[dataItemName]

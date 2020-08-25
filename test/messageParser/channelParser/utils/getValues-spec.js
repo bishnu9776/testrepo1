@@ -22,7 +22,8 @@ describe("getValues spec", () => {
     const event = {
       a: 1,
       b: 2,
-      c: "3"
+      c: "3",
+      d: null
     }
     it("should take schema as UNKNOWN when probe is not present", () => {
       const log = getMockLog()
@@ -53,8 +54,8 @@ describe("getValues spec", () => {
         data_item_type: "A",
         values_schema: "INT"
       },
-      b: {
-        data_item_name: "b",
+      double: {
+        data_item_name: "double",
         data_item_type: "B",
         values_schema: "DOUBLE"
       },
@@ -70,18 +71,18 @@ describe("getValues spec", () => {
         values_schema: "SPATIAL",
         values_keys: [
           {key: "a", value: "a"},
-          {key: "b", value: "b"},
+          {key: "b", value: "double"},
           {key: "c", value: "c"}
         ]
       },
-      e: {
+      location: {
         synthetic: true,
-        data_item_name: "e",
-        data_item_type: "E",
+        data_item_name: "location",
+        data_item_type: "LOC",
         values_schema: "LOCATION",
         values_keys: [
           {key: "a", value: "a"},
-          {key: "b", value: "b"}
+          {key: "b", value: "double"}
         ]
       },
       f: {
@@ -94,13 +95,6 @@ describe("getValues spec", () => {
           {key: "b", value: "lon"}
         ]
       },
-      name_diff: {
-        synthetic: true,
-        data_item_name: "d",
-        data_item_type: "D",
-        values_schema: "LOCATION",
-        values_keys: [{key: "a", value: "a"}]
-      },
       json_schema_item: {
         synthetic: true,
         data_item_name: "g",
@@ -108,21 +102,22 @@ describe("getValues spec", () => {
         values_schema: "JSON",
         values_keys: [
           {key: "a", value: "a"},
-          {key: "b", value: "b"}
+          {key: "b", value: "double"}
         ]
       }
     }
     const event = {
       a: 1,
-      b: 2.2,
-      c: "3"
+      double: 2.2,
+      c: "3",
+      probeAbsent: null
     }
     it("should return value as is if schema is INT ", () => {
       expect(getValues({event, probe, dataItemName: "a"})).to.be.equal(1)
     })
 
     it("should return value as is if schema is DOUBLE ", () => {
-      expect(getValues({event, probe, dataItemName: "b"})).to.be.equal(2.2)
+      expect(getValues({event, probe, dataItemName: "double"})).to.be.equal(2.2)
     })
 
     it("should return value as is if schema is STRING ", () => {
@@ -146,7 +141,7 @@ describe("getValues spec", () => {
       const val = getValues({
         event,
         probe,
-        dataItemName: "e"
+        dataItemName: "location"
       })
       expect(val).to.deep.equal({
         a: 1,
@@ -178,6 +173,40 @@ describe("getValues spec", () => {
           b: 2.2
         }
       })
+    })
+    it("should return null if schema is JSON and value is null", () => {
+      const val = getValues({
+        event: {},
+        probe,
+        dataItemName: "json_schema_item"
+      })
+      expect(val).to.eql(null)
+    })
+    it("should return value as null if schema is LOCATION and value is null ", () => {
+      const val = getValues({
+        event: {},
+        probe,
+        dataItemName: "location"
+      })
+      expect(val).to.eql(null)
+    })
+    it("should return null if schema is DOUBLE and value is null", () => {
+      const val = getValues({
+        event: {},
+        probe,
+        dataItemName: "double"
+      })
+      expect(val).to.eql(null)
+    })
+    it("should return null if schema is UNKNOWN and value is null", () => {
+      const log = getMockLog()
+      const val = getValues({
+        event: {},
+        log,
+        probe,
+        dataItemName: "probeAbsent"
+      })
+      expect(val).to.eql(null)
     })
   })
 })

@@ -48,7 +48,7 @@ describe("Parses GEN2", () => {
     expect(createDataItemsFromMessage({message: GEN2_CAN_RAW, probe})).to.eql([
       {
         attributes: {
-          deviceId: "s_3739",
+          bike_id: "s_3739",
           channel: "buffered_channel",
           version: "v1"
         },
@@ -63,7 +63,7 @@ describe("Parses GEN2", () => {
       },
       {
         attributes: {
-          deviceId: "s_3739",
+          bike_id: "s_3739",
           channel: "buffered_channel",
           version: "v1"
         },
