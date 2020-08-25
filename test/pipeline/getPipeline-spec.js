@@ -51,7 +51,7 @@ describe("Pipeline spec", () => {
       complete: () => {
         expect(output.length).to.eql(122)
         expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-        expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20) // Two deduped CAN events
+        expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
