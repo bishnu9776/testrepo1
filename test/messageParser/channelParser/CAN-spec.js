@@ -2,7 +2,7 @@ import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channel
 import {CAN_BMS} from "../../fixtures/bikeChannels/CAN"
 import probe from "../../fixtures/probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
-import {getParsedMessageFn, getParserCANRawMessageFn} from "../../utils/getParsedMessage"
+import {getParsedMessageFn, getParsedCANRawMessageFn} from "../../utils/getParsedMessage"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {clearStub} from "../../stubs/clearStub"
 
@@ -26,7 +26,7 @@ describe("Parses CAN", () => {
 
     it("parses given message", () => {
       const getParsedMessage = getParsedMessageFn("can_bms/e55", "BEAGLE-ESS-4", "0x158")
-      const getCANRawMessage = getParserCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
+      const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
       const parsedData = [
         getParsedMessage("BMS_2_Aux_Temp1-v1", "BMS_2_Aux_Temp1", 29.57, 1, 1),
@@ -49,7 +49,7 @@ describe("Parses CAN", () => {
 
     it("when config paths are not given, should return can raw message", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
-      const getCANRawMessage = getParserCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
+      const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
       expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([

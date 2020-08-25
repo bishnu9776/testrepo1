@@ -129,7 +129,7 @@ describe("Parse GCP message", () => {
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(121)
       expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-      expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20) // deduped CAN events
+      expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20) // deduped can_mcu events
       expect(output[120].tag).to.eql(ACK_MSG_TAG)
     })
 

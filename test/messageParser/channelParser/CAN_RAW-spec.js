@@ -1,12 +1,12 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import {CAN_RAW} from "../../fixtures/bikeChannels/CAN_RAW"
-import {getParserCANRawMessageFn} from "../../utils/getParsedMessage"
+import {getParsedCANRawMessageFn} from "../../utils/getParsedMessage"
 
 describe("Parses CAN_RAW", () => {
   const createDataItemsFromMessage = getCreateDataItemFromMessageFn()
 
   it("parses given messages", () => {
-    const getParsedMessage = getParserCANRawMessageFn("can_raw", "BMS-EOL5", 1)
+    const getParsedMessage = getParsedCANRawMessageFn("can_raw", "BMS-EOL5", 1)
     expect(createDataItemsFromMessage({...CAN_RAW})).to.eql([
       getParsedMessage({
         can_id: 306,
