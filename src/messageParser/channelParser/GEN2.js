@@ -1,6 +1,7 @@
 import {flatten} from "ramda"
 import {getDataItem} from "./utils/getDataItem"
 import {getValues} from "./utils/getValues"
+import {parseCANRAW} from "./CAN_RAW"
 
 const nonDataItemKeys = [
   "timestamp",
@@ -17,6 +18,10 @@ const nonDataItemKeys = [
   "value"
 ]
 
+const isCANRAWEvent = event => {
+  return event.can_id !== null && event.data !== null
+}
+
 export const parseGen2BufferedData = ({message, probe, log}) => {
   // Data items w/o direct mapping in the data
   const syntheticDataItemNameList = Object.values(probe)
@@ -27,8 +32,11 @@ export const parseGen2BufferedData = ({message, probe, log}) => {
   return flatten(
     data.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()
-      const {key, value} = event // maybe special case for can channel
+      const {key, value} = event
       const embellishedEvent = {...event, [key]: value}
+      if (isCANRAWEvent(event)) {
+        return parseCANRAW({data: [event], attributes})
+      }
       return [...Object.keys(embellishedEvent), ...syntheticDataItemNameList]
         .filter(dataItemName => !nonDataItemKeys.includes(dataItemName))
         .filter(dataItemName => embellishedEvent[dataItemName] !== null)

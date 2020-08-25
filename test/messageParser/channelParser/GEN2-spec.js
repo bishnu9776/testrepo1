@@ -1,6 +1,7 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {GEN2} from "../../fixtures/bikeChannels/GEN2"
+import {GEN2_CAN_RAW} from "../../fixtures/bikeChannels/GEN2_CAN_RAW"
 import {getMockLog} from "../../stubs/logger"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 
@@ -40,6 +41,43 @@ describe("Parses GEN2", () => {
       parsedDataItem("BMS_Cell3", "3.5231"),
       parsedDataItem("acceleration", {x: 2.23, y: 3.32, z: 4.45}),
       parsedDataItem("acc_x", {acc_x: {x: 2.23}})
+    ])
+  })
+  it("parses can raw messages", () => {
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    expect(createDataItemsFromMessage({message: GEN2_CAN_RAW, probe})).to.eql([
+      {
+        attributes: {
+          deviceId: "s_3739",
+          channel: "buffered_channel",
+          deviceNumId: "2604039160582631",
+          deviceRegistryId: "vehicle-gen2"
+        },
+        data_item_name: "can_raw",
+        device_uuid: "s_3739",
+        timestamp: "2020-07-21T08:58:19.501Z",
+        value: {
+          can_id: 132,
+          data: "-2621409860442463330",
+          timestamp: 1595321899.501
+        }
+      },
+      {
+        attributes: {
+          deviceId: "s_3739",
+          channel: "buffered_channel",
+          deviceNumId: "2604039160582631",
+          deviceRegistryId: "vehicle-gen2"
+        },
+        data_item_name: "can_raw",
+        device_uuid: "s_3739",
+        timestamp: "2020-08-14T12:53:57.437Z",
+        value: {
+          can_id: 131,
+          data: "0892e891ee91e491",
+          timestamp: 1597409637.437
+        }
+      }
     ])
   })
 })
