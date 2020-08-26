@@ -15,22 +15,22 @@ import {parseCANRAW} from "./CAN_RAW"
 import {parseGen2BufferedData} from "./GEN2"
 import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
-const getGen2DataParser = appContext => {
+const getGen2DataParser = (appContext, probe) => {
   const {log} = appContext
   const channelParserConfig = {
-    buffered_channel: parseGen2BufferedData,
+    buffered_channel: parseGen2BufferedData(appContext, probe),
     unbuffered_channel: parseGen2UnbufferedData
   }
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
 
-  return ({message, probe}) => {
+  return ({message}) => {
     const {channel} = message.attributes
 
     if (channelNotInParserConfig(channel)) {
       log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
       return []
     }
-    return channelParserConfig[channel]({message, probe, log})
+    return channelParserConfig[channel]({message})
   }
 }
 
@@ -65,40 +65,15 @@ const getGen1DataParser = appContext => {
   }
 }
 
-export const getCreateDataItemFromMessageFn = appContext => {
+export const getCreateDataItemFromMessageFn = (appContext, probe) => {
   const parseGen1Data = getGen1DataParser(appContext)
-  const parseGen2Data = getGen2DataParser(appContext)
+  const parseGen2Data = getGen2DataParser(appContext, probe)
 
-  return ({message, probe}) => {
+  return ({message}) => {
     const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
     if (isGen2Data) {
-      return parseGen2Data({message, probe})
+      return parseGen2Data({message})
     }
     return parseGen1Data({message})
   }
 }
-
-// const createCompositeDataItems = (dataItems, attributes, probe) => {
-//   const compositeDataItems = {
-//     location: {lat: "lat_deg", lon: "lon_deg"},
-//     acceleration: {x: "ACC_X_MPS2", y: "ACC_Y_MPS2", z: "ACC_Z_MPS2"}
-//   }
-//
-//   const getValue = (dataItemName, values) => {
-//     const schema = compositeDataItems[dataItemName]
-//     return Object.keys(schema).reduce((acc, val, index) => {
-//       return {...acc, [val]: values[index]}
-//     }, {})
-//   }
-//
-//   return Object.keys(compositeDataItems).map(compositeDataItemName => {
-//     const keysToGetValueOf = Object.values(compositeDataItems[compositeDataItemName]);
-//     const values = keysToGetValueOf.map(key => dataItems.find(dataItem => dataItem.data_item_name === key).value)
-//     return getDataItem({
-//       attributes,
-//       dataItemName: compositeDataItemName,
-//       timestamp: values[0].timestamp,
-//       value: getValue(compositeDataItemName, values)
-//     })
-//   })
-// }

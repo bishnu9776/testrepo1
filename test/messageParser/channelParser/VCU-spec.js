@@ -25,9 +25,9 @@ describe("Parses VCU", () => {
 
   it("parses given message", () => {
     const requiredKeys = ["channel", "data_item_id", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
-    const parsedMessage = createDataItemsFromMessage({message: VCU, probe})
+    const parsedMessage = createDataItemsFromMessage({message: VCU})
     expect(parsedMessage.length).to.eql(22)
     parsedMessage.forEach(e => {
       expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
@@ -36,7 +36,7 @@ describe("Parses VCU", () => {
 
   it("when config paths are not given, should return empty array", () => {
     env.VI_VCU_DECODER_CONFIG_PATH = undefined
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: VCU, probe})).to.eql([])
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: VCU})).to.eql([])
   })
 })

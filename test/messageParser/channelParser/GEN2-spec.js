@@ -23,7 +23,7 @@ describe("Parses GEN2", () => {
   })
 
   it("parses buffered messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
     const parsedDataItem = (dataItemName, value) => ({
       channel: "buffered_channel",
@@ -34,7 +34,7 @@ describe("Parses GEN2", () => {
       value
     })
 
-    expect(createDataItemsFromMessage({message: GEN2, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: GEN2})).to.eql([
       parsedDataItem("ACC_X_MPS2", 2.23),
       parsedDataItem("ACC_Y_MPS2", 3.32),
       parsedDataItem("ACC_Z_MPS2", "4.45"),
@@ -44,7 +44,7 @@ describe("Parses GEN2", () => {
     ])
   })
   it("parses can raw messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
     const parsedDataItem = (timestamp, value) => ({
       attributes: {
         bike_id: "s_3739",
@@ -57,7 +57,7 @@ describe("Parses GEN2", () => {
       timestamp,
       value
     })
-    expect(createDataItemsFromMessage({message: GEN2_CAN_RAW, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: GEN2_CAN_RAW})).to.eql([
       parsedDataItem("2020-07-21T08:58:19.501Z", {
         can_id: 132,
         data: "-2621409860442463330",

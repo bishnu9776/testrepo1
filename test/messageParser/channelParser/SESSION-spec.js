@@ -15,8 +15,8 @@ describe("Parses SESSION", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: SESSION, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: SESSION})).to.eql([
       {
         channel: "session",
         data_item_id: "vehicle_status-v1",

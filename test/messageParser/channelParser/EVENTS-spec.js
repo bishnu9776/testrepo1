@@ -15,7 +15,7 @@ describe("Parses EVENTS", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
     expect(createDataItemsFromMessage({message: EVENTS, probe})).to.eql([
       {

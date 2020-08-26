@@ -26,13 +26,13 @@ describe("Parses LOGS", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
     const getParsedMessage = getParsedMessageFn("logs", "s_248")
     const parsedMessage = [
       getParsedMessage("message-v1", "message", "log message1", 0, "vcu-s340-app"),
       getParsedMessage("message-v1", "message", "log message2", 1, "vcu-s340-app"),
       getParsedMessage("message-v1", "message", "log message3", 2, "vcu-s340-app")
     ]
-    expect(createDataItemsFromMessage({message: LOGS, probe})).to.eql(parsedMessage)
+    expect(createDataItemsFromMessage({message: LOGS})).to.eql(parsedMessage)
   })
 })

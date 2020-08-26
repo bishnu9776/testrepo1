@@ -15,8 +15,8 @@ describe("Parses SOH", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: SOH, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: SOH})).to.eql([
       {
         channel: "soh",
         data_item_id: "avg_soh_cap-v1",

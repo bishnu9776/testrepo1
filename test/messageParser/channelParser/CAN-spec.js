@@ -46,7 +46,7 @@ describe("Parses CAN", () => {
         })
       ]
       const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: CAN_BMS.data}
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
       expect(createDataItemsFromMessage({message: messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
@@ -55,7 +55,7 @@ describe("Parses CAN", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
       const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
       expect(createDataItemsFromMessage({message: CAN_BMS, probe})).to.eql([
         getCANRawMessage({
           bike_id: "BEAGLE-ESS-4",

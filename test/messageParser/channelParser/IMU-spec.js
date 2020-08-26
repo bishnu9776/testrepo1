@@ -14,7 +14,7 @@ describe("Parses IMU", () => {
     appContext = {log, metricRegistry}
   })
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
     expect(createDataItemsFromMessage({message: IMU, probe})).to.eql([
       {
         channel: "imu",

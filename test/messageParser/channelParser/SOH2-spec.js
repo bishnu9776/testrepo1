@@ -15,8 +15,8 @@ describe("Parses SOH2", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: SOH2, probe})).to.eql([
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: SOH2})).to.eql([
       {
         channel: "soh2",
         data_item_id: "FinalSoHCapacityEstimate_CellBlock_Cell1-v1",

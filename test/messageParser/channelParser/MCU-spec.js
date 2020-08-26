@@ -25,8 +25,8 @@ describe("Parses MCU", () => {
 
   it("parses given message", () => {
     const requiredKeys = ["channel", "data_item_id", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    const parsedMessage = createDataItemsFromMessage({message: MCU, probe})
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    const parsedMessage = createDataItemsFromMessage({message: MCU})
 
     expect(parsedMessage.length).to.eql(47)
     parsedMessage.forEach(e => {
@@ -36,7 +36,7 @@ describe("Parses MCU", () => {
 
   it("when config paths are not given, should return empty array", () => {
     env.VI_MCU_DECODER_CONFIG_PATH = undefined
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: MCU, probe})).to.eql([])
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: MCU})).to.eql([])
   })
 })

@@ -15,9 +15,9 @@ describe("Parses GPSTPV", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
-    expect(createDataItemsFromMessage({message: GPSTPV, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: GPSTPV})).to.eql([
       {
         data_item_id: "location-v1",
         data_item_name: "location",

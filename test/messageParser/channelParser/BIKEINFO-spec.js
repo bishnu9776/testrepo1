@@ -16,7 +16,7 @@ describe("Parses BIKEINFO", () => {
   })
 
   it("parses given messages", () => {
-    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
     const getParsedMessage = getParsedMessageFn("bike_info", "s_100")
     const parsedMessage = [
@@ -32,6 +32,6 @@ describe("Parses BIKEINFO", () => {
       getParsedMessage("bike_type-v1", "bike_type", "Gen1.5_450", 1, 1),
       getParsedMessage("motor_version-v1", "motor_version", "3_6_8", 1, 1)
     ]
-    expect(createDataItemsFromMessage({message: BIKEINFO, probe})).to.eql(parsedMessage)
+    expect(createDataItemsFromMessage({message: BIKEINFO})).to.eql(parsedMessage)
   })
 })
