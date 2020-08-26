@@ -45,37 +45,25 @@ describe("Parses GEN2", () => {
   })
   it("parses can raw messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: GEN2_CAN_RAW, probe})).to.eql([
-      {
-        attributes: {
-          bike_id: "s_3739",
-          channel: "buffered_channel",
-          version: "v1"
-        },
-        data_item_name: "can_raw",
-        device_uuid: "s_3739",
-        timestamp: "2020-07-21T08:58:19.501Z",
-        value: {
-          can_id: 132,
-          data: "-2621409860442463330",
-          timestamp: 1595321899.501
-        }
+    const parsedDataItem = (timestamp, value) => ({
+      attributes: {
+        bike_id: "s_3739",
+        channel: "buffered_channel",
+        version: "v1"
       },
-      {
-        attributes: {
-          bike_id: "s_3739",
-          channel: "buffered_channel",
-          version: "v1"
-        },
-        data_item_name: "can_raw",
-        device_uuid: "s_3739",
-        timestamp: "2020-08-14T12:53:57.437Z",
-        value: {
-          can_id: 131,
-          data: "0892e891ee91e491",
-          timestamp: 1597409637.437
-        }
-      }
+      channel: "buffered_channel",
+      data_item_name: "can_raw",
+      device_uuid: "s_3739",
+      timestamp,
+      value
+    })
+    expect(createDataItemsFromMessage({message: GEN2_CAN_RAW, probe})).to.eql([
+      parsedDataItem("2020-07-21T08:58:19.501Z", {
+        can_id: 132,
+        data: "-2621409860442463330",
+        timestamp: 1595321899.501
+      }),
+      parsedDataItem("2020-08-14T12:53:57.437Z", {can_id: 131, data: "0892e891ee91e491", timestamp: 1597409637.437})
     ])
   })
 })

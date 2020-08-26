@@ -55,8 +55,8 @@ describe("Parses CAN", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
       const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
-      expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
+      expect(createDataItemsFromMessage({message: CAN_BMS, probe})).to.eql([
         getCANRawMessage({
           bike_id: "BEAGLE-ESS-4",
           can_id: "344",
@@ -65,12 +65,6 @@ describe("Parses CAN", () => {
           timestamp: 1
         })
       ])
-    })
-
-    it("when config paths are not given, should return empty array", () => {
-      env.VI_CAN_DECODER_CONFIG_PATH = undefined
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
-      expect(createDataItemsFromMessage({message: CAN_BMS, probe})).to.eql([])
     })
   })
 })

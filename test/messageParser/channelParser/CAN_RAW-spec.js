@@ -17,7 +17,7 @@ describe("Parses CAN_RAW", () => {
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
     const getParsedMessage = getParsedCANRawMessageFn("can_raw", "BMS-EOL5", 1)
-    expect(createDataItemsFromMessage({...CAN_RAW})).to.eql([
+    expect(createDataItemsFromMessage({message: CAN_RAW})).to.eql([
       getParsedMessage({
         can_id: 306,
         data: "-2621409860442463330",
