@@ -22,7 +22,7 @@ describe("Parses GEN2", () => {
     delete process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX
   })
 
-  it("parses given messages", () => {
+  it("parses buffered messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext)
 
     const parsedDataItem = (dataItemName, value) => ({
