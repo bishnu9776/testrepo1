@@ -77,6 +77,7 @@ describe("Parses GEN2", () => {
         device_uuid: "s_248",
         is_valid: -1,
         native_code: "M043",
+        sequence: 283,
         timestamp: "2019-10-06T05:21:13.807Z",
         condition_level: "FAULT"
       }
