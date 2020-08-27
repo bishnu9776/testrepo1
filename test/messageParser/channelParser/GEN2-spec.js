@@ -4,6 +4,7 @@ import {GEN2} from "../../fixtures/bikeChannels/GEN2"
 import {GEN2_CAN_RAW} from "../../fixtures/bikeChannels/GEN2_CAN_RAW"
 import {getMockLog} from "../../stubs/logger"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
+import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFERED"
 
 describe("Parses GEN2", () => {
   let appContext
@@ -64,6 +65,35 @@ describe("Parses GEN2", () => {
         timestamp: 1595321899.501
       }),
       parsedDataItem("2020-08-14T12:53:57.437Z", {can_id: 131, data: "0892e891ee91e491", timestamp: 1597409637.437})
+    ])
+  })
+  it("parses unbuffered messages", () => {
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: UNBUFFERED, probe})).to.eql([
+      {
+        channel: "unbuffered_channel",
+        data_item_id: "s_248-error_code",
+        data_item_name: "error_code",
+        device_uuid: "s_248",
+        is_valid: -1,
+        native_code: "M043",
+        timestamp: "2019-10-06T05:21:13.807Z",
+        condition_level: "FAULT"
+      }
+    ])
+  })
+  it("parses unbuffered messages without keys - is valid, seq no", () => {
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+    expect(createDataItemsFromMessage({message: UNBUFFERED_STRICT, probe})).to.eql([
+      {
+        channel: "unbuffered_channel",
+        data_item_id: "s_248-error_code",
+        data_item_name: "error_code",
+        device_uuid: "s_248",
+        native_code: "M043",
+        timestamp: "2019-10-06T05:21:13.807Z",
+        condition_level: "FAULT"
+      }
     ])
   })
 })
