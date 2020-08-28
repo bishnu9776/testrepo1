@@ -16,7 +16,7 @@ describe("getValues spec", () => {
       value_keys_without_schema: {
         data_item_name: "value_keys_without_schema",
         data_item_type: "VALUE_KEYS_WITHOUT_SCHEMA",
-        values_keys: [{key: "without_probe", value: "without_values_schema"}]
+        values_keys: [{key: "foo", value: "without_values_schema"}]
       }
     }
     const event = {
