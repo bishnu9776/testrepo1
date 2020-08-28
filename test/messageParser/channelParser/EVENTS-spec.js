@@ -17,7 +17,7 @@ describe("Parses EVENTS", () => {
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
-    expect(createDataItemsFromMessage({message: EVENTS, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: EVENTS})).to.eql([
       {
         channel: "events",
         data_item_id: "beta_motorMode2-v1",

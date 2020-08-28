@@ -31,7 +31,7 @@ describe("getValues spec", () => {
       expect(log.warn).to.have.been.calledWith("Data item: a is not present in the probe.")
     })
 
-    it("should take schema as UNKNOWN when probe is doesn't have values_schema", () => {
+    it("should take schema as UNKNOWN when probe doesn't have values_schema", () => {
       const log = getMockLog()
       expect(getValues({event, probe, log, dataItemName: "b"})).to.be.equal("2")
     })
@@ -112,6 +112,7 @@ describe("getValues spec", () => {
       c: "3",
       probeAbsent: null
     }
+
     it("should return value as is if schema is INT ", () => {
       expect(getValues({event, probe, dataItemName: "a"})).to.be.equal(1)
     })
@@ -149,7 +150,7 @@ describe("getValues spec", () => {
       })
     })
 
-    it("should return value as is if schema is LOCATION wrong key in probe", () => {
+    it("should return value based on value keys when schema is location and return null for key not present", () => {
       const val = getValues({
         event,
         probe,

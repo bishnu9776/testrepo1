@@ -56,7 +56,7 @@ describe("Parses CAN", () => {
       const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
       const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
-      expect(createDataItemsFromMessage({message: CAN_BMS, probe})).to.eql([
+      expect(createDataItemsFromMessage({message: CAN_BMS})).to.eql([
         getCANRawMessage({
           bike_id: "BEAGLE-ESS-4",
           can_id: "344",

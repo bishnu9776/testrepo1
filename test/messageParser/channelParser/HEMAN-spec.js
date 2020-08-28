@@ -16,7 +16,7 @@ describe("Parses HEMAN", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
-    expect(createDataItemsFromMessage({message: HEMAN, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: HEMAN})).to.eql([
       {
         channel: "heman",
         data_item_id: "heman-v1",
