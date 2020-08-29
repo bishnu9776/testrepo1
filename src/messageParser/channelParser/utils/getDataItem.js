@@ -8,15 +8,18 @@ const getHexCanId = canId => {
 
 export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId}) => {
   const {version, bike_id: bikeId, channel} = attributes
+  const dataItemId = JSON.parse(process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX || "false")
+    ? `${bikeId}-${dataItemName}`
+    : `${dataItemName}-${version}`
 
   return {
     device_uuid: bikeId,
     data_item_name: dataItemName,
-    data_item_id: `${dataItemName}-${version}`,
+    data_item_id: dataItemId,
     timestamp,
     value,
-    channel,
-    sequence,
+    ...(channel && {channel}),
+    ...(sequence && {sequence}),
     ...(canId && {can_id: getHexCanId(canId)})
   }
 }

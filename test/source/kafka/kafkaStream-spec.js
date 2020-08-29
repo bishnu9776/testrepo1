@@ -43,7 +43,7 @@ describe("Kafka Stream", () => {
 
     stream.subscribe(event => {
       expect(event.message.data).to.eql(kafkaEvent.value.data)
-      expect(event.message.attributes.bike_id).to.eql("foo")
+      expect(event.message.attributes.deviceId).to.eql("foo")
     })
   })
 

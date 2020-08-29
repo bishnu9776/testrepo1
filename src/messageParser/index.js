@@ -48,13 +48,13 @@ export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn(appContext)
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
+  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
 
-  const shouldDropChannel = channel => channelsToDrop.includes(channel)
+  const shouldDropChannel = channel => Array.isArray(channelsToDrop) && channelsToDrop.includes(channel)
   const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
   return async event => {
@@ -79,7 +79,7 @@ export const getMessageParser = ({appContext, probe}) => {
         createDataItemsFromMessage,
         flatten,
         maybeDedupDataItems
-      )({data: decompressedMessage, attributes})
+      )({message: {data: decompressedMessage, attributes}})
 
       return dataItems.map(mergeProbeInfo).concat(endOfEvent)
     } catch (error) {

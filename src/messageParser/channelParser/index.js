@@ -1,5 +1,4 @@
 import {isNil} from "ramda"
-import {log} from "../../logger"
 import {parseGPSTPV} from "./GPSTPV"
 import {parseCAN} from "./CAN"
 import {parseMCU} from "./MCU"
@@ -13,8 +12,30 @@ import {parseSOH2} from "./SOH2"
 import {parseSOH} from "./SOH"
 import {parseLOG} from "./LOGS"
 import {parseCANRAW} from "./CAN_RAW"
+import {parseGen2BufferedData} from "./GEN2"
+import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
-export const getCreateDataItemFromMessageFn = metricRegistry => {
+const getGen2DataParser = (appContext, probe) => {
+  const {log} = appContext
+  const channelParserConfig = {
+    buffered_channel: parseGen2BufferedData(appContext, probe),
+    unbuffered_channel: parseGen2UnbufferedData
+  }
+  const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
+
+  return ({message}) => {
+    const {channel} = message.attributes
+
+    if (channelNotInParserConfig(channel)) {
+      log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      return []
+    }
+    return channelParserConfig[channel]({message})
+  }
+}
+
+const getGen1DataParser = appContext => {
+  const {log, metricRegistry} = appContext
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
     can: parseCAN(metricRegistry),
@@ -30,10 +51,8 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
     logs: parseLOG,
     can_raw: parseCANRAW
   }
-
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
-
-  return message => {
+  return ({message}) => {
     const {channel} = message.attributes
     if (channel !== "can_raw" && channel.match(/^can/)) {
       return channelParserConfig.can(message)
@@ -43,5 +62,18 @@ export const getCreateDataItemFromMessageFn = metricRegistry => {
       return []
     }
     return channelParserConfig[channel](message)
+  }
+}
+
+export const getCreateDataItemFromMessageFn = (appContext, probe) => {
+  const parseGen1Data = getGen1DataParser(appContext)
+  const parseGen2Data = getGen2DataParser(appContext, probe)
+
+  return ({message}) => {
+    const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
+    if (isGen2Data) {
+      return parseGen2Data({message})
+    }
+    return parseGen1Data({message})
   }
 }

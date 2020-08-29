@@ -151,6 +151,17 @@ describe("Parse GCP message", () => {
       expect(output[185].tag).to.eql(ACK_MSG_TAG)
     })
 
+    it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
+      process.env.IS_GEN_2_DATA = "true"
+      const messageParser = getMessageParser({appContext, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
+      const output = await messageParser({message, acknowledgeMessage})
+      expect(output.length).to.eql(2)
+      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+      delete process.env.IS_GEN_2_DATA
+    })
+
     it("it should log and ack the message if unable to parse", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))

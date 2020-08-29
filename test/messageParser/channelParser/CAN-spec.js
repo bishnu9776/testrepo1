@@ -5,18 +5,22 @@ import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../utils"
 import {getParsedMessageFn, getParsedCANRawMessageFn} from "../../utils/getParsedMessage"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {clearStub} from "../../stubs/clearStub"
+import {getMockLog} from "../../stubs/logger"
 
 describe("Parses CAN", () => {
   const {env} = process
 
   describe("should decode message", () => {
     let metricRegistry
-
+    let appContext
+    let log
     beforeEach(() => {
+      log = getMockLog()
+      metricRegistry = getMockMetricRegistry()
+      appContext = {log, metricRegistry}
       env.VI_SHOULD_DECODE_MESSAGE = "true"
       env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
       setChannelDecoderConfigFileEnvs()
-      metricRegistry = getMockMetricRegistry()
     })
 
     after(() => {
@@ -42,17 +46,17 @@ describe("Parses CAN", () => {
         })
       ]
       const messageWithoutCanParsed = {attributes: CAN_BMS.attributes, data: CAN_BMS.data}
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
-      expect(createDataItemsFromMessage({...messageWithoutCanParsed, probe})).to.eql(parsedData)
+      expect(createDataItemsFromMessage({message: messageWithoutCanParsed, probe})).to.eql(parsedData)
     })
 
     it("when config paths are not given, should return can raw message", () => {
       env.VI_CAN_DECODER_CONFIG_PATH = undefined
       const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
-      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(metricRegistry)
-      expect(createDataItemsFromMessage({...CAN_BMS, probe})).to.eql([
+      const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+      expect(createDataItemsFromMessage({message: CAN_BMS})).to.eql([
         getCANRawMessage({
           bike_id: "BEAGLE-ESS-4",
           can_id: "344",

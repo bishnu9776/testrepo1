@@ -26,5 +26,29 @@
   },
   "can_raw": {
     "data_item_name": "can_raw"
+  },
+  "ACC_X_MPS2": {
+    "data_item_name": "ACC_X_MPS2",
+    "data_item_type": "ACCELERATION",
+    "values_schema": "DOUBLE"
+  },
+  "ACC_Y_MPS2": {
+    "data_item_name": "ACC_Y_MPS2",
+    "data_item_type": "ACCELERATION",
+    "values_schema": "DOUBLE"
+  },
+  "acceleration": {
+    "synthetic": "true",
+    "data_item_name": "acceleration",
+    "data_item_type": "ACCELERATION",
+    "values_schema": "SPATIAL",
+    "values_keys": [{"key": "x", "value": "ACC_X_MPS2"}, {"key": "y", "value": "ACC_Y_MPS2"}, {"key": "z", "value": "ACC_Z_MPS2"}]
+  },
+  "acc_x": {
+    "synthetic": "true",
+    "data_item_name": "acc_x",
+    "data_item_type": "ACCELERATION",
+    "values_schema": "JSON",
+    "values_keys": [{"key": "x", "value": "ACC_X_MPS2"}]
   }
 }
