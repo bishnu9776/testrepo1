@@ -15,7 +15,7 @@ describe("Parses IMU", () => {
   })
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
-    expect(createDataItemsFromMessage({message: IMU, probe})).to.eql([
+    expect(createDataItemsFromMessage({message: IMU})).to.eql([
       {
         channel: "imu",
         data_item_id: "acc_x_mps2-v1",
