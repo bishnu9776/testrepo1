@@ -4,24 +4,21 @@ export const parseGen2UnbufferedData = ({message}) => {
   const {data, attributes} = message
   return flatten(
     data.map(event => {
-      // eslint-disable-next-line
-      const {version, bike_id, channel} = attributes
+      const {version, bike_id: bikeId, channel} = attributes
       const timestamp = event.end_timestamp ? event.end_timestamp : event.start_timestamp
-      // eslint-disable-next-line
-      const is_valid = event.isvalid
-      const sequence = event.seq_num
-      // eslint-disable-next-line
-      const bikeId = bike_id
+      const {seq_num: sequence, isvalid} = event
       const dataItemName = "error_code"
+      const dataItemId = JSON.parse(process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX || "false")
+        ? `${bikeId}-${dataItemName}`
+        : `${dataItemName}-${version}`
       return {
         timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
         data_item_name: dataItemName,
-        data_item_id: `${bikeId}-${dataItemName}`,
+        data_item_id: dataItemId,
         device_uuid: bikeId,
         native_code: event.error_code,
         condition_level: event.end_timestamp ? "NORMAL" : "FAULT",
-        // eslint-disable-next-line
-        ...(is_valid && {is_valid}),
+        ...(isvalid && {is_valid: isvalid}),
         ...(sequence && {sequence}),
         channel
       }
