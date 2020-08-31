@@ -36,6 +36,7 @@ export const getMergeProbeInfoFn = probe => {
     return {
       ...omit(["value"], event),
       [valueKey]: value,
+      values: value,
       ...probeInfo
     }
   }
