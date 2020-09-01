@@ -1,12 +1,15 @@
-import tokenGenerator from "utils/get-token"
 import axios from "axios"
+import getJwtConfig from "../utils/getJWTConfig"
+import {tokenGenerator} from "../utils/tokenGenerator"
 
 export const getDeviceModel = () => {
   const plant = "ather"
   const {env} = process
+  const jwtConfig = getJwtConfig()
+  const getToken = tokenGenerator(jwtConfig)
 
   const apiConfig = {
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://app.staging.ather.vimana.us/api/v3/device-registry/devices",
+    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
     subject: env.VI_NAME || "svc-ather-collector",
     permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
   }
@@ -15,7 +18,6 @@ export const getDeviceModel = () => {
     axios({
       method: "POST",
       url: apiConfig.url,
-      data: {},
       plant,
       headers: {
         "X-Tenant": plant,
@@ -24,7 +26,7 @@ export const getDeviceModel = () => {
       }
     })
       .then(response => {
-        resolve(response.data)
+        const devices = resolve(response.data)
       })
       .catch(err => {
         reject(err)

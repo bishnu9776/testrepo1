@@ -1,7 +1,7 @@
 import jwt from "jwt-simple"
 import {auth} from "node-microservice"
 import {omit} from "ramda"
-import {tokenGenerator} from "../src/utils/get-token"
+import {tokenGenerator} from "../src/utils/tokenGenerator"
 
 const cfg = {
   issuer: "i-example.com",

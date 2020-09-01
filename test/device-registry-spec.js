@@ -1,5 +1,5 @@
 // import nock from "nock"
-import {getDeviceModel} from "../src/get-device-model";
+import {getDeviceModel} from "../src/deviceModel/getDeviceModel";
 
 describe("Get metrics", () => {
   // export const mockDeviceRegistrySuccessResponse = (device) =>
