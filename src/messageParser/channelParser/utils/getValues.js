@@ -24,7 +24,7 @@ const schema = {
 }
 
 const defaultValuesKeys = dataItemName => [{value: dataItemName}]
-const defaultValueSchema = "string"
+const defaultValueSchema = {type: "string"}
 
 const maybeReturnValue = value => {
   const areAllValuesNull = all(isNil)(Object.values(value))
@@ -42,5 +42,5 @@ export const getValues = ({event, dataItemName, probe, log}) => {
     values_keys: valuesKeys = defaultValuesKeys(dataItemName),
     values_schema: valuesSchema = defaultValueSchema
   } = probeForDataItem
-  return schema[valuesSchema]({event, valuesKeys, dataItemName})
+  return schema[valuesSchema.type]({event, valuesKeys, dataItemName})
 }

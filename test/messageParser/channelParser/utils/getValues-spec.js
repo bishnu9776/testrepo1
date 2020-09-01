@@ -16,7 +16,7 @@ describe("getValues spec", () => {
       without_values_keys: {
         data_item_name: "without_values_keys",
         data_item_type: "WITHOUT_VALUE_KEYS",
-        values_schema: "string"
+        values_schema: {type: "string"}
       }
     }
     const event = {
@@ -51,29 +51,29 @@ describe("getValues spec", () => {
       value_int: {
         data_item_name: "value_int",
         data_item_type: "VALUE_INT",
-        values_schema: "int"
+        values_schema: {type: "int"}
       },
       value_number: {
         data_item_name: "value_number",
         data_item_type: "VALUE_NUMBER",
-        values_schema: "number"
+        values_schema: {type: "number"}
       },
       value_string: {
         data_item_name: "value_string",
         data_item_type: "VALUE_STRING",
-        values_schema: "string"
+        values_schema: {type: "string"}
       },
       value_boolean: {
         synthetic: true,
         data_item_name: "value_boolean",
         data_item_type: "VALUE_BOOLEAN",
-        values_schema: "boolean"
+        values_schema: {type: "boolean"}
       },
       value_object_spatial: {
         synthetic: true,
         data_item_name: "value_object_spatial",
         data_item_type: "VALUE_OBJECT_SPATIAL",
-        values_schema: "object",
+        values_schema: {type: "object"},
         values_keys: [
           {key: "a", value: "value_int"},
           {key: "b", value: "value_number"},
@@ -84,7 +84,7 @@ describe("getValues spec", () => {
         synthetic: true,
         data_item_name: "value_object_location",
         data_item_type: "VALUE_OBJECT_LOCATION",
-        values_schema: "object",
+        values_schema: {type: "object"},
         values_keys: [
           {key: "a", value: "value_int"},
           {key: "b", value: "value_number"}
@@ -94,7 +94,7 @@ describe("getValues spec", () => {
         synthetic: true,
         data_item_name: "value_object_location",
         data_item_type: "VALUE_OBJECT_LOCATION",
-        values_schema: "object",
+        values_schema: {type: "object"},
         values_keys: [
           {key: "a", value: "value_int"},
           {key: "b", value: "lon"}
