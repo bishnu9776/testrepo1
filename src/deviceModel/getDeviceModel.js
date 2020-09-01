@@ -1,6 +1,6 @@
 import axios from "axios"
-import getJwtConfig from "../utils/getJWTConfig"
 import {tokenGenerator} from "../utils/tokenGenerator"
+import {getJwtConfig} from "../utils/getJWTConfig"
 
 export const getDeviceModel = () => {
   const plant = "ather"
@@ -13,11 +13,12 @@ export const getDeviceModel = () => {
     subject: env.VI_NAME || "svc-ather-collector",
     permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
   }
-
+  console.log("get device model url", apiConfig.url)
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",
       url: apiConfig.url,
+      body: {},
       plant,
       headers: {
         "X-Tenant": plant,
