@@ -8,15 +8,15 @@ describe("getValues spec", () => {
         data_item_name: "without_values_schema",
         data_item_type: "WITHOUT_VALUES_SCHEMA"
       },
-      without_values_keys: {
-        data_item_name: "without_values_keys",
-        data_item_type: "WITHOUT_VALUE_KEYS",
-        values_schema: "STRING"
-      },
       value_keys_without_schema: {
         data_item_name: "value_keys_without_schema",
         data_item_type: "VALUE_KEYS_WITHOUT_SCHEMA",
         values_keys: [{key: "foo", value: "without_values_schema"}]
+      },
+      without_values_keys: {
+        data_item_name: "without_values_keys",
+        data_item_type: "WITHOUT_VALUE_KEYS",
+        values_schema: "string"
       }
     }
     const event = {
@@ -24,20 +24,20 @@ describe("getValues spec", () => {
       without_values_schema: 2,
       without_values_keys: 3
     }
-    it("should take schema as UNKNOWN when probe is not present", () => {
+    it("should take schema as string when probe is not present", () => {
       const log = getMockLog()
       expect(getValues({event, probe, log, dataItemName: "without_probe"})).to.be.equal("1")
       expect(log.warn).to.have.been.calledWith("Data item: without_probe is not present in the probe.")
     })
 
-    it("should take schema as UNKNOWN and return stringified value when probe doesn't have values_schema", () => {
+    it("should take schema as string and return stringified value when probe doesn't have values_schema", () => {
       const log = getMockLog()
       expect(getValues({event, probe, log, dataItemName: "without_values_schema"})).to.be.equal("2")
     })
 
     it("should take values_keys as default when it is not defined in the probe", () => {
       const log = getMockLog()
-      expect(getValues({event, probe, log, dataItemName: "without_values_keys"})).to.be.equal(3)
+      expect(getValues({event, probe, log, dataItemName: "without_values_keys"})).to.be.equal("3")
     })
 
     it("should return string of values when values_keys is present and schema is not", () => {
@@ -48,170 +48,168 @@ describe("getValues spec", () => {
 
   describe("when values_schema is defined", () => {
     const probe = {
-      a: {
-        data_item_name: "a",
-        data_item_type: "A",
-        values_schema: "INT"
+      value_int: {
+        data_item_name: "value_int",
+        data_item_type: "VALUE_INT",
+        values_schema: "int"
       },
-      b: {
-        data_item_name: "b",
-        data_item_type: "B",
-        values_schema: "DOUBLE"
+      value_number: {
+        data_item_name: "value_number",
+        data_item_type: "VALUE_NUMBER",
+        values_schema: "number"
       },
-      c: {
-        data_item_name: "c",
-        data_item_type: "C",
-        values_schema: "STRING"
+      value_string: {
+        data_item_name: "value_string",
+        data_item_type: "VALUE_STRING",
+        values_schema: "string"
       },
-      d: {
+      value_boolean: {
         synthetic: true,
-        data_item_name: "d",
-        data_item_type: "D",
-        values_schema: "SPATIAL",
+        data_item_name: "value_boolean",
+        data_item_type: "VALUE_BOOLEAN",
+        values_schema: "boolean"
+      },
+      value_object_spatial: {
+        synthetic: true,
+        data_item_name: "value_object_spatial",
+        data_item_type: "VALUE_OBJECT_SPATIAL",
+        values_schema: "object",
         values_keys: [
-          {key: "a", value: "a"},
-          {key: "b", value: "b"},
-          {key: "c", value: "c"}
+          {key: "a", value: "value_int"},
+          {key: "b", value: "value_number"},
+          {key: "c", value: "value_string"}
         ]
       },
-      e: {
+      value_object_location: {
         synthetic: true,
-        data_item_name: "e",
-        data_item_type: "LOC",
-        values_schema: "LOCATION",
+        data_item_name: "value_object_location",
+        data_item_type: "VALUE_OBJECT_LOCATION",
+        values_schema: "object",
         values_keys: [
-          {key: "a", value: "a"},
-          {key: "b", value: "b"}
+          {key: "a", value: "value_int"},
+          {key: "b", value: "value_number"}
         ]
       },
-      f: {
+      value_object_location_with_null: {
         synthetic: true,
-        data_item_name: "f",
-        data_item_type: "F",
-        values_schema: "LOCATION",
+        data_item_name: "value_object_location",
+        data_item_type: "VALUE_OBJECT_LOCATION",
+        values_schema: "object",
         values_keys: [
-          {key: "a", value: "a"},
+          {key: "a", value: "value_int"},
           {key: "b", value: "lon"}
-        ]
-      },
-      g: {
-        synthetic: true,
-        data_item_name: "g",
-        data_item_type: "G",
-        values_schema: "JSON",
-        values_keys: [
-          {key: "a", value: "a"},
-          {key: "b", value: "b"}
         ]
       }
     }
     const event = {
-      a: 1,
-      b: 2.2,
-      c: "3",
+      value_int: 1,
+      value_number: 2.2,
+      value_string: "3",
+      value_boolean: false,
       probeAbsent: null
     }
 
-    it("should return value as is if schema is INT ", () => {
-      expect(getValues({event, probe, dataItemName: "a"})).to.be.equal(1)
-    })
+    describe("should return value when event value is not null", () => {
+      it("should return value as is if schema is int ", () => {
+        expect(getValues({event, probe, dataItemName: "value_int"})).to.be.equal(1)
+      })
 
-    it("should return value as is if schema is DOUBLE ", () => {
-      expect(getValues({event, probe, dataItemName: "b"})).to.be.equal(2.2)
-    })
+      it("should return value as is if schema is number ", () => {
+        expect(getValues({event, probe, dataItemName: "value_number"})).to.be.equal(2.2)
+      })
 
-    it("should return value as is if schema is STRING ", () => {
-      expect(getValues({event, probe, dataItemName: "c"})).to.be.equal("3")
-    })
+      it("should return value as is if schema is string ", () => {
+        expect(getValues({event, probe, dataItemName: "value_string"})).to.be.equal("3")
+      })
 
-    it("should return value based on value keys if schema is SPATIAL ", () => {
-      const val = getValues({
-        event,
-        probe,
-        dataItemName: "d"
+      it("should return value as is if schema is boolean ", () => {
+        expect(getValues({event, probe, dataItemName: "value_boolean"})).to.be.equal(false)
       })
-      expect(val).to.deep.equal({
-        a: 1,
-        b: 2.2,
-        c: "3"
-      })
-    })
 
-    it("should return value based on value keys if schema is LOCATION ", () => {
-      const val = getValues({
-        event,
-        probe,
-        dataItemName: "e"
+      it("should return value based on value keys if schema is object with spatial structure", () => {
+        const val = getValues({
+          event,
+          probe,
+          dataItemName: "value_object_spatial"
+        })
+        expect(val).to.deep.equal({
+          a: 1,
+          b: 2.2,
+          c: "3"
+        })
       })
-      expect(val).to.deep.equal({
-        a: 1,
-        b: 2.2
-      })
-    })
 
-    it("should return value based on value keys when schema is location and return null for key not present", () => {
-      const val = getValues({
-        event,
-        probe,
-        dataItemName: "f"
-      })
-      expect(val).to.deep.equal({
-        a: 1,
-        b: null
-      })
-    })
-
-    it("should return value if value keys schema is JSON in probe", () => {
-      const val = getValues({
-        event,
-        probe,
-        dataItemName: "g"
-      })
-      expect(val).to.deep.equal({
-        g: {
+      it("should return value based on value keys if schema is object with location structure", () => {
+        const val = getValues({
+          event,
+          probe,
+          dataItemName: "value_object_location"
+        })
+        expect(val).to.deep.equal({
           a: 1,
           b: 2.2
-        }
+        })
+      })
+
+      it("should return value based on value keys when schema is object and return null for key not present", () => {
+        const val = getValues({
+          event,
+          probe,
+          dataItemName: "value_object_location_with_null"
+        })
+        expect(val).to.deep.equal({
+          a: 1,
+          b: null
+        })
       })
     })
 
-    describe("should return null when event value is null", () => {
-      it("if schema is JSON", () => {
+    describe("when event value is null", () => {
+      it("should return null if schema is object", () => {
         const val = getValues({
           event: {},
           probe,
-          dataItemName: "g"
+          dataItemName: "value_object_location"
         })
         expect(val).to.eql(null)
       })
-
-      it("if schema is LOCATION", () => {
+      it("should return null if schema is number", () => {
         const val = getValues({
           event: {},
           probe,
-          dataItemName: "e"
+          dataItemName: "value_number"
         })
         expect(val).to.eql(null)
       })
-
-      it("if schema is DOUBLE", () => {
-        const val = getValues({
-          event: {},
-          probe,
-          dataItemName: "b"
-        })
-        expect(val).to.eql(null)
-      })
-
-      it("if schema is UNKNOWN", () => {
+      it("should return null if schema is int", () => {
         const log = getMockLog()
         const val = getValues({
           event: {},
           log,
           probe,
-          dataItemName: "probeAbsent"
+          dataItemName: "value_int"
         })
         expect(val).to.eql(null)
+      })
+      it("should return null if schema is boolean", () => {
+        const log = getMockLog()
+        const val = getValues({
+          event: {},
+          log,
+          probe,
+          dataItemName: "value_boolean"
+        })
+        expect(val).to.eql(null)
+      })
+      it("should return empty string if schema is string", () => {
+        const log = getMockLog()
+        const val = getValues({
+          event: {},
+          log,
+          probe,
+          dataItemName: "value_string"
+        })
+        expect(val).to.eql("")
       })
     })
   })
