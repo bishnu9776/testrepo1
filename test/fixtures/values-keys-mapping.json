@@ -1,0 +1,7 @@
+{
+  "location": [{"key":  "lat", "value": "lat_deg"}, {"key":  "lon", "value": "lon_deg"}],
+  "acceleration": [{"key": "x", "value": "ACC_X_MPS2"}, {"key": "y", "value": "ACC_Y_MPS2"}, {"key": "z", "value": "ACC_Z_MPS2"}],
+  "gyroscope": [{"key": "x", "value": "GYR_X_DEG"}, {"key": "y", "value": "GYR_Y_DEG"}, {"key": "z", "value": "GYR_Z_DEG"}],
+  "log": [{"key": "message", "value": "message"}, {"key": "source", "value": "_comm"}],
+  "acc_x": [{"key": "x", "value": "ACC_X_MPS2"}]
+}

@@ -48,7 +48,6 @@ export const parseGen2BufferedData = (appContext, probe) => {
               timestamp,
               attributes,
               dataItemName,
-              // TODO: value -> values
               value: getValues({event: embellishedEvent, dataItemName, probe, log}),
               sequence: event.seq_num
             })
