@@ -13,12 +13,12 @@ export const getDeviceModel = () => {
     subject: env.VI_NAME || "svc-ather-collector",
     permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
   }
-  console.log("get device model url", apiConfig.url)
+
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",
       url: apiConfig.url,
-      body: {},
+      data: {plant: "ather"},
       plant,
       headers: {
         "X-Tenant": plant,
@@ -27,7 +27,7 @@ export const getDeviceModel = () => {
       }
     })
       .then(response => {
-        const devices = resolve(response.data)
+        resolve(response.data)
       })
       .catch(err => {
         reject(err)

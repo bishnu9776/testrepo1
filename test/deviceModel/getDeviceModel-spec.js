@@ -1,15 +1,11 @@
 import nock from "nock"
 import {getDeviceModel} from "../../src/deviceModel/getDeviceModel"
-import {mockDeviceRegistrySuccessResponse} from "../utils/deviceRegistryResponse";
-// import getTokenStub from "../stubs/getTokenStub"
+import {mockDeviceRegistrySuccessResponse} from "../utils/deviceRegistryResponse"
 
 describe("Get metrics", () => {
-  const subject = "test-ather-metrics-publisher"
-  const permissions = ["report1:read", "report2:read"]
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   const {env} = process
-  // const getToken = getTokenStub()
 
   beforeEach(() => {
     nock.cleanAll()
@@ -23,9 +19,10 @@ describe("Get metrics", () => {
   })
 
   it("get devices", async () => {
-    const res = mockDeviceRegistrySuccessResponse(url, endpoint, "device-1")
-    console.log("Mock", res)
-    const response = await getDeviceModel()
-    console.log(response)
+    const requestBody = {plant: "ather"}
+    const response = {}
+    mockDeviceRegistrySuccessResponse(url, endpoint, requestBody, response)
+    const devices = await getDeviceModel()
+    expect(devices).to.eql(response)
   })
 })
