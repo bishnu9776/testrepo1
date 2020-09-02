@@ -11,6 +11,8 @@ import {clearStub} from "../stubs/clearStub"
 
 const {env} = process
 
+// TODO: upaate JWT params and mock deviceModel response, update Response etc
+
 describe("Pipeline spec", () => {
   let probePath
   let appContext

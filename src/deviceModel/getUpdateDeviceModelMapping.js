@@ -1,7 +1,6 @@
 import axios from "axios"
 import {getJwtConfig} from "../utils/getJWTConfig"
 import {tokenGenerator} from "../utils/tokenGenerator"
-import {createDeviceModelMapping} from "./getDeviceProperties"
 
 export const putDeviceMapping = (device, model) => {
   const plant = "ather"
@@ -37,17 +36,15 @@ export const putDeviceMapping = (device, model) => {
   })
 }
 
-export const updateDeviceModelMapping = async () => {
-  const deviceModelMapping = await createDeviceModelMapping()
-  return async event => {
-    const device = event.device_uuid
-    const model = event?.value.split("_")[1]
-    if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
-      const response = putDeviceMapping(device, model)
-      if (response) {
-        deviceModelMapping[device] = model
-      }
+export const getUpdateDeviceModelMapping = async (deviceModelMapping, event) => {
+  const device = event.device_uuid
+  const model = event?.value.split("_")[1]
+  if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
+    const response = putDeviceMapping(device, model)
+    if (response) {
+      // eslint-disable-next-line no-param-reassign
+      deviceModelMapping[device] = model
     }
-    return deviceModelMapping
   }
+  return deviceModelMapping
 }

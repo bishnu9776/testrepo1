@@ -1,9 +1,6 @@
 import nock from "nock"
-import {
-  mockDeviceRegistryPostSuccessResponse,
-  mockDeviceRegistryPutSuccessResponse
-} from "../utils/deviceRegistryResponse"
-import {updateDeviceModelMapping} from "../../src/deviceModel/updateDeviceModelMapping"
+import {mockDeviceRegistryPutSuccessResponse} from "../utils/deviceRegistryResponse"
+import {getUpdateDeviceModelMapping} from "../../src/deviceModel/getUpdateDeviceModelMapping"
 
 describe("Update device mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
@@ -23,16 +20,12 @@ describe("Update device mapping", () => {
 
   it("update devices mapping", async () => {
     const putRequestBody = {device: "device-5", plant: "ather", model: "450plus"}
-    const response = [
-      {device: "device-1", plant: "ather", model: "450x"},
-      {device: "device-2", plant: "ather", model: "450plus"}
-    ]
+    const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
+
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
-    mockDeviceRegistryPostSuccessResponse(url, endpoint, {}, response)
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDevice = await updateDeviceModelMapping()
-    const putResponse = await updateDevice(event)
+    const putResponse = await getUpdateDeviceModelMapping(deviceModelMapping, event)
     expect(putResponse).to.eql({
       "device-1": "450x",
       "device-2": "450plus",

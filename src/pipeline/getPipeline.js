@@ -9,6 +9,8 @@ import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
+import {getUpdateDeviceModelMapping} from "../deviceModel/getUpdateDeviceModelMapping"
+import {createDeviceModelMapping} from "../deviceModel/getDeviceProperties"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -40,6 +42,9 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
+  const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
+  const updateDeviceModelMapping = getUpdateDeviceModelMapping()
+  let deviceModelMapping = createDeviceModelMapping()
 
   return stream
     .pipe(
@@ -49,6 +54,11 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
+      tap(event => {
+        if (modelDataItems.includes(event.data_item_name)) {
+          deviceModelMapping = updateDeviceModelMapping(deviceModelMapping, event)
+        }
+      }),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
