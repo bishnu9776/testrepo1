@@ -1,19 +1,17 @@
 import path from "path"
 import {getValuesFn} from "../../../../src/messageParser/channelParser/utils/getValues"
 import {getMockLog} from "../../../stubs/logger"
-import {clearEnv, setEnv} from "../../../utils"
 
 describe("getValues spec", () => {
   const pathToFixtures = path.join(process.cwd(), "test/fixtures")
   beforeEach(() => {
-    setEnv({
-      collectorValuesKeysMappingPath: path.join(pathToFixtures, "values_keys_mapping.json"),
-      collectorValuesSchemaPath: path.join(pathToFixtures, "values_schema.json")
-    })
+    process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = path.join(pathToFixtures, "values_keys_mapping.json")
+    process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = path.join(pathToFixtures, "values_schema.json")
   })
 
   afterEach(() => {
-    clearEnv()
+    delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
+    delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
   })
   describe("probe is not properly defined", () => {
     const probe = {

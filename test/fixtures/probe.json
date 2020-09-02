@@ -31,14 +31,14 @@
     "data_item_name": "ACC_X_MPS2",
     "data_item_type": "ACCELERATION",
     "values_schema": {
-      "type": "double"
+      "type": "number"
     }
   },
   "ACC_Y_MPS2": {
     "data_item_name": "ACC_Y_MPS2",
     "data_item_type": "ACCELERATION",
     "values_schema": {
-      "type": "double"
+      "type": "number"
     }
   },
   "acceleration": {

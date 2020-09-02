@@ -2,7 +2,6 @@ import {omit} from "ramda"
 import {getMergeProbeInfoFn} from "../../src/messageParser/mergeProbeInfo"
 import probe from "../fixtures/probe.json"
 import {getDataItem} from "../utils/getDataItem"
-import {clearEnv} from "../utils"
 
 describe("Merge probe info", () => {
   before(() => {
@@ -10,7 +9,7 @@ describe("Merge probe info", () => {
   })
 
   after(() => {
-    clearEnv()
+    delete process.env.VI_SCHEMA_VERSION
   })
 
   const mergeProbeInfo = getMergeProbeInfoFn(probe)

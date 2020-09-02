@@ -1,4 +1,5 @@
 import fs from "fs"
+import path from "path"
 import {difference} from "ramda"
 import {getMessageParser} from "../../src/messageParser"
 import probe from "../fixtures/probe.json"
@@ -152,14 +153,19 @@ describe("Parse GCP message", () => {
     })
 
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
+      const pathToFixtures = path.join(process.cwd(), "test/fixtures")
       process.env.IS_GEN_2_DATA = "true"
+      process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
+      process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
       const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(2)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
       delete process.env.IS_GEN_2_DATA
+      delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
+      delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
     })
 
     it("it should log and ack the message if unable to parse", async () => {
