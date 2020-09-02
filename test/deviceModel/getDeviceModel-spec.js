@@ -1,15 +1,8 @@
 import nock from "nock"
-import {
-  createDeviceModelMapping,
-  getDeviceProperties,
-  updateDeviceModelMapping
-} from "../../src/deviceModel/getDeviceProperties"
-import {
-  mockDeviceRegistryPostSuccessResponse,
-  mockDeviceRegistryPutSuccessResponse
-} from "../utils/deviceRegistryResponse"
+import {createDeviceModelMapping, getDeviceProperties} from "../../src/deviceModel/getDeviceProperties"
+import {mockDeviceRegistryPostSuccessResponse} from "../utils/deviceRegistryResponse"
 
-describe("Get metrics", () => {
+describe("create device Model Mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   const {env} = process
@@ -42,26 +35,5 @@ describe("Get metrics", () => {
     mockDeviceRegistryPostSuccessResponse(url, endpoint, requestBody, response)
     const deviceMapping = await createDeviceModelMapping()
     expect(deviceMapping).to.eql({"device-1": "450x", "device-2": "450plus"})
-  })
-
-  describe("Update device mapping", () => {
-    it("update devices mapping", async () => {
-      const putRequestBody = {device: "device-5", plant: "ather", model: "450plus"}
-      const response = [
-        {device: "device-1", plant: "ather", model: "450x"},
-        {device: "device-2", plant: "ather", model: "450plus"}
-      ]
-      const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
-      mockDeviceRegistryPostSuccessResponse(url, endpoint, {}, response)
-      mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-      const updateDevice = await updateDeviceModelMapping()
-      const putResponse = await updateDevice(event)
-      expect(putResponse).to.eql({
-        "device-1": "450x",
-        "device-2": "450plus",
-        "device-5": "450plus"
-      })
-    })
   })
 })

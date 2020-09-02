@@ -31,7 +31,7 @@ const defaultObserver = log => ({
   }
 })
 
-export const getPipeline = ({appContext, observer, probePath, source, kafkaProducer}) => {
+export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
   const {log} = appContext
   const probe = loadProbe(probePath, log)
 
