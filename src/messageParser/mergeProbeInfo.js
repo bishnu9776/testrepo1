@@ -32,11 +32,20 @@ export const getMergeProbeInfoFn = probe => {
     if (valueKey === "value_event" && typeof value !== "string") {
       value = JSON.stringify(event.value)
     }
-
+    const isNewProbeStructure = JSON.parse(process.env.VI_COLLECTOR_IS_NEW_PROBE_STRUCTURE || "false")
+    if (isNewProbeStructure) {
+      const meta = {values_schema: probeInfo.values_schema}
+      return {
+        ...omit(["value"], event),
+        [valueKey]: value,
+        values: value,
+        ...omit(["values_schema", "meta", "synthetic"], probeInfo),
+        meta
+      }
+    }
     return {
       ...omit(["value"], event),
       [valueKey]: value,
-      values: value,
       ...probeInfo
     }
   }
