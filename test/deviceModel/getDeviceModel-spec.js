@@ -26,8 +26,6 @@ describe("Get metrics", () => {
     expect(devices).to.eql(response)
   })
 
-
-
   it("create devices mapping", async () => {
     const requestBody = {plant: "ather"}
     const response = [
