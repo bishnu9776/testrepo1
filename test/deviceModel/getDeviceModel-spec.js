@@ -26,6 +26,8 @@ describe("Get metrics", () => {
     expect(devices).to.eql(response)
   })
 
+
+
   it("create devices mapping", async () => {
     const requestBody = {plant: "ather"}
     const response = [
@@ -33,7 +35,7 @@ describe("Get metrics", () => {
       {device: "device-2", plant: "ather", model: "450plus"}
     ]
     mockDeviceRegistrySuccessResponse(url, endpoint, requestBody, response)
-    const devices = await createDeviceModelMapping()
-    expect(devices).to.eql({"device-1": "450x", "device-2": "450plus"})
+    const deviceMapping = await createDeviceModelMapping()
+    expect(deviceMapping).to.eql({"device-1": "450x", "device-2": "450plus"})
   })
 })
