@@ -1,6 +1,6 @@
 import {flatten, isNil} from "ramda"
 import {getDataItem} from "./utils/getDataItem"
-import {getValues} from "./utils/getValues"
+import {getValuesFn} from "./utils/getValues"
 import {parseCANRAW} from "./CAN_RAW"
 
 const nonDataItemKeys = [
@@ -27,6 +27,8 @@ export const parseGen2BufferedData = (appContext, probe) => {
     .filter(dataItemProbe => dataItemProbe.synthetic)
     .map(dataItemProbe => dataItemProbe.data_item_name)
 
+  const getValues = getValuesFn(probe, log)
+
   return ({message}) => {
     const {data, attributes} = message
     return flatten(
@@ -48,7 +50,7 @@ export const parseGen2BufferedData = (appContext, probe) => {
               timestamp,
               attributes,
               dataItemName,
-              value: getValues({event: embellishedEvent, dataItemName, probe, log}),
+              value: getValues({event: embellishedEvent, dataItemName}),
               sequence: event.seq_num
             })
           })

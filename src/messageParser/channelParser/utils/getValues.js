@@ -1,4 +1,7 @@
-import {isNil, all} from "ramda"
+/* eslint-disable global-require, import/no-dynamic-require */
+import {isNil, all, last} from "ramda"
+import {errorFormatter} from "../../../utils/errorFormatter"
+import {delayAndExit} from "../../../utils/delayAndExit"
 
 const getSingleValue = ({event, valuesKeys}) => (isNil(event[valuesKeys[0].value]) ? null : event[valuesKeys[0].value])
 const getCompositeValue = ({event, valuesKeys}) => {
@@ -31,16 +34,43 @@ const maybeReturnValue = value => {
   return areAllValuesNull ? null : value
 }
 
-export const getValues = ({event, dataItemName, probe, log}) => {
-  let probeForDataItem = probe[dataItemName]
-  if (!probeForDataItem) {
-    log.warn(`Data item: ${dataItemName} is not present in the probe.`)
-    probeForDataItem = {}
+export const getValuesFn = (probe, log) => {
+  const valuesKeysMappingFilePath = process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
+  const valuesSchemaFilePath = process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
+  let valuesKeysMapping
+  let valuesSchemaDefinition
+  try {
+    valuesSchemaDefinition = require(valuesSchemaFilePath)
+    valuesKeysMapping = require(valuesKeysMappingFilePath)
+  } catch (error) {
+    log.error({error: errorFormatter(error)}, "Error loading config files, exiting application")
+    delayAndExit(3)
   }
 
-  const {
-    values_keys: valuesKeys = defaultValuesKeys(dataItemName),
-    values_schema: valuesSchema = defaultValueSchema
-  } = probeForDataItem
-  return schema[valuesSchema.type]({event, valuesKeys, dataItemName})
+  const getValuesSchema = schemaDef => {
+    if (!schemaDef) {
+      return defaultValueSchema
+    }
+    if (schemaDef.$ref) {
+      const schemaRef = last(schemaDef.$ref.split("/"))
+      return valuesSchemaDefinition[schemaRef] || defaultValueSchema
+    } else {
+      return schemaDef
+    }
+  }
+
+  return ({event, dataItemName}) => {
+    let probeForDataItem = probe[dataItemName]
+    if (!probeForDataItem) {
+      log.warn(`Data item: ${dataItemName} is not present in the probe.`)
+      probeForDataItem = {}
+    }
+
+    const valuesKeys = valuesKeysMapping[dataItemName] || defaultValuesKeys(dataItemName)
+
+    const {values_schema: valuesSchemaDef} = probeForDataItem
+    const valuesSchema = getValuesSchema(valuesSchemaDef)
+
+    return schema[valuesSchema.type]({event, valuesKeys, dataItemName})
+  }
 }

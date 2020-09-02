@@ -1,7 +1,20 @@
-import {getValues} from "../../../../src/messageParser/channelParser/utils/getValues"
+import path from "path"
+import {getValuesFn} from "../../../../src/messageParser/channelParser/utils/getValues"
 import {getMockLog} from "../../../stubs/logger"
+import {clearEnv, setEnv} from "../../../utils"
 
 describe("getValues spec", () => {
+  const pathToFixtures = path.join(process.cwd(), "test/fixtures")
+  beforeEach(() => {
+    setEnv({
+      collectorValuesKeysMappingPath: path.join(pathToFixtures, "values_keys_mapping.json"),
+      collectorValuesSchemaPath: path.join(pathToFixtures, "values_schema.json")
+    })
+  })
+
+  afterEach(() => {
+    clearEnv()
+  })
   describe("probe is not properly defined", () => {
     const probe = {
       without_values_schema: {
@@ -24,25 +37,26 @@ describe("getValues spec", () => {
       without_values_schema: 2,
       without_values_keys: 3
     }
+
     it("should take schema as string when probe is not present", () => {
       const log = getMockLog()
+      const getValues = getValuesFn(probe, log)
       expect(getValues({event, probe, log, dataItemName: "without_probe"})).to.be.equal("1")
       expect(log.warn).to.have.been.calledWith("Data item: without_probe is not present in the probe.")
     })
 
     it("should take schema as string and return stringified value when probe doesn't have values_schema", () => {
       const log = getMockLog()
+      const getValues = getValuesFn(probe, log)
+
       expect(getValues({event, probe, log, dataItemName: "without_values_schema"})).to.be.equal("2")
     })
 
     it("should take values_keys as default when it is not defined in the probe", () => {
       const log = getMockLog()
-      expect(getValues({event, probe, log, dataItemName: "without_values_keys"})).to.be.equal("3")
-    })
+      const getValues = getValuesFn(probe, log)
 
-    it("should return string of values when values_keys is present and schema is not", () => {
-      const log = getMockLog()
-      expect(getValues({event, probe, log, dataItemName: "value_keys_without_schema"})).to.be.equal("2")
+      expect(getValues({event, probe, log, dataItemName: "without_values_keys"})).to.be.equal("3")
     })
   })
 
@@ -69,36 +83,17 @@ describe("getValues spec", () => {
         data_item_type: "VALUE_BOOLEAN",
         values_schema: {type: "boolean"}
       },
-      value_object_spatial: {
+      acceleration: {
         synthetic: true,
         data_item_name: "value_object_spatial",
         data_item_type: "VALUE_OBJECT_SPATIAL",
-        values_schema: {type: "object"},
-        values_keys: [
-          {key: "a", value: "value_int"},
-          {key: "b", value: "value_number"},
-          {key: "c", value: "value_string"}
-        ]
+        values_schema: {$ref: "values_schema.json#/spatial"}
       },
-      value_object_location: {
+      location: {
         synthetic: true,
         data_item_name: "value_object_location",
         data_item_type: "VALUE_OBJECT_LOCATION",
-        values_schema: {type: "object"},
-        values_keys: [
-          {key: "a", value: "value_int"},
-          {key: "b", value: "value_number"}
-        ]
-      },
-      value_object_location_with_null: {
-        synthetic: true,
-        data_item_name: "value_object_location",
-        data_item_type: "VALUE_OBJECT_LOCATION",
-        values_schema: {type: "object"},
-        values_keys: [
-          {key: "a", value: "value_int"},
-          {key: "b", value: "lon"}
-        ]
+        values_schema: {$ref: "values_schema.json#/location"}
       }
     }
     const event = {
@@ -106,74 +101,87 @@ describe("getValues spec", () => {
       value_number: 2.2,
       value_string: "3",
       value_boolean: false,
+      lat_deg: 72.71,
+      lon_deg: 112.12,
+      ACC_X_MPS2: 12,
+      ACC_Y_MPS2: 13,
+      ACC_Z_MPS2: 14,
       probeAbsent: null
     }
 
     describe("should return value when event value is not null", () => {
       it("should return value as is if schema is int ", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
         expect(getValues({event, probe, dataItemName: "value_int"})).to.be.equal(1)
       })
 
       it("should return value as is if schema is number ", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
         expect(getValues({event, probe, dataItemName: "value_number"})).to.be.equal(2.2)
       })
 
       it("should return value as is if schema is string ", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
         expect(getValues({event, probe, dataItemName: "value_string"})).to.be.equal("3")
       })
 
       it("should return value as is if schema is boolean ", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
         expect(getValues({event, probe, dataItemName: "value_boolean"})).to.be.equal(false)
       })
 
       it("should return value based on value keys if schema is object with spatial structure", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event,
           probe,
-          dataItemName: "value_object_spatial"
+          dataItemName: "acceleration"
         })
         expect(val).to.deep.equal({
-          a: 1,
-          b: 2.2,
-          c: "3"
+          x: 12,
+          y: 13,
+          z: 14
         })
       })
 
       it("should return value based on value keys if schema is object with location structure", () => {
-        const val = getValues({
-          event,
-          probe,
-          dataItemName: "value_object_location"
-        })
-        expect(val).to.deep.equal({
-          a: 1,
-          b: 2.2
-        })
-      })
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
 
-      it("should return value based on value keys when schema is object and return null for key not present", () => {
         const val = getValues({
           event,
           probe,
-          dataItemName: "value_object_location_with_null"
+          dataItemName: "location"
         })
         expect(val).to.deep.equal({
-          a: 1,
-          b: null
+          lat: 72.71,
+          lon: 112.12
         })
       })
     })
 
     describe("when event value is null", () => {
       it("should return null if schema is object", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event: {},
           probe,
-          dataItemName: "value_object_location"
+          dataItemName: "location"
         })
         expect(val).to.eql(null)
       })
       it("should return null if schema is number", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event: {},
           probe,
@@ -183,6 +191,8 @@ describe("getValues spec", () => {
       })
       it("should return null if schema is int", () => {
         const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event: {},
           log,
@@ -193,6 +203,8 @@ describe("getValues spec", () => {
       })
       it("should return null if schema is boolean", () => {
         const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event: {},
           log,
@@ -203,6 +215,8 @@ describe("getValues spec", () => {
       })
       it("should return empty string if schema is string", () => {
         const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+
         const val = getValues({
           event: {},
           log,
