@@ -76,11 +76,5 @@ describe("Merge probe info", () => {
         category: "SAMPLE"
       })
     })
-
-    it("should have values_schema in meta", () => {
-      const mockDataItem = getDataItem({value: {x: 1, y: 1, z: 1}, dataItemName: "acceleration"})
-      const {meta} = mergeProbeInfo(mockDataItem)
-      expect(meta).to.eql({values_schema: probe.acceleration.values_schema})
-    })
   })
 })

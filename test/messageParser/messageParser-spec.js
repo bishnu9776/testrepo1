@@ -86,96 +86,100 @@ describe("Parse GCP message", () => {
       clearEnv()
     })
 
-    it("formats attributes for legacy data and parses correctly", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const message = getDeflateCompressedGCPEvent({
-        data: GPSTPV.data,
-        attributes: {subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id}
+    describe("gen1 parsing", () => {
+      it("formats attributes for legacy data and parses correctly", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const message = getDeflateCompressedGCPEvent({
+          data: GPSTPV.data,
+          attributes: {subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id}
+        })
+        const output = await messageParser({message, acknowledgeMessage})
+        const expected = parsedGCPEvents
+          .map(x => ({...x, data_item_id: `${x.data_item_name}-legacy`}))
+          .concat({tag: ACK_MSG_TAG, message, acknowledgeMessage})
+        expect(output).to.eql(expected)
       })
-      const output = await messageParser({message, acknowledgeMessage})
-      const expected = parsedGCPEvents
-        .map(x => ({...x, data_item_id: `${x.data_item_name}-legacy`}))
-        .concat({tag: ACK_MSG_TAG, message, acknowledgeMessage})
-      expect(output).to.eql(expected)
-    })
 
-    it("formats attributes for v1 data and parses correctly for GPS_TPV", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const requiredKeys = [
-        "channel",
-        "data_item_id",
-        "data_item_name",
-        "device_uuid",
-        "sequence",
-        "timestamp",
-        "value"
-      ]
-      const output = await messageParser({message, acknowledgeMessage})
+      it("formats attributes for v1 data and parses correctly for GPS_TPV", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const requiredKeys = [
+          "channel",
+          "data_item_id",
+          "data_item_name",
+          "device_uuid",
+          "sequence",
+          "timestamp",
+          "value"
+        ]
+        const output = await messageParser({message, acknowledgeMessage})
 
-      output.forEach(e => {
-        if (e.tag !== ACK_MSG_TAG) {
-          expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
-        }
+        output.forEach(e => {
+          if (e.tag !== ACK_MSG_TAG) {
+            expect(difference(requiredKeys, Object.keys(e)).length).to.eql(0)
+          }
+        })
+        expect(output.length).to.eql(277)
+        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
       })
-      expect(output.length).to.eql(277)
-      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+
+      it("formats attributes for v1 data and parses correctly for CAN ", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser({message, acknowledgeMessage})
+        expect(output.length).to.eql(121)
+        expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
+        expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20) // deduped can_mcu events
+        expect(output[120].tag).to.eql(ACK_MSG_TAG)
+      })
+
+      it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser({message, acknowledgeMessage})
+        expect(output.length).to.eql(13)
+        expect(output[12].tag).to.eql(ACK_MSG_TAG)
+      })
+
+      it("formats attributes for v1 data and parses correctly for CAN_RAW ", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_RAW`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser({message, acknowledgeMessage})
+        expect(output.length).to.eql(186)
+        expect(output[185].tag).to.eql(ACK_MSG_TAG)
+      })
+
+      it("it should log and ack the message if unable to parse", async () => {
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
+        const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+        const output = await messageParser({message, acknowledgeMessage})
+        expect(output.length).to.eql(1)
+        expect(output[0].tag).to.eql(ACK_MSG_TAG)
+        expect(appContext.metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
+      })
     })
 
-    it("formats attributes for v1 data and parses correctly for CAN ", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(121)
-      expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-      expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20) // deduped can_mcu events
-      expect(output[120].tag).to.eql(ACK_MSG_TAG)
-    })
-
-    it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(13)
-      expect(output[12].tag).to.eql(ACK_MSG_TAG)
-    })
-
-    it("formats attributes for v1 data and parses correctly for CAN_RAW ", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_RAW`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(186)
-      expect(output[185].tag).to.eql(ACK_MSG_TAG)
-    })
-
-    it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
-      const pathToFixtures = path.join(process.cwd(), "test/fixtures")
-      process.env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
-      process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
-      process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
-      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(2)
-      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
-      delete process.env.VI_COLLECTOR_IS_GEN_2_DATA
-      delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
-      delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
-    })
-
-    it("it should log and ack the message if unable to parse", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
-      expect(appContext.metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
+    describe("gen2 parsing", () => {
+      it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
+        const pathToFixtures = path.join(process.cwd(), "test/fixtures")
+        process.env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
+        process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
+        process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
+        const messageParser = getMessageParser({appContext, probe})
+        const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
+        const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
+        const output = await messageParser({message, acknowledgeMessage})
+        expect(output.length).to.eql(2)
+        expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+        delete process.env.VI_COLLECTOR_IS_GEN_2_DATA
+        delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
+        delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
+      })
     })
 
     describe("should ack message without decompressing or parsing", () => {
