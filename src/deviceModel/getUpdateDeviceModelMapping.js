@@ -1,19 +1,10 @@
 import axios from "axios"
-import {getJwtConfig} from "../utils/getJWTConfig"
-import {tokenGenerator} from "../utils/tokenGenerator"
 
-export const putDeviceMapping = (device, model) => {
-  const plant = "ather"
-  const {env} = process
-  const jwtConfig = getJwtConfig()
-  const getToken = tokenGenerator(jwtConfig)
+export const putDeviceMapping = (appContext, device, model) => {
+  const {apiConfig, getToken} = appContext
+  const {plant, url, subject, permissions} = apiConfig
 
-  const apiConfig = {
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
-    subject: env.VI_NAME || "svc-ather-collector",
-    permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
-  }
-  const endpoint = `${apiConfig.url}/${device}`
+  const endpoint = `${url}/${device}`
 
   return new Promise((resolve, reject) => {
     axios({
@@ -23,7 +14,7 @@ export const putDeviceMapping = (device, model) => {
       plant,
       headers: {
         "X-Tenant": plant,
-        Authorization: `Bearer ${getToken(apiConfig.subject, plant, apiConfig.permissions)}`,
+        Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
         "Content-Type": "application/json"
       }
     })
@@ -36,15 +27,17 @@ export const putDeviceMapping = (device, model) => {
   })
 }
 
-export const getUpdateDeviceModelMapping = async (deviceModelMapping, event) => {
-  const device = event.device_uuid
-  const model = event?.value.split("_")[1]
-  if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
-    const response = await putDeviceMapping(device, model)
-    if (response) {
-      // eslint-disable-next-line no-param-reassign
-      deviceModelMapping[device] = model
+export const getUpdateDeviceModelMapping = appContext => {
+  return async (deviceModelMapping, event) => {
+    const device = event.device_uuid
+    const model = event?.value.split("_")[1]
+    if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
+      const response = await putDeviceMapping(appContext, device, model)
+      if (response) {
+        // eslint-disable-next-line no-param-reassign
+        deviceModelMapping[device] = model
+      }
     }
+    return deviceModelMapping
   }
-  return deviceModelMapping
 }

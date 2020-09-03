@@ -44,8 +44,8 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
   const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
-  // const updateDeviceModelMapping = getUpdateDeviceModelMapping()
-  let deviceModelMapping = createDeviceModelMapping()
+  let deviceModelMapping = createDeviceModelMapping(appContext)
+  const updateDeviceModelMapping = getUpdateDeviceModelMapping(appContext)
 
   return stream
     .pipe(
@@ -57,7 +57,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       map(formatEvent),
       tap(event => {
         if (modelDataItems.includes(event.data_item_name)) {
-          deviceModelMapping = getUpdateDeviceModelMapping(deviceModelMapping, event)
+          deviceModelMapping = updateDeviceModelMapping(deviceModelMapping, event)
         }
       }),
       filter(isModelPresentForDevice(deviceModelMapping)),

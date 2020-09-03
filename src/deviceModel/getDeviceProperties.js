@@ -1,28 +1,17 @@
 import axios from "axios"
-import {tokenGenerator} from "../utils/tokenGenerator"
-import {getJwtConfig} from "../utils/getJWTConfig"
 
-export const getDeviceProperties = () => {
-  const plant = "ather"
-  const {env} = process
-  const jwtConfig = getJwtConfig()
-  const getToken = tokenGenerator(jwtConfig)
-
-  const apiConfig = {
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
-    subject: env.VI_NAME || "svc-ather-collector",
-    permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
-  }
+export const getDeviceProperties = ({apiConfig, getToken}) => {
+  const {plant, url, subject, permissions} = apiConfig
 
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",
-      url: apiConfig.url,
+      url,
       data: {},
       plant,
       headers: {
         "X-Tenant": plant,
-        Authorization: `Bearer ${getToken(apiConfig.subject, plant, apiConfig.permissions)}`,
+        Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
         "Content-Type": "application/json"
       }
     })
@@ -35,8 +24,8 @@ export const getDeviceProperties = () => {
   })
 }
 
-export const createDeviceModelMapping = async () => {
-  const deviceProperties = await getDeviceProperties()
+export const createDeviceModelMapping = async appContext => {
+  const deviceProperties = await getDeviceProperties(appContext)
   return deviceProperties.reduce((acc, deviceProperty) => {
     acc[deviceProperty.device] = deviceProperty.model
     return acc
