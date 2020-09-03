@@ -16,14 +16,14 @@ describe("Parses GEN2", () => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
-    process.env.IS_GEN_2_DATA = "true"
+    process.env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
     process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX = "true"
     process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
     process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
   })
 
   afterEach(() => {
-    delete process.env.IS_GEN_2_DATA
+    delete process.env.VI_COLLECTOR_IS_GEN_2_DATA
     delete process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX
     delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
     delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH

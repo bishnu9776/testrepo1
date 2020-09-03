@@ -154,7 +154,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
       const pathToFixtures = path.join(process.cwd(), "test/fixtures")
-      process.env.IS_GEN_2_DATA = "true"
+      process.env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
       process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
       process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
       const messageParser = getMessageParser({appContext, probe})
@@ -163,7 +163,7 @@ describe("Parse GCP message", () => {
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(2)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
-      delete process.env.IS_GEN_2_DATA
+      delete process.env.VI_COLLECTOR_IS_GEN_2_DATA
       delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
       delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
     })

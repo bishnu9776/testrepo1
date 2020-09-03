@@ -3,19 +3,7 @@ import {getDataItem} from "./utils/getDataItem"
 import {getValuesFn} from "./utils/getValues"
 import {parseCANRAW} from "./CAN_RAW"
 
-const nonDataItemKeys = [
-  "timestamp",
-  "seq_num",
-  "gpstime_utc",
-  "global_seq",
-  "bike_id",
-  "data",
-  "can_id",
-  "start_timestamp",
-  "end_timestamp",
-  "key",
-  "value"
-]
+const nonDataItemKeys = ["data", "can_id", "key", "value", "timestamp", "start_timestamp", "end_timestamp"]
 
 const isCANRAW = event => {
   return !isNil(event.can_id) && !isNil(event.data)
