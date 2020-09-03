@@ -40,7 +40,7 @@ export const getUpdateDeviceModelMapping = async (deviceModelMapping, event) => 
   const device = event.device_uuid
   const model = event?.value.split("_")[1]
   if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
-    const response = putDeviceMapping(device, model)
+    const response = await putDeviceMapping(device, model)
     if (response) {
       // eslint-disable-next-line no-param-reassign
       deviceModelMapping[device] = model

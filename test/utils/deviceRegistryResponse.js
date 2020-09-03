@@ -7,3 +7,7 @@ export const mockDeviceRegistryPostSuccessResponse = (baseUrl, postUrl, requestB
 export const mockDeviceRegistryPutSuccessResponse = (baseUrl, putUrl, requestBody, response) => {
   return nock(baseUrl).put(putUrl, requestBody).reply(200, response)
 }
+
+export const mockDeviceRegistryPutFailureResponse = (baseUrl, putUrl, requestBody) => {
+  return nock(baseUrl).put(putUrl, requestBody).reply(400)
+}
