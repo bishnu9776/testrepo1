@@ -8,7 +8,7 @@ export const parseGen2UnbufferedData = ({message}) => {
       const timestamp = event.end_timestamp ? event.end_timestamp : event.start_timestamp
       const {seq_num: sequence, isvalid} = event
       const dataItemName = "error_code"
-      const dataItemId = JSON.parse(process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX || "false")
+      const dataItemId = JSON.parse(process.env.VI_USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX || "false")
         ? `${bikeId}-${dataItemName}`
         : `${dataItemName}-${version}`
       return {
