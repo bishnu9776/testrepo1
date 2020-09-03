@@ -45,7 +45,7 @@
     "synthetic": "true",
     "data_item_name": "acceleration",
     "data_item_type": "ACCELERATION",
-    "category": "SAMPLE",
+    "category": "COMPOSITE",
     "values_schema": {
       "$ref": "values_schema.json#/spatial"
     }

@@ -65,15 +65,26 @@ describe("Merge probe info", () => {
     })
     const mergeProbeInfo = getMergeProbeInfoFn(probe)
 
-    it("should return value in value_sample and values key as is", () => {
+    it("should return value in value_location and values key for category LOCATION", () => {
+      const mockDataItem = getDataItem({value: {lat: 1.1, lon: 1.2}, dataItemName: "GPS_TPV"})
+      const mergedMockDataItem = omit(["meta"], mergeProbeInfo(mockDataItem))
+      expect(mergedMockDataItem).to.eql({
+        ...omit(["value"], mockDataItem),
+        data_item_type: "lat_val",
+        value_location: {lat: 1.1, lon: 1.2},
+        values: {lat: 1.1, lon: 1.2},
+        category: "LOCATION"
+      })
+    })
+
+    it("should return just values key for category COMPOSITE", () => {
       const mockDataItem = getDataItem({value: {x: 1, y: 1, z: 1}, dataItemName: "acceleration"})
       const mergedMockDataItem = omit(["meta"], mergeProbeInfo(mockDataItem))
       expect(mergedMockDataItem).to.eql({
         ...omit(["value"], mockDataItem),
         data_item_type: "ACCELERATION",
-        value_sample: {x: 1, y: 1, z: 1},
         values: {x: 1, y: 1, z: 1},
-        category: "SAMPLE"
+        category: "COMPOSITE"
       })
     })
   })
