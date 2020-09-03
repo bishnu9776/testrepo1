@@ -1,4 +1,3 @@
-import path from "path"
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
 import {GEN2} from "../../fixtures/bikeChannels/GEN2"
@@ -6,28 +5,22 @@ import {GEN2_CAN_RAW} from "../../fixtures/bikeChannels/GEN2_CAN_RAW"
 import {getMockLog} from "../../stubs/logger"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFERED"
+import {clearEnv, setGen2Envs} from "../../utils"
 
 describe("Parses GEN2", () => {
   let appContext
   let log
   let metricRegistry
-  const pathToFixtures = path.join(process.cwd(), "test/fixtures")
 
   beforeEach(() => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
-    process.env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
-    process.env.VI_USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX = "true"
-    process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
-    process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
+    setGen2Envs()
   })
 
   afterEach(() => {
-    delete process.env.VI_COLLECTOR_IS_GEN_2_DATA
-    delete process.env.VI_USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX
-    delete process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
-    delete process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
+    clearEnv()
   })
 
   it("parses buffered messages", () => {
