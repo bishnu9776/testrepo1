@@ -17,7 +17,7 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
     },
     timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
   }
-  const isRetryable = is5xxError()
+  const isRetryable = is5xxError
 
   const retryConfig = getRetryConfig(log, isRetryable)
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: getAxiosRequest})
