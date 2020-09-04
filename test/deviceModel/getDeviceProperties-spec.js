@@ -53,12 +53,23 @@ describe("create device Model Mapping", () => {
     expect(deviceMapping).to.eql({"device-1": "A", "device-2": "B"})
   })
 
+  it("should not retry on non retryable error", async () => {
+    const response = [
+      {device: "device-a", model: "A"},
+      {device: "device-b", model: "B"}
+    ]
+    mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 400)
+    const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
+    expect(deviceMapping).to.eql({})
+    expect(log.warn).to.have.been.calledOnce
+  })
+
   it("retry on post request error", async () => {
     const response = [
       {device: "device-a", model: "A"},
       {device: "device-b", model: "B"}
     ]
-    mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1)
+    mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 503)
     const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
     expect(deviceMapping).to.eql({"device-a": "A", "device-b": "B"})
     expect(log.warn).to.have.been.calledOnce
@@ -69,7 +80,7 @@ describe("create device Model Mapping", () => {
       {device: "device-a", model: "Z"},
       {device: "device-b", model: "A"}
     ]
-    mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 3)
+    mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 3, 503)
     const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
     expect(deviceMapping).to.eql({})
     expect(log.warn).to.have.been.calledTwice

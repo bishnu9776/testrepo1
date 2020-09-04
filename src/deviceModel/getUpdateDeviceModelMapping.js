@@ -24,7 +24,6 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
 }
 
 export const getUpdateDeviceModelMapping = appContext => {
-  const {log} = appContext
   return async (deviceModelMapping, event) => {
     const device = event.device_uuid
     const model = event?.value.split("_")[1]
@@ -34,8 +33,6 @@ export const getUpdateDeviceModelMapping = appContext => {
       if (ok && response.data) {
         // eslint-disable-next-line no-param-reassign
         deviceModelMapping[device] = model
-      } else {
-        log.warn("collector was not able to update the device mapping in device registry")
       }
     }
     return deviceModelMapping

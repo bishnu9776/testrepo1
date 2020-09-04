@@ -10,6 +10,7 @@ import {getMockLog} from "../stubs/logger"
 import {clearStub} from "../stubs/clearStub"
 
 describe("Update device mapping", () => {
+  const {env} = process
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   let getToken
@@ -29,6 +30,9 @@ describe("Update device mapping", () => {
       getToken,
       log
     }
+    env.VI_ATHER_COLLECTOR_MAX_RETRIES = 2
+    env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
+    env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
   })
 
   afterEach(() => {
@@ -79,17 +83,46 @@ describe("Update device mapping", () => {
     })
   })
 
-  it("update devices registry sends failure response ", async () => {
+  it("should not retry on non retryable error and should not update deviceModel", async () => {
+    const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
+    const deviceModelMapping = {"device-1": "450x"}
+    const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
+    const putUrl = `${endpoint}/${event.device_uuid}`
+    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 400, 1, {})
+    const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)
+    const response = await updateDeviceModelMapping(deviceModelMapping, event)
+    expect(response).to.eql(deviceModelMapping)
+  })
+
+  it("should retry when retryConfig is set non zero", async () => {
     const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
     const deviceModelMapping = {"device-1": "450x"}
 
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
-    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody)
+    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 1, {})
+    const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)
+    const response = await updateDeviceModelMapping(deviceModelMapping, event)
+    expect(response).to.eql({
+      "device-1": "450x",
+      "device-6": "450"
+    })
+    expect(log.warn).to.have.been.calledOnce
+  })
+
+  it("should retry and log error on retry caps out", async () => {
+    const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
+    const deviceModelMapping = {"device-1": "450x"}
+
+    const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
+    const putUrl = `${endpoint}/${event.device_uuid}`
+    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 3, {})
     const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x"
     })
+    expect(log.warn).to.have.been.calledTwice
+    expect(log.error).to.have.been.calledOnce
   })
 })
