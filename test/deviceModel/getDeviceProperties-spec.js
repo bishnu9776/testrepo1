@@ -33,7 +33,7 @@ describe("create device Model Mapping", () => {
     const requestBody = {}
     const response = {device: "device-1", plant: "ather", model: "450x"}
     mockDeviceRegistryPostSuccessResponse(url, endpoint, requestBody, response)
-    const devices = await getDeviceProperties({apiConfig, getToken})
+    const devices = await getDeviceProperties({apiConfig, getToken, log})
     expect(devices).to.eql(response)
   })
 
