@@ -5,26 +5,27 @@ import {
 } from "../utils/deviceRegistryResponse"
 import {getUpdateDeviceModelMapping} from "../../src/deviceModel/getUpdateDeviceModelMapping"
 import {clearEnv} from "../utils"
+import {getTokenStub} from "../stubs/getTokenStub"
 
 describe("Update device mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
-  const {env} = process
-  const apiConfig = {
-    url: `${url}${endpoint}`,
-    subject: env.VI_NAME || "svc-ather-collector",
-    permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
+  const getToken = getTokenStub()
+  const appContext = {
+    url,
+    endpoint,
+    getToken,
+    apiConfig: {
+      plant: "ather",
+      url: `${url}${endpoint}`,
+      subject: "svc-ather-collector",
+      permissions: ["reports:read"]
+    }
   }
 
   describe("Device Mapping on Success Response", () => {
     beforeEach(() => {
       nock.cleanAll()
-      env.VI_JWT_LIFETIME_SECS = "86400"
-      env.VI_JWT_ALGORITHM = "HS256"
-      env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS = "reports:read"
-      env.VI_RETRY_LOG_THRESHOLD = "5"
-      env.VI_JWT_SECS_BEFORE_EXPIRY_TO_DECIDE_TO_REFRESH_TOKEN = "300"
-      env.VI_JWT_SECRET = "testing"
     })
 
     afterEach(() => {
@@ -38,8 +39,9 @@ describe("Update device mapping", () => {
       const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
       const putUrl = `${endpoint}/${event.device_uuid}`
       mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-      const putResponse = await getUpdateDeviceModelMapping(deviceModelMapping, event, apiConfig)
-      expect(putResponse).to.eql({
+      const putResponse = await getUpdateDeviceModelMapping(appContext)
+      const response = await putResponse(deviceModelMapping, event)
+      expect(response).to.eql({
         "device-1": "450x",
         "device-2": "450plus",
         "device-5": "450plus"
@@ -53,8 +55,9 @@ describe("Update device mapping", () => {
       const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
       const putUrl = `${endpoint}/${event.device_uuid}`
       mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-      const putResponse = await getUpdateDeviceModelMapping(deviceModelMapping, event, apiConfig)
-      expect(putResponse).to.eql({
+      const putResponse = await getUpdateDeviceModelMapping(appContext)
+      const response = await putResponse(deviceModelMapping, event)
+      expect(response).to.eql({
         "device-1": "450x",
         "device-5": "450plus"
       })
@@ -64,8 +67,9 @@ describe("Update device mapping", () => {
       // no mock response as no api request is made
       const deviceModelMapping = {"device-1": "450x", "device-5": "450"}
       const event = {device_uuid: "device-5", value: "GEN2_450", data_item_name: "bike_type"}
-      const putResponse = await getUpdateDeviceModelMapping(deviceModelMapping, event, apiConfig)
-      expect(putResponse).to.eql({
+      const putResponse = await getUpdateDeviceModelMapping(appContext)
+      const response = await putResponse(deviceModelMapping, event)
+      expect(response).to.eql({
         "device-1": "450x",
         "device-5": "450"
       })
@@ -75,13 +79,6 @@ describe("Update device mapping", () => {
     // eslint-disable-next-line sonarjs/no-identical-functions
     beforeEach(() => {
       nock.cleanAll()
-      env.VI_SVC_DEVICE_REGISTRY_URL = `${url}${endpoint}`
-      env.VI_JWT_LIFETIME_SECS = "86400"
-      env.VI_JWT_ALGORITHM = "HS256"
-      env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS = "reports:read"
-      env.VI_RETRY_LOG_THRESHOLD = "5"
-      env.VI_JWT_SECS_BEFORE_EXPIRY_TO_DECIDE_TO_REFRESH_TOKEN = "300"
-      env.VI_JWT_SECRET = "testing"
     })
 
     afterEach(() => {
@@ -95,8 +92,9 @@ describe("Update device mapping", () => {
       const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
       const putUrl = `${endpoint}/${event.device_uuid}`
       mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody)
-      const putResponse = await getUpdateDeviceModelMapping(deviceModelMapping, event, apiConfig)
-      expect(putResponse).to.eql({
+      const putResponse = await getUpdateDeviceModelMapping(appContext)
+      const response = await putResponse(deviceModelMapping, event)
+      expect(response).to.eql({
         "device-1": "450x"
       })
     })
