@@ -6,30 +6,36 @@ import {
 import {getUpdateDeviceModelMapping} from "../../src/deviceModel/getUpdateDeviceModelMapping"
 import {clearEnv} from "../utils"
 import {getTokenStub} from "../stubs/getTokenStub"
+import {getMockLog} from "../stubs/logger"
+import {clearStub} from "../stubs/clearStub"
 
 describe("Update device mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
-  const getToken = getTokenStub()
-  const appContext = {
-    url,
-    endpoint,
-    getToken,
-    apiConfig: {
-      plant: "ather",
-      url: `${url}${endpoint}`,
-      subject: "svc-ather-collector",
-      permissions: ["reports:read"]
-    }
-  }
+  let getToken
+  let log
+  let appContext
 
   describe("Device Mapping on Success Response", () => {
     beforeEach(() => {
       nock.cleanAll()
+      log = getMockLog()
+      getToken = getTokenStub()
+      appContext = {
+        apiConfig: {
+          plant: "ather",
+          url: `${url}${endpoint}`,
+          subject: "svc-ather-collector",
+          permissions: ["reports:read"]
+        },
+        getToken,
+        log
+      }
     })
 
     afterEach(() => {
       clearEnv()
+      clearStub()
     })
 
     it("update devices mapping on receiving new device", async () => {
@@ -75,7 +81,7 @@ describe("Update device mapping", () => {
       })
     })
   })
-  describe.skip("Device mapping on failure response", () => {
+  describe("Device mapping on failure response", () => {
     // eslint-disable-next-line sonarjs/no-identical-functions
     beforeEach(() => {
       nock.cleanAll()
