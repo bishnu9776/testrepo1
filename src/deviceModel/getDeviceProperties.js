@@ -16,20 +16,20 @@ export const getDeviceProperties = async ({apiConfig, getToken, log}) => {
     },
     timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || 30000, 10)
   }
-  const isRetryable = is5xxError()
+  const isRetryable = is5xxError
 
   const retryConfig = getRetryConfig(log, isRetryable)
-  const {ok, response} = await retryableRequest({requestConfig, retryConfig, log, makeRequest: getAxiosRequest})
-  if (!ok) {
-    log.warn("collector was not able to get device model mapping from device registry")
-  }
-  return response.data
+  return retryableRequest({requestConfig, retryConfig, log, makeRequest: getAxiosRequest})
 }
 
 export const createDeviceModelMapping = async appContext => {
-  const deviceProperties = await getDeviceProperties(appContext)
-  return deviceProperties.reduce((acc, deviceProperty) => {
-    acc[deviceProperty.device] = deviceProperty.model
-    return acc
-  }, {})
+  const {ok, response} = await getDeviceProperties(appContext)
+  if (ok && response.data) {
+    const deviceProperties = response.data
+    return deviceProperties.reduce((acc, deviceProperty) => {
+      acc[deviceProperty.device] = deviceProperty.model
+      return acc
+    }, {})
+  }
+  return {}
 }

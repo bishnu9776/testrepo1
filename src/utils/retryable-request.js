@@ -41,8 +41,7 @@ const shouldRetryOnError = ({error, retryConfig, retryCount, log, requestConfig}
     const isRetrying = retryCount > 0
     const shouldLogRetry = isRetrying && retryCount % retryLogThreshold === 0
     if (shouldLogRetry) {
-      // log only on retry and not the first request
-      log.info(
+      log.warn(
         {ctx: {requestConfig: JSON.stringify(logRequestConfig(requestConfig))}},
         `Retrying request. Retry Count: ${retryCount}`
       )

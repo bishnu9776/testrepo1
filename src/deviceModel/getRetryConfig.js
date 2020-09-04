@@ -29,7 +29,7 @@ export const addConfigIfAvailable = (object, keyValuePairs) => {
 }
 
 export const is5xxError = error => {
-  const status = path(["response", "status"], error)
+  const status = path(["response", "status"], error) || error.statusCode
   return status && status >= 500 && status < 600
 }
 

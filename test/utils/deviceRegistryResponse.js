@@ -1,7 +1,16 @@
 import nock from "nock"
 
-export const mockDeviceRegistryPostSuccessResponse = (baseUrl, postUrl, requestBody, response) => {
-  return nock(baseUrl).post(postUrl, requestBody).reply(200, response)
+export const mockDeviceRegistryPostSuccessResponse = (baseUrl, postUrl, response) => {
+  return nock(baseUrl).post(postUrl, {}).reply(200, response)
+}
+
+export const mockDeviceRegistryPostSuccessAfterFailure = (baseUrl, postUrl, response, numFailures) => {
+  return nock(baseUrl)
+    .post(postUrl, {})
+    .times(numFailures)
+    .replyWithError({message: "Server error", statusCode: 503})
+    .post(postUrl)
+    .reply(200, response)
 }
 
 export const mockDeviceRegistryPutSuccessResponse = (baseUrl, putUrl, requestBody, response) => {
