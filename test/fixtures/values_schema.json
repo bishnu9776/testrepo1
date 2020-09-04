@@ -1,0 +1,42 @@
+{
+  "location": {
+    "title": "Longitude and Latitude Values",
+    "description": "A geographical coordinate.",
+    "type": "object",
+    "properties": {
+      "lat": {
+        "type": "number",
+        "minimum": -90,
+        "maximum": 90
+      },
+      "lon": {
+        "type": "number",
+        "minimum": -180,
+        "maximum": 180
+      }
+    },
+    "required": ["lat", "lon"]
+  },
+  "spatial": {
+    "title": "Spatial data",
+    "type": "object",
+    "properties": {
+      "x": {"type": "number"},
+      "y": {"type": "number"},
+      "z": {"type": "number"}
+    },
+    "required": ["x", "y", "z"]
+  },
+  "log": {
+    "title": "Log data",
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string"
+      },
+      "source": {
+        "type": "string"
+      }
+    }
+  }
+}

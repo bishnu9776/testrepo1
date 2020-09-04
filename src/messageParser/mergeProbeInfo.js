@@ -17,7 +17,7 @@ const getValueKey = ({probeInfo}) => {
     return "value_location"
   }
 
-  if (probeInfo.category === "LOG" || probeInfo.data_item_name === "can_raw") {
+  if (probeInfo.category === "LOG" || probeInfo.category === "COMPOSITE" || probeInfo.data_item_name === "can_raw") {
     return "values"
   }
 
@@ -32,7 +32,15 @@ export const getMergeProbeInfoFn = probe => {
     if (valueKey === "value_event" && typeof value !== "string") {
       value = JSON.stringify(event.value)
     }
-
+    const isNewProbeStructure = JSON.parse(process.env.VI_COLLECTOR_IS_NEW_PROBE_STRUCTURE || "false")
+    if (isNewProbeStructure) {
+      return {
+        ...omit(["value"], event),
+        [valueKey]: value,
+        values: value,
+        ...omit(["values_schema", "meta", "synthetic"], probeInfo)
+      }
+    }
     return {
       ...omit(["value"], event),
       [valueKey]: value,

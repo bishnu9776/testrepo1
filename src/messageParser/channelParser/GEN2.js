@@ -1,21 +1,9 @@
 import {flatten, isNil} from "ramda"
 import {getDataItem} from "./utils/getDataItem"
-import {getValues} from "./utils/getValues"
+import {getValuesFn} from "./utils/getValues"
 import {parseCANRAW} from "./CAN_RAW"
 
-const nonDataItemKeys = [
-  "timestamp",
-  "seq_num",
-  "gpstime_utc",
-  "global_seq",
-  "bike_id",
-  "data",
-  "can_id",
-  "start_timestamp",
-  "end_timestamp",
-  "key",
-  "value"
-]
+const nonDataItemKeys = ["data", "can_id", "key", "value", "timestamp", "start_timestamp", "end_timestamp"]
 
 const isCANRAW = event => {
   return !isNil(event.can_id) && !isNil(event.data)
@@ -26,6 +14,8 @@ export const parseGen2BufferedData = (appContext, probe) => {
   const syntheticDataItemNameList = Object.values(probe)
     .filter(dataItemProbe => dataItemProbe.synthetic)
     .map(dataItemProbe => dataItemProbe.data_item_name)
+
+  const getValues = getValuesFn(probe, log)
 
   return ({message}) => {
     const {data, attributes} = message
@@ -48,8 +38,7 @@ export const parseGen2BufferedData = (appContext, probe) => {
               timestamp,
               attributes,
               dataItemName,
-              // TODO: value -> values
-              value: getValues({event: embellishedEvent, dataItemName, probe, log}),
+              value: getValues({event: embellishedEvent, dataItemName}),
               sequence: event.seq_num
             })
           })

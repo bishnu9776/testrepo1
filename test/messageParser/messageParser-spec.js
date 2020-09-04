@@ -1,11 +1,12 @@
 import fs from "fs"
+import path from "path"
 import {difference} from "ramda"
 import {getMessageParser} from "../../src/messageParser"
 import probe from "../fixtures/probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {getMockLog} from "../stubs/logger"
-import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs, setEnv, setGen2Envs} from "../utils"
 import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
@@ -14,20 +15,6 @@ const {env} = process
 
 describe("Parse GCP message", () => {
   let appContext
-
-  beforeEach(() => {
-    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "true"
-    appContext = {
-      metricRegistry: getMockMetricRegistry(),
-      log: getMockLog()
-    }
-  })
-
-  afterEach(() => {
-    clearEnv()
-    clearStub()
-  })
-
   const parsedGCPEvents = [
     {
       data_item_id: "location-v1",
@@ -71,18 +58,28 @@ describe("Parse GCP message", () => {
       value: 77.60284
     }
   ]
+  const acknowledgeMessage = () => {}
 
-  describe("Pre big sink data", () => {
-    const acknowledgeMessage = () => {}
+  beforeEach(() => {
+    appContext = {
+      metricRegistry: getMockMetricRegistry(),
+      log: getMockLog()
+    }
+  })
 
+  afterEach(() => {
+    clearStub()
+    clearEnv()
+  })
+
+  describe("gen1 parsing", () => {
     beforeEach(() => {
-      env.VI_PRE_BIG_SINK_INPUT = "true"
-      env.VI_SHOULD_DECODE_MESSAGE = true
+      setEnv({
+        preBigSinkInput: "true",
+        shouldDecodeMessage: "true",
+        gcpPubsubDataCompressionFlag: "true"
+      })
       setChannelDecoderConfigFileEnvs()
-    })
-
-    afterEach(() => {
-      clearEnv()
     })
 
     it("formats attributes for legacy data and parses correctly", async () => {
@@ -151,17 +148,6 @@ describe("Parse GCP message", () => {
       expect(output[185].tag).to.eql(ACK_MSG_TAG)
     })
 
-    it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
-      process.env.IS_GEN_2_DATA = "true"
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
-      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(2)
-      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
-      delete process.env.IS_GEN_2_DATA
-    })
-
     it("it should log and ack the message if unable to parse", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
@@ -171,28 +157,46 @@ describe("Parse GCP message", () => {
       expect(output[0].tag).to.eql(ACK_MSG_TAG)
       expect(appContext.metricRegistry.updateStat).to.have.been.calledWith("Counter", "decompress_failures", 1, {})
     })
+  })
 
-    describe("should ack message without decompressing or parsing", () => {
-      it("when message contains channel specified to drop", async () => {
-        env.VI_CHANNELS_TO_DROP = "gps_tpv"
-        const messageParser = getMessageParser({appContext, probe})
-        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-        const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
-        const output = await messageParser({message, acknowledgeMessage})
-        expect(output.length).to.eql(1)
-        expect(output[0].tag).to.eql(ACK_MSG_TAG)
-      })
+  describe("gen2 parsing", () => {
+    const pathToFixtures = path.join(process.cwd(), "test/fixtures")
+    beforeEach(() => {
+      setGen2Envs()
+    })
 
-      it("when message contains bike_id which doesn't match the regex device filter", async () => {
-        env.VI_SHOULD_FILTER_DEVICE = "true"
-        env.VI_DEVICE_FILTER_REGEX = "00$"
-        const messageParser = getMessageParser({appContext, probe})
-        const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-        const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
-        const output = await messageParser({message, acknowledgeMessage})
-        expect(output.length).to.eql(1)
-        expect(output[0].tag).to.eql(ACK_MSG_TAG)
-      })
+    it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
+      const messageParser = getMessageParser({appContext, probe})
+      const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
+      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
+      const output = await messageParser({message, acknowledgeMessage})
+      expect(output.length).to.eql(2)
+      expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+    })
+  })
+
+  describe("should ack message without decompressing or parsing", () => {
+    beforeEach(() => {
+      env.VI_CHANNELS_TO_DROP = "gps_tpv"
+    })
+    it("when message contains channel specified to drop", async () => {
+      const messageParser = getMessageParser({appContext, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
+      const output = await messageParser({message, acknowledgeMessage})
+      expect(output.length).to.eql(1)
+      expect(output[0].tag).to.eql(ACK_MSG_TAG)
+    })
+
+    it("when message contains bike_id which doesn't match the regex device filter", async () => {
+      env.VI_SHOULD_FILTER_DEVICE = "true"
+      env.VI_DEVICE_FILTER_REGEX = "00$"
+      const messageParser = getMessageParser({appContext, probe})
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
+      const output = await messageParser({message, acknowledgeMessage})
+      expect(output.length).to.eql(1)
+      expect(output[0].tag).to.eql(ACK_MSG_TAG)
     })
   })
 })
