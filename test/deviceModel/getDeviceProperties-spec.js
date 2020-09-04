@@ -2,11 +2,15 @@ import nock from "nock"
 import {createDeviceModelMapping, getDeviceProperties} from "../../src/deviceModel/getDeviceProperties"
 import {mockDeviceRegistryPostSuccessResponse} from "../utils/deviceRegistryResponse"
 import {getTokenStub} from "../stubs/getTokenStub"
+import {getMockLog} from "../stubs/logger"
+import {clearEnv} from "../utils"
+import {clearStub} from "../stubs/clearStub"
 
 describe("create device Model Mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
-  const getToken = getTokenStub()
+  let getToken
+  let log
   const apiConfig = {
     plant: "ather",
     url: `${url}${endpoint}`,
@@ -15,7 +19,14 @@ describe("create device Model Mapping", () => {
   }
 
   beforeEach(() => {
+    getToken = getTokenStub()
+    log = getMockLog()
     nock.cleanAll()
+  })
+
+  afterEach(() => {
+    clearEnv()
+    clearStub()
   })
 
   it("get devices", async () => {
@@ -33,7 +44,7 @@ describe("create device Model Mapping", () => {
       {device: "device-2", plant: "ather", model: "450plus"}
     ]
     mockDeviceRegistryPostSuccessResponse(url, endpoint, requestBody, response)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, getToken})
+    const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
     expect(deviceMapping).to.eql({"device-1": "450x", "device-2": "450plus"})
   })
 })
