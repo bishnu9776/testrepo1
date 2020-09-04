@@ -61,7 +61,6 @@ describe("create device Model Mapping", () => {
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 400)
     const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
     expect(deviceMapping).to.eql({})
-    expect(log.warn).to.have.been.calledOnce
   })
 
   it("retry on post request error", async () => {
