@@ -123,7 +123,7 @@ describe("Update device mapping", () => {
     expect(response).to.eql({
       "device-1": "450x"
     })
-    expect(log.warn).to.have.been.calledTwice
+    expect(log.warn).to.have.been.calledThrice
     expect(log.error).to.have.been.calledOnce
   })
 })
