@@ -92,6 +92,7 @@ describe("Update device mapping", () => {
     const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql(deviceModelMapping)
+    expect(log.warn).to.have.been.calledOnce
   })
 
   it("should retry when retryConfig is set non zero", async () => {

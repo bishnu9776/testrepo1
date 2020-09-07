@@ -47,6 +47,11 @@ const shouldRetryOnError = ({error, retryConfig, retryCount, log, requestConfig}
       )
     }
     return true
+  } else {
+    log.warn(
+      {error: errorFormatter(error), ctx: {requestConfig: JSON.stringify(logRequestConfig(requestConfig))}},
+      `Non retryable error`
+    )
   }
   if (retryCount > maxRetries) {
     log.error(

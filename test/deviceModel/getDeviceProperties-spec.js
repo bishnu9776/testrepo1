@@ -54,6 +54,7 @@ describe("create device Model Mapping", () => {
   })
 
   it("should not retry on non retryable error", async () => {
+    env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 3
     const response = [
       {device: "device-a", model: "A"},
       {device: "device-b", model: "B"}
@@ -61,9 +62,10 @@ describe("create device Model Mapping", () => {
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 400)
     const deviceMapping = await createDeviceModelMapping({apiConfig, getToken, log})
     expect(deviceMapping).to.eql({})
+    expect(log.warn).to.have.been.calledOnce
   })
 
-  it("retry on post request error", async () => {
+  it("retry on post request retryable 5xx error", async () => {
     const response = [
       {device: "device-a", model: "A"},
       {device: "device-b", model: "B"}
