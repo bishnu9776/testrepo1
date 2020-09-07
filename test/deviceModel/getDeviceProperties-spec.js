@@ -25,7 +25,6 @@ describe("create device Model Mapping", () => {
   beforeEach(() => {
     getToken = getTokenStub()
     log = getMockLog()
-    nock.cleanAll()
     env.VI_ATHER_COLLECTOR_MAX_RETRIES = 2
     env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
     env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
@@ -34,6 +33,7 @@ describe("create device Model Mapping", () => {
   afterEach(() => {
     clearEnv()
     clearStub()
+    nock.cleanAll()
   })
 
   it("get devices", async () => {

@@ -44,7 +44,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
   const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
-  let deviceModelMapping = createDeviceModelMapping(appContext)
+  let deviceModelMapping = await createDeviceModelMapping(appContext)
   const updateDeviceModelMapping = getUpdateDeviceModelMapping(appContext)
 
   return stream
@@ -60,7 +60,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
           deviceModelMapping = updateDeviceModelMapping(deviceModelMapping, event)
         }
       }),
-      filter(isModelPresentForDevice(deviceModelMapping)),
+      filter(isModelPresentForDevice({deviceModelMapping, log})),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {

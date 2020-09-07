@@ -1,6 +1,6 @@
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 
-export const isModelPresentForDevice = deviceModelMapping => {
+export const isModelPresentForDevice = ({deviceModelMapping, log}) => {
   const shouldFilterEventsForDeviceWithoutModel = JSON.parse(
     process.env.VI_SHOULD_DROP_EVENTS_FOR_DEVICE_WITHOUT_MODEL || "false"
   )
@@ -11,6 +11,7 @@ export const isModelPresentForDevice = deviceModelMapping => {
     if (event.tag === "ack" || !isNilOrEmpty(deviceModelMapping[event.device_uuid])) {
       return true
     }
+    log.warn("Dropped event as mapping not present", {ctx: {event: JSON.stringify(event)}})
     return false
   }
 }
