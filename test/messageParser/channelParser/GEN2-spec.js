@@ -5,22 +5,22 @@ import {GEN2_CAN_RAW} from "../../fixtures/bikeChannels/GEN2_CAN_RAW"
 import {getMockLog} from "../../stubs/logger"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFERED"
+import {clearEnv, setGen2Envs} from "../../utils"
 
 describe("Parses GEN2", () => {
   let appContext
   let log
   let metricRegistry
+
   beforeEach(() => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
-    process.env.IS_GEN_2_DATA = "true"
-    process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX = "true"
+    setGen2Envs()
   })
 
   afterEach(() => {
-    delete process.env.IS_GEN_2_DATA
-    delete process.env.USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX
+    clearEnv()
   })
 
   it("parses buffered messages", () => {
@@ -41,7 +41,7 @@ describe("Parses GEN2", () => {
       parsedDataItem("ACC_Z_MPS2", "4.45"),
       parsedDataItem("BMS_Cell3", "3.5231"),
       parsedDataItem("acceleration", {x: 2.23, y: 3.32, z: 4.45}),
-      parsedDataItem("acc_x", {acc_x: {x: 2.23}})
+      parsedDataItem("acc_x", {x: 2.23})
     ])
   })
   it("parses can raw messages", () => {

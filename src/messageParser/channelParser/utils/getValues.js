@@ -1,58 +1,76 @@
-import {isNil, all} from "ramda"
+/* eslint-disable global-require, import/no-dynamic-require */
+import {isNil, all, last} from "ramda"
+import {errorFormatter} from "../../../utils/errorFormatter"
+import {delayAndExit} from "../../../utils/delayAndExit"
 
-const getSingleValue = ({event, valuesKeys}) => event[valuesKeys[0].value] || null
+const getSingleValue = ({event, valuesKeys}) => (isNil(event[valuesKeys[0].value]) ? null : event[valuesKeys[0].value])
 const getCompositeValue = ({event, valuesKeys}) => {
   const compositeValue = valuesKeys.reduce((acc, {key, value}) => {
-    return {...acc, [key]: event[value] || null}
+    return {...acc, [key]: isNil(event[value]) ? null : event[value]}
   }, {})
   return maybeReturnValue(compositeValue)
 }
-const getJSONValue = ({event, valuesKeys, dataItemName}) => {
-  const jsonValue = valuesKeys.reduce(
-    (acc, {key, value}) => {
-      const dataItemValue = {...acc[dataItemName], [key]: event[value] || null}
-      return {...acc, [dataItemName]: dataItemValue}
-    },
-    {[dataItemName]: {}}
-  )
-  return isNil(maybeReturnValue(jsonValue[dataItemName])) ? null : jsonValue
-}
-const getUnknownValue = ({event, valuesKeys}) => {
+const getStringValue = ({event, valuesKeys}) => {
   const value = getSingleValue({event, valuesKeys})
   if (isNil(value)) {
-    return null
+    return ""
   }
   return typeof value === "string" ? value : JSON.stringify(value)
 }
 
 const schema = {
-  INT: getSingleValue,
-  DOUBLE: getSingleValue,
-  STRING: getSingleValue,
-  SPATIAL: getCompositeValue,
-  LOCATION: getCompositeValue,
-  JSON: getJSONValue,
-  UNKNOWN: getUnknownValue
+  int: getSingleValue,
+  number: getSingleValue,
+  string: getStringValue,
+  boolean: getSingleValue,
+  object: getCompositeValue
 }
 
 const defaultValuesKeys = dataItemName => [{value: dataItemName}]
-const defaultValueSchema = "UNKNOWN"
+const defaultValueSchema = {type: "string"}
 
 const maybeReturnValue = value => {
   const areAllValuesNull = all(isNil)(Object.values(value))
   return areAllValuesNull ? null : value
 }
 
-export const getValues = ({event, dataItemName, probe, log}) => {
-  let probeForDataItem = probe[dataItemName]
-  if (!probeForDataItem) {
-    log.warn(`Data item: ${dataItemName} is not present in the probe.`)
-    probeForDataItem = {}
+export const getValuesFn = (probe, log) => {
+  const valuesKeysMappingFilePath = process.env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH
+  const valuesSchemaFilePath = process.env.VI_COLLECTOR_VALUES_SCHEMA_PATH
+  let valuesKeysMapping
+  let valuesSchemaDefinition
+  try {
+    valuesSchemaDefinition = require(valuesSchemaFilePath)
+    valuesKeysMapping = require(valuesKeysMappingFilePath)
+  } catch (error) {
+    log.error({error: errorFormatter(error)}, "Error loading config files, exiting application")
+    delayAndExit(3)
   }
 
-  const {
-    values_keys: valuesKeys = defaultValuesKeys(dataItemName),
-    values_schema: valuesSchema = defaultValueSchema
-  } = probeForDataItem
-  return schema[valuesSchema]({event, valuesKeys, dataItemName})
+  const getValuesSchema = schemaDef => {
+    if (!schemaDef) {
+      return defaultValueSchema
+    }
+    if (schemaDef.$ref) {
+      const schemaRef = last(schemaDef.$ref.split("/"))
+      return valuesSchemaDefinition[schemaRef] || defaultValueSchema
+    } else {
+      return schemaDef
+    }
+  }
+
+  return ({event, dataItemName}) => {
+    let probeForDataItem = probe[dataItemName]
+    if (!probeForDataItem) {
+      log.warn(`Data item: ${dataItemName} is not present in the probe.`)
+      probeForDataItem = {}
+    }
+
+    const valuesKeys = valuesKeysMapping[dataItemName] || defaultValuesKeys(dataItemName)
+
+    const {values_schema: valuesSchemaDef} = probeForDataItem
+    const valuesSchema = getValuesSchema(valuesSchemaDef)
+
+    return schema[valuesSchema.type]({event, valuesKeys, dataItemName})
+  }
 }

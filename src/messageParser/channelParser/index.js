@@ -70,7 +70,7 @@ export const getCreateDataItemFromMessageFn = (appContext, probe) => {
   const parseGen2Data = getGen2DataParser(appContext, probe)
 
   return ({message}) => {
-    const isGen2Data = JSON.parse(process.env.IS_GEN_2_DATA || "false")
+    const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
     if (isGen2Data) {
       return parseGen2Data({message})
     }
