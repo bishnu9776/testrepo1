@@ -14,8 +14,6 @@ import {mockDeviceRegistryPostSuccessResponse} from "../utils/deviceRegistryResp
 
 const {env} = process
 
-// TODO: upaate JWT params and mock deviceModel response, update Response etc
-
 describe("Pipeline spec", () => {
   let probePath
   let appContext
