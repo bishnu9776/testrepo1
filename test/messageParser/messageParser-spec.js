@@ -82,6 +82,10 @@ describe("Parse GCP message", () => {
       setChannelDecoderConfigFileEnvs()
     })
 
+    afterEach(() => {
+      clearEnv()
+    })
+
     it("formats attributes for legacy data and parses correctly", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const message = getDeflateCompressedGCPEvent({
@@ -163,6 +167,10 @@ describe("Parse GCP message", () => {
     const pathToFixtures = path.join(process.cwd(), "test/fixtures")
     beforeEach(() => {
       setGen2Envs()
+    })
+
+    afterEach(() => {
+      clearEnv()
     })
 
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {

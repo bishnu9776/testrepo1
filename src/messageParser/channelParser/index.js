@@ -66,14 +66,15 @@ const getGen1DataParser = appContext => {
 }
 
 export const getCreateDataItemFromMessageFn = (appContext, probe) => {
-  const parseGen1Data = getGen1DataParser(appContext)
-  const parseGen2Data = getGen2DataParser(appContext, probe)
+  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
+  let parseData
+  if (isGen2Data) {
+    parseData = getGen2DataParser(appContext, probe)
+  } else {
+    parseData = getGen1DataParser(appContext)
+  }
 
   return ({message}) => {
-    const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
-    if (isGen2Data) {
-      return parseGen2Data({message})
-    }
-    return parseGen1Data({message})
+    return parseData({message})
   }
 }
