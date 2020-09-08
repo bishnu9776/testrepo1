@@ -2,7 +2,7 @@ import nock from "nock"
 import {
   mockDeviceRegistryPutFailureResponse,
   mockDeviceRegistryPutSuccessResponse
-} from "../utils/deviceRegistryResponse"
+} from "../utils/mockDeviceRegistryResponse"
 import {getUpdateDeviceModelMapping} from "../../src/deviceModel/getUpdateDeviceModelMapping"
 import {clearEnv} from "../utils"
 import {getTokenStub} from "../stubs/getTokenStub"

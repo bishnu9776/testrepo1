@@ -10,7 +10,7 @@ import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {getTokenStub} from "../stubs/getTokenStub"
-import {mockDeviceRegistryPostSuccessResponse} from "../utils/deviceRegistryResponse"
+import {mockDeviceRegistryPostSuccessResponse} from "../utils/mockDeviceRegistryResponse"
 
 const {env} = process
 

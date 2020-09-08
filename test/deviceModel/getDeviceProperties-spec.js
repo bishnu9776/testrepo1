@@ -3,7 +3,7 @@ import {createDeviceModelMapping, getDeviceProperties} from "../../src/deviceMod
 import {
   mockDeviceRegistryPostSuccessAfterFailure,
   mockDeviceRegistryPostSuccessResponse
-} from "../utils/deviceRegistryResponse"
+} from "../utils/mockDeviceRegistryResponse"
 import {getTokenStub} from "../stubs/getTokenStub"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv} from "../utils"
