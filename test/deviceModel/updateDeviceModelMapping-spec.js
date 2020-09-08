@@ -41,7 +41,7 @@ describe("Update device mapping", () => {
   })
 
   it("update devices mapping on receiving new device", async () => {
-    const putRequestBody = {device: "device-5", plant: "ather", model: "450plus"}
+    const putRequestBody = {model: "450plus"}
     const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
 
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
@@ -57,7 +57,7 @@ describe("Update device mapping", () => {
   })
 
   it("update devices mapping when device exists and model changes", async () => {
-    const putRequestBody = {device: "device-5", plant: "ather", model: "450plus"}
+    const putRequestBody = {model: "450plus"}
     const deviceModelMapping = {"device-1": "450x", "device-5": "450"}
 
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
@@ -84,7 +84,7 @@ describe("Update device mapping", () => {
   })
 
   it("should not retry on non retryable error and should not update deviceModel", async () => {
-    const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
+    const putRequestBody = {model: "450"}
     const deviceModelMapping = {"device-1": "450x"}
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
@@ -96,7 +96,7 @@ describe("Update device mapping", () => {
   })
 
   it("should retry when retryConfig is set non zero", async () => {
-    const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
+    const putRequestBody = {model: "450"}
     const deviceModelMapping = {"device-1": "450x"}
 
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
@@ -112,7 +112,7 @@ describe("Update device mapping", () => {
   })
 
   it("should retry and log error on retry caps out", async () => {
-    const putRequestBody = {device: "device-6", plant: "ather", model: "450"}
+    const putRequestBody = {model: "450"}
     const deviceModelMapping = {"device-1": "450x"}
 
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}

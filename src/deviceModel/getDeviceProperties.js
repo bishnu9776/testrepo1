@@ -8,7 +8,7 @@ export const getDeviceProperties = async ({apiConfig, getToken, log}) => {
   const requestConfig = {
     url,
     method: "post",
-    data: {},
+    data: {fields: ["model"]},
     headers: {
       "X-Tenant": plant,
       Authorization: `Bearer ${getToken(subject, plant, permissions)}`,

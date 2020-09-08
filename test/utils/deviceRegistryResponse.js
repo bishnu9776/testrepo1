@@ -1,12 +1,14 @@
 import nock from "nock"
 
 export const mockDeviceRegistryPostSuccessResponse = (baseUrl, postUrl, response) => {
-  return nock(baseUrl).post(postUrl, {}).reply(200, response)
+  return nock(baseUrl)
+    .post(postUrl, {fields: ["model"]})
+    .reply(200, response)
 }
 
 export const mockDeviceRegistryPostSuccessAfterFailure = (baseUrl, postUrl, response, numFailures, statusCode) => {
   return nock(baseUrl)
-    .post(postUrl, {})
+    .post(postUrl, {fields: ["model"]})
     .times(numFailures)
     .replyWithError({message: "Server error", statusCode})
     .post(postUrl)

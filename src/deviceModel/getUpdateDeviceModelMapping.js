@@ -9,7 +9,7 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
   const requestConfig = {
     url: endpoint,
     method: "PUT",
-    data: {plant, device, model},
+    data: {model},
     headers: {
       "X-Tenant": plant,
       Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
