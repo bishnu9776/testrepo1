@@ -1,6 +1,6 @@
 import {retryableRequest} from "../utils/retryable-request"
-import {getAxiosRequest} from "./getAxiosRequest"
-import {getRetryConfig, is5xxError} from "./getRetryConfig"
+import {getAxiosRequest} from "../utils/getAxiosRequest"
+import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 
 export const getDeviceProperties = async ({apiConfig, getToken, log}) => {
   const {plant, url, subject, permissions} = apiConfig

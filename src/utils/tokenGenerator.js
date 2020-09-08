@@ -15,7 +15,7 @@ const getTokenFromCache = (cacheKey, cache) => {
 export const tokenGenerator = jwtConfig => {
   const tokenCache = {}
   const secondsBeforeExpiryToDecideToRefreshToken = parseInt(
-    env.VI_JWT_SECS_BEFORE_EXPIRY_TO_DECIDE_TO_REFRESH_TOKEN || "300", // PR: Do we need the default value here?
+    env.VI_JWT_SECS_BEFORE_EXPIRY_TO_DECIDE_TO_REFRESH_TOKEN || "300",
     10
   )
 

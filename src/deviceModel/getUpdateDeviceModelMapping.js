@@ -1,6 +1,6 @@
-import {getRetryConfig, is5xxError} from "./getRetryConfig"
+import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {retryableRequest} from "../utils/retryable-request"
-import {getAxiosRequest} from "./getAxiosRequest"
+import {getAxiosRequest} from "../utils/getAxiosRequest"
 
 export const putDeviceMapping = async ({appContext, device, model}) => {
   const {apiConfig, getToken, log} = appContext
