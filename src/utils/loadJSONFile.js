@@ -7,7 +7,7 @@ export const loadJSONFile = filePath => {
   try {
     return JSON.parse(fs.readFileSync(path.resolve(filePath), "utf8"))
   } catch (e) {
-    log.error({error: errorFormatter(e)}, `Error in reading JSON file ${filePath}.`)
+    log.warn({error: errorFormatter(e)}, `Error in reading JSON file ${filePath}.`)
     return {}
   }
 }

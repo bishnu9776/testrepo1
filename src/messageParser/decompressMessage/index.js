@@ -45,7 +45,8 @@ export const getDecompresserFn = ({log}) => {
   return async message => {
     const {attributes} = message
     const isLegacyMessage = attributes?.subFolder ? !attributes?.subFolder?.includes("v1") : false
-    if (isLegacyMessage) {
+    if (isLegacyMessage || process.env.VI_INPUT_TYPE === "ci") {
+      // TODO: Make decompression a strategy
       return decompressLegacyData({message, log})
     }
     return deserializeAvro({message, log})

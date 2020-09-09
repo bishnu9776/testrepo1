@@ -1,10 +1,11 @@
-import {flatten, pipe, isNil} from "ramda"
+import {flatten, isNil, pipe} from "ramda"
 import {getDecompresserFn} from "./decompressMessage"
-import {getCreateDataItemFromMessageFn} from "./channelParser"
 import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
+import {getAttributesFormatter} from "./formatAttributes"
+import {getChannelParser} from "./channelParser"
 
 const {env} = process
 
@@ -26,30 +27,13 @@ const handleParseFailures = (message, error, appContext) => {
   )
 }
 
-const getFormattedAttributes = attributes => {
-  const {subFolder, deviceId} = attributes
-  const isNonLegacyMessage = subFolder.includes("v1/")
-  if (isNonLegacyMessage) {
-    return {
-      channel: subFolder.split("/").slice(1).join("/"),
-      version: subFolder.split("/")[0],
-      bike_id: deviceId
-    }
-  }
-
-  return {
-    channel: subFolder,
-    bike_id: deviceId,
-    version: "legacy"
-  }
-}
-
 export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
   const maybeDecompressMessage = getDecompresserFn(appContext)
-  const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+  const createDataItemsFromMessage = getChannelParser()(appContext, probe)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
+  const formatAttributes = getAttributesFormatter()
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
@@ -63,7 +47,7 @@ export const getMessageParser = ({appContext, probe}) => {
     const endOfEvent = [{message, tag: ACK_MSG_TAG, acknowledgeMessage}]
 
     try {
-      const attributes = getFormattedAttributes(message.attributes)
+      const attributes = formatAttributes(message.attributes)
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
         return endOfEvent
       }
