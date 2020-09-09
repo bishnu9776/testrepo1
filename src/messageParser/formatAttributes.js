@@ -3,11 +3,10 @@ const attributesFormatter = {
     const {subFolder, deviceId, version, channel} = attributes
     const isNonLegacyMessage = subFolder.includes("v1/")
 
-    // We get version and channel for CI. Factor this out as strategy for CI
     if (version) {
       return {
         channel,
-        bike_id: deviceId, // TODO: Remove bike_id
+        bike_id: deviceId,
         version
       }
     }
