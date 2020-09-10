@@ -11,7 +11,7 @@ export const isModelPresentForDevice = ({deviceModelMapping, log}) => {
     if (event.tag === "ack" || !isNilOrEmpty(deviceModelMapping[event.device_uuid])) {
       return true
     }
-    log.warn("Dropped event as mapping not present", {ctx: {event: JSON.stringify(event)}})
+    log.warn("Dropping event as device model mapping is not present", {ctx: {event: JSON.stringify(event)}})
     return false
   }
 }

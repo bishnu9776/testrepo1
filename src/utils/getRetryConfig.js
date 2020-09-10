@@ -50,10 +50,10 @@ export const getRetryConfig = (log, isRetryable) => {
       default: 5
     }
   ])
-  const exponentialRetry = JSON.parse(env.VI_ATHER_SB_RIDE_STAT_EXPONENTIAL_RETRY || "false")
+  const exponentialRetry = JSON.parse(env.VI_ATHER_COLLECTOR_EXPONENTIAL_RETRY || "false")
   const retryConfig = addConfigIfAvailable({}, {maxRetries, exponentialRetry, retryDelay, retryLogThreshold})
 
-  log.info({ctx: {retryConfig: JSON.stringify(retryConfig)}}, "Retry config for ride stats connector")
+  log.info({ctx: {retryConfig: JSON.stringify(retryConfig)}}, "Retry config for ather collector")
 
   return {...retryConfig, isRetryable}
 }

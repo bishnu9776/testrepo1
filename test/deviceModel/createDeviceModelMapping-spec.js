@@ -1,5 +1,5 @@
 import nock from "nock"
-import {createDeviceModelMapping, getDeviceProperties} from "../../src/deviceModel/getDeviceProperties"
+import {createDeviceModelMapping} from "../../src/deviceModel/createDeviceModelMapping"
 import {
   mockDeviceRegistryPostSuccessAfterFailure,
   mockDeviceRegistryPostSuccessResponse
@@ -34,13 +34,6 @@ describe("create device Model Mapping", () => {
     clearEnv()
     clearStub()
     nock.cleanAll()
-  })
-
-  it("get devices", async () => {
-    const expected = {device: "device-1", model: "A"}
-    mockDeviceRegistryPostSuccessResponse(url, endpoint, expected)
-    const {response} = await getDeviceProperties({apiConfig, getToken, log})
-    expect(response.data).to.eql(expected)
   })
 
   it("create devices mapping", async () => {

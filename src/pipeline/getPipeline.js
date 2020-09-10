@@ -10,7 +10,7 @@ import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
 import {getUpdateDeviceModelMapping} from "../deviceModel/getUpdateDeviceModelMapping"
-import {createDeviceModelMapping} from "../deviceModel/getDeviceProperties"
+import {createDeviceModelMapping} from "../deviceModel/createDeviceModelMapping"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 
 const {env} = process
@@ -44,7 +44,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
   const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
-  let deviceModelMapping = await createDeviceModelMapping(appContext)
+  const deviceModelMapping = await createDeviceModelMapping(appContext)
   const updateDeviceModelMapping = getUpdateDeviceModelMapping(appContext)
 
   return stream
@@ -57,7 +57,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       map(formatEvent),
       tap(event => {
         if (modelDataItems.includes(event.data_item_name)) {
-          deviceModelMapping = updateDeviceModelMapping(deviceModelMapping, event)
+          updateDeviceModelMapping(deviceModelMapping, event)
         }
       }),
       filter(isModelPresentForDevice({deviceModelMapping, log})),
