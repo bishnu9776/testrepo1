@@ -81,7 +81,7 @@ describe("Pipeline spec", () => {
       },
       complete: () => {
         expect(output.length).to.eql(4)
-        output.every(e => expect(e.plant).to.eql("ather-ci"))
+        output.every(e => expect(e.plant).to.eql("atherci"))
         expect(acknowledgeMessageSpy.callCount).to.eql(1)
         done()
       }

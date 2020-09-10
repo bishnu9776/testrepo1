@@ -21,6 +21,10 @@ describe("Kafka producer", () => {
       metricRegistry: getMockMetricRegistry(),
       log: getMockLog()
     }
+    env.VI_KAFKA_SINK_DATA_TOPICS = "test-topic-ather"
+    env.VI_KAFKA_SINK_ARCHIVE_TOPICS = "test-archive-topic-ather"
+    env.VI_KAFKA_SINK_CANRAW_TOPICS = "test-canraw-topic-ather"
+    env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
   })
 
   afterEach(() => {
@@ -41,10 +45,7 @@ describe("Kafka producer", () => {
     })
 
     it("sends all data items to archive topic, whitelisted data items to configured topics, drops events without tag", done => {
-      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-      env.VI_KAFKA_SINK_ARCHIVE_TOPIC = "test-archive"
       env.VI_DATAITEM_WHITELIST = "mode"
-      env.VI_PRODUCER_BUFFER_TIME_SPAN = "100"
 
       const sendToKafka = getKafkaSender({kafkaProducer: kafkaProducerStub, appContext})
 
@@ -100,8 +101,6 @@ describe("Kafka producer", () => {
     })
 
     it("flushes and throws error if kafka send fails", done => {
-      env.VI_KAFKA_SINK_DATA_TOPIC = "test"
-
       const sourceEvents = getMockDataItems(1, "device-1")
       const sendToKafka = getKafkaSender({
         kafkaProducer: kafkaProducerStub,
