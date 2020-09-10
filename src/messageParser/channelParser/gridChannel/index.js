@@ -1,6 +1,7 @@
 import {isNil} from "ramda"
 import {parsePODINFO} from "./POD_INFO"
 import {parseCAN} from "./CAN"
+import {parseDBINFO} from "./DB_INFO"
 
 const getCiParser = appContext => {
   const {metricRegistry} = appContext
@@ -10,9 +11,7 @@ const getCiParser = appContext => {
     db_data: () => {
       return []
     },
-    db_info: () => {
-      return []
-    },
+    db_info: parseDBINFO,
     network_data: () => {
       return []
     },
