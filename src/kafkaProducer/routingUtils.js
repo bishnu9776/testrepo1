@@ -1,13 +1,9 @@
 const {env} = process
 
 export const getRoutingConfig = () => {
-  const dataTopics = env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : ["test-topic-ather"]
-  const archiveTopics = env.VI_KAFKA_SINK_ARCHIVE_TOPICS
-    ? env.VI_KAFKA_SINK_ARCHIVE_TOPICS.split(",")
-    : ["test-archive-topic-ather"]
-  const canRawTopics = env.VI_KAFKA_SINK_CANRAW_TOPICS
-    ? env.VI_KAFKA_SINK_CANRAW_TOPICS.split(",")
-    : ["test-canraw-topic-ather"]
+  const dataTopics = env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : []
+  const archiveTopics = env.VI_KAFKA_SINK_ARCHIVE_TOPICS ? env.VI_KAFKA_SINK_ARCHIVE_TOPICS.split(",") : []
+  const canRawTopics = env.VI_KAFKA_SINK_CANRAW_TOPICS ? env.VI_KAFKA_SINK_CANRAW_TOPICS.split(",") : []
   const whitelistedDataItems = env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : []
   const whitelistedCanRawDataItems = env.VI_CANRAW_DATAITEM_WHITELIST ? env.VI_CANRAW_DATAITEM_WHITELIST.split(",") : []
 
