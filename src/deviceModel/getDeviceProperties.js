@@ -1,6 +1,7 @@
-import {retryableRequest} from "../utils/retryable-request"
+import {retryableRequest} from "node-microservice/dist/retryable-request"
 import {getAxiosRequest} from "../utils/getAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
+import {errorFormatter} from "../utils/errorFormatter"
 
 export const getDeviceProperties = async ({apiConfig, getToken, log}) => {
   const {plant, url, subject, permissions} = apiConfig
@@ -23,7 +24,8 @@ export const getDeviceProperties = async ({apiConfig, getToken, log}) => {
 }
 
 export const createDeviceModelMapping = async appContext => {
-  const {ok, response} = await getDeviceProperties(appContext)
+  const {log} = appContext
+  const {ok, response, error} = await getDeviceProperties(appContext)
   if (ok && response.data) {
     const deviceProperties = response.data
     return deviceProperties.reduce((acc, deviceProperty) => {
@@ -31,5 +33,6 @@ export const createDeviceModelMapping = async appContext => {
       return acc
     }, {})
   }
+  log.warn("Failed to get device model mapping", {error: errorFormatter(error)})
   return {}
 }

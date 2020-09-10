@@ -1,6 +1,7 @@
+import {retryableRequest} from "node-microservice/dist/retryable-request"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
-import {retryableRequest} from "../utils/retryable-request"
 import {getAxiosRequest} from "../utils/getAxiosRequest"
+import {errorFormatter} from "../utils/errorFormatter"
 
 export const putDeviceMapping = async ({appContext, device, model}) => {
   const {apiConfig, getToken, log} = appContext
@@ -24,15 +25,17 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
 }
 
 export const getUpdateDeviceModelMapping = appContext => {
+  const {log} = appContext
   return async (deviceModelMapping, event) => {
     const device = event.device_uuid
     const model = event?.value.split("_")[1]
     if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
-      const {ok, response} = await putDeviceMapping({appContext, device, model})
-
-      if (ok && response.data) {
+      const {ok, response, error} = await putDeviceMapping({appContext, device, model})
+      if (ok && response) {
         // eslint-disable-next-line no-param-reassign
         deviceModelMapping[device] = model
+      } else {
+        log.warn("Failed to put device model mapping", {error: errorFormatter(error)})
       }
     }
     return deviceModelMapping
