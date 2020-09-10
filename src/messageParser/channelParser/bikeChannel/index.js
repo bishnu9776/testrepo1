@@ -16,7 +16,7 @@ import {parseGen2BufferedData} from "./GEN2"
 import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
 const getGen2DataParser = (appContext, probe) => {
-  const {log} = appContext
+  const {metricRegistry} = appContext
   const channelParserConfig = {
     buffered_channel: parseGen2BufferedData(appContext, probe),
     unbuffered_channel: parseGen2UnbufferedData
@@ -27,7 +27,7 @@ const getGen2DataParser = (appContext, probe) => {
     const {channel} = message.attributes
 
     if (channelNotInParserConfig(channel)) {
-      log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      metricRegistry.updateStat("Counter", "num_events_without_parsers", 1, {channel})
       return []
     }
     return channelParserConfig[channel]({message})
@@ -35,7 +35,7 @@ const getGen2DataParser = (appContext, probe) => {
 }
 
 const getGen1DataParser = appContext => {
-  const {log, metricRegistry} = appContext
+  const {metricRegistry} = appContext
   const channelParserConfig = {
     gps_tpv: parseGPSTPV,
     can: parseCAN(metricRegistry),
@@ -58,7 +58,7 @@ const getGen1DataParser = appContext => {
       return channelParserConfig.can(message)
     }
     if (channelNotInParserConfig(channel)) {
-      log.warn({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      metricRegistry.updateStat("Counter", "num_events_without_parsers", 1, {channel})
       return []
     }
     return channelParserConfig[channel](message)

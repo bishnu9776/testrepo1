@@ -3,11 +3,12 @@ import fs from "fs"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
-import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getDecompressedGCPEvent, getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
+import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
 
 const {env} = process
 
@@ -32,11 +33,12 @@ describe("Pipeline spec", () => {
   })
 
   afterEach(() => {
+    acknowledgeMessageSpy.resetHistory()
     clearEnv()
     clearStub()
   })
 
-  it("valid events flow through pipeline from source gcp", done => {
+  it("bike events flow through pipeline from source gcp", done => {
     const source = {
       stream: from([
         {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
@@ -67,6 +69,34 @@ describe("Pipeline spec", () => {
     })
   })
 
+  it("ci events flow through pipeline from source gcp", done => {
+    process.env.VI_INPUT_TYPE = "ci"
+    const source = {
+      stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
+    }
+    const output = []
+    const observer = {
+      next: message => {
+        output.push(message)
+      },
+      complete: () => {
+        expect(output.length).to.eql(4)
+        output.every(e => expect(e.plant).to.eql("ather-ci"))
+        expect(acknowledgeMessageSpy.callCount).to.eql(1)
+        done()
+      }
+    }
+
+    getPipeline({
+      source,
+      observer,
+      probePath,
+      kafkaProducer,
+      appContext
+    })
+  })
+
+  // TODO: Can this be deleted?
   it.skip("valid events flow through pipeline from source kafka", done => {
     const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
     const source = {

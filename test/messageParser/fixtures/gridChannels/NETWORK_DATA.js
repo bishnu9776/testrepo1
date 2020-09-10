@@ -1,4 +1,4 @@
-export const NETWORKDATA = {
+export const NETWORK_DATA = {
   attributes: {channel: "network_data", bike_id: "DB_001f7b100e8f", version: "v1"},
   data: [
     {

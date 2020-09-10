@@ -1,4 +1,4 @@
-export const PODINFO = {
+export const POD_INFO = {
   attributes: {version: "v1_5", channel: "pod_info", bike_id: "DB_D81910297370014"},
   data: [
     {

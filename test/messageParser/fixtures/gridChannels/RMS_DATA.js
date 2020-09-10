@@ -1,4 +1,4 @@
-export const RMSDATA = {
+export const RMS_DATA = {
   attributes: {version: "v1_5", channel: "rms_data", bike_id: "DB_D81910297370017"},
   data: [
     {

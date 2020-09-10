@@ -1,4 +1,4 @@
-export const SESSIONDATA = {
+export const SESSION_DATA = {
   attributes: {channel: "session_data", bike_id: "DB_001f7b100569", version: "v1"},
   data: [
     {
