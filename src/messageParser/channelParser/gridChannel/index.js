@@ -3,6 +3,7 @@ import {parsePODINFO} from "./POD_INFO"
 import {parseCAN} from "./CAN"
 import {parseDBINFO} from "./DB_INFO"
 import {parseDBDATA} from "./DB_DATA"
+import {parseRMSDATA} from "./RMS_DATA"
 
 const getCiParser = appContext => {
   const {metricRegistry} = appContext
@@ -15,9 +16,7 @@ const getCiParser = appContext => {
       return []
     },
     pod_info: parsePODINFO,
-    rms_data: () => {
-      return []
-    },
+    rms_data: parseRMSDATA,
     session_data: () => []
   }
 
