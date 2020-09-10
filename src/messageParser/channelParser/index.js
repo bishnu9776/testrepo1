@@ -27,7 +27,10 @@ const getGen2DataParser = (appContext, probe) => {
     const {channel} = message.attributes
 
     if (channelNotInParserConfig(channel)) {
-      log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      log.info(
+        {ctx: {attributes: JSON.stringify(message.attributes, null, 2), message: JSON.stringify(message, null, 2)}},
+        "No parser for message. Dropping event"
+      )
       return []
     }
     return channelParserConfig[channel]({message})
