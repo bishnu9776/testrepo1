@@ -6,7 +6,7 @@ import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
 import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../../src/constants"
-import {clearEnv, setChannelDecoderConfigFileEnvs} from "../utils"
+import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {getTokenStub} from "../stubs/getTokenStub"
@@ -121,7 +121,7 @@ describe("Pipeline spec", () => {
     })
   })
 
-  it("should ack and filter out events when model for device is present", done => {
+  it("should ack and filter out events when model for device is not present", done => {
     env.VI_SHOULD_DROP_EVENTS_FOR_DEVICE_WITHOUT_MODEL = "true"
     const response = [
       {device: "device-1", model: "A"},
@@ -157,11 +157,15 @@ describe("Pipeline spec", () => {
     })
   })
 
-  it.skip("valid events flow through pipeline from source kafka", done => {
+  it("valid events flow through pipeline from source kafka", done => {
+    setGen2Envs()
     const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
     const source = {
       stream: from([
-        {message: input, acknowledgeMessage: acknowledgeMessageSpy},
+        {
+          message: {data: Buffer.from(input.value.data), attributes: input.attributes},
+          acknowledgeMessage: acknowledgeMessageSpy
+        },
         {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
       ])
     }
@@ -171,7 +175,8 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
-        expect(output.length).to.eql(22)
+        expect(output.length).to.eql(3)
+        expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
