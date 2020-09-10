@@ -2,6 +2,7 @@ import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/channelParser/gridChannel"
 import {CAN} from "../../fixtures/gridChannels/CAN"
+import {getAttributesFormatter} from "../../../../src/messageParser/formatAttributes"
 
 describe("Parses CAN", () => {
   let metricRegistry
@@ -9,6 +10,7 @@ describe("Parses CAN", () => {
   let log
 
   beforeEach(() => {
+    process.env.VI_INPUT_TYPE = "ci"
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
@@ -16,8 +18,11 @@ describe("Parses CAN", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateCIEventFromMessageFn(appContext)
+    const formatAttributes = getAttributesFormatter() // TODO: Hack?
 
-    expect(createDataItemsFromMessage({message: CAN})).to.eql([
+    expect(
+      createDataItemsFromMessage({message: {data: CAN.data, attributes: formatAttributes(CAN.attributes)}})
+    ).to.eql([
       {
         channel: "can",
         data_item_id: "POD_CP_Volts-v1",
