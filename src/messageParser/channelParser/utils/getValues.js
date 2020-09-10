@@ -1,7 +1,7 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 import {isNil, all, last} from "ramda"
-import {errorFormatter} from "../../../../utils/errorFormatter"
-import {delayAndExit} from "../../../../utils/delayAndExit"
+import {errorFormatter} from "../../../utils/errorFormatter"
+import {delayAndExit} from "../../../utils/delayAndExit"
 
 const getSingleValue = ({event, valuesKeys}) => (isNil(event[valuesKeys[0].value]) ? null : event[valuesKeys[0].value])
 const getCompositeValue = ({event, valuesKeys}) => {

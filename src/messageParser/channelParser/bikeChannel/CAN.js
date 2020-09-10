@@ -1,5 +1,5 @@
 import {flatten} from "ramda"
-import {getDataItem} from "./utils/getDataItem"
+import {getDataItem} from "../utils/getDataItem"
 import {getCANDecoder} from "./channelDecoder/getCANDecoder"
 import {parseCANRAW} from "./CAN_RAW"
 

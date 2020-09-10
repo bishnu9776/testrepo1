@@ -1,5 +1,5 @@
 import {flatten} from "ramda"
-import {getDataItem} from "../bikeChannel/utils/getDataItem"
+import {getDataItem} from "../utils/getDataItem"
 
 export const parseCAN = message => {
   const {data, attributes} = message

@@ -1,5 +1,5 @@
 import {flatten} from "ramda"
-import {nonDataItemKeys} from "../../../../constants"
+import {nonDataItemKeys} from "../../../constants"
 import {getDataItem} from "./getDataItem"
 
 // TODO: Better name for this based on the shape this function handles

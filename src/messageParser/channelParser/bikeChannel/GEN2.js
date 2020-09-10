@@ -1,6 +1,6 @@
 import {flatten, isNil} from "ramda"
-import {getDataItem} from "./utils/getDataItem"
-import {getValuesFn} from "./utils/getValues"
+import {getDataItem} from "../utils/getDataItem"
+import {getValuesFn} from "../utils/getValues"
 import {parseCANRAW} from "./CAN_RAW"
 
 const nonDataItemKeys = ["data", "can_id", "key", "value", "timestamp", "start_timestamp", "end_timestamp"]

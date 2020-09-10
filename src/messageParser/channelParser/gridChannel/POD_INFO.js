@@ -1,3 +1,3 @@
-import {parseMessage} from "../bikeChannel/utils/parseMessage"
+import {parseMessage} from "../utils/parseMessage"
 
 export const parsePODINFO = ({data, attributes}) => parseMessage(data, attributes)

@@ -1,6 +1,6 @@
 import path from "path"
-import {getValuesFn} from "../../../../../src/messageParser/channelParser/bikeChannel/utils/getValues"
-import {getMockLog} from "../../../../stubs/logger"
+import {getValuesFn} from "../../../src/messageParser/channelParser/utils/getValues"
+import {getMockLog} from "../../stubs/logger"
 
 describe("getValues spec", () => {
   const pathToFixtures = path.join(process.cwd(), "test/fixtures")

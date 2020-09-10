@@ -1,4 +1,4 @@
-import {parseMessage} from "./utils/parseMessage"
+import {parseMessage} from "../utils/parseMessage"
 import {getMCUDecoder} from "./channelDecoder/getMCUDecoder"
 
 export const parseMCU = () => {
