@@ -12,9 +12,7 @@ const getCiParser = appContext => {
     can: parseCAN,
     db_data: parseDBDATA,
     db_info: parseDBINFO,
-    network_data: () => {
-      return []
-    },
+    network_data: () => [],
     pod_info: parsePODINFO,
     rms_data: parseRMSDATA,
     session_data: () => []
