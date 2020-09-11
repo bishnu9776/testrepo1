@@ -22,7 +22,7 @@ export const startPipelines = async () => {
     plant: env.VI_PLANT || "ather",
     url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
     subject: env.VI_NAME || "svc-ather-collector",
-    permissions: env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS ? env.VI_SVC_ATHER_COLLECTOR_PERMISSIONS.split(",") : []
+    permissions: env.VI_SVC_DEVICE_REGISTRY_PERMISSIONS ? env.VI_SVC_DEVICE_REGISTRY_PERMISSIONS.split(",") : []
   }
 
   const appContext = {log, metricRegistry, apiConfig, getToken}
