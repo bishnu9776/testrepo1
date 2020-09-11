@@ -8,7 +8,7 @@ import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFE
 import {clearEnv, setGen2Envs} from "../../utils"
 import {GEN2_LOGS} from "../../fixtures/bikeChannels/GEN2_LOGS"
 
-describe("Parses GEN2_BUFFERED", () => {
+describe("Parses GEN2", () => {
   let appContext
   let log
   let metricRegistry
