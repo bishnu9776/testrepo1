@@ -84,8 +84,7 @@ describe("Update device mapping", () => {
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
-      "device-2": "450plus",
-      "device-5": "450plus"
+      "device-2": "450plus"
     })
   })
 
