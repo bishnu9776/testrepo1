@@ -17,8 +17,10 @@ import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
 const getGen2DataParser = (appContext, probe) => {
   const {metricRegistry} = appContext
+  const parseBufferedData = parseGen2BufferedData(appContext, probe)
   const channelParserConfig = {
-    buffered_channel: parseGen2BufferedData(appContext, probe),
+    buffered_channel: parseBufferedData,
+    logs_channel: parseBufferedData,
     unbuffered_channel: parseGen2UnbufferedData
   }
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
