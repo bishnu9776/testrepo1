@@ -1,11 +1,12 @@
 import {getCreateDataItemFromMessageFn} from "../../../src/messageParser/channelParser"
 import probe from "../../fixtures/probe.json"
-import {GEN2} from "../../fixtures/bikeChannels/GEN2"
+import {GEN2_BUFFERED} from "../../fixtures/bikeChannels/GEN2_BUFFERED"
 import {GEN2_CAN_RAW} from "../../fixtures/bikeChannels/GEN2_CAN_RAW"
 import {getMockLog} from "../../stubs/logger"
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
 import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFERED"
 import {clearEnv, setGen2Envs} from "../../utils"
+import {GEN2_LOGS} from "../../fixtures/bikeChannels/GEN2_LOGS"
 
 describe("Parses GEN2", () => {
   let appContext
@@ -35,13 +36,30 @@ describe("Parses GEN2", () => {
       value
     })
 
-    expect(createDataItemsFromMessage({message: GEN2})).to.eql([
+    expect(createDataItemsFromMessage({message: GEN2_BUFFERED})).to.eql([
       parsedDataItem("ACC_X_MPS2", 2.23),
       parsedDataItem("ACC_Y_MPS2", 3.32),
       parsedDataItem("ACC_Z_MPS2", "4.45"),
       parsedDataItem("BMS_Cell3", "3.5231"),
       parsedDataItem("acceleration", {x: 2.23, y: 3.32, z: 4.45}),
       parsedDataItem("acc_x", {x: 2.23})
+    ])
+  })
+  it("parses log messages", () => {
+    const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
+
+    const parsedDataItem = (dataItemName, value) => ({
+      channel: "logs_channel",
+      data_item_id: `s_123-${dataItemName}`,
+      data_item_name: dataItemName,
+      device_uuid: "s_123",
+      timestamp: "2019-10-05T18:27:04.164Z",
+      value
+    })
+
+    expect(createDataItemsFromMessage({message: GEN2_LOGS})).to.eql([
+      parsedDataItem("message", {message: "This is a log message", source: "Source is undefined"}),
+      parsedDataItem("_comm", "Source is undefined")
     ])
   })
   it("parses can raw messages", () => {

@@ -57,5 +57,17 @@
     "values_schema": {
       "type": "object"
     }
+  },
+  "message": {
+    "data_item_name": "message",
+    "component": "logs",
+    "subcomponent": "",
+    "data_item_type": "LOG",
+    "sub_type": "",
+    "category": "LOG",
+    "units": "",
+    "values_schema": {
+      "$ref": "values_schema.json#/log"
+    }
   }
 }
