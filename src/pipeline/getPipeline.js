@@ -9,6 +9,9 @@ import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
+import {getUpdateDeviceModelMapping} from "../deviceModel/getUpdateDeviceModelMapping"
+import {createDeviceModelMapping} from "../deviceModel/createDeviceModelMapping"
+import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -31,7 +34,7 @@ const defaultObserver = log => ({
   }
 })
 
-export const getPipeline = ({appContext, observer, probePath, source, kafkaProducer}) => {
+export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
   const {log} = appContext
   const probe = loadProbe(probePath, log)
 
@@ -40,6 +43,15 @@ export const getPipeline = ({appContext, observer, probePath, source, kafkaProdu
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
+  const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
+  const deviceModelMapping = await createDeviceModelMapping(appContext)
+  const updateDeviceModelMappingFn = getUpdateDeviceModelMapping(appContext)
+
+  const updateDeviceModelMapping = event => {
+    if (modelDataItems.includes(event.data_item_name)) {
+      updateDeviceModelMappingFn(deviceModelMapping, event)
+    }
+  }
 
   return stream
     .pipe(
@@ -49,6 +61,8 @@ export const getPipeline = ({appContext, observer, probePath, source, kafkaProdu
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
+      tap(updateDeviceModelMapping),
+      filter(isModelPresentForDevice({deviceModelMapping, log})),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
