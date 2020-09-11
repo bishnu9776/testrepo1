@@ -1,4 +1,4 @@
-export const GEN2 = {
+export const GEN2_BUFFERED = {
   attributes: {
     bike_id: "s_123",
     channel: "buffered_channel",
