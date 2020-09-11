@@ -28,14 +28,13 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
 export const getUpdateDeviceModelMapping = appContext => {
   const {log} = appContext
   const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
+  const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
+    !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
   return async (deviceModelMapping, event) => {
     const device = event.device_uuid
     const model = isGen2Data ? event?.value : event?.value?.split("_")[1]
-    if (
-      !isNilOrEmpty(model) &&
-      (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model)
-    ) {
+    if (!isNilOrEmpty(model) && deviceModelMappingMismatch({device, deviceModelMapping, model})) {
       const {ok, response, error} = await putDeviceMapping({appContext, device, model})
       if (ok && response) {
         // eslint-disable-next-line no-param-reassign
