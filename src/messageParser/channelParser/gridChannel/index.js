@@ -5,6 +5,7 @@ import {parseDBINFO} from "./DB_INFO"
 import {parseDBDATA} from "./DB_DATA"
 import {parseRMSDATA} from "./RMS_DATA"
 import {parseNETWORKDATA} from "./NETWORK_DATA"
+import {parseSESSIONDATA} from "./SESSION_DATA"
 
 const getCiParser = appContext => {
   const {metricRegistry} = appContext
@@ -16,7 +17,7 @@ const getCiParser = appContext => {
     network_data: parseNETWORKDATA,
     pod_info: parsePODINFO,
     rms_data: parseRMSDATA,
-    session_data: () => []
+    session_data: parseSESSIONDATA
   }
 
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
