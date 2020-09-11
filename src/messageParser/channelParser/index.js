@@ -17,8 +17,10 @@ import {parseGen2UnbufferedData} from "./GEN2_UNBUFFERED"
 
 const getGen2DataParser = (appContext, probe) => {
   const {log} = appContext
+  const parseBufferedData = parseGen2BufferedData(appContext, probe)
   const channelParserConfig = {
-    buffered_channel: parseGen2BufferedData(appContext, probe),
+    buffered_channel: parseBufferedData,
+    logs_channel: parseBufferedData,
     unbuffered_channel: parseGen2UnbufferedData
   }
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
@@ -27,7 +29,10 @@ const getGen2DataParser = (appContext, probe) => {
     const {channel} = message.attributes
 
     if (channelNotInParserConfig(channel)) {
-      log.info({ctx: {message: JSON.stringify(message, null, 2)}}, "No parser for message. Dropping event")
+      log.info(
+        {ctx: {attributes: JSON.stringify(message.attributes, null, 2), message: JSON.stringify(message, null, 2)}},
+        "No parser for message. Dropping event"
+      )
       return []
     }
     return channelParserConfig[channel]({message})
