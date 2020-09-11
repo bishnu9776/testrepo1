@@ -47,6 +47,12 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const deviceModelMapping = await createDeviceModelMapping(appContext)
   const updateDeviceModelMapping = getUpdateDeviceModelMapping(appContext)
 
+  const updateDeviceModelMappingOnModelDataItem = event => {
+    if (modelDataItems.includes(event.data_item_name)) {
+      updateDeviceModelMapping(deviceModelMapping, event)
+    }
+  }
+
   return stream
     .pipe(
       timeout(eventTimeout),
@@ -55,11 +61,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
-      tap(event => {
-        if (modelDataItems.includes(event.data_item_name)) {
-          updateDeviceModelMapping(deviceModelMapping, event)
-        }
-      }),
+      tap(updateDeviceModelMappingOnModelDataItem),
       filter(isModelPresentForDevice({deviceModelMapping, log})),
       sendToKafka,
       tap(event => {

@@ -1,6 +1,6 @@
 import {retryableRequest} from "node-microservice/dist/retryable-request"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
-import {getAxiosRequest} from "../utils/getAxiosRequest"
+import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {errorFormatter} from "../utils/errorFormatter"
 
 export const putDeviceMapping = async ({appContext, device, model}) => {
@@ -21,7 +21,7 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
   const isRetryable = is5xxError
 
   const retryConfig = getRetryConfig(log, isRetryable)
-  return retryableRequest({requestConfig, retryConfig, log, makeRequest: getAxiosRequest})
+  return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
 export const getUpdateDeviceModelMapping = appContext => {

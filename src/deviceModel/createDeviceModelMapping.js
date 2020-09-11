@@ -1,5 +1,5 @@
 import {retryableRequest} from "node-microservice/dist/retryable-request"
-import {getAxiosRequest} from "../utils/getAxiosRequest"
+import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
@@ -9,7 +9,7 @@ const getDeviceModel = async ({apiConfig, getToken, log}) => {
   const requestConfig = {
     url,
     method: "post",
-    data: {fields: ["model"]},
+    data: {fields: ["model", "device"]},
     headers: {
       "X-Tenant": plant,
       Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
@@ -20,7 +20,7 @@ const getDeviceModel = async ({apiConfig, getToken, log}) => {
   const isRetryable = is5xxError
 
   const retryConfig = getRetryConfig(log, isRetryable)
-  return retryableRequest({requestConfig, retryConfig, log, makeRequest: getAxiosRequest})
+  return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
 export const createDeviceModelMapping = async appContext => {

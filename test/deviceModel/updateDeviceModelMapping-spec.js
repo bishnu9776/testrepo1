@@ -88,7 +88,7 @@ describe("Update device mapping", () => {
     })
   })
 
-  it("Do not update if existing device model mapping for device is correct", async () => {
+  it("do not update if existing device model mapping for device is correct", async () => {
     // no mock response as no api request is made
     const deviceModelMapping = {"device-1": "450x", "device-5": "450"}
     const event = {device_uuid: "device-5", value: "GEN2_450", data_item_name: "bike_type"}
