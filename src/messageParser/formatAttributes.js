@@ -25,10 +25,9 @@ const attributesFormatter = {
       version: "legacy"
     }
   },
-  // TODO: Switch to a common deviceId representation in formatted attributes instead of calling it bike_id
   ci: attributes => {
     if (attributes.channel === "can") {
-      return {...attributes, bike_id: attributes.db_id} // TODO: Clarify on why CAN channel alone has this
+      return {...attributes, bike_id: attributes.db_id}
     }
     return attributes
   }

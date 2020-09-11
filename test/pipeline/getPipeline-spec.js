@@ -1,5 +1,4 @@
 import {from} from "rxjs"
-import fs from "fs"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
@@ -83,37 +82,6 @@ describe("Pipeline spec", () => {
         expect(output.length).to.eql(4)
         output.every(e => expect(e.plant).to.eql("atherci"))
         expect(acknowledgeMessageSpy.callCount).to.eql(1)
-        done()
-      }
-    }
-
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
-    })
-  })
-
-  // TODO: Can this be deleted?
-  it.skip("valid events flow through pipeline from source kafka", done => {
-    const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
-    const source = {
-      stream: from([
-        {message: input, acknowledgeMessage: acknowledgeMessageSpy},
-        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
-      ])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        expect(output.length).to.eql(22)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
       }
     }

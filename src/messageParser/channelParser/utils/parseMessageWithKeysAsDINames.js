@@ -2,8 +2,7 @@ import {flatten} from "ramda"
 import {nonDataItemKeys} from "../../../constants"
 import {getDataItem} from "./getDataItem"
 
-// TODO: Better name for this based on the shape this function handles
-export const parseMessage = (message, attributes) => {
+export const parseMessageWithKeysAsDINames = (message, attributes) => {
   return flatten(
     message.map(event => {
       const timestamp = new Date(event.timestamp * 1000).toISOString()

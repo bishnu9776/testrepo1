@@ -1,4 +1,4 @@
-import {parseMessage} from "../utils/parseMessage"
+import {parseMessageWithKeysAsDINames} from "../utils/parseMessageWithKeysAsDINames"
 import {getVCUDecoder} from "./channelDecoder/getVCUDecoder"
 
 export const parseVCU = () => {
@@ -8,6 +8,6 @@ export const parseVCU = () => {
     const {attributes} = message
     const decodedMessage = decodeVCUMessage(message)
 
-    return parseMessage(decodedMessage, attributes)
+    return parseMessageWithKeysAsDINames(decodedMessage, attributes)
   }
 }

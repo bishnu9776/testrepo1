@@ -1,4 +1,4 @@
-import {parseMessage} from "../utils/parseMessage"
+import {parseMessageWithKeysAsDINames} from "../utils/parseMessageWithKeysAsDINames"
 import {getMCUDecoder} from "./channelDecoder/getMCUDecoder"
 
 export const parseMCU = () => {
@@ -8,6 +8,6 @@ export const parseMCU = () => {
     const {attributes} = message
     const decodedMessage = decodeMCUMessage(message)
 
-    return parseMessage(decodedMessage, attributes)
+    return parseMessageWithKeysAsDINames(decodedMessage, attributes)
   }
 }

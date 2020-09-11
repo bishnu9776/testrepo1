@@ -18,7 +18,7 @@ describe("Parses CAN", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateCIEventFromMessageFn(appContext)
-    const formatAttributes = getAttributesFormatter() // TODO: Hack?
+    const formatAttributes = getAttributesFormatter() // Note: Doing this as CAN attributes differs from attributes in other channels
 
     expect(
       createDataItemsFromMessage({message: {data: CAN.data, attributes: formatAttributes(CAN.attributes)}})

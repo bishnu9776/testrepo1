@@ -1,3 +1,3 @@
-import {parseMessage} from "../utils/parseMessage"
+import {parseMessageWithKeysAsDINames} from "../utils/parseMessageWithKeysAsDINames"
 
-export const parseNETWORKDATA = ({data, attributes}) => parseMessage(data, attributes)
+export const parseNETWORKDATA = ({data, attributes}) => parseMessageWithKeysAsDINames(data, attributes)
