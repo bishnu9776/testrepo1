@@ -40,11 +40,28 @@ describe("Update device mapping", () => {
     clearStub()
   })
 
-  it("update devices mapping on receiving new device", async () => {
+  it("update devices mapping on receiving new device for gen1", async () => {
     const putRequestBody = {model: "450plus"}
     const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
 
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
+    const putUrl = `${endpoint}/${event.device_uuid}`
+    mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
+    const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)
+    const response = await updateDeviceModelMapping(deviceModelMapping, event)
+    expect(response).to.eql({
+      "device-1": "450x",
+      "device-2": "450plus",
+      "device-5": "450plus"
+    })
+  })
+
+  it("update devices mapping on receiving new device for gen2", async () => {
+    env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
+    const putRequestBody = {model: "450plus"}
+    const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
+
+    const event = {device_uuid: "device-5", value: "450plus", data_item_name: "model"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
     const updateDeviceModelMapping = await getUpdateDeviceModelMapping(appContext)

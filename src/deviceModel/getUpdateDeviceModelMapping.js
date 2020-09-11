@@ -26,9 +26,11 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
 
 export const getUpdateDeviceModelMapping = appContext => {
   const {log} = appContext
+  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
+
   return async (deviceModelMapping, event) => {
     const device = event.device_uuid
-    const model = event?.value.split("_")[1]
+    const model = isGen2Data ? event?.value : event?.value.split("_")[1]
     if (!deviceModelMapping[event.device_uuid] || deviceModelMapping[event.device_uuid] !== model) {
       const {ok, response, error} = await putDeviceMapping({appContext, device, model})
       if (ok && response) {
