@@ -28,7 +28,7 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
 const getModel = event => {
   const split = event.value.split("_")
   return split[1] ? split[1] : split[0]
- }
+}
 
 export const getUpdateDeviceModelMapping = appContext => {
   const {log} = appContext
