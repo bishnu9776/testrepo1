@@ -25,7 +25,10 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-const getModel = event => (event.value.split("_")[1] ? event.value.split("_")[1] : event.value.split("_")[0])
+const getModel = event => {
+  const split = event.value.split("_")
+  return split[1] ? split[1] : split[0]
+ }
 
 export const getUpdateDeviceModelMapping = appContext => {
   const {log} = appContext
