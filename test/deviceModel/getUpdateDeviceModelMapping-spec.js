@@ -40,7 +40,7 @@ describe("Update device mapping", () => {
     clearStub()
   })
 
-  it("update devices mapping on receiving new device for gen1", async () => {
+  it("update devices mapping on receiving new device with value in gen_model format", async () => {
     const putRequestBody = {model: "450plus"}
     const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
 
@@ -56,8 +56,7 @@ describe("Update device mapping", () => {
     })
   })
 
-  it("update devices mapping on receiving new device for gen2", async () => {
-    env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
+  it("update devices mapping on receiving new device with value in model format", async () => {
     const putRequestBody = {model: "450plus"}
     const deviceModelMapping = {"device-1": "450x", "device-2": "450plus"}
 
