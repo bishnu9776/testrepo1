@@ -20,7 +20,7 @@ const getGen2DataParser = (appContext, probe) => {
   const parseBufferedData = parseGen2BufferedData(appContext, probe)
   const channelParserConfig = {
     buffered_channel: parseBufferedData,
-    logs_channel: parseBufferedData,
+    logs: parseBufferedData,
     unbuffered_channel: parseGen2UnbufferedData
   }
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
