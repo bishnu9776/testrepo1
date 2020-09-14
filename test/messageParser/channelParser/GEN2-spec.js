@@ -49,7 +49,7 @@ describe("Parses GEN2", () => {
     const createDataItemsFromMessage = getCreateDataItemFromMessageFn(appContext, probe)
 
     const parsedDataItem = (dataItemName, value) => ({
-      channel: "logs_channel",
+      channel: "logs",
       data_item_id: `s_123-${dataItemName}`,
       data_item_name: dataItemName,
       device_uuid: "s_123",
