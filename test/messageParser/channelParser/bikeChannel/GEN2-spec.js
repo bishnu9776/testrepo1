@@ -5,8 +5,8 @@ import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {UNBUFFERED, UNBUFFERED_STRICT} from "../../fixtures/bikeChannels/UNBUFFERED"
 import {clearEnv, setGen2Envs} from "../../../utils"
-import {GEN2_BUFFERED} from "../../../fixtures/bikeChannels/GEN2_BUFFERED"
-import {GEN2_LOGS} from "../../../fixtures/bikeChannels/GEN2_LOGS"
+import {GEN2_BUFFERED} from "../../fixtures/bikeChannels/GEN2_BUFFERED"
+import {GEN2_LOGS} from "../../fixtures/bikeChannels/GEN2_LOGS"
 
 describe("Parses GEN2", () => {
   let appContext
