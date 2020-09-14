@@ -2,9 +2,17 @@ import {path} from "ramda"
 
 const debugStats = JSON.parse(process.env.VI_STATS_PER_DEVICE || "false")
 
+const getChannel = message => {
+  return path(["attributes", "subFolder"], message) || path(["attributes", "channel"], message)
+}
+
+const getDeviceUuid = message => {
+  return path(["attributes", "bike_id"], message) || path(["attributes", "db_id"], message)
+}
+
 export const getGCPMessageTags = message => {
-  const channel = path(["attributes", "subFolder"], message)
-  const device_uuid = path(["attributes", "bike_id"], message) // eslint-disable-line
+  const channel = getChannel(message)
+  const device_uuid = getDeviceUuid(message) // eslint-disable-line
   return debugStats
     ? {
         channel,

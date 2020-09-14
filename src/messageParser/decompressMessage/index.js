@@ -42,12 +42,17 @@ const deserializeAvro = async ({message, log}) => {
 }
 
 export const getDecompresserFn = ({log}) => {
-  return async message => {
-    const {attributes} = message
-    const isLegacyMessage = attributes?.subFolder ? !attributes?.subFolder?.includes("v1") : false
-    if (isLegacyMessage) {
-      return decompressLegacyData({message, log})
-    }
-    return deserializeAvro({message, log})
+  const decompressionConfig = {
+    bike: async message => {
+      const {attributes} = message
+      const isLegacyMessage = attributes?.subFolder ? !attributes?.subFolder?.includes("v1") : false
+      if (isLegacyMessage) {
+        return decompressLegacyData({message, log})
+      }
+      return deserializeAvro({message, log})
+    },
+    ci: async message => decompressLegacyData({message, log})
   }
+
+  return decompressionConfig[process.env.VI_INPUT_TYPE || "bike"]
 }

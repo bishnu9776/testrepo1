@@ -3,7 +3,7 @@ import {getDecompresserFn} from "../../src/messageParser/decompressMessage"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv} from "../utils"
 import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
-import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
+import {GPSTPV} from "./fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 

@@ -7,7 +7,7 @@ import {ACK_MSG_TAG} from "../../src/constants"
 import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv, setChannelDecoderConfigFileEnvs, setEnv, setGen2Envs} from "../utils"
-import {GPSTPV} from "../fixtures/bikeChannels/GPSTPV"
+import {GPSTPV} from "./fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 

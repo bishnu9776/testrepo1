@@ -1,14 +1,15 @@
 import {from} from "rxjs"
-import fs from "fs"
 import nock from "nock"
+import fs from "fs"
 import * as kafkaProducer from "../../src/kafkaProducer"
 import {getPipeline} from "../../src/pipeline/getPipeline"
 import {getMockLog} from "../stubs/logger"
-import {getDecompressedGCPEvent} from "../utils/getMockGCPEvent"
+import {getDecompressedGCPEvent, getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
+import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
 import {getTokenStub} from "../stubs/getTokenStub"
 import {mockDeviceRegistryPostSuccessResponse} from "../utils/mockDeviceRegistryResponse"
 
@@ -17,7 +18,7 @@ const {env} = process
 describe("Pipeline spec", () => {
   let probePath
   let appContext
-  let acknowledgeMessageSpy
+  const acknowledgeMessageSpy = sinon.spy()
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   let getToken
@@ -33,14 +34,13 @@ describe("Pipeline spec", () => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
     setChannelDecoderConfigFileEnvs()
-    acknowledgeMessageSpy = sinon.spy()
     getToken = getTokenStub()
     log = getMockLog()
     appContext = {
       metricRegistry: getMockMetricRegistry(),
       log,
-      apiConfig,
-      getToken
+      getToken,
+      apiConfig
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
 
@@ -50,12 +50,13 @@ describe("Pipeline spec", () => {
   })
 
   afterEach(() => {
+    acknowledgeMessageSpy.resetHistory()
     clearEnv()
     clearStub()
     nock.cleanAll()
   })
 
-  it("valid events flow through pipeline from source gcp", done => {
+  it("bike events flow through pipeline from source gcp", done => {
     const source = {
       stream: from([
         {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
@@ -179,6 +180,33 @@ describe("Pipeline spec", () => {
         expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
+        done()
+      }
+    }
+
+    getPipeline({
+      source,
+      observer,
+      probePath,
+      kafkaProducer,
+      appContext
+    })
+  })
+
+  it("ci events flow through pipeline from source gcp", done => {
+    process.env.VI_INPUT_TYPE = "ci"
+    const source = {
+      stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
+    }
+    const output = []
+    const observer = {
+      next: message => {
+        output.push(message)
+      },
+      complete: () => {
+        expect(output.length).to.eql(4)
+        output.every(e => expect(e.plant).to.eql("atherci"))
+        expect(acknowledgeMessageSpy.callCount).to.eql(1)
         done()
       }
     }

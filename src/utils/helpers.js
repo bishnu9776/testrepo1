@@ -12,7 +12,7 @@ export const isValid = log => event => {
   return false
 }
 
-// TODO: is agent, instance_id, id etc are required by down stream applictaion
+// Note: Remove agent, instance_id after ensuring zero downstream dependencies
 export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_SCHEMA_VERSION
   /* eslint-disable camelcase */
@@ -25,9 +25,8 @@ export const getEventFormatter = () => {
       ...event,
       received_at: new Date().toISOString(),
       agent: "ather",
-      id,
       instance_id: id,
-      plant: "ather",
+      plant: process.env.VI_INPUT_TYPE === "bike" ? "ather" : "atherci",
       tenant: "ather",
       schema_version: schemaVersion
     }

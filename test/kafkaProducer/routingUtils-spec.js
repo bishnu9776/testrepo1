@@ -7,6 +7,9 @@ describe("should route the events based on routing config", () => {
   beforeEach(() => {
     env.VI_DATAITEM_WHITELIST = "mcu"
     env.VI_CANRAW_DATAITEM_WHITELIST = "can_raw"
+    env.VI_KAFKA_SINK_DATA_TOPICS = "test-topic-ather"
+    env.VI_KAFKA_SINK_ARCHIVE_TOPICS = "test-archive-topic-ather"
+    env.VI_KAFKA_SINK_CANRAW_TOPICS = "test-canraw-topic-ather"
   })
 
   afterEach(() => {
