@@ -25,33 +25,13 @@ describe("Parses CAN", () => {
     ).to.eql([
       {
         channel: "can",
-        data_item_id: "POD_CP_Volts-v1",
-        data_item_name: "POD_CP_Volts",
-        device_uuid: "DB_001f7b100e81",
-        pod_id: "0xfff76",
-        sequence: 39208,
-        timestamp: "2020-09-02T22:36:46.523Z",
-        value: 10.9956149784
-      },
-      {
-        channel: "can",
-        data_item_id: "POD_AtherVehicleConnected-v1",
-        data_item_name: "POD_AtherVehicleConnected",
-        device_uuid: "DB_001f7b100e81",
-        pod_id: "0xfff76",
-        sequence: 39208,
-        timestamp: "2020-09-02T22:36:46.523Z",
-        value: 0
-      },
-      {
-        channel: "can",
-        data_item_id: "POD_CP_State-v1",
-        data_item_name: "POD_CP_State",
-        device_uuid: "DB_001f7b100e81",
-        pod_id: "0xfff76",
-        sequence: 39208,
-        timestamp: "2020-09-02T22:36:46.523Z",
-        value: 65
+        data_item_id: "POD_AC_Voltage-v1",
+        data_item_name: "POD_AC_Voltage",
+        device_uuid: "DB_001f7b100e91",
+        pod_id: "0xfffe8",
+        sequence: 82121,
+        timestamp: "2020-04-06T16:12:46.960Z",
+        value: 241.094
       }
     ])
   })

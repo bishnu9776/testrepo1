@@ -1,4 +1,4 @@
-const attributes = {channel: "can", db_id: "DB_001f7b100e81", version: "v1"}
+const attributes = {channel: "can", db_id: "DB_001f7b100e91", version: "v1"}
 
 export const CAN = {
   attributes,
@@ -6,48 +6,24 @@ export const CAN = {
     {
       parsed: [
         {
-          timestamp: 1599086206.523,
-          seq_num: 39208,
-          global_seq: 547447344,
-          can_id: "0x007",
-          pod_id: "0xfff76",
-          key: "POD_CP_Volts",
-          value: 10.9956149784,
-          bigsink_timestamp: "2020-09-03T00:29:24.308",
-          db_id: "DB_001f7b100e81"
-        },
-        {
-          timestamp: 1599086206.523,
-          seq_num: 39208,
-          global_seq: 547447344,
-          can_id: "0x007",
-          pod_id: "0xfff76",
-          key: "POD_AtherVehicleConnected",
-          value: 0,
-          bigsink_timestamp: "2020-09-03T00:29:24.308",
-          db_id: "DB_001f7b100e81"
-        },
-        {
-          timestamp: 1599086206.523,
-          seq_num: 39208,
-          global_seq: 547447344,
-          can_id: "0x007",
-          pod_id: "0xfff76",
-          key: "POD_CP_State",
-          value: 65,
-          bigsink_timestamp: "2020-09-03T00:29:24.308",
-          db_id: "DB_001f7b100e81"
+          timestamp: 1586189566.96,
+          seq_num: 82121,
+          global_seq: 49767849,
+          can_id: "0x05e",
+          pod_id: "0xfffe8",
+          key: "POD_AC_Voltage",
+          value: 241.094,
+          db_id: "DB_001f7b100e91"
         }
       ],
       canRaw: {
-        timestamp: 1599086206.523,
-        seq_num: 39208,
-        global_seq: 547447344,
-        can_id: "0x007",
-        pod_id: "0xfff76",
-        data: "00410100a4070000",
-        bigsink_timestamp: "2020-09-03T00:29:24.308",
-        db_id: "DB_001f7b100e81"
+        timestamp: 1586189566.96,
+        seq_num: 82121,
+        global_seq: 49767849,
+        can_id: "0x05e",
+        pod_id: "0xfffe8",
+        data: "91000000c6ad0300",
+        db_id: "DB_001f7b100e91"
       }
     }
   ]

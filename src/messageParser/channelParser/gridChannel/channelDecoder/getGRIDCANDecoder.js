@@ -1,7 +1,7 @@
 import {keys, isNil} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
-import {convertHexToBytes} from "./utils/convertHexToBytes"
+import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)

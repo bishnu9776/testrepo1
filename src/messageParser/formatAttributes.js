@@ -1,15 +1,7 @@
 const attributesFormatter = {
   bike: attributes => {
-    const {subFolder, deviceId, version, channel} = attributes
+    const {subFolder, deviceId} = attributes
     const isNonLegacyMessage = subFolder.includes("v1/")
-
-    if (version) {
-      return {
-        channel,
-        bike_id: deviceId,
-        version
-      }
-    }
 
     if (isNonLegacyMessage) {
       return {

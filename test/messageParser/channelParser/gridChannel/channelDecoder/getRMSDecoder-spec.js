@@ -1,7 +1,7 @@
 import {dissoc} from "ramda"
 import {PRE_BIG_SINK_RMS} from "../../../fixtures/bikeChannels/RMS"
 import {clearEnv} from "../../../../utils"
-import {getRMSDecoder} from "../../../../../src/messageParser/channelParser/bikeChannel/channelDecoder/getRMSDecoder"
+import {getRMSDecoder} from "../../../../../src/messageParser/channelParser/gridChannel/channelDecoder/getRMSDecoder"
 
 describe("RMS decoder", () => {
   const {env} = process

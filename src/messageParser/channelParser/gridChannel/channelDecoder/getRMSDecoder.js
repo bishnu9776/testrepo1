@@ -1,6 +1,6 @@
 import {keys} from "ramda"
 import {loadFile} from "../../../../utils/loadFile"
-import {populateDecoderConfig} from "./utils/populateDecoderConfig"
+import {populateDecoderConfig} from "../../bikeChannel/channelDecoder/utils/populateDecoderConfig"
 
 const decodeTripFlag = (data, decoder) => {
   const {trip_flag: tripFlag, ...decodedData} = data
