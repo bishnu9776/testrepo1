@@ -25,15 +25,19 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
+const getModel = event => {
+  const split = event.value.split("_")
+  return split[1] ? split[1] : split[0]
+}
+
 export const getUpdateDeviceModelMapping = appContext => {
   const {log} = appContext
-  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
   const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
     !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
   return async (deviceModelMapping, event) => {
     const device = event.device_uuid
-    const model = isGen2Data ? event?.value : event?.value?.split("_")[1]
+    const model = event && event.value ? getModel(event) : null
     if (!isNilOrEmpty(model) && deviceModelMappingMismatch({device, deviceModelMapping, model})) {
       const {ok, response, error} = await putDeviceMapping({appContext, device, model})
       if (ok && response) {
