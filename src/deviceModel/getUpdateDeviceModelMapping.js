@@ -5,8 +5,8 @@ import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 
 export const putDeviceMapping = async ({appContext, device, model}) => {
-  const {apiConfig, getToken, log} = appContext
-  const {plant, url, subject, permissions} = apiConfig
+  const {apiConfig, log} = appContext
+  const {plant, url} = apiConfig
   const endpoint = `${url}/${device}`
   const requestConfig = {
     url: endpoint,
@@ -14,7 +14,7 @@ export const putDeviceMapping = async ({appContext, device, model}) => {
     data: {model},
     headers: {
       "X-Tenant": plant,
-      Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
+      Authorization: `Bearer ${process.env.VI_JWT}`,
       "Content-Type": "application/json"
     },
     timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
