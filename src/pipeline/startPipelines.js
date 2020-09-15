@@ -4,8 +4,6 @@ import {getPipeline} from "./getPipeline"
 import {getMetricRegistry} from "../metrics/metricRegistry"
 import {collectProcessStats} from "../metrics/processStats"
 import {getSourceStream} from "../source"
-import {tokenGenerator} from "../utils/tokenGenerator"
-import {getJwtConfig} from "../utils/getJWTConfig"
 
 const {env} = process
 
@@ -17,15 +15,12 @@ export const startPipelines = async () => {
   }
   const kafkaProducer = await createProducer(kafkaProps)
   const metricRegistry = getMetricRegistry(log)
-  const getToken = tokenGenerator(getJwtConfig())
   const apiConfig = {
     plant: env.VI_PLANT || "ather",
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
-    subject: env.VI_NAME || "svc-ather-collector",
-    permissions: env.VI_SVC_DEVICE_REGISTRY_PERMISSIONS ? env.VI_SVC_DEVICE_REGISTRY_PERMISSIONS.split(",") : []
+    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices"
   }
 
-  const appContext = {log, metricRegistry, apiConfig, getToken}
+  const appContext = {log, metricRegistry, apiConfig}
 
   metricRegistry.startStatsReporting()
   collectProcessStats(metricRegistry)

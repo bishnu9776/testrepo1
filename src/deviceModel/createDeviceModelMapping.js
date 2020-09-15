@@ -3,8 +3,8 @@ import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
-const getDeviceModel = async ({apiConfig, getToken, log}) => {
-  const {plant, url, subject, permissions} = apiConfig
+const getDeviceModel = async ({apiConfig, log}) => {
+  const {plant, url} = apiConfig
 
   const requestConfig = {
     url,
@@ -12,7 +12,7 @@ const getDeviceModel = async ({apiConfig, getToken, log}) => {
     data: {fields: ["model", "device"]},
     headers: {
       "X-Tenant": plant,
-      Authorization: `Bearer ${getToken(subject, plant, permissions)}`,
+      Authorization: `Bearer ${process.env.VI_JWT}`,
       "Content-Type": "application/json"
     },
     timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || 30000, 10)

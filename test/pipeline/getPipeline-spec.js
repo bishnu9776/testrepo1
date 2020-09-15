@@ -10,7 +10,6 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
-import {getTokenStub} from "../stubs/getTokenStub"
 import {mockDeviceRegistryPostSuccessResponse} from "../utils/mockDeviceRegistryResponse"
 
 const {env} = process
@@ -21,25 +20,20 @@ describe("Pipeline spec", () => {
   const acknowledgeMessageSpy = sinon.spy()
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
-  let getToken
   let log
   const apiConfig = {
     plant: "test",
-    url: `${url}${endpoint}`,
-    subject: "svc-ather-collector",
-    permissions: ["reports:read"]
+    url: `${url}${endpoint}`
   }
 
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
     setChannelDecoderConfigFileEnvs()
-    getToken = getTokenStub()
     log = getMockLog()
     appContext = {
       metricRegistry: getMockMetricRegistry(),
       log,
-      getToken,
       apiConfig
     }
     probePath = `${process.cwd()}/test/fixtures/probe`

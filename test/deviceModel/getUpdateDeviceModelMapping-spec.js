@@ -5,7 +5,6 @@ import {
 } from "../utils/mockDeviceRegistryResponse"
 import {getUpdateDeviceModelMapping} from "../../src/deviceModel/getUpdateDeviceModelMapping"
 import {clearEnv} from "../utils"
-import {getTokenStub} from "../stubs/getTokenStub"
 import {getMockLog} from "../stubs/logger"
 import {clearStub} from "../stubs/clearStub"
 
@@ -13,26 +12,22 @@ describe("Update device mapping", () => {
   const {env} = process
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
-  let getToken
   let log
   let appContext
   beforeEach(() => {
     nock.cleanAll()
     log = getMockLog()
-    getToken = getTokenStub()
     appContext = {
       apiConfig: {
         plant: "ather",
-        url: `${url}${endpoint}`,
-        subject: "svc-ather-collector",
-        permissions: ["reports:read"]
+        url: `${url}${endpoint}`
       },
-      getToken,
       log
     }
     env.VI_ATHER_COLLECTOR_MAX_RETRIES = 2
     env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
     env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
+    env.VI_JWT = "dummysecret"
   })
 
   afterEach(() => {
