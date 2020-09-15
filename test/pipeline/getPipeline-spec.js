@@ -29,8 +29,8 @@ describe("Pipeline spec", () => {
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_SHOULD_DEDUP_DATA = "true"
-    env.VI_DATAITEM_WHITELIST =
-      "vehicle_current_state,motor_current_state,odometer,MOT_NPres_RPM,BMS_Current,BMS_Voltage,MOT_Tmot_C,location,error_code,MCU_SOC,bms_status,incognito_mode,BCM_ChaType,CHA_Mode,CHA_Type,POD_AuthenticationStatus,GRID_Type,CHA_State_of_Protocol,POD_Type,POD_ID,CI_Recoverable_Fault,solenoid_feedback,release_name,betaDisplay_motorMode1,betaDisplay_motorMode2,betaDisplay_motorMode4,system_boot_time"
+    process.env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_DATAITEM_WHITELIST = "MCU_SOC"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
@@ -65,10 +65,9 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
-        expect(output.length).to.eql(122) // 123 after adding probe
-        // console.log(JSON.stringify(output.filter(e => e.agent === "ather-agent"), null, 2))
+        expect(output.length).to.eql(123)
         expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-        // expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1)
+        expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1) // probe
         expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
@@ -105,7 +104,7 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
-        expect(output.length).to.eql(122)
+        expect(output.length).to.eql(123)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         done()
       }
@@ -122,6 +121,8 @@ describe("Pipeline spec", () => {
 
   it("should ack and filter out events when model for device is not present", done => {
     env.VI_SHOULD_DROP_EVENTS_FOR_DEVICE_WITHOUT_MODEL = "true"
+    env.VI_SHOULD_SEND_PROBE = "false"
+
     const response = [
       {device: "device-1", model: "A"},
       {device: "device-2", model: "B"}
@@ -174,8 +175,9 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
-        expect(output.length).to.eql(3)
+        expect(output.length).to.eql(4)
         expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
+        expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1) // probe
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
@@ -193,6 +195,7 @@ describe("Pipeline spec", () => {
 
   it("ci events flow through pipeline from source gcp", done => {
     process.env.VI_INPUT_TYPE = "ci"
+    process.env.VI_SHOULD_SEND_PROBE = "false"
     const source = {
       stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
     }
