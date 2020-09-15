@@ -12,6 +12,7 @@ import {loadProbe} from "./loadProbe"
 import {getUpdateDeviceModelMapping} from "../deviceModel/getUpdateDeviceModelMapping"
 import {createDeviceModelMapping} from "../deviceModel/createDeviceModelMapping"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
+// import {getUpdateProbe} from "../getUpdateProbe"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -46,6 +47,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
   const deviceModelMapping = await createDeviceModelMapping(appContext)
   const updateDeviceModelMappingFn = getUpdateDeviceModelMapping(appContext)
+  // const updateProbe = getUpdateProbe(appContext, probe)
 
   const updateDeviceModelMapping = event => {
     if (modelDataItems.includes(event.data_item_name)) {
@@ -63,6 +65,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       map(formatEvent),
       tap(updateDeviceModelMapping),
       filter(isModelPresentForDevice({deviceModelMapping, log})),
+      // mergeMap(event => from(updateProbe(event))),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
