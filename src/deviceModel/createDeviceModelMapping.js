@@ -28,10 +28,14 @@ export const createDeviceModelMapping = async appContext => {
   const {ok, response, error} = await getDeviceModel(appContext)
   if (ok && response.data) {
     const deviceProperties = response.data
-    return deviceProperties.reduce((acc, deviceProperty) => {
+    const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {
       acc[deviceProperty.device] = deviceProperty.model
       return acc
     }, {})
+    log.info("Received device model mapping from device registry", {
+      ctx: {deviceModelMapping: JSON.stringify(deviceModelMapping)}
+    })
+    return deviceModelMapping
   }
   log.warn("Failed to get device model mapping", {error: errorFormatter(error)})
   return {}
