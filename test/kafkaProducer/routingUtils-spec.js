@@ -10,6 +10,7 @@ describe("should route the events based on routing config", () => {
     env.VI_KAFKA_SINK_DATA_TOPICS = "test-topic-ather"
     env.VI_KAFKA_SINK_ARCHIVE_TOPICS = "test-archive-topic-ather"
     env.VI_KAFKA_SINK_CANRAW_TOPICS = "test-canraw-topic-ather"
+    env.VI_KAFKA_SINK_PROBE_TOPICS = "test-probe-topic-ather"
   })
 
   afterEach(() => {
@@ -38,5 +39,10 @@ describe("should route the events based on routing config", () => {
   it("should route non whitelisted and non canraw dataitem to archive topic alone", () => {
     const topics = getTopics({...event, data_item_name: "vcu"}, getRoutingConfig())
     expect(topics).to.eql(["test-archive-topic-ather"])
+  })
+
+  it("should route probe events to probe topic alone", () => {
+    const topics = getTopics({...event, tag: "MTConnectDevices", data_item_name: "foo"}, getRoutingConfig())
+    expect(topics).to.eql(["test-probe-topic-ather"])
   })
 })

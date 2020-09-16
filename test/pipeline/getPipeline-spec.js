@@ -67,7 +67,7 @@ describe("Pipeline spec", () => {
       complete: () => {
         expect(output.length).to.eql(123)
         expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-        expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1) // probe
+        expect(output.filter(e => e.tag === "MTConnectDevices").length).to.eql(1) // probe
         expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
