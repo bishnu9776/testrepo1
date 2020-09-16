@@ -47,7 +47,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
   const deviceModelMapping = await createDeviceModelMapping(appContext)
   const updateDeviceModelMappingFn = getUpdateDeviceModelMapping(appContext)
-  const updateProbe = getUpdateProbe(appContext, probe)
+  const updateProbe = getUpdateProbe({appContext, probe})
 
   const updateDeviceModelMapping = event => {
     if (modelDataItems.includes(event.data_item_name)) {

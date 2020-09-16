@@ -62,7 +62,7 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
   return formattedProbe
 }
 
-export const getUpdateProbe = (appContext, probe) => {
+export const getUpdateProbe = ({probe}) => {
   const listOfDevices = []
   const whitelistedDataItems = process.env.VI_DATAITEM_WHITELIST ? process.env.VI_DATAITEM_WHITELIST.split(",") : []
   const schemaVersion = process.env.VI_SCHEMA_VERSION || "3"
