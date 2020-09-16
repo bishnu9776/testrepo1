@@ -28,6 +28,7 @@ describe("Update device mapping", () => {
     env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
     env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
     env.VI_JWT = "dummysecret"
+    env.VI_VALUE_KEY = "value"
   })
 
   afterEach(() => {
