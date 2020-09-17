@@ -26,7 +26,7 @@ export const getEventFormatter = () => {
       received_at: new Date().toISOString(),
       agent: "ather",
       instance_id: id,
-      plant: process.env.VI_INPUT_TYPE === "bike" ? "ather" : "atherci",
+      plant: process.env.VI_INPUT_TYPE === "ci" ? "atherci" : "ather",
       tenant: "ather",
       schema_version: schemaVersion
     }

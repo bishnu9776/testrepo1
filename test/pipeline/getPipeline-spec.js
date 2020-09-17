@@ -157,7 +157,7 @@ describe("Pipeline spec", () => {
     })
   })
 
-  it("valid events flow through pipeline from source kafka", done => {
+  it("bike events flow through pipeline from source kafka", done => {
     setGen2Envs()
     const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
     const source = {
@@ -176,6 +176,7 @@ describe("Pipeline spec", () => {
       },
       complete: () => {
         expect(output.length).to.eql(4)
+        output.every(e => expect(e.plant).to.eql("ather"))
         expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
         expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1) // probe
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
