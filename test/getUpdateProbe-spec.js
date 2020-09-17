@@ -1,16 +1,12 @@
+import {omit} from "ramda"
 import probe from "./fixtures/probe.json"
-// import {getMockLog} from "./stubs/logger"
 import {clearEnv} from "./utils"
 import {getUpdateProbe} from "../src/getUpdateProbe"
 
 describe("it should update probe", () => {
-  // let appContext
   const {env} = process
-  const schemaVersion = 3
+  const schemaVersion = "3"
   beforeEach(() => {
-    // appContext = {
-    //   log: getMockLog()
-    // }
     env.VI_DATAITEM_WHITELIST = "MCU_SOC,MCU_CHARGER_TYPE,GPS_TPV"
     env.VI_SCHEMA_VERSION = schemaVersion
     env.VI_SHOULD_SEND_PROBE = "true"
@@ -20,7 +16,7 @@ describe("it should update probe", () => {
     clearEnv()
   })
 
-  it.skip("should send probe for a new device", () => {
+  it("should send probe for a new device", () => {
     const device = "device-1"
     const timestamp = new Date().toISOString()
 
@@ -32,7 +28,7 @@ describe("it should update probe", () => {
       data_item_id: "MCU_SOC-v1",
       timestamp,
       channel: "can_mcu/v1_0_0",
-      sequence: 5238684,
+      sequence: 1,
       can_id: "0x100",
       value: 90,
       component: "mcu",
@@ -84,13 +80,10 @@ describe("it should update probe", () => {
         },
         mtconnect_devices_attributes: {}
       },
-      timestamp,
-      creation_time: timestamp,
-      received_at: timestamp,
       collector_version: "1.0.0",
       hasRealtimeData: false
     }
-    expect(probeData).to.eql(expectedProbe)
-    // console.log(probeData)
+    const probeWithoutTimestamp = omit(["timestamp", "creation_time", "received_at"], probeData)
+    expect(probeWithoutTimestamp).to.eql(expectedProbe)
   })
 })
