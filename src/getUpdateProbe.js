@@ -1,6 +1,8 @@
 import {contains, intersection} from "ramda"
 import {isNilOrEmpty} from "./utils/isNilOrEmpty"
 
+const {env} = process
+
 const getDeviceProbe = (device, probe, schemaVersion) => {
   const timestamp = new Date().toISOString()
   const version = "1.0.0"
@@ -43,14 +45,16 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
   const dataItems = Object.keys(probe)
   const keysInWhitelistedDataItems = intersection(dataItems, whitelistedDataItems)
   const keysToCheckForValidValues = ["units", "sub_type", "subcomponent"]
+  const keysToDeleteFromProbe = env.VI_KEYS_TO_DELETE_FROM_PROBE
+    ? env.VI_KEYS_TO_DELETE_FROM_PROBE.split(",")
+    : ["data_item_name", "data_item_type", "values_schema"]
 
   keysInWhitelistedDataItems.map(dataItem => {
     const value = {...probe[dataItem]}
     value.name = value.data_item_name
     value.type = getType(value.data_item_type)
     value.id = `${value.name}-v${schemaVersion}`
-    delete value.data_item_name
-    delete value.data_item_type
+    keysToDeleteFromProbe.map(key => delete value[key])
     keysToCheckForValidValues.map(key => {
       if (value[key] === "" || value[key] === "?") {
         delete value[key]
@@ -64,9 +68,9 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
 
 export const getUpdateProbe = ({probe}) => {
   const listOfDevices = []
-  const whitelistedDataItems = process.env.VI_DATAITEM_WHITELIST ? process.env.VI_DATAITEM_WHITELIST.split(",") : []
-  const schemaVersion = process.env.VI_SCHEMA_VERSION || "3"
-  const shouldSendProbe = JSON.parse(process.env.VI_SHOULD_SEND_PROBE || "false")
+  const whitelistedDataItems = env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : []
+  const schemaVersion = env.VI_SCHEMA_VERSION || "3"
+  const shouldSendProbe = JSON.parse(env.VI_SHOULD_SEND_PROBE || "false")
 
   const formattedProbe = formatProbe(probe, whitelistedDataItems, schemaVersion)
   return event => {

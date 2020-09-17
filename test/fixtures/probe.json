@@ -22,7 +22,9 @@
   "message": {
     "data_item_name": "message",
     "data_item_type": "LOG",
-    "category": "LOG"
+    "category": "LOG",
+    "units": "",
+    "sub_type": "?"
   },
   "can_raw": {
     "data_item_name": "can_raw"
