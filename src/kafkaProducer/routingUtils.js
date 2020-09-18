@@ -4,6 +4,7 @@ export const getRoutingConfig = () => {
   const dataTopics = env.VI_KAFKA_SINK_DATA_TOPICS ? env.VI_KAFKA_SINK_DATA_TOPICS.split(",") : []
   const archiveTopics = env.VI_KAFKA_SINK_ARCHIVE_TOPICS ? env.VI_KAFKA_SINK_ARCHIVE_TOPICS.split(",") : []
   const canRawTopics = env.VI_KAFKA_SINK_CANRAW_TOPICS ? env.VI_KAFKA_SINK_CANRAW_TOPICS.split(",") : []
+  const probeTopics = env.VI_KAFKA_SINK_PROBE_TOPICS ? env.VI_KAFKA_SINK_PROBE_TOPICS.split(",") : []
   const whitelistedDataItems = env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : []
   const whitelistedCanRawDataItems = env.VI_CANRAW_DATAITEM_WHITELIST ? env.VI_CANRAW_DATAITEM_WHITELIST.split(",") : []
 
@@ -19,6 +20,10 @@ export const getRoutingConfig = () => {
     {
       filter: e => whitelistedCanRawDataItems.includes(e.data_item_name),
       topics: canRawTopics
+    },
+    {
+      filter: e => e.tag === "MTConnectDevices",
+      topics: probeTopics
     }
   ]
 }
