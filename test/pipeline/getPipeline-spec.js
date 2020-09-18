@@ -28,9 +28,9 @@ describe("Pipeline spec", () => {
 
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
+    env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
     process.env.VI_SHOULD_SEND_PROBE = "true"
-    env.VI_DATAITEM_WHITELIST = "MCU_SOC"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {

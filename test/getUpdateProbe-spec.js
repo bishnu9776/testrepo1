@@ -7,7 +7,7 @@ describe("it should update probe", () => {
   const {env} = process
   const schemaVersion = "3"
   beforeEach(() => {
-    env.VI_DATAITEM_WHITELIST = "MCU_SOC,MCU_CHARGER_TYPE,message"
+    env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC,MCU_CHARGER_TYPE,message"
     env.VI_SCHEMA_VERSION = schemaVersion
     env.VI_SHOULD_SEND_PROBE = "true"
   })
