@@ -24,7 +24,8 @@
     "data_item_type": "LOG",
     "category": "LOG",
     "units": "",
-    "sub_type": "?"
+    "sub_type": "?",
+    "subcomponent": "foo"
   },
   "can_raw": {
     "data_item_name": "can_raw"
@@ -63,9 +64,9 @@
   "message": {
     "data_item_name": "message",
     "component": "logs",
-    "subcomponent": "",
+    "subcomponent": "foo",
     "data_item_type": "LOG",
-    "sub_type": "",
+    "sub_type": "?",
     "category": "LOG",
     "units": "",
     "values_schema": {
