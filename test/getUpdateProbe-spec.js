@@ -51,7 +51,8 @@ describe("it should update probe", () => {
             component: "logs",
             id: "message-v3",
             name: "message",
-            type: "LOG"
+            type: "LOG",
+            subcomponent: "foo"
           }
         ]
       },
