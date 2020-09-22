@@ -17,7 +17,8 @@ export const startPipelines = async () => {
   const metricRegistry = getMetricRegistry(log)
   const apiConfig = {
     plant: env.VI_PLANT || "ather",
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices"
+    deviceRegistryUrl: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices",
+    deviceRulesUrl: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-rules.com/device-rules/"
   }
 
   const appContext = {log, metricRegistry, apiConfig}

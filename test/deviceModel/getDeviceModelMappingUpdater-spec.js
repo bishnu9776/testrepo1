@@ -20,7 +20,7 @@ describe("Update device mapping", () => {
     appContext = {
       apiConfig: {
         plant: "ather",
-        url: `${url}${endpoint}`
+        deviceRegistryUrl: `${url}${endpoint}`
       },
       log
     }

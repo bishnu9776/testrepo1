@@ -44,7 +44,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
-  const getUpdatedDeviceModelMapping = getDeviceModelMappingUpdater(appContext)
+  const updateDeviceModelMappingAndReturnUpdated = getDeviceModelMappingUpdater(appContext)
   const appendProbeOnNewDevice = getProbeAppender({appContext, probe})
 
   let deviceModelMapping = await getDeviceModelMapping(appContext)
@@ -58,7 +58,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
       tap(e => {
-        deviceModelMapping = getUpdatedDeviceModelMapping(deviceModelMapping, e)
+        deviceModelMapping = updateDeviceModelMappingAndReturnUpdated(deviceModelMapping, e)
       }),
       filter(isModelPresentForDevice({deviceModelMapping, log})),
       mergeMap(event => from(appendProbeOnNewDevice(event))),
