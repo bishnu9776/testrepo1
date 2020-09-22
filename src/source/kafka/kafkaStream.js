@@ -13,7 +13,7 @@ const getAttributes = (headers, metricRegistry) => {
       subFolder: `${attributesObj[4]}/${attributesObj[5]}`
     }
   }
-  throw new Error(`Invalid header: ${JSON.stringify(headers)}`)
+  throw new Error(`Invalid headers`)
 }
 
 export const kafkaStream = (appContext, observer) => {
