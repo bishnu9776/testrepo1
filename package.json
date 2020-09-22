@@ -22,6 +22,7 @@
   "scripts": {
     "start": "ELASTIC_APM_ACTIVE=false babel-node src/main.js",
     "generate-probe": "babel-node scripts/parseCSVtoJSON.js",
+    "kafka": "babel-node scripts/kafkaConsumer.js",
     "debug-gcp": "ELASTIC_APM_ACTIVE=false babel-node scripts/gcpConsumer.js",
     "debug-subscriber": "babel-node src/source/gcp/index.js",
     "debug-publisher": "babel-node scripts/gcpProducer.js",
@@ -38,7 +39,7 @@
     "@google-cloud/monitoring": "2.1.2",
     "@google-cloud/pubsub": "2.5.0",
     "avsc": "5.4.22",
-    "axios": "0.20.0",
+    "axios": "0.19.0",
     "event-loop-stats": "1.3.0",
     "jwt-simple": "0.5.6",
     "long": "4.0.0",
