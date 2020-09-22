@@ -6,12 +6,12 @@
   "author": "VIMANA",
   "license": "ISC",
   "bugs": {
-    "deviceRegistryUrl": "https://github.com/systeminsights/svc-ather-collector/issues"
+    "url": "https://github.com/systeminsights/svc-ather-collector/issues"
   },
   "homepage": "https://github.com/systeminsights/svc-ather-collector#readme",
   "repository": {
     "type": "git",
-    "deviceRegistryUrl": "git+https://github.com/systeminsights/svc-ather-collector.git"
+    "url": "git+https://github.com/systeminsights/svc-ather-collector.git"
   },
   "husky": {
     "hooks": {
