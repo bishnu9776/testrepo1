@@ -3,6 +3,7 @@ import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 import {updateDeviceModel} from "./updateDeviceModel"
 import {updateDeviceRules} from "./updateDeviceRules"
+import {getDeviceModelMapping} from "./getDeviceModelMapping"
 
 const extractModel = value => {
   const split = value.split("_")
@@ -33,41 +34,45 @@ const isSuccessfulRequest = apiResponse => {
   return ok && response
 }
 
-export const getDeviceInfoUpdater = appContext => {
+export const getDeviceInfoHandler = async appContext => {
   const {log} = appContext
   const isRetryable = is5xxError
   const retryConfig = getRetryConfig(log, isRetryable)
+  const deviceModelMapping = await getDeviceModelMapping(appContext)
 
-  return async (deviceModelMapping, event) => {
-    const device = event.device_uuid
-    const model = getModel(event)
+  return {
+    updateDeviceInfo: async event => {
+      const device = event.device_uuid
+      const model = getModel(event)
 
-    if (!isNewDevice({deviceModelMapping, event, device, model})) {
+      if (!isNewDevice({deviceModelMapping, event, device, model})) {
+        return deviceModelMapping
+      }
+
+      const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
+
+      if (!isSuccessfulRequest(deviceModelResponse)) {
+        log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
+          error: errorFormatter(deviceModelResponse.error)
+        })
+        return deviceModelMapping
+      }
+
+      const deviceRulesResponse = await updateDeviceRules({device, rulesetName: model, appContext, retryConfig})
+
+      if (!isSuccessfulRequest(deviceRulesResponse)) {
+        log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
+          error: errorFormatter(deviceModelResponse.error)
+        })
+        return deviceModelMapping
+        // eslint-disable-next-line no-param-reassign
+      }
+
+      deviceModelMapping[device] = model
       return deviceModelMapping
-    }
-
-    const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
-
-    if (!isSuccessfulRequest(deviceModelResponse)) {
-      log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
-        error: errorFormatter(deviceModelResponse.error)
-      })
+    },
+    getUpdatedDeviceModelMapping: () => {
       return deviceModelMapping
-    }
-
-    const deviceRulesResponse = await updateDeviceRules({device, rulesetName: model, appContext, retryConfig})
-
-    if (!isSuccessfulRequest(deviceRulesResponse)) {
-      log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
-        error: errorFormatter(deviceModelResponse.error)
-      })
-      return deviceModelMapping
-      // eslint-disable-next-line no-param-reassign
-    }
-
-    return {
-      ...deviceModelMapping,
-      [device]: model
     }
   }
 }

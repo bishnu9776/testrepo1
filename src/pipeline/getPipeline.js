@@ -9,8 +9,7 @@ import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
-import {getDeviceInfoUpdater} from "../deviceModel/getDeviceInfoUpdater"
-import {getDeviceModelMapping} from "../deviceModel/getDeviceModelMapping"
+import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 import {getProbeAppender} from "../getProbeAppender"
 
@@ -44,10 +43,8 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
-  const updateDeviceModelMappingAndReturnUpdated = getDeviceInfoUpdater(appContext)
   const appendProbeOnNewDevice = getProbeAppender({appContext, probe})
-
-  let deviceModelMapping = await getDeviceModelMapping(appContext)
+  const {getUpdatedDeviceModelMapping, updateDeviceInfo} = await getDeviceInfoHandler(appContext)
 
   return stream
     .pipe(
@@ -57,10 +54,10 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
-      tap(e => {
-        deviceModelMapping = updateDeviceModelMappingAndReturnUpdated(deviceModelMapping, e)
+      tap(updateDeviceInfo),
+      filter(e => {
+        return isModelPresentForDevice({deviceModelMapping: getUpdatedDeviceModelMapping(), log})(e)
       }),
-      filter(isModelPresentForDevice({deviceModelMapping, log})),
       mergeMap(event => from(appendProbeOnNewDevice(event))),
       sendToKafka,
       tap(event => {

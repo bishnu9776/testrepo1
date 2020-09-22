@@ -4,10 +4,10 @@ import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
 const fetchDeviceModelInfo = async ({apiConfig, log}) => {
-  const {plant, url} = apiConfig
+  const {plant, deviceRegistryUrl} = apiConfig
 
   const requestConfig = {
-    url,
+    url: deviceRegistryUrl,
     method: "post",
     data: {fields: ["model", "device"]},
     headers: {

@@ -15,7 +15,7 @@ describe("create device Model Mapping", () => {
   let log
   const apiConfig = {
     plant: "test",
-    url: `${url}${endpoint}`
+    deviceRegistryUrl: `${url}${endpoint}`
   }
 
   beforeEach(() => {

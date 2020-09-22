@@ -23,7 +23,7 @@ describe("Pipeline spec", () => {
   let log
   const apiConfig = {
     plant: "test",
-    url: `${url}${endpoint}`
+    deviceRegistryUrl: `${url}${endpoint}`
   }
 
   beforeEach(() => {
