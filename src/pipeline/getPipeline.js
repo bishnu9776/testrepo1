@@ -9,7 +9,7 @@ import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadProbe} from "./loadProbe"
-import {getDeviceModelMappingUpdater} from "../deviceModel/getDeviceModelMappingUpdater"
+import {getDeviceInfoUpdater} from "../deviceModel/getDeviceInfoUpdater"
 import {getDeviceModelMapping} from "../deviceModel/getDeviceModelMapping"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 import {getProbeAppender} from "../getProbeAppender"
@@ -44,7 +44,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
-  const updateDeviceModelMappingAndReturnUpdated = getDeviceModelMappingUpdater(appContext)
+  const updateDeviceModelMappingAndReturnUpdated = getDeviceInfoUpdater(appContext)
   const appendProbeOnNewDevice = getProbeAppender({appContext, probe})
 
   let deviceModelMapping = await getDeviceModelMapping(appContext)

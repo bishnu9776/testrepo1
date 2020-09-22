@@ -2,6 +2,7 @@ import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 import {updateDeviceModel} from "./updateDeviceModel"
+import {updateDeviceRules} from "./updateDeviceRules"
 
 const extractModel = value => {
   const split = value.split("_")
@@ -27,7 +28,12 @@ const isNewDevice = ({deviceModelMapping, event, device, model}) => {
   return !isNilOrEmpty(model) && deviceModelMappingMismatch({device, deviceModelMapping, model})
 }
 
-export const getDeviceModelMappingUpdater = appContext => {
+const isSuccessfulRequest = apiResponse => {
+  const {ok, response} = apiResponse
+  return ok && response
+}
+
+export const getDeviceInfoUpdater = appContext => {
   const {log} = appContext
   const isRetryable = is5xxError
   const retryConfig = getRetryConfig(log, isRetryable)
@@ -40,15 +46,28 @@ export const getDeviceModelMappingUpdater = appContext => {
       return deviceModelMapping
     }
 
-    const {ok, response, error} = await updateDeviceModel({appContext, device, model, retryConfig})
-    const updatedDeviceModelMapping = {...deviceModelMapping}
+    const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
 
-    if (ok && response) {
-      // eslint-disable-next-line no-param-reassign
-      updatedDeviceModelMapping[device] = model
-    } else {
-      log.warn("Failed to put device model mapping", {error: errorFormatter(error)})
+    if (!isSuccessfulRequest(deviceModelResponse)) {
+      log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
+        error: errorFormatter(deviceModelResponse.error)
+      })
+      return deviceModelMapping
     }
-    return updatedDeviceModelMapping
+
+    const deviceRulesResponse = await updateDeviceRules({device, rulesetName: model, appContext, retryConfig})
+
+    if (!isSuccessfulRequest(deviceRulesResponse)) {
+      log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
+        error: errorFormatter(deviceModelResponse.error)
+      })
+      return deviceModelMapping
+      // eslint-disable-next-line no-param-reassign
+    }
+
+    return {
+      ...deviceModelMapping,
+      [device]: model
+    }
   }
 }

@@ -3,7 +3,7 @@ import {
   mockDeviceRegistryPutFailureResponse,
   mockDeviceRegistryPutSuccessResponse
 } from "../utils/mockDeviceRegistryResponse"
-import {getDeviceModelMappingUpdater} from "../../src/deviceModel/getDeviceModelMappingUpdater"
+import {getDeviceInfoUpdater} from "../../src/deviceModel/getDeviceInfoUpdater"
 import {clearEnv} from "../utils"
 import {getMockLog} from "../stubs/logger"
 import {clearStub} from "../stubs/clearStub"
@@ -44,7 +44,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -60,7 +60,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-5", value: "450plus", data_item_name: "model"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -76,7 +76,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-5", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -91,7 +91,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-5", value: "GEN2_450plus", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -106,7 +106,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-5", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -118,7 +118,7 @@ describe("Update device mapping", () => {
     // no mock response as no api request is made
     const deviceModelMapping = {"device-1": "450x", "device-5": "450"}
     const event = {device_uuid: "device-5", value: "GEN2_450", data_item_name: "bike_type"}
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -132,7 +132,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 400, 1, {})
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql(deviceModelMapping)
     expect(log.warn).to.have.been.calledOnce
@@ -145,7 +145,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 1, {})
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x",
@@ -161,7 +161,7 @@ describe("Update device mapping", () => {
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
     mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 3, {})
-    const updateDeviceModelMapping = await getDeviceModelMappingUpdater(appContext)
+    const updateDeviceModelMapping = await getDeviceInfoUpdater(appContext)
     const response = await updateDeviceModelMapping(deviceModelMapping, event)
     expect(response).to.eql({
       "device-1": "450x"

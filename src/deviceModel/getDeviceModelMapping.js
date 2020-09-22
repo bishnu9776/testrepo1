@@ -3,7 +3,7 @@ import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
-const getDeviceModel = async ({apiConfig, log}) => {
+const fetchDeviceModelInfo = async ({apiConfig, log}) => {
   const {plant, url} = apiConfig
 
   const requestConfig = {
@@ -25,7 +25,7 @@ const getDeviceModel = async ({apiConfig, log}) => {
 
 export const getDeviceModelMapping = async appContext => {
   const {log} = appContext
-  const {ok, response, error} = await getDeviceModel(appContext)
+  const {ok, response, error} = await fetchDeviceModelInfo(appContext)
   if (ok && response.data) {
     const deviceProperties = response.data
     const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {
