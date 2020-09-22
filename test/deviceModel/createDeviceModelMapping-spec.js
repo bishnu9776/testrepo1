@@ -1,5 +1,5 @@
 import nock from "nock"
-import {createDeviceModelMapping} from "../../src/deviceModel/createDeviceModelMapping"
+import {getDeviceModelMapping} from "../../src/deviceModel/getDeviceModelMapping"
 import {
   mockDeviceRegistryPostSuccessAfterFailure,
   mockDeviceRegistryPostSuccessResponse
@@ -38,7 +38,7 @@ describe("create device Model Mapping", () => {
       {device: "device-2", model: "B"}
     ]
     mockDeviceRegistryPostSuccessResponse(url, endpoint, response)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await getDeviceModelMapping({apiConfig, log})
     expect(deviceMapping).to.eql({"device-1": "A", "device-2": "B"})
   })
 
@@ -49,7 +49,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "B"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 400)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await getDeviceModelMapping({apiConfig, log})
     expect(deviceMapping).to.eql({})
     expect(log.warn).to.have.been.calledOnce
   })
@@ -60,7 +60,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "B"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 503)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await getDeviceModelMapping({apiConfig, log})
     expect(deviceMapping).to.eql({"device-a": "A", "device-b": "B"})
     expect(log.warn).to.have.been.calledOnce
   })
@@ -71,7 +71,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "A"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 3, 503)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await getDeviceModelMapping({apiConfig, log})
     expect(deviceMapping).to.eql({})
     expect(log.warn).to.have.been.calledThrice
     expect(log.error).to.have.been.calledOnce

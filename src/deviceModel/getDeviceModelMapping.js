@@ -23,7 +23,7 @@ const getDeviceModel = async ({apiConfig, log}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-export const createDeviceModelMapping = async appContext => {
+export const getDeviceModelMapping = async appContext => {
   const {log} = appContext
   const {ok, response, error} = await getDeviceModel(appContext)
   if (ok && response.data) {

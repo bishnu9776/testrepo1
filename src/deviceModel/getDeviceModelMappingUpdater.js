@@ -28,16 +28,24 @@ const getModel = value => {
   return split[1] ? split[1] : split[0]
 }
 
-export const getUpdateDeviceModelMapping = appContext => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+export const getDeviceModelMappingUpdater = appContext => {
   const {log} = appContext
   const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
     !deviceModelMapping[device] || deviceModelMapping[device] !== model
   const isRetryable = is5xxError
   const retryConfig = getRetryConfig(log, isRetryable)
+  const valueKey = process.env.VI_VALUE_KEY || "value_event" // TODO: Better name. This env var should reflect that it is value key for the data item being used to update model
+  const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST
+    ? process.env.VI_DATAITEM_MODEL_LIST.split(",")
+    : ["bike_type"]
 
   return async (deviceModelMapping, event) => {
+    if (!modelDataItems.includes(event.data_item_name)) {
+      return
+    }
+
     const device = event.device_uuid
-    const valueKey = process.env.VI_VALUE_KEY || "value_event"
     const model = event && event[valueKey] ? getModel(event[valueKey]) : null
     if (!isNilOrEmpty(model) && deviceModelMappingMismatch({device, deviceModelMapping, model})) {
       const {ok, response, error} = await putDeviceMapping({appContext, device, model, retryConfig})
