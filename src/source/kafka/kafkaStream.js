@@ -9,7 +9,7 @@ const getAttributes = (headers, metricRegistry) => {
       throw new Error(`Device not present, topic: ${headers[0].inputTopic}`)
     }
     return {
-      devicId: attributesObj[2],
+      deviceId: attributesObj[2],
       subFolder: `${attributesObj[4]}/${attributesObj[5]}`
     }
   }

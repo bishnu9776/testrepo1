@@ -6,7 +6,7 @@ import {kafkaStream} from "../../../src/source/kafka/kafkaStream"
 import kafkaEvent from "../../fixtures/kafkaEvent.json"
 import {clearEnv} from "../../utils"
 
-describe.skip("Kafka Stream", () => {
+describe("Kafka Stream", () => {
   let appContext
 
   beforeEach(async () => {
@@ -39,9 +39,10 @@ describe.skip("Kafka Stream", () => {
     })
 
     stream.subscribe(event => {
-      expect(event.message.data).to.eql(kafkaEvent.value.data)
+      expect(event.message.data).to.eql(Buffer.from(kafkaEvent.value.data))
       expect(event.message.attributes.deviceId).to.eql("foo")
     })
+    stream.subscribe()
   })
 
   it("throw error when device is not present", done => {
