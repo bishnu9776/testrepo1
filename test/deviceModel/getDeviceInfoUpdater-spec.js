@@ -1,3 +1,4 @@
+/* eslint-disable mocha/no-return-from-async */
 import nock from "nock"
 import {
   mockDeviceRegistryPostSuccessResponse,
@@ -31,7 +32,6 @@ describe("Update device mapping", () => {
     env.VI_JWT = "dummysecret"
     env.VI_VALUE_KEY = "value"
     env.VI_DATAITEM_MODEL_LIST = "bike_type,model"
-    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
   })
 
   afterEach(() => {
@@ -40,6 +40,7 @@ describe("Update device mapping", () => {
   })
 
   it("update devices mapping on receiving new device with value in gen_model format", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody1 = {model: "450plus"}
     const putRequestBody2 = {model: "450x"}
     const events = [
@@ -52,7 +53,7 @@ describe("Update device mapping", () => {
     mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[2].device_uuid}`, putRequestBody2, putRequestBody2)
 
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450plus",
         "device-2": "450x",
@@ -62,6 +63,7 @@ describe("Update device mapping", () => {
   })
 
   it("update devices mapping on receiving new device with value in model format", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450plus"}
     const events = [
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"},
@@ -74,7 +76,7 @@ describe("Update device mapping", () => {
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450plus",
         "device-2": "450x"
@@ -83,6 +85,7 @@ describe("Update device mapping", () => {
   })
 
   it("should not update device model mapping when a new device comes but model is invalid", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450plus"}
     const events = [
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"},
@@ -92,7 +95,7 @@ describe("Update device mapping", () => {
     mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[0].device_uuid}`, putRequestBody, putRequestBody)
 
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450plus"
       })
@@ -100,18 +103,16 @@ describe("Update device mapping", () => {
   })
 
   it("update devices mapping when device exists and model changes", async () => {
-    const putRequestBody = {model: "450plus"}
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const events = [
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"},
       {device_uuid: "device-1", value: "450x", data_item_name: "bike_type"}
     ]
-    mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[0].device_uuid}`, putRequestBody, "ok")
-    const event = {device_uuid: "device-5", value: "450plus", data_item_name: "model"}
-    const putUrl = `${endpoint}/${event.device_uuid}`
-    mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
+    mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[0].device_uuid}`, {model: "450plus"}, "ok")
+    mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[0].device_uuid}`, {model: "450x"}, "ok")
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450x"
       })
@@ -119,6 +120,7 @@ describe("Update device mapping", () => {
   })
 
   it("should not update devices mapping when device exists and model changes to invalid", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450plus"}
     const events = [
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"},
@@ -130,33 +132,34 @@ describe("Update device mapping", () => {
     mockDeviceRegistryPutSuccessResponse(url, putUrl, putRequestBody, putRequestBody)
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
-    // eslint-disable-next-line
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    // eslint-disable-next-line sonarjs/no-identical-functions
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450plus"
       })
     })
   })
 
-  it.skip("update device model only once if device model mapping is already correct", async () => {
-    // TODO: Fix this test. This should fail
+  it("update device model only once if device model mapping is already correct", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450plus"}
     const events = [
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"},
       {device_uuid: "device-1", value: "450plus", data_item_name: "bike_type"}
     ]
-    mockDeviceRegistryPutSuccessResponse(url, `${endpoint}/${events[0].device_uuid}`, putRequestBody, "ok", 0)
+    mockDeviceRegistryPutFailureResponse(url, `${endpoint}/${events[0].device_uuid}`, putRequestBody, 400, 1, "ok")
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
-    // eslint-disable-next-line
-    Promise.all(events.map(updateDeviceInfo)).then(() => {
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
       expect(getUpdatedDeviceModelMapping()).to.eql({
         "device-1": "450plus"
       })
+      expect(log.warn).to.have.been.calledOnce
     })
   })
 
   it("should not retry on non retryable error and should not update deviceModel", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450"}
     const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
@@ -167,34 +170,51 @@ describe("Update device mapping", () => {
     expect(log.warn).to.have.been.calledOnce
   })
 
-  it.skip("should retry when retryConfig is set non zero", async () => {
-    // TODO: Fix this test. Success after failure is not working
+  it("should retry when retryConfig is set non zero", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
     const putRequestBody = {model: "450"}
 
     const event = {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"}
     const putUrl = `${endpoint}/${event.device_uuid}`
-    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 1, {})
+    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 2, {})
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
     await updateDeviceInfo(event)
-    expect(getUpdatedDeviceModelMapping()).to.eql({})
-    expect(log.warn).to.have.been.calledOnce
-    await updateDeviceInfo(event)
+    expect(log.warn).to.have.been.calledTwice
     expect(getUpdatedDeviceModelMapping()).to.eql({"device-1": "450"})
   })
 
-  // it("should retry and log error on retry caps out", async () => {
-  //   const putRequestBody = {model: "450"}
-  //   const deviceModelMapping = {"device-1": "450x"}
-  //
-  //   const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
-  //   const putUrl = `${endpoint}/${event.device_uuid}`
-  //   mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 3, {})
-  //   const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
-  //   await updateDeviceInfo(event)
-  //   expect(getUpdatedDeviceModelMapping()).to.eql({
-  //     "device-1": "450x"
-  //   })
-  //   expect(log.warn).to.have.been.calledThrice
-  //   expect(log.error).to.have.been.calledOnce
-  // })
+  it("should retry and log error on retry caps out", async () => {
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
+    const putRequestBody = {model: "450"}
+
+    const event = {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"}
+    const putUrl = `${endpoint}/${event.device_uuid}`
+    mockDeviceRegistryPutFailureResponse(url, putUrl, putRequestBody, 503, 3, {})
+    const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+    await updateDeviceInfo(event)
+    expect(log.warn).to.have.been.calledThrice
+    expect(log.error).to.have.been.calledOnce
+    expect(getUpdatedDeviceModelMapping()).to.eql({})
+  })
+
+  it("do not update if existing device model mapping for device is correct", async () => {
+    // Not mocking PUT request as we won't send updates since device registry is up to date
+    mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [
+      {device: "device-1", model: "450"},
+      {device: "device-2", model: "450x"}
+    ])
+
+    const events = [
+      {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"},
+      {device_uuid: "device-2", value: "GEN2_45x", data_item_name: "bike_type"}
+    ]
+
+    const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+    return Promise.all(events.map(updateDeviceInfo)).then(() => {
+      expect(getUpdatedDeviceModelMapping()).to.eql({
+        "device-1": "450",
+        "device-2": "450x"
+      })
+    })
+  })
 })

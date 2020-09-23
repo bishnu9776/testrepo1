@@ -15,8 +15,8 @@ export const mockDeviceRegistryPostSuccessAfterFailure = (baseUrl, postUrl, resp
     .reply(200, response)
 }
 
-export const mockDeviceRegistryPutSuccessResponse = (baseUrl, putUrl, requestBody, response, numSuccesses = 100) => {
-  return nock(baseUrl).put(putUrl, requestBody).times(numSuccesses).reply(200, response)
+export const mockDeviceRegistryPutSuccessResponse = (baseUrl, putUrl, requestBody, response) => {
+  return nock(baseUrl).put(putUrl, requestBody).reply(200, response)
 }
 
 export const mockDeviceRegistryPutFailureResponse = (
