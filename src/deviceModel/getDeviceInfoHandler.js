@@ -55,7 +55,7 @@ export const getDeviceInfoHandler = async appContext => {
       const device = getDevice(event)
       const model = getModel(event)
 
-      const deviceRulesResponse = await updateDeviceRules({device, rulesetName: model, appContext, retryConfig})
+      const deviceRulesResponse = await updateDeviceRules({device, model})
 
       if (!isSuccessfulRequest(deviceRulesResponse)) {
         log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {

@@ -10,20 +10,20 @@ export const getDeviceRulesUpdater = ({log, retryConfig}) => {
   const deviceRulesUrl = env.VI_DEVICE_RULES_DEVICE_URL
 
   return async ({device, model}) => {
-    // const requestConfig = {
-    //   url: `${deviceRulesUrl}/${device}/${model}`,
-    //   method: "PUT",
-    //   headers: {
-    //     "X-Tenant": plant,
-    //     Authorization: `Bearer ${process.env.VI_JWT}`,
-    //     "Content-Type": "application/json"
-    //   },
-    //   timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
-    // }
-    // return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
-    return {
-      ok: true,
-      response: "okay"
+    const requestConfig = {
+      url: `${deviceRulesUrl}/${device}/${model}`,
+      method: "PUT",
+      headers: {
+        "X-Tenant": plant,
+        Authorization: `Bearer ${process.env.VI_JWT}`,
+        "Content-Type": "application/json"
+      },
+      timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
     }
+    return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
+    // return {
+    //   ok: true,
+    //   response: "okay"
+    // }
   }
 }

@@ -72,6 +72,7 @@ describe("Parse GCP message", () => {
     clearEnv()
   })
 
+  // TODO: One test is failing under CHOMA_SEED=le9gUHD4Oz. Fix it.
   describe("gen1 parsing", () => {
     beforeEach(() => {
       setEnv({
@@ -187,6 +188,7 @@ describe("Parse GCP message", () => {
     beforeEach(() => {
       env.VI_CHANNELS_TO_DROP = "gps_tpv"
     })
+
     it("when message contains channel specified to drop", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
