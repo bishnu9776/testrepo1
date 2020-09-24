@@ -15,10 +15,12 @@ const getModel = event => {
   return event && event[valueKey] ? extractModel(event[valueKey]) : null
 }
 
+const getDevice = event => event.device_uuid
+
 const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
   !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
-const isNewDevice = ({deviceModelMapping, event, device, model}) => {
+const isNewDevice = ({deviceModelMapping, event}) => {
   const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST
     ? process.env.VI_DATAITEM_MODEL_LIST.split(",")
     : ["bike_type"]
@@ -26,7 +28,9 @@ const isNewDevice = ({deviceModelMapping, event, device, model}) => {
     return false
   }
 
-  return !isNilOrEmpty(model) && deviceModelMappingMismatch({device, deviceModelMapping, model})
+  const model = getModel(event)
+
+  return !isNilOrEmpty(model) && deviceModelMappingMismatch({device: getDevice(event), deviceModelMapping, model})
 }
 
 const isSuccessfulRequest = apiResponse => {
@@ -42,12 +46,12 @@ export const getDeviceInfoHandler = async appContext => {
 
   return {
     updateDeviceInfo: async event => {
-      const device = event.device_uuid
-      const model = getModel(event)
-
-      if (!isNewDevice({deviceModelMapping, event, device, model})) {
+      if (!isNewDevice({deviceModelMapping, event})) {
         return deviceModelMapping
       }
+
+      const device = getDevice(event)
+      const model = getModel(event)
 
       const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
 
