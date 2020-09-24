@@ -72,7 +72,6 @@ describe("Parse GCP message", () => {
     clearEnv()
   })
 
-  // TODO: One test is failing under CHOMA_SEED=le9gUHD4Oz. Fix it.
   describe("gen1 parsing", () => {
     beforeEach(() => {
       setEnv({

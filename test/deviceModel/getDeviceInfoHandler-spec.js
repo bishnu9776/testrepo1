@@ -9,7 +9,11 @@ import {getDeviceInfoHandler} from "../../src/deviceModel/getDeviceInfoHandler"
 import {clearEnv} from "../utils"
 import {getMockLog} from "../stubs/logger"
 import {clearStub} from "../stubs/clearStub"
-import {mockDeviceRulesPutSuccess} from "../apiResponseMocks/mockDeviceRulesResponse"
+import {
+  mockDeviceRulesPutFailure,
+  mockDeviceRulesPutSuccess,
+  mockDeviceRulesPutSuccessAfterFailure
+} from "../apiResponseMocks/mockDeviceRulesResponse"
 
 describe("Update device info", () => {
   const {env} = process
@@ -32,33 +36,13 @@ describe("Update device info", () => {
     env.VI_VALUE_KEY = "value"
     env.VI_DATAITEM_MODEL_LIST = "bike_type,model"
     env.VI_PLANT = "ather"
-    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices" // TODO: See if we can update nock to use only url instead of url + endpoint
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
     env.VI_DEVICE_RULES_DEVICE_URL = "https://svc-device-rules.com/device-rules/device"
   })
 
   afterEach(() => {
     clearEnv()
     clearStub()
-  })
-
-  describe("Combination scenarios between updates to device model and updates to device rules", () => {
-    beforeEach(() => {
-      mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
-    })
-    //
-    // it("updates rules and device model if both APIs are up", () => {
-    //   const events = [
-    //     {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"},
-    //     {device_uuid: "device-2", value: "GEN2_450x", data_item_name: "bike_type"},
-    //     {device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"}
-    //   ]
-    //
-    //
-    // })
-
-    it("does not update external device model and in-memory device model if rule update API fails", () => {})
-
-    it("retries both updating device rules and devide model if device registry API fails", () => {})
   })
 
   describe("Updates to device model", () => {
@@ -92,6 +76,7 @@ describe("Update device info", () => {
         )
 
         const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+        // eslint-disable-next-line sonarjs/no-identical-functions
         return Promise.all(events.map(updateDeviceInfo)).then(() => {
           expect(getUpdatedDeviceModelMapping()).to.eql({
             "device-1": "450plus",
@@ -230,6 +215,81 @@ describe("Update device info", () => {
           expect(log.warn.callCount).to.eql(0)
         })
       })
+    })
+  })
+
+  describe("When device rules API is down", () => {
+    beforeEach(() => {
+      mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
+    })
+
+    it("does not attempt to update device registry if device rules update fails with non-retryable error", async () => {
+      mockDeviceRulesPutFailure({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        failureStatusCode: 400
+      })
+      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}
+
+      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+      await updateDeviceInfo(event)
+      expect(getUpdatedDeviceModelMapping()).to.eql({})
+      expect(log.warn.callCount).to.eql(1)
+      expect(log.warn).to.have.been.calledWithMatch("Failed to update rules for device: device-1 with model: 450plus")
+    })
+
+    it("retry's device rules and device model update if API fails with retryable error", async () => {
+      mockDeviceRulesPutSuccessAfterFailure({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        failureStatusCode: 503,
+        numFailures: 1
+      })
+
+      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}
+
+      mockDeviceRegistryPutSuccessAfterFailure(
+        deviceRegistryUrl,
+        `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`,
+        {model: "450plus"},
+        503,
+        1,
+        {}
+      )
+
+      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+      await updateDeviceInfo(event)
+
+      expect(getUpdatedDeviceModelMapping()).to.eql({
+        "device-1": "450plus"
+      })
+
+      expect(log.warn.callCount).to.eql(2)
+      expect(log.warn).to.have.been.calledWithMatch(
+        {
+          ctx: {
+            requestConfig: JSON.stringify({
+              url: "https://svc-device-rules.com/device-rules/device/device-1/450plus",
+              method: "PUT",
+              timeout: 30000
+            })
+          }
+        },
+        "Retrying request. Retry Count: 1"
+      )
+      expect(log.warn).to.have.been.calledWithMatch(
+        {
+          ctx: {
+            requestConfig: JSON.stringify({
+              url: "https://svc-device-registry.com/device-registry/devices/device-1",
+              method: "PUT",
+              data: {model: "450plus"},
+              timeout: 30000
+            })
+          }
+        },
+        "Retrying request. Retry Count: 1"
+      )
     })
   })
 })

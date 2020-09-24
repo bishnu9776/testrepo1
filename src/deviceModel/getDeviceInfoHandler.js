@@ -11,7 +11,7 @@ const extractModel = value => {
 }
 
 const getModel = event => {
-  const valueKey = process.env.VI_VALUE_KEY || "value_event" // TODO: Better name. This env var should reflect that it is value key for the data item being used to update model
+  const valueKey = process.env.VI_VALUE_KEY || "value_event"
   return event && event[valueKey] ? extractModel(event[valueKey]) : null
 }
 
@@ -59,7 +59,7 @@ export const getDeviceInfoHandler = async appContext => {
 
       if (!isSuccessfulRequest(deviceRulesResponse)) {
         log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
-          error: errorFormatter(deviceModelResponse.error)
+          error: errorFormatter(deviceRulesResponse.error)
         })
         return deviceModelMapping
       }
