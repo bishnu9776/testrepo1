@@ -1,7 +1,7 @@
-import {errorFormatter} from "../utils/errorFormatter"
-import {delayAndExit} from "../utils/delayAndExit"
+import {errorFormatter} from "./errorFormatter"
+import {delayAndExit} from "./delayAndExit"
 
-export const loadProbe = (filePath, log) => {
+export const loadFileFromAbsolutePath = (filePath, log) => {
   try {
     return require(filePath) // eslint-disable-line global-require, import/no-dynamic-require
   } catch (e) {

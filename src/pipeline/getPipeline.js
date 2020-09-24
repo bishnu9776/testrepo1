@@ -8,7 +8,7 @@ import {ACK_MSG_TAG} from "../constants"
 import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
-import {loadProbe} from "./loadProbe"
+import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 import {getProbeAppender} from "../getProbeAppender"
@@ -36,7 +36,7 @@ const defaultObserver = log => ({
 
 export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
   const {log} = appContext
-  const probe = loadProbe(probePath, log)
+  const probe = loadFileFromAbsolutePath(probePath, log)
 
   const {stream} = source
 
@@ -55,9 +55,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
       tap(updateDeviceInfo),
-      filter(e => {
-        return isModelPresentForDevice({deviceModelMapping: getUpdatedDeviceModelMapping(), log})(e)
-      }),
+      filter(isModelPresentForDevice({deviceModelMapping: getUpdatedDeviceModelMapping(), log})),
       mergeMap(event => from(appendProbeOnNewDevice(event))),
       sendToKafka,
       tap(event => {
