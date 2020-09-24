@@ -8,9 +8,8 @@ export const getDeviceModelUpdater = ({log, retryConfig}) => {
   const deviceRegistryUrl = env.VI_DEVICE_REGISTRY_DEVICES_URL
 
   return async ({device, model}) => {
-    const endpoint = `${deviceRegistryUrl}/${device}`
     const requestConfig = {
-      url: endpoint,
+      url: `${deviceRegistryUrl}/${device}`,
       method: "PUT",
       data: {model},
       headers: {

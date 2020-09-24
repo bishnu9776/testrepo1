@@ -4,7 +4,7 @@ import {
   mockDeviceRegistryPostSuccessResponse,
   mockDeviceRegistryPutFailureResponse,
   mockDeviceRegistryPutSuccessResponse
-} from "../utils/mockDeviceRegistryResponse"
+} from "../apiResponseMocks/mockDeviceRegistryResponse"
 import {getDeviceInfoHandler} from "../../src/deviceModel/getDeviceInfoHandler"
 import {clearEnv} from "../utils"
 import {getMockLog} from "../stubs/logger"
@@ -13,19 +13,13 @@ import {clearStub} from "../stubs/clearStub"
 describe("Update device info", () => {
   const {env} = process
   const deviceRegistryUrl = "https://svc-device-registry.com/device-registry"
-  const endpoint = "/devices"
-  const deviceRulesUrl = "https://svc-device-rules.com/rules/device/"
+  const deviceRegistryDevicesEndpoint = "/devices"
   let log
   let appContext
   beforeEach(() => {
     nock.cleanAll()
     log = getMockLog()
     appContext = {
-      apiConfig: {
-        plant: "ather",
-        deviceRegistryUrl: `${deviceRegistryUrl}${endpoint}`,
-        deviceRulesUrl
-      },
       log
     }
     env.VI_ATHER_COLLECTOR_MAX_RETRIES = 2
@@ -63,19 +57,19 @@ describe("Update device info", () => {
       ]
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         putRequestBody1,
         "ok"
       )
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[1].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[1].device_uuid}`,
         putRequestBody2,
         "ok"
       )
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[2].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[2].device_uuid}`,
         putRequestBody2,
         "ok"
       )
@@ -99,18 +93,18 @@ describe("Update device info", () => {
       ]
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         putRequestBody,
         "ok"
       )
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[1].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[1].device_uuid}`,
         {model: "450x"},
         "ok"
       )
       const event = {device_uuid: "device-5", value: "450plus", data_item_name: "model"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
+      const putUrl = `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`
       mockDeviceRegistryPutSuccessResponse(deviceRegistryUrl, putUrl, putRequestBody, putRequestBody)
       const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
@@ -132,7 +126,7 @@ describe("Update device info", () => {
 
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         putRequestBody,
         "ok"
       )
@@ -153,13 +147,13 @@ describe("Update device info", () => {
       ]
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         {model: "450plus"},
         "ok"
       )
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         {model: "450x"},
         "ok"
       )
@@ -181,12 +175,12 @@ describe("Update device info", () => {
       ]
       mockDeviceRegistryPutSuccessResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         putRequestBody,
         "ok"
       )
       const event = {device_uuid: "device-5", value: "450plus", data_item_name: "model"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
+      const putUrl = `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`
       mockDeviceRegistryPutSuccessResponse(deviceRegistryUrl, putUrl, putRequestBody, putRequestBody)
       const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
 
@@ -207,7 +201,7 @@ describe("Update device info", () => {
       ]
       mockDeviceRegistryPutFailureResponse(
         deviceRegistryUrl,
-        `${endpoint}/${events[0].device_uuid}`,
+        `${deviceRegistryDevicesEndpoint}/${events[0].device_uuid}`,
         putRequestBody,
         400,
         1,
@@ -227,7 +221,7 @@ describe("Update device info", () => {
       mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
       const putRequestBody = {model: "450"}
       const event = {device_uuid: "device-6", value: "GEN2_450", data_item_name: "bike_type"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
+      const putUrl = `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`
       mockDeviceRegistryPutFailureResponse(deviceRegistryUrl, putUrl, putRequestBody, 400, 1, {})
       const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
       await updateDeviceInfo(event)
@@ -240,7 +234,7 @@ describe("Update device info", () => {
       const putRequestBody = {model: "450"}
 
       const event = {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
+      const putUrl = `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`
       mockDeviceRegistryPutFailureResponse(deviceRegistryUrl, putUrl, putRequestBody, 503, 2, {})
       const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
       await updateDeviceInfo(event)
@@ -253,7 +247,7 @@ describe("Update device info", () => {
       const putRequestBody = {model: "450"}
 
       const event = {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"}
-      const putUrl = `${endpoint}/${event.device_uuid}`
+      const putUrl = `${deviceRegistryDevicesEndpoint}/${event.device_uuid}`
       mockDeviceRegistryPutFailureResponse(deviceRegistryUrl, putUrl, putRequestBody, 503, 3, {})
       const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
       await updateDeviceInfo(event)

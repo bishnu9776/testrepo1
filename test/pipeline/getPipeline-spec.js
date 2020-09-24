@@ -10,7 +10,7 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
-import {mockDeviceRegistryPostSuccessResponse} from "../utils/mockDeviceRegistryResponse"
+import {mockDeviceRegistryPostSuccessResponse} from "../apiResponseMocks/mockDeviceRegistryResponse"
 
 const {env} = process
 

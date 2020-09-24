@@ -3,9 +3,11 @@ import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
-const fetchDeviceModelInfo = async ({apiConfig, log}) => {
-  const {plant, deviceRegistryUrl} = apiConfig
+const {env} = process
 
+const fetchDeviceModelInfo = async ({log}) => {
+  const plant = env.VI_PLANT
+  const deviceRegistryUrl = env.VI_DEVICE_REGISTRY_DEVICES_URL
   const requestConfig = {
     url: deviceRegistryUrl,
     method: "post",
@@ -25,7 +27,7 @@ const fetchDeviceModelInfo = async ({apiConfig, log}) => {
 
 export const getDeviceModelMapping = async appContext => {
   const {log} = appContext
-  const {ok, response, error} = await fetchDeviceModelInfo(appContext)
+  const {ok, response, error} = await fetchDeviceModelInfo({log})
   if (ok && response.data) {
     const deviceProperties = response.data
     const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {

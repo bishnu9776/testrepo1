@@ -2,7 +2,7 @@ import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 import {getDeviceModelUpdater} from "./getDeviceModelUpdater"
-import {updateDeviceRules} from "./updateDeviceRules"
+import {getDeviceRulesUpdater} from "./getDeviceRulesUpdater"
 import {getDeviceModelMapping} from "./getDeviceModelMapping"
 
 const extractModel = value => {
@@ -44,6 +44,7 @@ export const getDeviceInfoHandler = async appContext => {
   const retryConfig = getRetryConfig(log, isRetryable)
   const deviceModelMapping = await getDeviceModelMapping(appContext)
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
+  const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
 
   return {
     updateDeviceInfo: async event => {
