@@ -53,15 +53,6 @@ export const getDeviceInfoHandler = async appContext => {
       const device = getDevice(event)
       const model = getModel(event)
 
-      const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
-
-      if (!isSuccessfulRequest(deviceModelResponse)) {
-        log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
-          error: errorFormatter(deviceModelResponse.error)
-        })
-        return deviceModelMapping
-      }
-
       const deviceRulesResponse = await updateDeviceRules({device, rulesetName: model, appContext, retryConfig})
 
       if (!isSuccessfulRequest(deviceRulesResponse)) {
@@ -70,6 +61,15 @@ export const getDeviceInfoHandler = async appContext => {
         })
         return deviceModelMapping
         // eslint-disable-next-line no-param-reassign
+      }
+
+      const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
+
+      if (!isSuccessfulRequest(deviceModelResponse)) {
+        log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
+          error: errorFormatter(deviceModelResponse.error)
+        })
+        return deviceModelMapping
       }
 
       deviceModelMapping[device] = model
