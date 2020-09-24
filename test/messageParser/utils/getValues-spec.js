@@ -40,7 +40,6 @@ describe("getValues spec", () => {
       const log = getMockLog()
       const getValues = getValuesFn(probe, log)
       expect(getValues({event, probe, log, dataItemName: "without_probe"})).to.be.equal("1")
-      expect(log.warn).to.have.been.calledWith("Data item: without_probe is not present in the probe.")
     })
 
     it("should take schema as string and return stringified value when probe doesn't have values_schema", () => {

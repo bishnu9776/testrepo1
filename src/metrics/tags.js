@@ -10,7 +10,7 @@ const getDeviceUuid = message => {
   return path(["attributes", "bike_id"], message) || path(["attributes", "db_id"], message)
 }
 
-export const getGCPMessageTags = message => {
+export const getMessageTags = message => {
   const channel = getChannel(message)
   const device_uuid = getDeviceUuid(message) // eslint-disable-line
   return debugStats

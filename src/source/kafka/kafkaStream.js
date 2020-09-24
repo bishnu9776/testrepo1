@@ -1,5 +1,6 @@
 import {errorFormatter} from "../../utils/errorFormatter"
 import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
+import {getMessageTags} from "../../metrics/tags"
 
 const getAttributes = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
@@ -28,7 +29,7 @@ export const kafkaStream = (appContext, observer) => {
           metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
           throw new Error(`Invalid Event value, event:${JSON.stringify(event)}`)
         }
-        metricRegistry.updateStat("Counter", "num_messages_received", 1)
+        metricRegistry.updateStat("Counter", "num_messages_received", 1, getMessageTags({attributes}))
         observer.next({
           message: {
             data: event.value,
