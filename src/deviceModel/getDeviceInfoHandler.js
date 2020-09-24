@@ -3,7 +3,7 @@ import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
 import {getDeviceModelUpdater} from "./getDeviceModelUpdater"
 import {getDeviceRulesUpdater} from "./getDeviceRulesUpdater"
-import {getDeviceModelMapping} from "./getDeviceModelMapping"
+import {fetchDeviceModelMapping} from "./fetchDeviceModelMapping"
 
 const extractModel = value => {
   const split = value.split("_")
@@ -42,7 +42,7 @@ export const getDeviceInfoHandler = async appContext => {
   const {log} = appContext
   const isRetryable = is5xxError
   const retryConfig = getRetryConfig(log, isRetryable)
-  const deviceModelMapping = await getDeviceModelMapping(appContext)
+  const deviceModelMapping = await fetchDeviceModelMapping(appContext)
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
 

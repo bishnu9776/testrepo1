@@ -5,7 +5,7 @@ import {errorFormatter} from "../utils/errorFormatter"
 
 const {env} = process
 
-const fetchDeviceModelInfo = async ({log}) => {
+const getDeviceModelMapping = async ({log}) => {
   const plant = env.VI_PLANT
   const deviceRegistryUrl = env.VI_DEVICE_REGISTRY_DEVICES_URL
   const requestConfig = {
@@ -25,9 +25,9 @@ const fetchDeviceModelInfo = async ({log}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-export const getDeviceModelMapping = async appContext => {
+export const fetchDeviceModelMapping = async appContext => {
   const {log} = appContext
-  const {ok, response, error} = await fetchDeviceModelInfo({log})
+  const {ok, response, error} = await getDeviceModelMapping({log})
   if (ok && response.data) {
     const deviceProperties = response.data
     const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {
