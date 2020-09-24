@@ -34,6 +34,8 @@ describe("Update device info", () => {
     env.VI_JWT = "dummysecret"
     env.VI_VALUE_KEY = "value"
     env.VI_DATAITEM_MODEL_LIST = "bike_type,model"
+    env.VI_PLANT = "ather"
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices" // TODO: Update nock to use only url instead of url + endpoint
   })
 
   afterEach(() => {

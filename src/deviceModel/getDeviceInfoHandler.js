@@ -1,7 +1,7 @@
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
-import {updateDeviceModel} from "./updateDeviceModel"
+import {getDeviceModelUpdater} from "./getDeviceModelUpdater"
 import {updateDeviceRules} from "./updateDeviceRules"
 import {getDeviceModelMapping} from "./getDeviceModelMapping"
 
@@ -43,6 +43,7 @@ export const getDeviceInfoHandler = async appContext => {
   const isRetryable = is5xxError
   const retryConfig = getRetryConfig(log, isRetryable)
   const deviceModelMapping = await getDeviceModelMapping(appContext)
+  const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
 
   return {
     updateDeviceInfo: async event => {
@@ -60,10 +61,9 @@ export const getDeviceInfoHandler = async appContext => {
           error: errorFormatter(deviceModelResponse.error)
         })
         return deviceModelMapping
-        // eslint-disable-next-line no-param-reassign
       }
 
-      const deviceModelResponse = await updateDeviceModel({appContext, device, model, retryConfig})
+      const deviceModelResponse = await updateDeviceModel({device, model})
 
       if (!isSuccessfulRequest(deviceModelResponse)) {
         log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {

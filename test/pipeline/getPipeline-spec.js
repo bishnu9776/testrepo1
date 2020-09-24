@@ -30,7 +30,9 @@ describe("Pipeline spec", () => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
-    process.env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_PLANT = "ather"
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
