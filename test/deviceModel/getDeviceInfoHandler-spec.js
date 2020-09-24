@@ -260,7 +260,7 @@ describe("Update device info", () => {
 
     describe("Device model mapping is non-empty on startup", () => {
       it("do not update if existing device model mapping for device is correct", async () => {
-        // Not mocking PUT request as we won't send updates since device registry is up to date
+        // Not mocking any PUT request as we won't send updates since device registry is up to date
         nock.cleanAll()
         mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [
           {device: "device-1", model: "450"},
@@ -269,7 +269,7 @@ describe("Update device info", () => {
 
         const events = [
           {device_uuid: "device-1", value: "GEN2_450", data_item_name: "bike_type"},
-          {device_uuid: "device-2", value: "GEN2_45x", data_item_name: "bike_type"}
+          {device_uuid: "device-2", value: "GEN2_450x", data_item_name: "bike_type"}
         ]
 
         const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
@@ -278,6 +278,7 @@ describe("Update device info", () => {
             "device-1": "450",
             "device-2": "450x"
           })
+          expect(log.warn.callCount).to.eql(0)
         })
       })
     })
