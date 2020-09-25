@@ -20,30 +20,49 @@ const getAttributes = (headers, metricRegistry) => {
   throw new Error(`Invalid headers`)
 }
 
-export const kafkaStream = (appContext, observer) => {
+const parseEvent = (appContext, event) => {
+  const {value, headers} = event
   const {log, metricRegistry} = appContext
-  return event => {
-    return new Promise(resolve => {
-      const acknowledgeMessage = () => resolve(event)
-      const {value, headers} = event
-      try {
-        const attributes = getAttributes(headers, metricRegistry)
-        if (event && isNilOrEmpty(value)) {
-          metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
-          throw new Error(`Invalid Event value, event:${JSON.stringify(event)}`)
-        }
-        metricRegistry.updateStat("Counter", "num_messages_received", 1, getMessageTags({attributes}))
-        observer.next({
-          message: {
-            data: event.value,
-            attributes
-          },
-          acknowledgeMessage
-        })
-      } catch (e) {
-        log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
-        resolve(event)
+  try {
+    const attributes = getAttributes(headers, metricRegistry)
+    if (event && isNilOrEmpty(value)) {
+      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
+      throw new Error(`Invalid Event value, event:${JSON.stringify(event)}`)
+    }
+    metricRegistry.updateStat("Counter", "num_messages_received", 1, getMessageTags({attributes}))
+    return {
+      message: {
+        data: event.value,
+        attributes
       }
+    }
+  } catch (e) {
+    log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
+    return e
+  }
+}
+
+export const kafkaStream = (appContext, observer) => {
+  const sendToObserver = (event, ack) => {
+    const acknowledgeMessage = isNilOrEmpty(ack) ? () => {} : ack
+    if (isNilOrEmpty(event)) {
+      observer.next({...event, acknowledgeMessage})
+    }
+  }
+
+  return batch => {
+    return new Promise(resolve => {
+      const acknowledgeMessage = event => {
+        // console.log("ACking")
+        return resolve(event)
+      }
+      const lastEvent = batch.pop()
+      batch.forEach(event => {
+        const parsedEvent = parseEvent(appContext, event)
+        sendToObserver(parsedEvent)
+      })
+      const parsedEvent = parseEvent(appContext, lastEvent)
+      sendToObserver(parsedEvent, acknowledgeMessage)
     })
   }
 }

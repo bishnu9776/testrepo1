@@ -35,7 +35,7 @@ describe("Kafka Stream", () => {
   it("send data on observable stream", () => {
     const stream = new Observable(observer => {
       const kafkaInput = getKafkaInput(kafkaEvent)
-      kafkaStream(appContext, observer)(kafkaInput)
+      kafkaStream(appContext, observer)([kafkaInput])
     })
 
     stream.subscribe(event => {
@@ -63,7 +63,7 @@ describe("Kafka Stream", () => {
       kafkaStream(
         appContext,
         observer
-      )(kafkaInput).then(() => {
+      )([kafkaInput]).then(() => {
         expect(appContext.log.warn).to.have.been.calledOnce
         expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
           "Counter",
@@ -96,7 +96,7 @@ describe("Kafka Stream", () => {
         appContext,
         observer
         // eslint-disable-next-line sonarjs/no-identical-functions
-      )(kafkaInput).then(() => {
+      )([kafkaInput]).then(() => {
         expect(appContext.log.warn).to.have.been.calledOnce
         expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
           "Counter",
@@ -118,7 +118,7 @@ describe("Kafka Stream", () => {
       kafkaStream(
         appContext,
         observer
-      )(inputWithInvalidData).then(() => {
+      )([inputWithInvalidData]).then(() => {
         expect(appContext.log.warn).to.have.been.calledOnce
         expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
           "Counter",
