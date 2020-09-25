@@ -2,12 +2,15 @@ import {errorFormatter} from "../../utils/errorFormatter"
 import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
 import {getMessageTags} from "../../metrics/tags"
 
+const isInvalidAttributes = attributes =>
+  isNilOrEmpty(attributes[2]) && isNilOrEmpty(attributes[5]) && isNilOrEmpty(attributes[5])
+
 const getAttributes = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
     const attributesObj = headers[0].inputTopic.toString().split(".")
-    if (isNilOrEmpty(attributesObj[2])) {
-      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "device_not_present")
-      throw new Error(`Device not present, topic: ${headers[0].inputTopic}`)
+    if (isInvalidAttributes(attributesObj)) {
+      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
+      throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
     }
     return {
       deviceId: attributesObj[2],

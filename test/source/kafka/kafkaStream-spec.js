@@ -40,16 +40,26 @@ describe("Kafka Stream", () => {
 
     stream.subscribe(event => {
       expect(event.message.data).to.eql(Buffer.from(kafkaEvent.value.data))
-      expect(event.message.attributes.deviceId).to.eql("foo")
+      expect(event.message.attributes.deviceId).to.eql("device-1")
+      expect(event.message.attributes.subFolder).to.eql("v1/logs")
     })
     stream.subscribe()
   })
 
   it("throw error when device is not present", done => {
-    // inputTopic = "/a/b/c"
-    const kafkaInputWithWrongTopic = {...kafkaEvent, headers: [{inputTopic: {data: [47, 97, 47, 98, 47, 99]}}]}
+    const topicBuffer = JSON.stringify(Buffer.from(".devices"))
+    const kafkaInputWithoutDevice = {
+      ...kafkaEvent,
+      headers: [
+        {
+          inputTopic: {
+            data: topicBuffer
+          }
+        }
+      ]
+    }
     const stream = new Observable(observer => {
-      const kafkaInput = getKafkaInput(kafkaInputWithWrongTopic)
+      const kafkaInput = getKafkaInput(kafkaInputWithoutDevice)
       kafkaStream(
         appContext,
         observer
@@ -59,7 +69,40 @@ describe("Kafka Stream", () => {
           "Counter",
           "num_events_dropped",
           1,
-          "device_not_present"
+          "invalid_attributes"
+        )
+        done()
+      })
+    })
+
+    stream.subscribe()
+  })
+
+  it("throw error when channel is not present", done => {
+    const topicBuffer = JSON.stringify(Buffer.from(".devices.device-1.events.v1"))
+    const kafkaInputWithoutChannel = {
+      ...kafkaEvent,
+      headers: [
+        {
+          inputTopic: {
+            data: topicBuffer
+          }
+        }
+      ]
+    }
+    const stream = new Observable(observer => {
+      const kafkaInput = getKafkaInput(kafkaInputWithoutChannel)
+      kafkaStream(
+        appContext,
+        observer
+        // eslint-disable-next-line sonarjs/no-identical-functions
+      )(kafkaInput).then(() => {
+        expect(appContext.log.warn).to.have.been.calledOnce
+        expect(appContext.metricRegistry.updateStat).to.have.been.calledWith(
+          "Counter",
+          "num_events_dropped",
+          1,
+          "invalid_attributes"
         )
         done()
       })
