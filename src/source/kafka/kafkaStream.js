@@ -38,14 +38,13 @@ const parseEvent = (appContext, event) => {
     }
   } catch (e) {
     log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
-    return e
   }
 }
 
 export const kafkaStream = (appContext, observer) => {
   const sendToObserver = (event, ack) => {
     const acknowledgeMessage = isNilOrEmpty(ack) ? () => {} : ack
-    if (isNilOrEmpty(event)) {
+    if (!isNilOrEmpty(event)) {
       observer.next({...event, acknowledgeMessage})
     }
   }
@@ -53,7 +52,6 @@ export const kafkaStream = (appContext, observer) => {
   return batch => {
     return new Promise(resolve => {
       const acknowledgeMessage = event => {
-        // console.log("ACking")
         return resolve(event)
       }
       const lastEvent = batch.pop()
