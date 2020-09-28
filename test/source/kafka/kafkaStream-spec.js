@@ -6,7 +6,7 @@ import {kafkaStream} from "../../../src/source/kafka/kafkaStream"
 import kafkaEvent from "../../fixtures/kafkaEvent.json"
 import {clearEnv} from "../../utils"
 
-describe.skip("Kafka Stream", () => {
+describe("Kafka Stream", () => {
   let appContext
 
   beforeEach(async () => {

@@ -20,7 +20,7 @@ const getAttributes = (headers, metricRegistry) => {
   throw new Error(`Invalid headers`)
 }
 
-const parseEvent = (appContext, event) => {
+const parseEvent = (appContext, event, resolve) => {
   const {value, headers} = event
   const {log, metricRegistry} = appContext
   try {
@@ -38,6 +38,7 @@ const parseEvent = (appContext, event) => {
     }
   } catch (e) {
     log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
+    resolve(event)
   }
 }
 
@@ -56,10 +57,10 @@ export const kafkaStream = (appContext, observer) => {
       }
       const lastEvent = batch.pop()
       batch.forEach(event => {
-        const parsedEvent = parseEvent(appContext, event)
+        const parsedEvent = parseEvent(appContext, event, resolve)
         sendToObserver(parsedEvent)
       })
-      const parsedEvent = parseEvent(appContext, lastEvent)
+      const parsedEvent = parseEvent(appContext, lastEvent, resolve)
       sendToObserver(parsedEvent, acknowledgeMessage)
     })
   }
