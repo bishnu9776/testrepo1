@@ -1,0 +1,342 @@
+{
+  "ureg": {
+    "data_item_name": "ureg",
+    "data_item_type": "NETWORK_DATA",
+    "category": "SAMPLE"
+  },
+  "signal_strength": {
+    "data_item_name": "signal_strength",
+    "data_item_type": "NETWORK_DATA",
+    "category": "SAMPLE"
+  },
+  "service_provider": {
+    "data_item_name": "service_provider",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "sim_status": {
+    "data_item_name": "sim_status",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "nwk_iface_type": {
+    "data_item_name": "nwk_iface_type",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "ppp_ip": {
+    "data_item_name": "ppp_ip",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "eth_ip": {
+    "data_item_name": "eth_ip",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "data_usage": {
+    "data_item_name": "data_usage",
+    "data_item_type": "NETWORK_DATA",
+    "category": "SAMPLE"
+  },
+  "reset_type": {
+    "data_item_name": "reset_type",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "pod1_session_id": {
+    "data_item_name": "pod1_session_id",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "pod2_session_id": {
+    "data_item_name": "pod2_session_id",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "pod3_session_id": {
+    "data_item_name": "pod3_session_id",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "mac_address": {
+    "data_item_name": "mac_address",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "mender_artifact_ver": {
+    "data_item_name": "mender_artifact_ver",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "rms_firmware_version": {
+    "data_item_name": "rms_firmware_version",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "obc_firmware_version": {
+    "data_item_name": "obc_firmware_version",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "gsm_modem_status": {
+    "data_item_name": "gsm_modem_status",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "reset_cause": {
+    "data_item_name": "reset_cause",
+    "data_item_type": "DB_INFO",
+    "category": "EVENT"
+  },
+  "phase1_voltage": {
+    "data_item_name": "phase1_voltage",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase2_voltage": {
+    "data_item_name": "phase2_voltage",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase3_voltage": {
+    "data_item_name": "phase3_voltage",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase1_power": {
+    "data_item_name": "phase1_power",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase2_power": {
+    "data_item_name": "phase2_power",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase3_power": {
+    "data_item_name": "phase3_power",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase1_current": {
+    "data_item_name": "phase1_current",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase2_current": {
+    "data_item_name": "phase2_current",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "phase3_current": {
+    "data_item_name": "phase3_current",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "frequency": {
+    "data_item_name": "frequency",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "rms_uptime": {
+    "data_item_name": "rms_uptime",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "energy_consumed_in_24hours": {
+    "data_item_name": "energy_consumed_in_24hours",
+    "data_item_type": "RMS_DATA",
+    "category": "SAMPLE"
+  },
+  "temp_sensor1": {
+    "data_item_name": "temp_sensor1",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "temp_sensor2": {
+    "data_item_name": "temp_sensor2",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "temp_sensor3": {
+    "data_item_name": "temp_sensor3",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "temp_sensor4": {
+    "data_item_name": "temp_sensor4",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "temp_sensor5": {
+    "data_item_name": "temp_sensor5",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "dc_voltage": {
+    "data_item_name": "dc_voltage",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "dc_current": {
+    "data_item_name": "dc_current",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "db_error_code": {
+    "data_item_name": "db_error_code",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "cpu_temperature": {
+    "data_item_name": "cpu_temperature",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "pod1_charging_state": {
+    "data_item_name": "pod1_charging_state",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "db_fan_state": {
+    "data_item_name": "db_fan_state",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "obc_mode": {
+    "data_item_name": "obc_mode",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "is_rms_live": {
+    "data_item_name": "is_rms_live",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "earth_state": {
+    "data_item_name": "earth_state",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "system_uptime": {
+    "data_item_name": "system_uptime",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "load_avarage": {
+    "data_item_name": "load_avarage",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "cpu_usage": {
+    "data_item_name": "cpu_usage",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "ram_usage": {
+    "data_item_name": "ram_usage",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "POD_Uptime": {
+    "data_item_name": "POD_Uptime",
+    "data_item_type": "DB_DATA",
+    "category": "SAMPLE"
+  },
+  "phase1_error": {
+    "data_item_name": "phase1_error",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "is_pod1_live": {
+    "data_item_name": "is_pod1_live",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "is_obc_live": {
+    "data_item_name": "is_obc_live",
+    "data_item_type": "DB_DATA",
+    "category": "EVENT"
+  },
+  "pod1_id": {
+    "data_item_name": "pod1_id",
+    "data_item_type": "POD_INFO",
+    "category": "EVENT"
+  },
+  "pod1_firmware_version": {
+    "data_item_name": "pod1_firmware_version",
+    "data_item_type": "POD_INFO",
+    "category": "EVENT"
+  },
+  "pod1_hardware_version": {
+    "data_item_name": "pod1_hardware_version",
+    "data_item_type": "POD_INFO",
+    "category": "EVENT"
+  },
+  "POD_AC_Voltage": {
+    "data_item_name": "POD_AC_Voltage",
+    "data_item_type": "CAN",
+    "category": "SAMPLE"
+  },
+  "POD_AC_Current": {
+    "data_item_name": "POD_AC_Current",
+    "data_item_type": "CAN",
+    "category": "SAMPLE"
+  },
+  "POD_DpmStatus": {
+    "data_item_name": "POD_DpmStatus",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_AtherStatus": {
+    "data_item_name": "POD_AtherStatus",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_FastStatus": {
+    "data_item_name": "POD_FastStatus",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_IrStatus": {
+    "data_item_name": "POD_IrStatus",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_AC_OverVoltageFault": {
+    "data_item_name": "POD_AC_OverVoltageFault",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_DC_Voltage": {
+    "data_item_name": "POD_DC_Voltage",
+    "data_item_type": "CAN",
+    "category": "SAMPLE"
+  },
+  "POD_InternalTemp": {
+    "data_item_name": "POD_InternalTemp",
+    "data_item_type": "CAN",
+    "category": "SAMPLE"
+  },
+  "POD_CP_Volts": {
+    "data_item_name": "POD_CP_Volts",
+    "data_item_type": "CAN",
+    "category": "SAMPLE"
+  },
+  "POD_UserLedColour": {
+    "data_item_name": "POD_UserLedColour",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "POD_ResponseReason": {
+    "data_item_name": "POD_ResponseReason",
+    "data_item_type": "CAN",
+    "category": "EVENT"
+  },
+  "session": {
+    "data_item_name": "session",
+    "data_item_type": "SESSION",
+    "category": "EVENT"
+  }
+}
