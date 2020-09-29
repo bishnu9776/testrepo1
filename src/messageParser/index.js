@@ -6,6 +6,7 @@ import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
 import {getAttributesFormatter} from "./formatAttributes"
 import {getChannelParser} from "./channelParser"
+import {getGCPMessageTags} from "../metrics/tags"
 
 const {env} = process
 
@@ -49,6 +50,7 @@ export const getMessageParser = ({appContext, probe}) => {
     try {
       const attributes = formatAttributes(message.attributes)
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
+        metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getGCPMessageTags(message))
         return endOfEvent
       }
 
