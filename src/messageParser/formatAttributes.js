@@ -19,7 +19,7 @@ const attributesFormatter = {
   },
   ci: attributes => {
     if (attributes.channel === "can") {
-      return {...attributes, bike_id: attributes.db_id}
+      return {...attributes, bike_id: attributes.db_id || attributes.bike_id}
     }
     return attributes
   }
