@@ -15,12 +15,8 @@ export const startPipelines = async () => {
   }
   const kafkaProducer = await createProducer(kafkaProps)
   const metricRegistry = getMetricRegistry(log)
-  const apiConfig = {
-    plant: env.VI_PLANT || "ather",
-    url: env.VI_SVC_DEVICE_REGISTRY_URL || "https://svc-device-registry.com/device-registry/devices"
-  }
 
-  const appContext = {log, metricRegistry, apiConfig}
+  const appContext = {log, metricRegistry}
 
   metricRegistry.startStatsReporting()
   collectProcessStats(metricRegistry)

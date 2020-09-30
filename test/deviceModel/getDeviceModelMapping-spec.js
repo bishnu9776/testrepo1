@@ -1,9 +1,9 @@
 import nock from "nock"
-import {createDeviceModelMapping} from "../../src/deviceModel/createDeviceModelMapping"
+import {fetchDeviceModelMapping} from "../../src/deviceModel/fetchDeviceModelMapping"
 import {
   mockDeviceRegistryPostSuccessAfterFailure,
   mockDeviceRegistryPostSuccessResponse
-} from "../utils/mockDeviceRegistryResponse"
+} from "../apiResponseMocks/mockDeviceRegistryResponse"
 import {getMockLog} from "../stubs/logger"
 import {clearEnv} from "../utils"
 import {clearStub} from "../stubs/clearStub"
@@ -13,10 +13,6 @@ describe("create device Model Mapping", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   let log
-  const apiConfig = {
-    plant: "test",
-    url: `${url}${endpoint}`
-  }
 
   beforeEach(() => {
     log = getMockLog()
@@ -24,6 +20,8 @@ describe("create device Model Mapping", () => {
     env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
     env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
     env.VI_JWT = "dummysecret"
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
+    env.VI_PLANT = "ather"
   })
 
   afterEach(() => {
@@ -32,13 +30,13 @@ describe("create device Model Mapping", () => {
     nock.cleanAll()
   })
 
-  it("create devices mapping", async () => {
+  it("fetches devices mapping", async () => {
     const response = [
       {device: "device-1", model: "A"},
       {device: "device-2", model: "B"}
     ]
     mockDeviceRegistryPostSuccessResponse(url, endpoint, response)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await fetchDeviceModelMapping({log})
     expect(deviceMapping).to.eql({"device-1": "A", "device-2": "B"})
   })
 
@@ -49,7 +47,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "B"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 400)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await fetchDeviceModelMapping({log})
     expect(deviceMapping).to.eql({})
     expect(log.warn).to.have.been.calledOnce
   })
@@ -60,7 +58,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "B"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 1, 503)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await fetchDeviceModelMapping({log})
     expect(deviceMapping).to.eql({"device-a": "A", "device-b": "B"})
     expect(log.warn).to.have.been.calledOnce
   })
@@ -71,7 +69,7 @@ describe("create device Model Mapping", () => {
       {device: "device-b", model: "A"}
     ]
     mockDeviceRegistryPostSuccessAfterFailure(url, endpoint, response, 3, 503)
-    const deviceMapping = await createDeviceModelMapping({apiConfig, log})
+    const deviceMapping = await fetchDeviceModelMapping({log})
     expect(deviceMapping).to.eql({})
     expect(log.warn).to.have.been.calledThrice
     expect(log.error).to.have.been.calledOnce
