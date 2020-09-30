@@ -65,6 +65,8 @@ export const getDeviceInfoHandler = async appContext => {
         }
       }
 
+      log.info(`Successfully updated rules for device: ${device} with model: ${model}`)
+
       const deviceModelResponse = await updateDeviceModel({device, model})
 
       if (!isSuccessfulRequest(deviceModelResponse)) {
@@ -73,6 +75,8 @@ export const getDeviceInfoHandler = async appContext => {
         })
         return deviceModelMapping
       }
+
+      log.info(`Successfully updated device registry for device: ${device} with model: ${model}`)
 
       deviceModelMapping[device] = model
       return deviceModelMapping
