@@ -1,7 +1,7 @@
 import {omit} from "ramda"
 import probe from "./fixtures/probe.json"
 import {clearEnv} from "./utils"
-import {getUpdateProbe} from "../src/getUpdateProbe"
+import {getProbeAppender} from "../src/getProbeAppender"
 
 describe("it should update probe", () => {
   const {env} = process
@@ -82,7 +82,7 @@ describe("it should update probe", () => {
   }
 
   it("should send probe for a new device", () => {
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     const probeWithoutTimestamp = omit(["timestamp", "creation_time", "received_at"], probeData)
@@ -91,14 +91,14 @@ describe("it should update probe", () => {
 
   it("should not send probe for a new device, when VI_SHOULD_SEND_PROBE is false", () => {
     env.VI_SHOULD_SEND_PROBE = "false"
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     expect(probeData).to.be.undefined
   })
 
   it("should not send probe for a device which it is already send before", () => {
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response1, probeData1] = updateProbe(event)
     const [response2, probeData2] = updateProbe(event)
     expect(response1).to.eql(event)
@@ -110,7 +110,7 @@ describe("it should update probe", () => {
 
   it("should send probe only for whitelisted dataitems", () => {
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     const dataItem = probeData.probe.data_items.data_item
@@ -121,7 +121,7 @@ describe("it should update probe", () => {
   it("probe should not contain keys specified in VI_KEYS_TO_DELETE_FROM_PROBE", () => {
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_KEYS_TO_DELETE_FROM_PROBE = "data_item_name,data_item_type,values_schema"
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     const dataItem = probeData.probe.data_items.data_item
@@ -133,7 +133,7 @@ describe("it should update probe", () => {
 
   it("should remove keys: (units,sub_type,subcomponent) if they have invalid values", () => {
     env.VI_PROBE_DATAITEM_WHITELIST = "message"
-    const updateProbe = getUpdateProbe({probe})
+    const updateProbe = getProbeAppender({probe})
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     const dataItem = probeData.probe.data_items.data_item

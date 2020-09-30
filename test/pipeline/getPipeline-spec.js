@@ -10,7 +10,7 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
-import {mockDeviceRegistryPostSuccessResponse} from "../utils/mockDeviceRegistryResponse"
+import {mockDeviceRegistryPostSuccessResponse} from "../apiResponseMocks/mockDeviceRegistryResponse"
 
 const {env} = process
 
@@ -21,22 +21,19 @@ describe("Pipeline spec", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   let log
-  const apiConfig = {
-    plant: "test",
-    url: `${url}${endpoint}`
-  }
 
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
-    process.env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_PLANT = "ather"
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
       metricRegistry: getMockMetricRegistry(),
-      log,
-      apiConfig
+      log
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
 
