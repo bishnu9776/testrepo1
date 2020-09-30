@@ -21,10 +21,6 @@ describe("Pipeline spec", () => {
   const url = "https://svc-device-registry.com/device-registry"
   const endpoint = "/devices"
   let log
-  const apiConfig = {
-    plant: "test",
-    deviceRegistryUrl: `${url}${endpoint}`
-  }
 
   beforeEach(() => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
@@ -37,8 +33,7 @@ describe("Pipeline spec", () => {
     log = getMockLog()
     appContext = {
       metricRegistry: getMockMetricRegistry(),
-      log,
-      apiConfig
+      log
     }
     probePath = `${process.cwd()}/test/fixtures/probe`
 

@@ -20,7 +20,7 @@ const getDevice = event => event.device_uuid
 const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
   !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
-const isNewDevice = ({deviceModelMapping, event}) => {
+const isNewDeviceOrUpdatedModel = ({deviceModelMapping, event}) => {
   const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST
     ? process.env.VI_DATAITEM_MODEL_LIST.split(",")
     : ["bike_type"]
@@ -48,7 +48,7 @@ export const getDeviceInfoHandler = async appContext => {
 
   return {
     updateDeviceInfo: async event => {
-      if (!isNewDevice({deviceModelMapping, event})) {
+      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event})) {
         return deviceModelMapping
       }
 

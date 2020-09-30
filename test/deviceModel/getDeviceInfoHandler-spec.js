@@ -36,8 +36,8 @@ describe("Update device info", () => {
     env.VI_VALUE_KEY = "value"
     env.VI_DATAITEM_MODEL_LIST = "bike_type,model"
     env.VI_PLANT = "ather"
-    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
-    env.VI_DEVICE_RULES_DEVICE_URL = "https://svc-device-rules.com/device-rules/device"
+    env.VI_DEVICE_REGISTRY_DEVICES_URL = `${deviceRegistryUrl}/devices`
+    env.VI_DEVICE_RULES_DEVICE_URL = `${deviceRulesUrl}/device`
   })
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe("Update device info", () => {
     clearStub()
   })
 
-  describe("Updates to device model", () => {
+  describe("Updates to device registry when device rules API is up", () => {
     describe("Device model mapping is empty on startup", () => {
       beforeEach(() => {
         mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
@@ -269,7 +269,7 @@ describe("Update device info", () => {
         {
           ctx: {
             requestConfig: JSON.stringify({
-              url: "https://svc-device-rules.com/device-rules/device/device-1/450plus",
+              url: `${deviceRulesUrl}/device/device-1/450plus`,
               method: "PUT",
               timeout: 30000
             })
@@ -281,7 +281,7 @@ describe("Update device info", () => {
         {
           ctx: {
             requestConfig: JSON.stringify({
-              url: "https://svc-device-registry.com/device-registry/devices/device-1",
+              url: `${deviceRegistryUrl}/devices/device-1`,
               method: "PUT",
               data: {model: "450plus"},
               timeout: 30000

@@ -69,7 +69,7 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
 export const getProbeAppender = ({probe}) => {
   const listOfDevices = []
   const whitelistedDataItems = env.VI_PROBE_DATAITEM_WHITELIST ? env.VI_PROBE_DATAITEM_WHITELIST.split(",") : []
-  const schemaVersion = env.VI_SCHEMA_VERSION || "3"
+  const schemaVersion = env.VI_SCHEMA_VERSION
   const shouldSendProbe = JSON.parse(env.VI_SHOULD_SEND_PROBE || "false")
 
   const formattedProbe = formatProbe(probe, whitelistedDataItems, schemaVersion)

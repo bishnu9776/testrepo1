@@ -20,10 +20,7 @@ export const getDeviceRulesUpdater = ({log, retryConfig}) => {
       },
       timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
     }
+
     return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
-    // return {
-    //   ok: true,
-    //   response: "okay"
-    // }
   }
 }
