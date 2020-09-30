@@ -49,7 +49,7 @@ describe("Update device info", () => {
   describe("Updates to device registry when device rules API is up", () => {
     describe("Device model mapping is empty on startup", () => {
       beforeEach(() => {
-        mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
+        mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [])
         mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`})
         mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-2/450x`})
         mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-3/450plus`})
@@ -197,7 +197,7 @@ describe("Update device info", () => {
       it("do not update if existing device model mapping for device is correct", async () => {
         // Not mocking any PUT request as we won't send updates since device registry is up to date
         nock.cleanAll()
-        mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [
+        mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [
           {device: "device-1", model: "450plus"},
           {device: "device-2", model: "450x"}
         ])
@@ -221,7 +221,7 @@ describe("Update device info", () => {
 
   describe("When device rules API is down", () => {
     beforeEach(() => {
-      mockDeviceRegistryPostSuccessResponse("https://svc-device-registry.com/device-registry", "/devices", [])
+      mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [])
     })
 
     it("does not attempt to update device registry if device rules update fails with non-retryable error", async () => {
