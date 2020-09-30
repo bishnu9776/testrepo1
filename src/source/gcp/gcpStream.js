@@ -2,7 +2,7 @@ import {PubSub} from "@google-cloud/pubsub"
 import {Observable} from "rxjs"
 import {errorFormatter} from "../../utils/errorFormatter"
 import {getSubscriberOptions} from "./config"
-import {getGCPMessageTags} from "../../metrics/tags"
+import {getInputMessageTags} from "../../metrics/tags"
 
 export const getGCPStream = ({subscriptionName, credentialsPath, projectId, appContext}) => {
   const {log, metricRegistry} = appContext
@@ -24,7 +24,7 @@ export const getGCPStream = ({subscriptionName, credentialsPath, projectId, appC
       const acknowledgeMessage = () => {
         msg.ack()
       }
-      metricRegistry.updateStat("Counter", "num_messages_received", 1, getGCPMessageTags(msg))
+      metricRegistry.updateStat("Counter", "num_messages_received", 1, getInputMessageTags(msg))
       observer.next({message: msg, acknowledgeMessage})
     })
 
