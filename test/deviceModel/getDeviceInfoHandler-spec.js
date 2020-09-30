@@ -38,6 +38,7 @@ describe("Update device info", () => {
     env.VI_PLANT = "ather"
     env.VI_DEVICE_REGISTRY_DEVICES_URL = `${deviceRegistryUrl}/devices`
     env.VI_DEVICE_RULES_DEVICE_URL = `${deviceRulesUrl}/device`
+    env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
   })
 
   afterEach(() => {

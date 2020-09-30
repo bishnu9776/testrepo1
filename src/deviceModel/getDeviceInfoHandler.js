@@ -21,9 +21,7 @@ const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
   !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
 const isNewDeviceOrUpdatedModel = ({deviceModelMapping, event}) => {
-  const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST
-    ? process.env.VI_DATAITEM_MODEL_LIST.split(",")
-    : ["bike_type"]
+  const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST ? process.env.VI_DATAITEM_MODEL_LIST.split(",") : []
   if (!modelDataItems.includes(event.data_item_name)) {
     return false
   }
@@ -45,6 +43,7 @@ export const getDeviceInfoHandler = async appContext => {
   const deviceModelMapping = await fetchDeviceModelMapping(appContext)
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
+  const shouldUpdateDeviceRules = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
 
   return {
     updateDeviceInfo: async event => {
@@ -55,13 +54,15 @@ export const getDeviceInfoHandler = async appContext => {
       const device = getDevice(event)
       const model = getModel(event)
 
-      const deviceRulesResponse = await updateDeviceRules({device, model})
+      if (shouldUpdateDeviceRules) {
+        const deviceRulesResponse = await updateDeviceRules({device, model})
 
-      if (!isSuccessfulRequest(deviceRulesResponse)) {
-        log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
-          error: errorFormatter(deviceRulesResponse.error)
-        })
-        return deviceModelMapping
+        if (!isSuccessfulRequest(deviceRulesResponse)) {
+          log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
+            error: errorFormatter(deviceRulesResponse.error)
+          })
+          return deviceModelMapping
+        }
       }
 
       const deviceModelResponse = await updateDeviceModel({device, model})
