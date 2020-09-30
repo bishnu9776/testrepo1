@@ -60,8 +60,8 @@ export const kafkaStream = (appContext, observer) => {
         const parsedEvent = parseEvent(appContext, event, resolve)
         sendToObserver(parsedEvent)
       })
-      const parsedEvent = parseEvent(appContext, lastEvent, resolve)
-      sendToObserver(parsedEvent, acknowledgeMessage)
+      const parsedLastEvent = parseEvent(appContext, lastEvent, resolve)
+      sendToObserver(parsedLastEvent, acknowledgeMessage)
     })
   }
 }
