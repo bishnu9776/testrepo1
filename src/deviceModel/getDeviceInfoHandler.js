@@ -53,8 +53,8 @@ export const getDeviceInfoHandler = async appContext => {
       const model = getModel(event)
 
       const shouldUpdateDeviceRules =
-        (shouldUpdateDeviceRulesEnv && isNewDeviceOrUpdatedModel({deviceModelMapping, event})) ||
-        deviceHasNoAssociatedRules(device)
+        shouldUpdateDeviceRulesEnv &&
+        (isNewDeviceOrUpdatedModel({deviceModelMapping, event}) || deviceHasNoAssociatedRules(device))
 
       if (shouldUpdateDeviceRules) {
         const deviceRulesResponse = await updateDeviceRules({device, model})
