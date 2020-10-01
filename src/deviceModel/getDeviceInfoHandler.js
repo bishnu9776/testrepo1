@@ -45,7 +45,7 @@ export const getDeviceInfoHandler = async appContext => {
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
   const shouldUpdateDeviceRulesEnv = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
   const deviceRules = {}
-  const deviceHasNoAssociatedRules = (device, model) => model && !deviceRules[device]
+  const deviceHasNoAssociatedRules = (device, model) => !!(model && !deviceRules[device])
 
   return {
     updateDeviceInfo: async event => {
@@ -55,7 +55,6 @@ export const getDeviceInfoHandler = async appContext => {
       const shouldUpdateDeviceRules =
         shouldUpdateDeviceRulesEnv &&
         (isNewDeviceOrUpdatedModel({deviceModelMapping, event}) || deviceHasNoAssociatedRules(device, model))
-      // TODO: Write test for device rules for null model
 
       if (shouldUpdateDeviceRules) {
         const deviceRulesResponse = await updateDeviceRules({device, model})

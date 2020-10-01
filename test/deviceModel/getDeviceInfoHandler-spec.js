@@ -237,16 +237,25 @@ describe("Update device info", () => {
     })
 
     it("should update device rules only once if model of bike remains same", async () => {
-      const events = [{device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}]
-      mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`})
+      const events = [
+        {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type", seq: 1},
+        {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type", seq: 2}
+      ]
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        numSuccesses: 1
+      })
 
       const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
-      return Promise.all(events.map(updateDeviceInfo)).then(() => {
-        expect(log.info).to.have.been.calledWithMatch(
-          "Successfully updated device rules for device: device-1 with model: 450plus"
-        )
-        expect(log.warn.callCount).to.eql(0)
-      })
+
+      await updateDeviceInfo(events[0])
+      await updateDeviceInfo(events[1])
+
+      expect(log.info).to.have.been.calledWithMatch(
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
+      expect(log.warn.callCount).to.eql(0)
     })
 
     it("should update device rules if model of bike changes", async () => {
@@ -254,8 +263,16 @@ describe("Update device info", () => {
         {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"},
         {device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"}
       ]
-      mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`})
-      mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/450x`})
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        numSuccesses: 1
+      })
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450x`,
+        numSuccesses: 1
+      })
 
       const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
       return Promise.all(events.map(updateDeviceInfo)).then(() => {
@@ -305,6 +322,12 @@ describe("Update device info", () => {
           "Successfully updated device rules for device: device-1 with model: 450x"
         )
       })
+    })
+
+    it("should not update device rules if model is invalid", async () => {
+      const event = {device_uuid: "device-1", data_item_name: "bike_type"}
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+      await updateDeviceInfo(event)
     })
   })
 
