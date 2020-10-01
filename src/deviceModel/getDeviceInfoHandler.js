@@ -43,16 +43,18 @@ export const getDeviceInfoHandler = async appContext => {
   const deviceModelMapping = await fetchDeviceModelMapping(appContext)
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
-  const shouldUpdateDeviceRules = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
+  const shouldUpdateDeviceRulesEnv = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
+  const deviceRules = {}
+  const deviceHasNoAssociatedRules = device => deviceRules[device]
 
   return {
     updateDeviceInfo: async event => {
-      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event})) {
-        return deviceModelMapping
-      }
-
       const device = getDevice(event)
       const model = getModel(event)
+
+      const shouldUpdateDeviceRules =
+        (shouldUpdateDeviceRulesEnv && isNewDeviceOrUpdatedModel({deviceModelMapping, event})) ||
+        deviceHasNoAssociatedRules(device)
 
       if (shouldUpdateDeviceRules) {
         const deviceRulesResponse = await updateDeviceRules({device, model})
@@ -61,11 +63,15 @@ export const getDeviceInfoHandler = async appContext => {
           log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
             error: errorFormatter(deviceRulesResponse.error)
           })
-          return deviceModelMapping
+        } else {
+          log.info(`Successfully updated device rules for device: ${device} with model: ${model}`)
+          deviceRules[device] = 1
         }
       }
 
-      log.info(`Successfully updated rules for device: ${device} with model: ${model}`)
+      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event})) {
+        return deviceModelMapping
+      }
 
       const deviceModelResponse = await updateDeviceModel({device, model})
 

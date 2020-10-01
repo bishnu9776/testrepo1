@@ -25,6 +25,13 @@ export const mockDeviceRegistryPutSuccess = (baseUrl, putUrl, requestBody, respo
   return nock(baseUrl).put(putUrl, requestBody).reply(200, response)
 }
 
+export const mockDeviceRegistryPutFailure = ({baseUrl, putUrl, requestBody, numFailures, failureStatusCode}) => {
+  return nock(baseUrl)
+    .put(putUrl, requestBody)
+    .times(numFailures)
+    .replyWithError({message: "Server error", statusCode: failureStatusCode})
+}
+
 export const mockDeviceRegistryPutSuccessAfterFailure = (
   baseUrl,
   putUrl,
