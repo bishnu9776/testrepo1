@@ -2,8 +2,8 @@
 import nock from "nock"
 import {
   mockDeviceRegistryPostSuccessResponse,
-  mockDeviceRegistryPutSuccessAfterFailure,
-  mockDeviceRegistryPutSuccess
+  mockDeviceRegistryPutSuccess,
+  mockDeviceRegistryPutSuccessAfterFailure
 } from "../apiResponseMocks/mockDeviceRegistryResponse"
 import {getDeviceInfoHandler} from "../../src/deviceModel/getDeviceInfoHandler"
 import {clearEnv} from "../utils"
@@ -38,7 +38,6 @@ describe("Update device info", () => {
     env.VI_PLANT = "ather"
     env.VI_DEVICE_REGISTRY_DEVICES_URL = `${deviceRegistryUrl}/devices`
     env.VI_DEVICE_RULES_DEVICE_URL = `${deviceRulesUrl}/device`
-    env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
   })
 
   afterEach(() => {
@@ -46,14 +45,14 @@ describe("Update device info", () => {
     clearStub()
   })
 
-  describe("Updates to device registry when device rules API is up", () => {
+  describe("Updates to device registry", () => {
+    beforeEach(() => {
+      env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
+    })
+
     describe("Device model mapping is empty on startup", () => {
       beforeEach(() => {
         mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [])
-        mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`})
-        mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-2/450x`})
-        mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-3/450plus`})
-        mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-3/450x`})
       })
 
       it("update device mapping on receiving new device with value in gen_model format", async () => {
@@ -195,7 +194,6 @@ describe("Update device info", () => {
 
     describe("Device model mapping is non-empty on startup", () => {
       it("do not update if existing device model mapping for device is correct", async () => {
-        // Not mocking any PUT request as we won't send updates since device registry is up to date
         nock.cleanAll()
         mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [
           {device: "device-1", model: "450plus"},
@@ -219,27 +217,126 @@ describe("Update device info", () => {
     })
   })
 
-  describe("When device rules API is down", () => {
+  describe("Updates to device rules", () => {
     beforeEach(() => {
+      env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
       mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [])
+      mockDeviceRegistryPutSuccess(
+        deviceRegistryUrl,
+        `${deviceRegistryDevicesEndpoint}/device-1`,
+        {model: "450plus"},
+        "ok"
+      )
+      mockDeviceRegistryPutSuccess(
+        deviceRegistryUrl,
+        `${deviceRegistryDevicesEndpoint}/device-1`,
+        {model: "450x"},
+        "ok"
+      )
     })
 
-    it("does not attempt to update device registry if device rules update fails with non-retryable error", async () => {
-      mockDeviceRulesPutFailure({
+    it("should update device rules only once if model of bike remains same", async () => {
+      const events = [
+        {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type", seq: 1},
+        {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type", seq: 2}
+      ]
+      mockDeviceRulesPutSuccess({
         baseUrl: deviceRulesUrl,
         putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
-        failureStatusCode: 400
+        numSuccesses: 1
       })
-      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}
 
-      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
-      await updateDeviceInfo(event)
-      expect(getUpdatedDeviceModelMapping()).to.eql({})
-      expect(log.warn.callCount).to.eql(1)
-      expect(log.warn).to.have.been.calledWithMatch("Failed to update rules for device: device-1 with model: 450plus")
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+
+      await updateDeviceInfo(events[0])
+      await updateDeviceInfo(events[1])
+
+      expect(log.info).to.have.been.calledWithMatch(
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
+      expect(log.warn.callCount).to.eql(0)
     })
 
-    it("retry's device rules and device model update if API fails with retryable error", async () => {
+    it("should update device rules if model of bike changes", async () => {
+      const events = [
+        {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"},
+        {device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"}
+      ]
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        numSuccesses: 1
+      })
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450x`,
+        numSuccesses: 1
+      })
+
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+      return Promise.all(events.map(updateDeviceInfo)).then(() => {
+        expect(log.info).to.have.been.calledWithMatch(
+          "Successfully updated device rules for device: device-1 with model: 450plus"
+        )
+        expect(log.info).to.have.been.calledWithMatch(
+          "Successfully updated device rules for device: device-1 with model: 450x"
+        )
+        expect(log.warn.callCount).to.eql(0)
+      })
+    })
+
+    it("if device rules request fails with non-retryable error, should retry updating devices rules on subsequent model event", async () => {
+      const events = [
+        {device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"},
+        {device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"}
+      ]
+      mockDeviceRulesPutSuccessAfterFailure({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450x`,
+        failureStatusCode: 400,
+        numFailures: 1
+      })
+
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+      return Promise.all(events.map(updateDeviceInfo)).then(() => {
+        expect(log.warn).to.have.been.calledWithMatch("Failed to update rules for device: device-1 with model: 450x")
+        expect(log.info).to.have.been.calledWithMatch(
+          "Successfully updated device rules for device: device-1 with model: 450x"
+        )
+      })
+    })
+
+    it("should retry if device rules request fails with retryable error", async () => {
+      const events = [{device_uuid: "device-1", value: "GEN2_450x", data_item_name: "bike_type"}]
+      mockDeviceRulesPutSuccessAfterFailure({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450x`,
+        failureStatusCode: 503,
+        numFailures: 2 // 2 is the max number of retries in retry config
+      })
+
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+      return Promise.all(events.map(updateDeviceInfo)).then(() => {
+        expect(log.info).to.have.been.calledWithMatch(
+          "Successfully updated device rules for device: device-1 with model: 450x"
+        )
+      })
+    })
+
+    it("should not update device rules if model is invalid", async () => {
+      const event = {device_uuid: "device-1", data_item_name: "bike_type"}
+      const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+      await updateDeviceInfo(event)
+    })
+  })
+
+  describe("Updates to device rules and device registry", () => {
+    beforeEach(() => {
+      mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [])
+      env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
+    })
+
+    it("retries and updates device rules and device registry correctly if both APIs are up", async () => {
       mockDeviceRulesPutSuccessAfterFailure({
         baseUrl: deviceRulesUrl,
         putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
@@ -290,6 +387,71 @@ describe("Update device info", () => {
           }
         },
         "Retrying request. Retry Count: 1"
+      )
+    })
+
+    it("does not update device registry if device rules fails with non-retryable error", async () => {
+      mockDeviceRulesPutFailure({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        failureStatusCode: 400
+      })
+      mockDeviceRegistryPutSuccess(
+        deviceRegistryUrl,
+        `${deviceRegistryDevicesEndpoint}/device-1`,
+        {model: "450plus"},
+        "ok"
+      )
+
+      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}
+
+      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+      await updateDeviceInfo(event)
+      expect(getUpdatedDeviceModelMapping()).to.eql({})
+      expect(log.warn.callCount).to.eql(1)
+      expect(log.warn).to.have.been.calledWithMatch("Failed to update rules for device: device-1 with model: 450plus")
+    })
+
+    it("updates only device rules if device registry fails with non-retryable error", async () => {
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        numSuccesses: 2
+      })
+
+      mockDeviceRegistryPutSuccessAfterFailure(
+        deviceRegistryUrl,
+        `${deviceRegistryDevicesEndpoint}/device-1`,
+        {model: "450plus"},
+        400,
+        1,
+        "ok"
+      )
+
+      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type"}
+
+      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+
+      await updateDeviceInfo(event)
+      expect(getUpdatedDeviceModelMapping()).to.eql({})
+      expect(log.warn.callCount).to.eql(1)
+      expect(log.warn).to.have.been.calledWithMatch(
+        "Failed to update device model mapping for device: device-1 with model: 450plus"
+      )
+
+      await updateDeviceInfo(event)
+      expect(getUpdatedDeviceModelMapping()).to.eql({
+        "device-1": "450plus"
+      })
+      expect(log.warn.callCount).to.eql(1)
+
+      sinon.assert.calledWithMatch(
+        log.info.getCall(3),
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
+      sinon.assert.calledWithMatch(
+        log.info.getCall(5),
+        "Successfully updated device rules for device: device-1 with model: 450plus"
       )
     })
   })
