@@ -444,6 +444,15 @@ describe("Update device info", () => {
         "device-1": "450plus"
       })
       expect(log.warn.callCount).to.eql(1)
+
+      sinon.assert.calledWithMatch(
+        log.info.getCall(3),
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
+      sinon.assert.calledWithMatch(
+        log.info.getCall(5),
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
     })
   })
 })
