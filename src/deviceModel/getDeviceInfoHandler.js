@@ -21,14 +21,14 @@ const deviceModelMappingMismatch = ({device, deviceModelMapping, model}) =>
   !deviceModelMapping[device] || deviceModelMapping[device] !== model
 
 const isNewDeviceOrUpdatedModel = ({deviceModelMapping, event}) => {
-  const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST ? process.env.VI_DATAITEM_MODEL_LIST.split(",") : []
-  if (!modelDataItems.includes(event.data_item_name)) {
-    return false
-  }
-
   const model = getModel(event)
 
   return !isNilOrEmpty(model) && deviceModelMappingMismatch({device: getDevice(event), deviceModelMapping, model})
+}
+
+const isModelDataItem = event => {
+  const modelDataItems = process.env.VI_DATAITEM_MODEL_LIST ? process.env.VI_DATAITEM_MODEL_LIST.split(",") : []
+  return modelDataItems.includes(event.data_item_name)
 }
 
 const isSuccessfulRequest = apiResponse => {
@@ -44,10 +44,17 @@ export const getDeviceInfoHandler = async appContext => {
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
   const shouldUpdateDeviceRules = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
+  const temporaryEnvToForceUpdateDeviceRules = JSON.parse(
+    process.env.VI_TEMPORARY_ENV_TO_FORCE_UPDATE_DEVICE_RULES || "false"
+  )
 
   return {
     updateDeviceInfo: async event => {
-      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event})) {
+      if (!isModelDataItem(event)) {
+        return deviceModelMapping
+      }
+
+      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event}) && !temporaryEnvToForceUpdateDeviceRules) {
         return deviceModelMapping
       }
 
