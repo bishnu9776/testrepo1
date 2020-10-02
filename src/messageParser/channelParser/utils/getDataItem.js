@@ -1,15 +1,13 @@
 import {getHexCANId} from "../bikeChannel/channelDecoder/utils/getHexCANId"
+import {getDataItemId} from "../../../utils/helpers"
 
 export const getDataItem = ({attributes, dataItemName, timestamp, value, sequence, canId, podId}) => {
-  const {version, bike_id: bikeId, channel} = attributes
-  const dataItemId = JSON.parse(process.env.VI_USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX || "false")
-    ? `${bikeId}-${dataItemName}`
-    : `${dataItemName}-${version}`
+  const {bike_id: bikeId, channel} = attributes
 
   return {
     device_uuid: bikeId,
     data_item_name: dataItemName,
-    data_item_id: dataItemId,
+    data_item_id: getDataItemId({dataItemName, deviceId: bikeId}),
     timestamp,
     value,
     ...(channel && {channel}),

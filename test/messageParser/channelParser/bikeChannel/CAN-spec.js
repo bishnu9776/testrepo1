@@ -20,6 +20,7 @@ describe("Parses CAN", () => {
       appContext = {log, metricRegistry}
       env.VI_SHOULD_DECODE_MESSAGE = "true"
       env.VI_CAN_MESSAGE_BYTE_LENGTH = "16"
+      env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
       setChannelDecoderConfigFileEnvs()
     })
 

@@ -3,8 +3,9 @@ import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/channelParser/gridChannel"
 import {CAN} from "../../fixtures/gridChannels/CAN"
 import {getAttributesFormatter} from "../../../../src/messageParser/formatAttributes"
+import {clearEnv} from "../../../utils"
 
-describe("Parses CAN", () => {
+describe("Parses grid CAN", () => {
   let metricRegistry
   let appContext
   let log
@@ -14,6 +15,11 @@ describe("Parses CAN", () => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
   })
 
   it("parses given messages", () => {

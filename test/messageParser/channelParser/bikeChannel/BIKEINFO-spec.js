@@ -4,15 +4,22 @@ import probe from "../../../fixtures/probe.json"
 import {getParsedMessageFn} from "../../../utils/getParsedMessage"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
+import {clearEnv} from "../../../utils"
 
 describe("Parses BIKEINFO", () => {
   let appContext
   let log
   let metricRegistry
+
   beforeEach(() => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
   })
 
   it("parses given messages", () => {

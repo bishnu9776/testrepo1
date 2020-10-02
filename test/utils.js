@@ -31,7 +31,6 @@ export const setGen2Envs = () => {
   const pathToFixtures = path.join(process.cwd(), "test/fixtures")
 
   env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
-  env.VI_USE_BIKE_ID_AS_DATA_ITEM_ID_PREFIX = "true"
   env.VI_COLLECTOR_VALUES_KEYS_MAPPING_PATH = `${pathToFixtures}/values_keys_mapping.json`
   env.VI_COLLECTOR_VALUES_SCHEMA_PATH = `${pathToFixtures}/values_schema.json`
 }

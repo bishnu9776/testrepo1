@@ -2,6 +2,7 @@ import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/channelParser/gridChannel"
 import {SESSION_DATA} from "../../fixtures/gridChannels/SESSION_DATA"
+import {clearEnv} from "../../../utils"
 
 describe("Parses POD_INFO", () => {
   let metricRegistry
@@ -12,6 +13,11 @@ describe("Parses POD_INFO", () => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
   })
 
   it("parses given messages", () => {
