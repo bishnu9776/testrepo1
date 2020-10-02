@@ -30,7 +30,11 @@ describe("Pipeline spec", () => {
     env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
-    process.env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_SHOULD_SEND_PROBE = "true"
+    env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+    env.VI_PROBE_ES_SCHEMA_VERSION = "4"
+    env.VI_DATAITEM_ES_SCHEMA_VERSION = "3"
+
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
@@ -65,9 +69,13 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
+        const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
         expect(output.length).to.eql(123)
         expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-        expect(output.filter(e => e.tag === "MTConnectDevices").length).to.eql(1) // probe
+        output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
+        output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
+        expect(probeEvent.length).to.eql(1)
+        expect(probeEvent[0].schema_version).to.eql("4")
         expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
@@ -157,7 +165,7 @@ describe("Pipeline spec", () => {
     })
   })
 
-  it("bike events flow through pipeline from source kafka", done => {
+  it("gen 2 bike events flow through pipeline from source kafka", done => {
     setGen2Envs()
     const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
     const source = {
@@ -175,10 +183,13 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
+        const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
         expect(output.length).to.eql(4)
         output.every(e => expect(e.plant).to.eql("ather"))
+        output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
         expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
-        expect(output.filter(e => e.agent === "ather-agent").length).to.eql(1) // probe
+        expect(probeEvent.length).to.eql(1)
+        expect(probeEvent[0].schema_version).to.eql("4")
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()

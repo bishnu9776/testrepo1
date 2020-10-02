@@ -28,7 +28,8 @@ export const getEventFormatter = () => {
       instance_id: id,
       plant: process.env.VI_INPUT_TYPE === "ci" ? "atherci" : "ather",
       tenant: "ather",
-      schema_version: schemaVersion
+      schema_version: schemaVersion,
+      data_item_id: getDataItemId({dataItemName: data_item_name, deviceId: device_uuid}) // TODO: Remove adding data item id within the parsers and update tests
     }
   }
   /* eslint-disable camelcase */

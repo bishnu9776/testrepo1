@@ -8,7 +8,14 @@ import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {clearEnv} from "../../../utils"
 
 describe("Parses LOGS", () => {
+  let metricRegistry
+  let appContext
+  let log
+
   beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
     process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
   })
 
@@ -23,15 +30,6 @@ describe("Parses LOGS", () => {
     value: {message: value, source},
     channel,
     device_uuid: device
-  })
-
-  let metricRegistry
-  let appContext
-  let log
-  beforeEach(() => {
-    log = getMockLog()
-    metricRegistry = getMockMetricRegistry()
-    appContext = {log, metricRegistry}
   })
 
   it("parses given messages", () => {

@@ -6,10 +6,10 @@ import {getGen1Probe, getGen2Probe} from "./probeFixtures"
 
 describe("it should update probe", () => {
   const {env} = process
-  const probeEsSchemaVersion = "probe-v1"
+
   beforeEach(() => {
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC,MCU_CHARGER_TYPE,message"
-    env.VI_PROBE_ES_SCHEMA_VERSION = probeEsSchemaVersion
+    env.VI_PROBE_ES_SCHEMA_VERSION = "3"
     env.VI_SHOULD_SEND_PROBE = "true"
     env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
   })
@@ -30,7 +30,7 @@ describe("it should update probe", () => {
     const [response, probeData] = updateProbe(event)
     expect(response).to.eql(event)
     const probeWithoutTimestamp = omit(["timestamp", "creation_time", "received_at"], probeData)
-    expect(probeWithoutTimestamp).to.eql(getGen1Probe({device, probeEsSchemaVersion}))
+    expect(probeWithoutTimestamp).to.eql(getGen1Probe({device, probeEsSchemaVersion: "3"}))
   })
 
   it("should not send probe for a new device, when VI_SHOULD_SEND_PROBE is false", () => {
@@ -48,7 +48,7 @@ describe("it should update probe", () => {
     expect(response1).to.eql(event)
     expect(response2).to.eql(event)
     const probeWithoutTimestamp = omit(["timestamp", "creation_time", "received_at"], probeData1)
-    expect(probeWithoutTimestamp).to.eql(getGen1Probe({device, probeEsSchemaVersion}))
+    expect(probeWithoutTimestamp).to.eql(getGen1Probe({device, probeEsSchemaVersion: "3"}))
     expect(probeData2).to.eql(undefined)
   })
 
@@ -93,7 +93,7 @@ describe("it should update probe", () => {
     // eslint-disable-next-line no-unused-vars
     const [_, probeData] = updateProbe(event)
     const probeWithoutTimestamp = omit(["timestamp", "creation_time", "received_at"], probeData)
-    expect(probeWithoutTimestamp).to.eql(getGen2Probe({device, probeEsSchemaVersion}))
+    expect(probeWithoutTimestamp).to.eql(getGen2Probe({device, probeEsSchemaVersion: "3"}))
     clearEnv()
   })
 })

@@ -1,0 +1,57 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start-ather-gen2-kafka" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.16.1/bin/node" />
+    <envs>
+      <env name="VI_GCP_PROJECT_ID" value="ather-not-production" />
+      <env name="VI_GCP_SERVICE_ACCOUNT_CREDS_FILE_PATH" value="$PROJECT_DIR$/creds/atherprodcreds.json" />
+      <env name="VI_KAFKA_SINK_CLIENT_ID" value="test" />
+      <env name="VI_STATS_INTERVAL" value="300000" />
+      <env name="VI_COLLECTOR_PROBE_PATH" value="$PROJECT_DIR$/scripts/probe.json" />
+      <env name="VI_KAFKA_SINK_DATA_TOPICS" value="test-topic-compressed" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_METADATA_BROKER_LIST" value="localhost:9092" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_RETRY_BACKOFF_MS" value="1000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_MESSAGE_SEND_MAX_RETRIES" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_MS" value="500" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_MESSAGES" value="500000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_BATCH_NUM_MESSAGES" value="5000" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_LOG_CONNECTION_CLOSE" value="false" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_REQUEST_REQUIRED_ACKS" value="1" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_QUEUE_BUFFERING_MAX_KBYTES" value="2097151" />
+      <env name="VI_KAFKA_PRODUCER_CLIENT_CLIENT_ID" value="foo" />
+      <env name="VI_GCP_PUBSUB_SUBSCRIPTION" value="bigsink_grid_realtime.vimana" />
+      <env name="VI_INPUT_TYPE" value="bike" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_GROUP_ID" value="s-local-artemis-test-3" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION" value=" 1" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_MESSAGE_MAX_BYTES" value=" 5242880" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_METADATA_BROKER_LIST" value="kafka-kafka.staging.ather.vimana.us:9094" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_QUEUED_MAX_MESSAGES_KBYTES" value="10240" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_QUEUED_MIN_MESSAGES" value="1000" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_FETCH_WAIT_MAX_MS" value="100" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_FETCH_MESSAGE_MAX_BYTES" value="10240" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_FETCH_MIN_BYTES" value="1" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_FETCH_MAX_BYTES" value="5242880" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_STATISTICS_INTERVAL_MS" value="60000" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_ENABLE_AUTO_COMMIT" value="false" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_LOG_CONNECTION_CLOSE" value="false" />
+      <env name="VI_KAFKA_CONSUMER_CLIENT_TOPIC_METADATA_REFRESH_INTERVAL_MS" value=" 60000" />
+      <env name="VI_KAFKA_CONSUMER_TOPIC_AUTO_OFFSET_RESET" value="earliest" />
+      <env name="VI_KAFKA_CONSUMER_TOPIC_CONSUME_CALLBACK_MAX_MESSAGES" value=" 1000" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_TOPICS" value="connect-ather-artemis" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_OBJECT_MODE" value="true" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_WAIT_INTERVAL" value="0" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_HIGH_WATER_MARK" value="20000" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_FETCH_SIZE" value=" 1000" />
+      <env name="VI_KAFKA_CONSUMER_STREAM_AS_BATCH" value="false" />
+      <env name="VI_ATHER_COLLECTOR_SOURCE_MODE" value="not-gcp" />
+      <env name="VI_CHANNELS_TO_DROP" value="logs" />
+      <env name="VI_COLLECTOR_IS_GEN_2_DATA" value="true" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
