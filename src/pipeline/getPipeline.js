@@ -8,11 +8,10 @@ import {ACK_MSG_TAG} from "../constants"
 import {getEventFormatter, isValid} from "../utils/helpers"
 import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
-import {loadProbe} from "./loadProbe"
-import {getUpdateDeviceModelMapping} from "../deviceModel/getUpdateDeviceModelMapping"
-import {createDeviceModelMapping} from "../deviceModel/createDeviceModelMapping"
+import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
+import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
-import {getUpdateProbe} from "../getUpdateProbe"
+import {getProbeAppender} from "../getProbeAppender"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -37,23 +36,15 @@ const defaultObserver = log => ({
 
 export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
   const {log} = appContext
-  const probe = loadProbe(probePath, log)
+  const probe = loadFileFromAbsolutePath(probePath, log)
 
   const {stream} = source
 
   const sendToKafka = getKafkaSender({kafkaProducer, appContext})
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
-  const modelDataItems = env.VI_DATAITEM_MODEL_LIST ? env.VI_DATAITEM_MODEL_LIST.split(",") : ["bike_type"]
-  const deviceModelMapping = await createDeviceModelMapping(appContext)
-  const updateDeviceModelMappingFn = getUpdateDeviceModelMapping(appContext)
-  const updateProbe = getUpdateProbe({appContext, probe})
-
-  const updateDeviceModelMapping = event => {
-    if (modelDataItems.includes(event.data_item_name)) {
-      updateDeviceModelMappingFn(deviceModelMapping, event)
-    }
-  }
+  const appendProbeOnNewDevice = getProbeAppender({appContext, probe})
+  const {getUpdatedDeviceModelMapping, updateDeviceInfo} = await getDeviceInfoHandler(appContext)
 
   return stream
     .pipe(
@@ -63,9 +54,9 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
-      tap(updateDeviceModelMapping),
-      filter(isModelPresentForDevice({deviceModelMapping, log})),
-      mergeMap(event => from(updateProbe(event))),
+      tap(updateDeviceInfo),
+      filter(isModelPresentForDevice({deviceModelMapping: getUpdatedDeviceModelMapping(), log})),
+      mergeMap(event => from(appendProbeOnNewDevice(event))),
       sendToKafka,
       tap(event => {
         if (event.tag === ACK_MSG_TAG) {
