@@ -1,6 +1,6 @@
 import {errorFormatter} from "../../utils/errorFormatter"
 import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
-import {getMessageTags} from "../../metrics/tags"
+import {getInputMessageTags} from "../../metrics/tags"
 
 const isInvalidAttributes = attributes =>
   isNilOrEmpty(attributes[2]) && isNilOrEmpty(attributes[5]) && isNilOrEmpty(attributes[5])
@@ -29,7 +29,7 @@ const parseEvent = (appContext, event, resolve) => {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
       throw new Error(`Invalid Event value, event:${JSON.stringify(event)}`)
     }
-    metricRegistry.updateStat("Counter", "num_messages_received", 1, getMessageTags({attributes}))
+    metricRegistry.updateStat("Counter", "num_messages_received", 1, getInputMessageTags({attributes}))
     return {
       message: {
         data: event.value,
