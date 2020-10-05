@@ -62,7 +62,6 @@ export const getValuesFn = (probe, log) => {
   return ({event, dataItemName}) => {
     let probeForDataItem = probe[dataItemName]
     if (!probeForDataItem) {
-      log.warn(`Data item: ${dataItemName} is not present in the probe.`)
       probeForDataItem = {}
     }
 

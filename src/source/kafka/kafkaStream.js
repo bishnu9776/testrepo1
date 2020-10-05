@@ -1,43 +1,67 @@
 import {errorFormatter} from "../../utils/errorFormatter"
+import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
+import {getInputMessageTags} from "../../metrics/tags"
 
-const {env} = process
+const isInvalidAttributes = attributes =>
+  isNilOrEmpty(attributes[2]) && isNilOrEmpty(attributes[5]) && isNilOrEmpty(attributes[5])
 
-const getDevice = (topic, metricRegistry) => {
-  const regex = env.VI_KAFKA_SOURCE_DEVICE_REGEX
-  const decodedTopic = String.fromCharCode.apply(null, new Uint16Array(topic))
-  if (decodedTopic.match(regex)) {
-    return decodedTopic.match(regex)[1]
+const getAttributes = (headers, metricRegistry) => {
+  if (headers && headers[0].inputTopic) {
+    const attributesObj = headers[0].inputTopic.toString().split(".")
+    if (isInvalidAttributes(attributesObj)) {
+      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
+      throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
+    }
+    return {
+      deviceId: attributesObj[2],
+      subFolder: `${attributesObj[4]}/${attributesObj[5]}`
+    }
   }
-  metricRegistry.updateStat("Counter", "num_events_dropped", 1, "regex_mismatch")
-  throw new Error(`Regex doesn't match a device in the topic ${regex}, decodedTopic: ${decodedTopic}`)
+  throw new Error(`Invalid headers`)
 }
 
-const parseMessage = (value, metricRegistry) => {
+const parseEvent = (appContext, event, resolve) => {
+  const {value, headers} = event
+  const {log, metricRegistry} = appContext
   try {
-    return JSON.parse(JSON.stringify(value))
+    const attributes = getAttributes(headers, metricRegistry)
+    if (event && isNilOrEmpty(value)) {
+      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
+      throw new Error(`Invalid Event value, event:${JSON.stringify(event)}`)
+    }
+    metricRegistry.updateStat("Counter", "num_messages_received", 1, getInputMessageTags({attributes}))
+    return {
+      message: {
+        data: event.value,
+        attributes
+      }
+    }
   } catch (e) {
-    metricRegistry.updateStat("Counter", "num_events_dropped", 1, "parse_failure")
-    throw new Error(e, "Failed to parse the message")
+    log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
+    resolve(event)
   }
 }
 
 export const kafkaStream = (appContext, observer) => {
-  const {log, metricRegistry} = appContext
+  const sendToObserver = (event, ack) => {
+    const acknowledgeMessage = isNilOrEmpty(ack) ? () => {} : ack
+    if (!isNilOrEmpty(event)) {
+      observer.next({...event, acknowledgeMessage})
+    }
+  }
 
-  return event => {
+  return batch => {
     return new Promise(resolve => {
-      const acknowledgeMessage = () => resolve(event)
-      const {value, headers} = event
-      try {
-        const topicObj = headers ? parseMessage(headers[0].inputTopic) : null
-        const device = getDevice(topicObj?.data, metricRegistry)
-        const {data} = parseMessage(value, metricRegistry)
-        metricRegistry.updateStat("Counter", "num_messages_received", 1)
-        observer.next({message: {data, attributes: {deviceId: device}}, acknowledgeMessage})
-      } catch (e) {
-        log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
-        resolve(event)
+      const acknowledgeMessage = event => {
+        return resolve(event)
       }
+      const lastEvent = batch.pop()
+      batch.forEach(event => {
+        const parsedEvent = parseEvent(appContext, event, resolve)
+        sendToObserver(parsedEvent)
+      })
+      const parsedLastEvent = parseEvent(appContext, lastEvent, resolve)
+      sendToObserver(parsedLastEvent, acknowledgeMessage)
     })
   }
 }
