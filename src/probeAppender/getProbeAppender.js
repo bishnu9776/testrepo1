@@ -1,9 +1,10 @@
 import {contains, intersection} from "ramda"
-import {isNilOrEmpty} from "./utils/isNilOrEmpty"
+import {isNilOrEmpty} from "../utils/isNilOrEmpty"
+import {getDataItemId} from "../utils/helpers"
 
 const {env} = process
 
-const getDeviceProbe = (device, probe, schemaVersion) => {
+const getDeviceProbe = ({device, probe}) => {
   const timestamp = new Date().toISOString()
   const version = "1.0.0"
   return {
@@ -11,7 +12,7 @@ const getDeviceProbe = (device, probe, schemaVersion) => {
     tag: "MTConnectDevices",
     instance_id: "1",
     agent_version: version,
-    schema_version: schemaVersion,
+    schema_version: process.env.VI_PROBE_ES_SCHEMA_VERSION,
     plant: "ather",
     tenant: "ather",
     device_uuid: device,
@@ -40,7 +41,7 @@ const getType = dataItemType => {
   return dataItemType
 }
 
-const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
+const formatProbe = ({probe, whitelistedDataItems, deviceId}) => {
   const formattedProbe = []
   const dataItems = Object.keys(probe)
   const keysInWhitelistedDataItems = intersection(dataItems, whitelistedDataItems)
@@ -53,7 +54,7 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
     const value = {...probe[dataItem]}
     value.name = value.data_item_name
     value.type = getType(value.data_item_type)
-    value.id = `${value.name}-v${schemaVersion}`
+    value.id = getDataItemId({dataItemName: value.data_item_name, deviceId})
     keysToDeleteFromProbe.map(key => delete value[key])
     keysToCheckForValidValues.map(key => {
       if (value[key] === "" || value[key] === "?") {
@@ -69,14 +70,13 @@ const formatProbe = (probe, whitelistedDataItems, schemaVersion) => {
 export const getProbeAppender = ({probe}) => {
   const listOfDevices = []
   const whitelistedDataItems = env.VI_PROBE_DATAITEM_WHITELIST ? env.VI_PROBE_DATAITEM_WHITELIST.split(",") : []
-  const schemaVersion = env.VI_SCHEMA_VERSION
   const shouldSendProbe = JSON.parse(env.VI_SHOULD_SEND_PROBE || "false")
 
-  const formattedProbe = formatProbe(probe, whitelistedDataItems, schemaVersion)
   return event => {
     const device = event?.device_uuid
     if (!isNilOrEmpty(device) && !listOfDevices.includes(device) && shouldSendProbe) {
-      const probeToSend = getDeviceProbe(device, formattedProbe, schemaVersion)
+      const formattedProbe = formatProbe({probe, whitelistedDataItems, deviceId: device})
+      const probeToSend = getDeviceProbe({device, probe: formattedProbe})
       listOfDevices.push(device)
       return [event, probeToSend]
     }

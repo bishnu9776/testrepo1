@@ -3,15 +3,22 @@ import {EVENTS} from "../../fixtures/bikeChannels/EVENTS"
 import probe from "../../../fixtures/probe.json"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
+import {clearEnv} from "../../../utils"
 
 describe("Parses EVENTS", () => {
   let metricRegistry
   let appContext
   let log
+
   beforeEach(() => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
   })
 
   it("parses given messages", () => {

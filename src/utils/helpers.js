@@ -14,7 +14,7 @@ export const isValid = log => event => {
 
 // Note: Remove agent, instance_id after ensuring zero downstream dependencies
 export const getEventFormatter = () => {
-  const schemaVersion = process.env.VI_SCHEMA_VERSION
+  const schemaVersion = process.env.VI_DATAITEM_ES_SCHEMA_VERSION
   /* eslint-disable camelcase */
   return event => {
     const {device_uuid, data_item_name, timestamp} = event
@@ -28,8 +28,19 @@ export const getEventFormatter = () => {
       instance_id: id,
       plant: process.env.VI_INPUT_TYPE === "ci" ? "atherci" : "ather",
       tenant: "ather",
-      schema_version: schemaVersion
+      schema_version: schemaVersion,
+      data_item_id: getDataItemId({dataItemName: data_item_name, deviceId: device_uuid}) // TODO: Remove adding data item id within the parsers and update tests
     }
   }
   /* eslint-disable camelcase */
+}
+
+export const getDataItemId = ({dataItemName, deviceId}) => {
+  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
+
+  if (isGen2Data) {
+    return `${deviceId}-${dataItemName}`
+  }
+
+  return `${dataItemName}-${process.env.VI_GEN1_DATAITEM_ID_VERSION}`
 }

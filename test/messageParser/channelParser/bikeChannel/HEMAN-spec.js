@@ -3,15 +3,22 @@ import {HEMAN} from "../../fixtures/bikeChannels/HEMAN"
 import probe from "../../../fixtures/probe.json"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
+import {clearEnv} from "../../../utils"
 
 describe("Parses HEMAN", () => {
   let metricRegistry
   let appContext
   let log
+
   beforeEach(() => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
   })
 
   it("parses given messages", () => {
@@ -19,7 +26,7 @@ describe("Parses HEMAN", () => {
     expect(createDataItemsFromMessage({message: HEMAN})).to.eql([
       {
         channel: "heman",
-        data_item_id: "heman-v1",
+        data_item_id: "error_code-v1",
         data_item_name: "error_code",
         device_uuid: "s_248",
         is_valid: -1,

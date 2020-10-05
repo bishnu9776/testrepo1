@@ -77,7 +77,8 @@ describe("Parse GCP message", () => {
       setEnv({
         preBigSinkInput: "true",
         shouldDecodeMessage: "true",
-        gcpPubsubDataCompressionFlag: "true"
+        gcpPubsubDataCompressionFlag: "true",
+        gen1DataitemIdVersion: "v1"
       })
       setChannelDecoderConfigFileEnvs()
     })
@@ -94,8 +95,9 @@ describe("Parse GCP message", () => {
       })
       const output = await messageParser({message, acknowledgeMessage})
       const expected = parsedGCPEvents
-        .map(x => ({...x, data_item_id: `${x.data_item_name}-legacy`}))
+        .map(x => ({...x, data_item_id: `${x.data_item_name}-v1`}))
         .concat({tag: ACK_MSG_TAG, message, acknowledgeMessage})
+
       expect(output).to.eql(expected)
     })
 
@@ -180,6 +182,7 @@ describe("Parse GCP message", () => {
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(2)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
+      expect(output[0].data_item_id).to.eql("s_123-BMS_Cell3")
     })
   })
 

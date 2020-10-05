@@ -4,14 +4,6 @@ import probe from "../fixtures/probe.json"
 import {getDataItem} from "../utils/getDataItem"
 
 describe("Merge probe info", () => {
-  before(() => {
-    process.env.VI_SCHEMA_VERSION = "1"
-  })
-
-  after(() => {
-    delete process.env.VI_SCHEMA_VERSION
-  })
-
   describe("old probe structure", () => {
     const mergeProbeInfo = getMergeProbeInfoFn(probe)
 

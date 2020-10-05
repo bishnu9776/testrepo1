@@ -1,14 +1,15 @@
 import {flatten} from "ramda"
+import {getDataItemId} from "../../../utils/helpers"
 
 const keysToIngnore = ["timestamp", "seq_num", "gpstime_utc", "global_seq", "bike_id", "data", "_comm", "value"]
 
 const getLogDataItem = ({attributes, dataItemName, timestamp, value}) => {
-  const {version, bike_id: bikeId, channel} = attributes
+  const {bike_id: bikeId, channel} = attributes
 
   return {
     device_uuid: bikeId,
     data_item_name: dataItemName,
-    data_item_id: `${dataItemName}-${version}`,
+    data_item_id: getDataItemId({dataItemName, deviceId: bikeId}),
     timestamp,
     value,
     channel

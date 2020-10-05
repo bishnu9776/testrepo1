@@ -11,7 +11,7 @@ import {delayAndExit} from "../utils/delayAndExit"
 import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
-import {getProbeAppender} from "../getProbeAppender"
+import {getProbeAppender} from "../probeAppender/getProbeAppender"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000

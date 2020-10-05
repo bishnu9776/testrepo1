@@ -12,6 +12,7 @@ describe("Parses NETWORK_DATA", () => {
     log = getMockLog()
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
   })
 
   it("parses given messages", () => {

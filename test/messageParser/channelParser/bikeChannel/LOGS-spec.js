@@ -5,8 +5,24 @@ import probe from "../../../fixtures/probe.json"
 import {iso} from "../../../utils/iso"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
+import {clearEnv} from "../../../utils"
 
 describe("Parses LOGS", () => {
+  let metricRegistry
+  let appContext
+  let log
+
+  beforeEach(() => {
+    log = getMockLog()
+    metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+    process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+  })
+
+  afterEach(() => {
+    clearEnv()
+  })
+
   const getParsedMessageFn = (channel, device) => (data_item_id, data_item_name, value, timestamp, source) => ({
     data_item_id,
     data_item_name,
@@ -14,15 +30,6 @@ describe("Parses LOGS", () => {
     value: {message: value, source},
     channel,
     device_uuid: device
-  })
-
-  let metricRegistry
-  let appContext
-  let log
-  beforeEach(() => {
-    log = getMockLog()
-    metricRegistry = getMockMetricRegistry()
-    appContext = {log, metricRegistry}
   })
 
   it("parses given messages", () => {
