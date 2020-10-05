@@ -184,12 +184,16 @@ describe("Pipeline spec", () => {
       },
       complete: () => {
         const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
+        const dataItemEvent = output.filter(e => e.tag === "MTConnectDataItems")
         expect(output.length).to.eql(4)
         output.every(e => expect(e.plant).to.eql("ather"))
-        output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
+        expect(dataItemEvent.length).to.eql(1)
+        expect(dataItemEvent[0].schema_version).to.eql("3")
+        expect(dataItemEvent[0].data_item_id).to.eql("s_123-BMS_Cell3")
         expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
         expect(probeEvent.length).to.eql(1)
         expect(probeEvent[0].schema_version).to.eql("4")
+        expect(probeEvent.length).to.eql(1)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
