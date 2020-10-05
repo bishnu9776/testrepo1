@@ -3,11 +3,13 @@ import {makeAxiosRequest} from "../utils/makeAxiosRequest"
 import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
-const getDeviceModel = async ({apiConfig, log}) => {
-  const {plant, url} = apiConfig
+const {env} = process
 
+const getDeviceModelMapping = async ({log}) => {
+  const plant = env.VI_PLANT
+  const deviceRegistryUrl = env.VI_DEVICE_REGISTRY_DEVICES_URL
   const requestConfig = {
-    url,
+    url: deviceRegistryUrl,
     method: "post",
     data: {fields: ["model", "device"]},
     headers: {
@@ -23,9 +25,9 @@ const getDeviceModel = async ({apiConfig, log}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-export const createDeviceModelMapping = async appContext => {
+export const fetchDeviceModelMapping = async appContext => {
   const {log} = appContext
-  const {ok, response, error} = await getDeviceModel(appContext)
+  const {ok, response, error} = await getDeviceModelMapping({log})
   if (ok && response.data) {
     const deviceProperties = response.data
     const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {

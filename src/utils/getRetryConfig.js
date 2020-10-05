@@ -53,7 +53,7 @@ export const getRetryConfig = (log, isRetryable) => {
   const exponentialRetry = JSON.parse(env.VI_ATHER_COLLECTOR_EXPONENTIAL_RETRY || "false")
   const retryConfig = addConfigIfAvailable({}, {maxRetries, exponentialRetry, retryDelay, retryLogThreshold})
 
-  log.info({ctx: {retryConfig: JSON.stringify(retryConfig)}}, "Retry config for ather collector")
+  log.info({ctx: {retryConfig: JSON.stringify(retryConfig)}}, "API retry config")
 
   return {...retryConfig, isRetryable}
 }

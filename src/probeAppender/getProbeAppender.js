@@ -67,7 +67,7 @@ const formatProbe = ({probe, whitelistedDataItems, deviceId}) => {
   return formattedProbe
 }
 
-export const getProbeUpdater = ({probe}) => {
+export const getProbeAppender = ({probe}) => {
   const listOfDevices = []
   const whitelistedDataItems = env.VI_PROBE_DATAITEM_WHITELIST ? env.VI_PROBE_DATAITEM_WHITELIST.split(",") : []
   const shouldSendProbe = JSON.parse(env.VI_SHOULD_SEND_PROBE || "false")
