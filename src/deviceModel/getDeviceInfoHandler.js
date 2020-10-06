@@ -44,21 +44,21 @@ export const getDeviceInfoHandler = async appContext => {
   const updateDeviceModel = getDeviceModelUpdater({log, retryConfig})
   const updateDeviceRules = getDeviceRulesUpdater({log, retryConfig})
   const shouldUpdateDeviceRules = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
+  const shouldForceUpdateRules = JSON.parse(process.env.VI_FORCE_UPDATE_DEVICE_RULES || "false")
 
   return {
     updateDeviceInfo: async event => {
-      if (!isModelDataItem(event)) {
-        return deviceModelMapping
-      }
+      const shouldUpdateDeviceRegistry =
+        isModelDataItem(event) && isNewDeviceOrUpdatedModel({deviceModelMapping, event})
 
-      if (!isNewDeviceOrUpdatedModel({deviceModelMapping, event})) {
+      if (!shouldUpdateDeviceRegistry && !shouldForceUpdateRules) {
         return deviceModelMapping
       }
 
       const device = getDevice(event)
       const model = getModel(event)
 
-      if (shouldUpdateDeviceRules) {
+      if ((shouldUpdateDeviceRegistry && shouldUpdateDeviceRules) || shouldForceUpdateRules) {
         const deviceRulesResponse = await updateDeviceRules({device, model})
         if (!isSuccessfulRequest(deviceRulesResponse)) {
           log.warn(`Failed to update rules for device: ${device} with model: ${model}`, {
@@ -71,18 +71,22 @@ export const getDeviceInfoHandler = async appContext => {
         }
       }
 
-      const deviceModelResponse = await updateDeviceModel({device, model})
+      if (shouldUpdateDeviceRegistry) {
+        const deviceModelResponse = await updateDeviceModel({device, model})
 
-      if (!isSuccessfulRequest(deviceModelResponse)) {
-        log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
-          error: errorFormatter(deviceModelResponse.error)
-        })
+        if (!isSuccessfulRequest(deviceModelResponse)) {
+          log.warn(`Failed to update device model mapping for device: ${device} with model: ${model}`, {
+            error: errorFormatter(deviceModelResponse.error)
+          })
+          return deviceModelMapping
+        }
+
+        log.info(`Successfully updated device registry for device: ${device} with model: ${model}`)
+        deviceModelMapping[device] = model
+
         return deviceModelMapping
       }
 
-      log.info(`Successfully updated device registry for device: ${device} with model: ${model}`)
-
-      deviceModelMapping[device] = model
       return deviceModelMapping
     },
     getUpdatedDeviceModelMapping: () => {
