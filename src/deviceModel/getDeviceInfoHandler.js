@@ -51,6 +51,10 @@ export const getDeviceInfoHandler = async appContext => {
       const shouldUpdateDeviceRegistry =
         isModelDataItem(event) && isNewDeviceOrUpdatedModel({deviceModelMapping, event})
 
+      if (!isModelDataItem(event)) {
+        return deviceModelMapping
+      }
+
       if (!shouldUpdateDeviceRegistry && !shouldForceUpdateRules) {
         return deviceModelMapping
       }

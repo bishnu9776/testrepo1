@@ -454,8 +454,7 @@ describe("Update device info", () => {
         "Successfully updated device rules for device: device-1 with model: 450plus"
       )
     })
-
-    it("updates device rules for existing device if force update rules is enabled", async () => {
+    it("updates device rules for existing device if force update rules is enabled and on model dataitem", async () => {
       nock.cleanAll()
       process.env.VI_FORCE_UPDATE_DEVICE_RULES = "true"
 
@@ -478,6 +477,37 @@ describe("Update device info", () => {
       })
 
       expect(log.info).to.have.been.calledWithMatch(
+        "Successfully updated device rules for device: device-1 with model: 450plus"
+      )
+
+      expect(log.warn.callCount).to.eql(0)
+
+      delete process.env.VI_FORCE_UPDATE_DEVICE_RULES
+    })
+
+    it("don't updates device rules for existing device if force update rules is enabled for non model dataitem", async () => {
+      nock.cleanAll()
+      process.env.VI_FORCE_UPDATE_DEVICE_RULES = "true"
+
+      // If response is empty, test will fail as we will try to update device registry which will fail as we haven't mocked device registry API
+      mockDeviceRegistryPostSuccessResponse(deviceRegistryUrl, "/devices", [{device: "device-1", model: "450plus"}])
+      mockDeviceRulesPutSuccess({
+        baseUrl: deviceRulesUrl,
+        putUrl: `${deviceRulesDeviceEndpoint}/device-1/450plus`,
+        numSuccesses: 1
+      })
+
+      const event = {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "foo"}
+
+      const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+
+      await updateDeviceInfo(event)
+
+      expect(getUpdatedDeviceModelMapping()).to.eql({
+        "device-1": "450plus"
+      })
+
+      expect(log.info).not.to.have.been.calledWithMatch(
         "Successfully updated device rules for device: device-1 with model: 450plus"
       )
 
