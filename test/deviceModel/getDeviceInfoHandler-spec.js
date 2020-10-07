@@ -502,10 +502,6 @@ describe("Update device info", () => {
         "device-1": "450plus"
       })
 
-      expect(log.info).not.to.have.been.calledWithMatch(
-        "Successfully updated device rules for device: device-1 with model: 450plus"
-      )
-
       expect(log.warn.callCount).to.eql(0)
 
       delete process.env.VI_FORCE_UPDATE_DEVICE_RULES
