@@ -486,7 +486,7 @@ describe("Update device info", () => {
       delete process.env.VI_FORCE_UPDATE_DEVICE_RULES
     })
 
-    it("don't updates device rules for existing device if force update rules is enabled for non model dataitem", async () => {
+    it("don't update device rules for existing device if force update rules is enabled for non model dataitem", async () => {
       nock.cleanAll()
       process.env.VI_FORCE_UPDATE_DEVICE_RULES = "true"
 
