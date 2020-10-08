@@ -45,6 +45,8 @@ describe("Update device info", () => {
 
   it("should prime with device-ruleset mapping on startup and should not update device rules for existing devices", async () => {
     const {updateDeviceInfo, getUpdatedDeviceModelMapping} = await getDeviceInfoHandler(appContext)
+    mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-1/gen-2`})
+    mockDeviceRulesPutSuccess({baseUrl: deviceRulesUrl, putUrl: `${deviceRulesDeviceEndpoint}/device-2/gen-2`})
     const events = [
       {device_uuid: "device-1", value: "GEN2_450plus", data_item_name: "bike_type", seq: 1},
       {device_uuid: "device-2", value: "GEN2_450plus", data_item_name: "bike_type", seq: 2}

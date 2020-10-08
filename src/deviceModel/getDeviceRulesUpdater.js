@@ -2,6 +2,7 @@
 
 import {retryableRequest} from "node-microservice/dist/retryable-request"
 import {makeAxiosRequest} from "../utils/makeAxiosRequest"
+import {errorFormatter} from "../utils/errorFormatter";
 
 const {env} = process
 
@@ -22,6 +23,12 @@ export const getDeviceRulesUpdater = ({log, retryConfig}) => {
       timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
     }
 
-    return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest}).then(() => gen)
+    const {error} = await retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
+    if (error) {
+      log.warn(`Failed to update device rule set for device ${device} with ruleset ${gen}`, {error: errorFormatter(error)})
+      return null
+    }
+
+    return gen
   }
 }
