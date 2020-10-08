@@ -32,6 +32,7 @@ describe("Pipeline spec", () => {
     env.VI_SHOULD_SEND_PROBE = "true"
     env.VI_PLANT = "ather"
     env.VI_DEVICE_RULES_URL = deviceRulesUrl
+    env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
