@@ -1,6 +1,6 @@
-import {concatMap, filter, map, mergeMap, tap, timeout} from "rxjs/operators"
+import {concatMap, filter, groupBy, map, mergeMap, tap, timeout} from "rxjs/operators"
 import {from} from "rxjs"
-import {complement, isEmpty} from "ramda"
+import {complement, isEmpty, prop} from "ramda"
 import {getMessageParser} from "../messageParser"
 import {getKafkaSender} from "../kafkaProducer"
 import {retryWithExponentialBackoff} from "../utils/retryWithExponentialBackoff"
@@ -10,7 +10,6 @@ import {errorFormatter} from "../utils/errorFormatter"
 import {delayAndExit} from "../utils/delayAndExit"
 import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
-import {isModelPresentForDevice} from "../deviceModel/isModelPresentForDevice"
 import {getProbeAppender} from "../probeAppender/getProbeAppender"
 
 const {env} = process
@@ -44,7 +43,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   const parseMessage = getMessageParser({appContext, probe})
   const formatEvent = getEventFormatter()
   const appendProbeOnNewDevice = getProbeAppender({appContext, probe})
-  const {getUpdatedDeviceModelMapping, updateDeviceInfo} = await getDeviceInfoHandler(appContext)
+  const {updateDeviceInfo} = await getDeviceInfoHandler(appContext)
 
   return stream
     .pipe(
@@ -54,8 +53,8 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
       filter(isValid), // After finalising all parsers, remove this.
       map(formatEvent),
-      tap(updateDeviceInfo),
-      filter(isModelPresentForDevice({deviceModelMapping: getUpdatedDeviceModelMapping(), log})),
+      groupBy(prop("device_uuid")),
+      mergeMap(deviceObs => deviceObs.pipe(concatMap(updateDeviceInfo))),
       mergeMap(event => from(appendProbeOnNewDevice(event))),
       sendToKafka,
       tap(event => {

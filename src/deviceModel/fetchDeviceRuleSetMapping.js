@@ -1,11 +1,10 @@
 import {retryableRequest} from "node-microservice/dist/retryable-request"
 import {makeAxiosRequest} from "../utils/makeAxiosRequest"
-import {getRetryConfig, is5xxError} from "../utils/getRetryConfig"
 import {errorFormatter} from "../utils/errorFormatter"
 
 const {env} = process
 
-const getDeviceRuleSet = async ({log}) => {
+const getDeviceRuleSet = async ({log, retryConfig}) => {
   const plant = env.VI_PLANT
   const deviceRulesUrl = env.VI_DEVICE_RULES_URL
   const requestConfig = {
@@ -18,15 +17,12 @@ const getDeviceRuleSet = async ({log}) => {
     },
     timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || 30000, 10)
   }
-  const isRetryable = is5xxError
 
-  const retryConfig = getRetryConfig(log, isRetryable)
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-export const fetchDeviceRuleSetMapping = async appContext => {
-  const {log} = appContext
-  const {ok, response, error} = await getDeviceRuleSet({log})
+export const fetchDeviceRuleSetMapping = async ({log, retryConfig}) => {
+  const {ok, response, error} = await getDeviceRuleSet({log, retryConfig})
   if (ok && response.data) {
     const deviceRuleSets = response.data
     const deviceRuleSetMapping = deviceRuleSets.reduce((acc, deviceRuleSet) => {

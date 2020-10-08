@@ -37,16 +37,16 @@ export const getRetryConfig = (log, isRetryable) => {
   const {maxRetries, retryDelay, retryLogThreshold} = getIntegerConfigs([
     {
       name: "maxRetries",
-      envName: "VI_ATHER_COLLECTOR_MAX_RETRIES",
+      envName: "VI_ATHER_DEVICE_RULES_MAX_RETRIES",
       default: Number.POSITIVE_INFINITY
     },
     {
       name: "retryDelay",
-      envName: "VI_ATHER_COLLECTOR_RETRY_DELAY"
+      envName: "VI_ATHER_DEVICE_RULES_RETRY_DELAY"
     },
     {
       name: "retryLogThreshold",
-      envName: "VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD",
+      envName: "VI_ATHER_DEVICE_RULES_RETRY_LOG_THRESHOLD",
       default: 5
     }
   ])

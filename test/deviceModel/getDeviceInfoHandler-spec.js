@@ -18,9 +18,9 @@ describe("Update device info", () => {
     appContext = {
       log
     }
-    env.VI_ATHER_COLLECTOR_MAX_RETRIES = 2
-    env.VI_ATHER_COLLECTOR_RETRY_DELAY = 100
-    env.VI_ATHER_COLLECTOR_RETRY_LOG_THRESHOLD = 1
+    env.VI_ATHER_DEVICE_RULES_MAX_RETRIES = 2
+    env.VI_ATHER_DEVICE_RULES_RETRY_DELAY = 100
+    env.VI_ATHER_DEVICE_RULES_RETRY_LOG_THRESHOLD = 1
     env.VI_JWT = "dummysecret"
     env.VI_VALUE_KEY = "value" // TODO
     env.VI_PLANT = "ather"
