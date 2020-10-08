@@ -10,7 +10,7 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setGen2Envs} from "../utils"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {POD_INFO} from "../messageParser/fixtures/gridChannels/POD_INFO"
-import {mockDeviceRegistryPostSuccessResponse} from "../apiResponseMocks/mockDeviceRegistryResponse"
+import {mockDeviceRulesGetSuccess, mockDeviceRulesPutAnyDevice} from "../apiResponseMocks/mockDeviceRulesResponse"
 
 const {env} = process
 
@@ -18,8 +18,7 @@ describe("Pipeline spec", () => {
   let probePath
   let appContext
   const acknowledgeMessageSpy = sinon.spy()
-  const url = "https://svc-device-registry.com/device-registry"
-  const endpoint = "/devices"
+  const deviceRulesUrl = "https://svc-device-rules.com/device-rules"
   let log
 
   beforeEach(() => {
@@ -32,7 +31,8 @@ describe("Pipeline spec", () => {
     env.VI_DATAITEM_ES_SCHEMA_VERSION = "3"
     env.VI_SHOULD_SEND_PROBE = "true"
     env.VI_PLANT = "ather"
-    env.VI_DEVICE_REGISTRY_DEVICES_URL = "https://svc-device-registry.com/device-registry/devices"
+    env.VI_DEVICE_RULES_URL = deviceRulesUrl
+    env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
     setChannelDecoderConfigFileEnvs()
     log = getMockLog()
     appContext = {
@@ -44,6 +44,14 @@ describe("Pipeline spec", () => {
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
     })
+
+    mockDeviceRulesGetSuccess({
+      baseUrl: deviceRulesUrl,
+      getUrl: `/device/ruleset`,
+      response: []
+    })
+
+    mockDeviceRulesPutAnyDevice({baseUrl: deviceRulesUrl})
   })
 
   afterEach(() => {
@@ -90,13 +98,6 @@ describe("Pipeline spec", () => {
   })
 
   it("valid events flow through the pipeline when model for device is present", done => {
-    env.VI_SHOULD_DROP_EVENTS_FOR_DEVICE_WITHOUT_MODEL = "true"
-    const response = [
-      {device: "s_3432", model: "A"},
-      {device: "device-2", model: "B"}
-    ]
-    mockDeviceRegistryPostSuccessResponse(url, endpoint, response)
-
     const source = {
       stream: from([
         {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
@@ -111,44 +112,6 @@ describe("Pipeline spec", () => {
       complete: () => {
         expect(output.length).to.eql(123)
         expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        done()
-      }
-    }
-
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
-    })
-  })
-
-  it("should ack and filter out events when model for device is not present", done => {
-    env.VI_SHOULD_DROP_EVENTS_FOR_DEVICE_WITHOUT_MODEL = "true"
-    env.VI_SHOULD_SEND_PROBE = "false"
-
-    const response = [
-      {device: "device-1", model: "A"},
-      {device: "device-2", model: "B"}
-    ]
-    mockDeviceRegistryPostSuccessResponse(url, endpoint, response)
-
-    const source = {
-      stream: from([
-        {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
-        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
-      ])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        expect(output.length).to.eql(2)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        expect(log.warn.callCount).to.eql(120) // logging one warn for each event in message
         done()
       }
     }
