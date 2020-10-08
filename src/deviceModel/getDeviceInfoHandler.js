@@ -19,6 +19,7 @@ export const getDeviceInfoHandler = async appContext => {
       if (shouldUpdateDeviceRules && device && !deviceExistsInMapping) {
         const gen = await deviceRulesUpdater(device)
         deviceRuleSetMapping[device] = gen
+        log.info(`Updated device-ruleset mapping for device ${device}, with ruleset ${gen}`)
       }
 
       return event
