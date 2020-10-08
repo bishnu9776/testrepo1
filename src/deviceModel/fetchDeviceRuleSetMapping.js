@@ -5,13 +5,12 @@ import {errorFormatter} from "../utils/errorFormatter"
 
 const {env} = process
 
-const getDeviceModelMapping = async ({log}) => {
+const getDeviceRuleSet = async ({log}) => {
   const plant = env.VI_PLANT
-  const deviceRegistryUrl = env.VI_DEVICE_REGISTRY_DEVICES_URL
+  const deviceRulesUrl = env.VI_DEVICE_RULES_URL
   const requestConfig = {
-    url: deviceRegistryUrl,
-    method: "post",
-    data: {fields: ["model", "device"]},
+    url: `${deviceRulesUrl}/device/ruleset`,
+    method: "get",
     headers: {
       "X-Tenant": plant,
       Authorization: `Bearer ${process.env.VI_JWT}`,
@@ -25,20 +24,20 @@ const getDeviceModelMapping = async ({log}) => {
   return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
 }
 
-export const fetchDeviceModelMapping = async appContext => {
+export const fetchDeviceRuleSetMapping = async appContext => {
   const {log} = appContext
-  const {ok, response, error} = await getDeviceModelMapping({log})
+  const {ok, response, error} = await getDeviceRuleSet({log})
   if (ok && response.data) {
-    const deviceProperties = response.data
-    const deviceModelMapping = deviceProperties.reduce((acc, deviceProperty) => {
-      acc[deviceProperty.device] = deviceProperty.model
+    const deviceRuleSets = response.data
+    const deviceRuleSetMapping = deviceRuleSets.reduce((acc, deviceRuleSet) => {
+      acc[deviceRuleSet.device] = deviceRuleSet.ruleset
       return acc
     }, {})
-    log.info("Received device model mapping from device registry", {
-      ctx: {deviceModelMapping: JSON.stringify(deviceModelMapping)}
+    log.info("Received device ruleset mapping from device rules", {
+      ctx: {deviceRuleSet: JSON.stringify(deviceRuleSetMapping)}
     })
-    return deviceModelMapping
+    return deviceRuleSetMapping
   }
-  log.warn("Failed to get device model mapping", {error: errorFormatter(error)})
+  log.warn("Failed to get device rule set", {error: errorFormatter(error)})
   return {}
 }

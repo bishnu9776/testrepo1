@@ -7,11 +7,12 @@ const {env} = process
 
 export const getDeviceRulesUpdater = ({log, retryConfig}) => {
   const plant = env.VI_PLANT
-  const deviceRulesUrl = env.VI_DEVICE_RULES_DEVICE_URL
+  const deviceRulesUrl = env.VI_DEVICE_RULES_URL
+  const gen = JSON.parse(env.VI_COLLECTOR_IS_GEN_2_DATA || "false") ? "gen-2" : "gen-1"
 
-  return async ({device, model}) => {
+  return async ({device}) => {
     const requestConfig = {
-      url: `${deviceRulesUrl}/${device}/${model}`,
+      url: `${deviceRulesUrl}/device/${device}/${gen}`,
       method: "PUT",
       headers: {
         "X-Tenant": plant,

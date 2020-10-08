@@ -24,13 +24,13 @@ describe("Update device info", () => {
     env.VI_JWT = "dummysecret"
     env.VI_VALUE_KEY = "value" // TODO
     env.VI_PLANT = "ather"
-    env.VI_DEVICE_RULES_DEVICE_URL = `${deviceRulesUrl}/device`
+    env.VI_DEVICE_RULES_URL = deviceRulesUrl
     env.VI_SHOULD_UPDATE_DEVICE_RULES = "true"
     env.VI_COLLECTOR_IS_GEN_2_DATA = "true"
 
     mockDeviceRulesGetSuccess({
       baseUrl: deviceRulesUrl,
-      getUrl: `${deviceRulesDeviceEndpoint}/ruleset/`,
+      getUrl: `${deviceRulesDeviceEndpoint}/ruleset`,
       response: [
         {device: "device-1", ruleset: "gen-2"},
         {device: "device-2", ruleset: "gen-2"}
