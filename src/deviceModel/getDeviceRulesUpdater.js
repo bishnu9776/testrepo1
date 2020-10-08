@@ -10,7 +10,7 @@ export const getDeviceRulesUpdater = ({log, retryConfig}) => {
   const deviceRulesUrl = env.VI_DEVICE_RULES_URL
   const gen = JSON.parse(env.VI_COLLECTOR_IS_GEN_2_DATA || "false") ? "gen-2" : "gen-1"
 
-  return async ({device}) => {
+  return async device => {
     const requestConfig = {
       url: `${deviceRulesUrl}/device/${device}/${gen}`,
       method: "PUT",
@@ -22,6 +22,6 @@ export const getDeviceRulesUpdater = ({log, retryConfig}) => {
       timeout: parseInt(process.env.VI_ATHER_COLLECTOR_REQUEST_TIMEOUT || "30000", 10)
     }
 
-    return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest})
+    return retryableRequest({requestConfig, retryConfig, log, makeRequest: makeAxiosRequest}).then(() => gen)
   }
 }
