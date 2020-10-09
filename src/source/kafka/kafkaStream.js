@@ -37,7 +37,10 @@ const parseEvent = (appContext, event, resolve) => {
       }
     }
   } catch (e) {
-    log.warn({error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}})
+    log.warn(
+      {error: errorFormatter(e), ctx: {value: JSON.stringify(value), headers: JSON.stringify(headers)}},
+      `${e.message}`
+    )
     resolve(event)
   }
 }
