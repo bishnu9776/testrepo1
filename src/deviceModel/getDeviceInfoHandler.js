@@ -7,7 +7,7 @@ export const getDeviceInfoHandler = async appContext => {
   const shouldUpdateDeviceRules = JSON.parse(process.env.VI_SHOULD_UPDATE_DEVICE_RULES || "false")
   if (!shouldUpdateDeviceRules) {
     return {
-      updateDeviceInfo: R.identity
+      updateDeviceInfo: e => Promise.resolve(e)
     }
   }
 

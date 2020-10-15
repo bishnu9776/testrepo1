@@ -172,6 +172,7 @@ describe("Pipeline spec", () => {
   it("ci events flow through pipeline from source gcp", done => {
     process.env.VI_INPUT_TYPE = "ci"
     process.env.VI_SHOULD_SEND_PROBE = "false"
+    process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
     const source = {
       stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
     }
