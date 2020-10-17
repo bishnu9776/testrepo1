@@ -4,7 +4,6 @@ import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
-import {getAttributesFormatter} from "./formatAttributes"
 import {getChannelParser} from "./channelParser"
 import {getInputMessageTags} from "../metrics/tags"
 
@@ -35,7 +34,6 @@ export const getMessageParser = ({appContext, probe}) => {
   const decompressMessage = getDecompresserFn(appContext)
   const createDataItemsFromMessage = getChannelParser()(appContext, probe)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
-  const formatAttributes = getAttributesFormatter()
   const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
   const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
   const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
@@ -49,14 +47,13 @@ export const getMessageParser = ({appContext, probe}) => {
     const endOfEvent = [{message, tag: ACK_MSG_TAG, acknowledgeMessage}]
 
     try {
-      const attributes = formatAttributes(message.attributes)
+      const {attributes} = message
 
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
         metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getInputMessageTags(message))
         return endOfEvent
       }
 
-      message.attributes = attributes
       decompressedMessage = await decompressMessage(message)
 
       if (isNil(decompressedMessage)) {

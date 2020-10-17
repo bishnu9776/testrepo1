@@ -75,14 +75,14 @@ describe("Pipeline spec", () => {
       },
       complete: () => {
         const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
-        expect(output.length).to.eql(123)
+        expect(output.length).to.eql(122)
         expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
         output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
         output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
         expect(probeEvent.length).to.eql(1)
         expect(probeEvent[0].schema_version).to.eql("4")
         expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
+        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
       }
@@ -110,8 +110,9 @@ describe("Pipeline spec", () => {
         output.push(message)
       },
       complete: () => {
-        expect(output.length).to.eql(123)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
+        expect(output.length).to.eql(122)
+        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
+        expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
       }
     }
@@ -145,7 +146,7 @@ describe("Pipeline spec", () => {
       complete: () => {
         const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
         const dataItemEvent = output.filter(e => e.tag === "MTConnectDataItems")
-        expect(output.length).to.eql(4)
+        expect(output.length).to.eql(3)
         output.every(e => expect(e.plant).to.eql("ather"))
         expect(dataItemEvent.length).to.eql(1)
         expect(dataItemEvent[0].schema_version).to.eql("3")
@@ -154,7 +155,7 @@ describe("Pipeline spec", () => {
         expect(probeEvent.length).to.eql(1)
         expect(probeEvent[0].schema_version).to.eql("4")
         expect(probeEvent.length).to.eql(1)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
+        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
         expect(acknowledgeMessageSpy.callCount).to.eql(2)
         done()
       }
@@ -169,7 +170,7 @@ describe("Pipeline spec", () => {
     })
   })
 
-  it("ci events flow through pipeline from source gcp", done => {
+  it("post big sink ci events flow through pipeline from source gcp", done => {
     process.env.VI_INPUT_TYPE = "ci"
     process.env.VI_SHOULD_SEND_PROBE = "false"
     process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
@@ -196,6 +197,10 @@ describe("Pipeline spec", () => {
       kafkaProducer,
       appContext
     })
+  })
+
+  it.skip("pre big sink ci events flow through pipeline from source gcp", () => {
+    // deserialises using avro for rms_data and logs, decodes rms_data and can_raw, parses other channels as byte arrays
   })
 
   it.skip("retry's observable chain if producing to kafka fails", () => {})

@@ -2,8 +2,8 @@ import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/channelParser/gridChannel"
 import {CAN} from "../../fixtures/gridChannels/CAN"
-import {getAttributesFormatter} from "../../../../src/messageParser/formatAttributes"
 import {clearEnv} from "../../../utils"
+import {getAttributesFormatter} from "../../../../src/messageParser/formatAttributes"
 
 describe("Parses grid CAN", () => {
   let metricRegistry
@@ -24,7 +24,7 @@ describe("Parses grid CAN", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateCIEventFromMessageFn(appContext)
-    const formatAttributes = getAttributesFormatter() // Note: Doing this as CAN attributes differs from attributes in other channels
+    const formatAttributes = getAttributesFormatter(metricRegistry) // Note: Doing this as CAN attributes differs from attributes in other channels
 
     expect(
       createDataItemsFromMessage({message: {data: CAN.data, attributes: formatAttributes(CAN.attributes)}})

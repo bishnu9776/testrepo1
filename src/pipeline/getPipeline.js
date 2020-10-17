@@ -11,6 +11,7 @@ import {delayAndExit} from "../utils/delayAndExit"
 import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {getProbeAppender} from "../probeAppender/getProbeAppender"
+import {getAttributesFormatter} from "../messageParser/formatAttributes"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -33,8 +34,28 @@ const defaultObserver = log => ({
   }
 })
 
+const formatAttributesAndAckMessageIfInvalid = metricRegistry => {
+  const formatAttributes = getAttributesFormatter(metricRegistry)
+
+  return e => {
+    const formattedAttributes = formatAttributes(e.message.attributes)
+    if (formattedAttributes) {
+      return {
+        message: {
+          ...e.message,
+          attributes: formattedAttributes
+        },
+        acknowledgeMessage: e.acknowledgeMessage
+      }
+    }
+
+    e.acknowledgeMessage()
+    return null
+  }
+}
+
 export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
-  const {log} = appContext
+  const {log, metricRegistry} = appContext
   const probe = loadFileFromAbsolutePath(probePath, log)
 
   const {stream} = source
@@ -48,6 +69,8 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
   return stream
     .pipe(
       timeout(eventTimeout),
+      map(formatAttributesAndAckMessageIfInvalid(metricRegistry)),
+      filter(x => !!x),
       mergeMap(event => from(parseMessage(event))),
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array
