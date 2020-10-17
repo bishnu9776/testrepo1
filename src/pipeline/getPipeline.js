@@ -12,6 +12,7 @@ import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {getProbeAppender} from "../probeAppender/getProbeAppender"
 import {getAttributesFormatter} from "../messageParser/formatAttributes"
+import {getInputMessageTags} from "../metrics/tags"
 
 const {env} = process
 const eventTimeout = process.env.VI_EVENT_TIMEOUT || 600000
@@ -54,6 +55,29 @@ const formatAttributesAndAckMessageIfInvalid = metricRegistry => {
   }
 }
 
+const filterEventsBasedOnChannelAndDevice = metricRegistry => {
+  const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
+  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
+  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
+
+  const shouldDropChannel = channel => Array.isArray(channelsToDrop) && channelsToDrop.includes(channel)
+  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
+
+  return event => {
+    const {message, acknowledgeMessage} = event
+
+    const {attributes} = message
+
+    if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
+      metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getInputMessageTags(message))
+      acknowledgeMessage()
+      return false
+    }
+
+    return true
+  }
+}
+
 export const getPipeline = async ({appContext, observer, probePath, source, kafkaProducer}) => {
   const {log, metricRegistry} = appContext
   const probe = loadFileFromAbsolutePath(probePath, log)
@@ -71,6 +95,7 @@ export const getPipeline = async ({appContext, observer, probePath, source, kafk
       timeout(eventTimeout),
       map(formatAttributesAndAckMessageIfInvalid(metricRegistry)),
       filter(x => !!x),
+      filter(filterEventsBasedOnChannelAndDevice(metricRegistry)),
       mergeMap(event => from(parseMessage(event))),
       filter(complement(isEmpty)),
       concatMap(events => from(events)), // previous from returns a promise which resolves to an array

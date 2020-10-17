@@ -12,9 +12,7 @@ import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
 import {getAttributesFormatter} from "../../src/messageParser/formatAttributes"
 
-const {env} = process
 const formatAttributes = getAttributesFormatter(getMockMetricRegistry())
-// TODO: Update fixtures to reflect formatted attributes
 
 describe("Parse GCP message", () => {
   let appContext
@@ -186,32 +184,6 @@ describe("Parse GCP message", () => {
       expect(output.length).to.eql(2)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
       expect(output[0].data_item_id).to.eql("s_123-BMS_Cell3")
-    })
-  })
-
-  describe("should ack message without decompressing or parsing", () => {
-    beforeEach(() => {
-      env.VI_CHANNELS_TO_DROP = "gps_tpv"
-    })
-
-    it("when message contains channel specified to drop", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
-    })
-
-    it("when message contains bike_id which doesn't match the regex device filter", async () => {
-      env.VI_SHOULD_FILTER_DEVICE = "true"
-      env.VI_DEVICE_FILTER_REGEX = "00$"
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
     })
   })
 })
