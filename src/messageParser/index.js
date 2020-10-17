@@ -28,10 +28,11 @@ const handleParseFailures = (message, error, appContext) => {
   )
 }
 
+// parses attributes, decides to drop / not based on channel / device, decompresses / decodes based on attributes and env, makes it a connect event, dedups, merges probe info
 export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
-  const maybeDecompressMessage = getDecompresserFn(appContext)
+  const decompressMessage = getDecompresserFn(appContext)
   const createDataItemsFromMessage = getChannelParser()(appContext, probe)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
   const formatAttributes = getAttributesFormatter()
@@ -49,12 +50,14 @@ export const getMessageParser = ({appContext, probe}) => {
 
     try {
       const attributes = formatAttributes(message.attributes)
+
       if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
         metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getInputMessageTags(message))
         return endOfEvent
       }
 
-      decompressedMessage = await maybeDecompressMessage(message)
+      message.attributes = attributes
+      decompressedMessage = await decompressMessage(message)
 
       if (isNil(decompressedMessage)) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})

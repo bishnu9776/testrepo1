@@ -14,7 +14,7 @@ const inflate = message => {
   })
 }
 
-const decompressLegacyData = async ({message, log}) => {
+const decompressUsingInflate = async ({message, log}) => {
   const {data, attributes} = message
   try {
     const decompressedMessage = await inflate(data)
@@ -22,7 +22,7 @@ const decompressLegacyData = async ({message, log}) => {
   } catch (e) {
     log.error(
       {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
-      "Error decompressing legacy data."
+      "Error decompressing using inflate."
     )
     return null
   }
@@ -45,13 +45,24 @@ export const getDecompresserFn = ({log}) => {
   const decompressionConfig = {
     bike: async message => {
       const {attributes} = message
-      const isLegacyMessage = attributes?.subFolder ? !attributes?.subFolder?.includes("v1") : false
+      const isLegacyMessage = attributes.version === "legacy"
       if (isLegacyMessage) {
-        return decompressLegacyData({message, log})
+        return decompressUsingInflate({message, log})
       }
       return deserializeAvro({message, log})
     },
-    ci: async message => decompressLegacyData({message, log})
+    ci: async message => {
+      const isPreBigSink = JSON.parse(process.env.VI_CI_PRE_BIG_SINK_MODE || "false")
+      const {attributes} = message
+
+      if (isPreBigSink) {
+        const isAvro =
+          (attributes.channel === "rms_data" && attributes.version === "v1") || attributes.channel === "logs"
+        return isAvro ? deserializeAvro({message, log}) : JSON.parse(message.data.toString())
+      }
+
+      return decompressUsingInflate({message, log})
+    }
   }
 
   return decompressionConfig[process.env.VI_INPUT_TYPE || "bike"]

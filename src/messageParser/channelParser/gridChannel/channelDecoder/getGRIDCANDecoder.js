@@ -2,6 +2,8 @@ import {keys, isNil} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
+import {log} from "../../../../logger"
+import {convertIntCANIdToHex} from "../../bikeChannel/channelDecoder/utils/convertIntCANIdToHex"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -70,22 +72,34 @@ const populateDecoderConfig = config => {
   return decoder
 }
 
-export const getGRIDCANDecoder = () => {
+export const getGRIDCANDecoder = metricRegistry => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
   const decoder = populateDecoderConfig(decoderConfig)
 
   return message => {
-    const {data} = message
+    const {data, attributes} = message
 
     return data.map(d => {
       const {can_id: canId} = d.canRaw
 
       const decoderKeys = keys(decoder)
-      let decodeKey = decoderKeys.filter(key => new RegExp(canId).test(key))
-      decodeKey = decoder[decodeKey]
+      const decoderKey = decoderKeys.filter(key => new RegExp(canId).test(key))
 
-      return decodeGRIDCANRaw(d.canRaw, decodeKey)
+      if (decoderKey.length !== 1) {
+        log.error(
+          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes?.channel}`}},
+          "CI CAN message does not map to one decoder for its CAN id"
+        )
+
+        metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
+          channel: attributes?.channel,
+          can_id: convertIntCANIdToHex(canId)
+        })
+        return []
+      }
+
+      return decodeGRIDCANRaw(d.canRaw, decoder[decoderKey[0]])
     })
   }
 }

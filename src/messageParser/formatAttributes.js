@@ -7,19 +7,32 @@ const attributesFormatter = {
       return {
         channel: subFolder.split("/").slice(1).join("/"),
         version: subFolder.split("/")[0],
-        bike_id: deviceId
+        bike_id: deviceId,
+        device_id: deviceId
       }
     }
 
     return {
       channel: subFolder,
       bike_id: deviceId,
-      version: "legacy"
+      version: "legacy",
+      device_id: deviceId
     }
   },
   ci: attributes => {
+    const isPreBigSink = JSON.parse(process.env.VI_CI_PRE_BIG_SINK_MODE || "false")
+
+    if (isPreBigSink) {
+      return {
+        channel: attributes.subFolder.split("/").slice(1).join("/"),
+        version: attributes.subFolder.split("/")[0],
+        bike_id: attributes.deviceId
+      }
+    }
+
     if (attributes.channel === "can") {
-      return {...attributes, bike_id: attributes.db_id || attributes.bike_id}
+      const deviceId = attributes.db_id || attributes.bike_id
+      return {...attributes, bike_id: deviceId, device_id: deviceId}
     }
     return attributes
   }

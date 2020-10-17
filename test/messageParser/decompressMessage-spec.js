@@ -24,7 +24,7 @@ describe("Decompresses gcp message", () => {
 
   describe("legacy data", () => {
     it("uses zlib inflate", async () => {
-      const input = getDeflateCompressedGCPEvent({data: GPSTPV.data, attributes: {subFolder: "gpstpv"}})
+      const input = getDeflateCompressedGCPEvent({data: GPSTPV.data, attributes: {version: "legacy"}})
       const decompressMessage = getDecompresserFn(appContext)
       const output = await decompressMessage(input)
       expect(output.length).to.eql(1)
