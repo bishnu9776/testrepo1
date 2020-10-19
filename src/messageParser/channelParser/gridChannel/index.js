@@ -6,6 +6,7 @@ import {parseDBDATA} from "./DB_DATA"
 import {parseRMSDATA} from "./RMS_DATA"
 import {parseNETWORKDATA} from "./NETWORK_DATA"
 import {parseSESSIONDATA} from "./SESSION_DATA"
+import {parseLOG} from "../bikeChannel/LOGS"
 
 const getCiParser = appContext => {
   const {metricRegistry} = appContext
@@ -17,7 +18,8 @@ const getCiParser = appContext => {
     network_data: parseNETWORKDATA,
     pod_info: parsePODINFO,
     rms_data: parseRMSDATA,
-    session_data: parseSESSIONDATA
+    session_data: parseSESSIONDATA,
+    logs: parseLOG
   }
 
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])

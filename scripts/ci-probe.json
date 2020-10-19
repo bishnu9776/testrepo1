@@ -338,5 +338,11 @@
     "data_item_name": "session",
     "data_item_type": "SESSION",
     "category": "EVENT"
+  },
+  "message": {
+    "data_item_name": "message",
+    "component": "logs",
+    "data_item_type": "LOG",
+    "category": "LOG"
   }
 }

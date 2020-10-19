@@ -26,7 +26,7 @@ const handleParseFailures = (message, error, appContext) => {
   )
 }
 
-// decompresses / decodes based on attributes and env, makes it a connect event, dedups, merges probe info
+// decompresses / decodes, converts message into array of connect events, dedups, merges probe info
 export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)

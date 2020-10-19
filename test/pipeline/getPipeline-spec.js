@@ -203,7 +203,8 @@ describe("Pipeline spec", () => {
     })
 
     it.skip("pre big sink ci events flow through pipeline from source gcp", () => {
-      // deserialises using avro for rms_data and logs, decodes rms_data and can_raw, parses other channels as byte arrays
+      // deserialises using avro for can_raw, rms_data and logs and string to byte arrays for other channels
+      // decodes rms_data with trip flag and can_raw
     })
   })
 
