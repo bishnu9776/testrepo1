@@ -15,6 +15,7 @@ describe("Parses pre big sink RMS_DATA", () => {
     metricRegistry = getMockMetricRegistry()
     appContext = {log, metricRegistry}
     process.env.VI_GEN1_DATAITEM_ID_VERSION = "v1"
+    process.env.VI_RMS_DECODER_CONFIG_PATH = "./test/fixtures/configFiles/rmsDecoderConfig.js"
   })
 
   afterEach(() => {
@@ -54,8 +55,108 @@ describe("Parses pre big sink RMS_DATA", () => {
     ])
   })
 
-  it.skip("parses data with trip flag", () => {
+  it("parses data with trip flag", () => {
     const createDataItemsFromMessage = getCreateCIEventFromMessageFn(appContext)
-    expect(createDataItemsFromMessage({message: RMS_DATA_WITH_TRIP_FLAG})).to.eql([])
+    expect(createDataItemsFromMessage({message: RMS_DATA_WITH_TRIP_FLAG})).to.eql([
+      {
+        channel: "rms_data",
+        data_item_id: "phase1_voltage-v1",
+        data_item_name: "phase1_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 247.5500030517578
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P1_over_voltage-v1",
+        data_item_name: "P1_over_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P1_under_voltage-v1",
+        data_item_name: "P1_under_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P1_over_current-v1",
+        data_item_name: "P1_over_current",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P2_over_voltage-v1",
+        data_item_name: "P2_over_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P2_under_voltage-v1",
+        data_item_name: "P2_under_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 1
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P2_over_current-v1",
+        data_item_name: "P2_over_current",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P3_over_voltage-v1",
+        data_item_name: "P3_over_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P3_under_voltage-v1",
+        data_item_name: "P3_under_voltage",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 1
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "P3_over_current-v1",
+        data_item_name: "P3_over_current",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      },
+      {
+        channel: "rms_data",
+        data_item_id: "Bad_frequency-v1",
+        data_item_name: "Bad_frequency",
+        device_uuid: "DB_D81910297370017",
+        sequence: 117346,
+        timestamp: "2020-10-18T21:51:59.952Z",
+        value: 0
+      }
+    ])
   })
 })

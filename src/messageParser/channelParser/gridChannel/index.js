@@ -17,7 +17,7 @@ const getCiParser = appContext => {
     db_info: parseDBINFO,
     network_data: parseNETWORKDATA,
     pod_info: parsePODINFO,
-    rms_data: parseRMSDATA,
+    rms_data: parseRMSDATA(),
     session_data: parseSESSIONDATA,
     logs: parseLOG
   }

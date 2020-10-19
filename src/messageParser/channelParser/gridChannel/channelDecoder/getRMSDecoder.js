@@ -5,10 +5,12 @@ import {populateDecoderConfig} from "../../bikeChannel/channelDecoder/utils/popu
 const decodeTripFlag = (data, decoder) => {
   const {trip_flag: tripFlag, ...decodedData} = data
 
-  const dataItems = keys(decoder)
-  dataItems.forEach(dataItem => {
-    decodedData[dataItem] = decoder[dataItem](tripFlag)
-  })
+  if (tripFlag) {
+    const dataItems = keys(decoder)
+    dataItems.forEach(dataItem => {
+      decodedData[dataItem] = decoder[dataItem](tripFlag)
+    })
+  }
 
   return decodedData
 }
