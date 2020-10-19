@@ -1,0 +1,856 @@
+{
+  "Pod":{
+    "LPCv1":{
+      "0x001":[
+        {
+          "params":"POD_Error",
+          "HRN":"POD Error",
+          "equation":"(bytes[0])"
+        },
+        {
+          "params":"POD_ErrorValue",
+          "HRN":"POD Error Value",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AC_OverVoltageErrorValue",
+          "HRN":"AC Over Voltage Error Value",
+          "condition":"(bytes[0] == 0x01)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_UnderVoltageErrorValue",
+          "HRN":"AC Under Voltage Error Value",
+          "condition":"(bytes[0] == 0x02)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_OverCurrentErrorValue",
+          "HRN":"AC Over Current Error Value",
+          "condition":"(bytes[0] == 0x03)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_EarthFaultValue",
+          "HRN":"Earth Fault Value",
+          "condition":"(bytes[0] == 0x04)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_IntTempErrorValue",
+          "HRN":"Internal Temp Error Value",
+          "condition":"(bytes[0] == 0x05)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_FlapOpen",
+          "HRN":"Proximity Switch Error Value",
+          "condition":"(bytes[0] == 0x06)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AC_VoltageHwErrorValue",
+          "HRN":"AC Voltage Hardware Error Value",
+          "condition":"(bytes[0] == 0x20)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_CurrentHwErrorValue",
+          "HRN":"AC Current Hardware Error Value",
+          "condition":"(bytes[0] == 0x21)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_RelayHwErrorValue",
+          "HRN":"AC Relay Leakage Error Value",
+          "condition":"(bytes[0] == 0x22)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_DBHeartbeatError",
+          "HRN":"DB Heartbeat Error",
+          "condition":"(bytes[0] == 0x23)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_VehicleHeartbeatError",
+          "HRN":"Vehicle Heartbeat Error Value",
+          "condition":"(bytes[0] == 0x24)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x002":[
+        {
+          "params":"POD_ErrorRecovery",
+          "HRN":"POD Error Recovery",
+          "equation":"(bytes[0])"
+        },
+        {
+          "params":"POD_ErrorRecoveryValue",
+          "HRN":"POD Error Recovery Value",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AC_OverVoltageErrorRecoveryValue",
+          "HRN":"AC Over Voltage Error Recovery Value",
+          "condition":"(bytes[0] == 0x01)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_UnderVoltageErrorRecoveryValue",
+          "HRN":"AC Under Voltage Error Recovery Value",
+          "condition":"(bytes[0] == 0x02)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_OverCurrentErrorRecoveryValue",
+          "HRN":"Over Current Error Recovery Value",
+          "condition":"(bytes[0] == 0x03)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_EarthFaultRecoveryValue",
+          "HRN":"Earth EarthFault",
+          "condition":"(bytes[0] == 0x04)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_IntTempErrorRecoveryValue",
+          "HRN":"Internal Temp Error Recovery Value",
+          "condition":"(bytes[0] == 0x05)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_FlapClosed",
+          "HRN":"Proximity Switch Error Recovery Value",
+          "condition":"(bytes[0] == 0x06)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AC_VoltageHwErrorRecoveryValue",
+          "HRN":"AC Voltage Hardware Error Recovery Value",
+          "condition":"(bytes[0] == 0x20)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_CurentHwErrorRecoveryValue",
+          "HRN":"AC Current Hardware Error Recovery Value",
+          "condition":"(bytes[0] == 0x21)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_RelayHwErrorRecoveryValue",
+          "HRN":"AC Relay Leakage Error Recovery Value",
+          "condition":"(bytes[0] == 0x22)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_DBHeartbeatRecovery",
+          "HRN":"DB Heartbeat Error Recovery",
+          "condition":"(bytes[0] == 0x23)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_VehicleHeartbeatRecovery",
+          "HRN":"Vehicle Heartbeat Error Recovery Value",
+          "condition":"(bytes[0] == 0x24)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x003":[
+        {
+          "params":"POD_Boot",
+          "HRN":"POD Boot Up",
+          "equation":"1"
+        },
+        {
+          "params":"POD_ResetCause",
+          "HRN":"POD Reset Cause",
+          "equation":"bytes[1]"
+        },
+        {
+          "params":"POD_ResetCause_PowerOnReset",
+          "HRN":"POD Reset Cause Power On Reset",
+          "equation":"(bytes[1] >> 0) & 1"
+        },
+        {
+          "params":"POD_ResetCause_ExternalReset",
+          "HRN":"POD Reset Cause External Reset",
+          "equation":"(bytes[1] >> 1) & 1"
+        },
+        {
+          "params":"POD_ResetCause_WatchDogReset",
+          "HRN":"POD Reset Cause WatchDog Reset",
+          "equation":"(bytes[1] >> 2) & 1"
+        },
+        {
+          "params":"POD_ResetCause_BrownOutDetect",
+          "HRN":"POD Reset Cause Brown Out",
+          "equation":"(bytes[1] >> 3) & 1"
+        },
+        {
+          "params":"POD_HardwareVersion",
+          "HRN":"POD Hardware Version",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_WatchdogCause",
+          "HRN":"POD Cause of Watchdog",
+          "equation":"bytes[3]"
+        },
+        {
+          "params":"POD_FirmwareVersion",
+          "HRN":"POD Firmware Version",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x004":[
+        {
+          "params":"POD_DpmOffReason",
+          "HRN":"POD DPM Relay Turned OFF Reason",
+          "equation":"bytes[0]"
+        }
+      ],
+      "0x005":[
+        {
+          "params":"POD_AtherOffReason",
+          "HRN":"POD S340 / Ather AC Relay Turned OFF Reason",
+          "equation":"bytes[0]"
+        }
+      ],
+      "0x006":[
+        {
+          "params":"POD_ResetTimerOverflow",
+          "HRN":"POD Reset Due to Timer Overflow (ms)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x007":[
+        {
+          "params":"POD_AtherVehicleConnected",
+          "HRN":"POD Ather Vehicle Connected Status",
+          "equation":"bytes[0]"
+        },
+        {
+          "params":"POD_CP_State",
+          "HRN":"POD CP State",
+          "equation":"bytes[1]"
+        },
+        {
+          "params":"POD_CP_Volts",
+          "HRN":"POD CP Volts",
+          "equation":"((bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) - 1290) * 0.0165099324"
+        }
+      ],
+      "0x008":[
+        {
+          "params":"POD_FastOffReason",
+          "HRN":"POD DC Relay Turned OFF Reason",
+          "equation":"bytes[0]"
+        }
+      ],
+      "0x009":[
+        {
+          "params":"POD_ResetLongError",
+          "HRN":"POD Reset Due to Long Error State",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x022":[
+        {
+          "params":"POD_Heartbeat",
+          "HRN":"POD Heartbeat",
+          "equation":"1"
+        },
+        {
+          "params":"POD_State",
+          "HRN":"POD State",
+          "equation":"bytes[0]"
+        },
+        {
+          "params":"POD_AC_Fault",
+          "HRN":"POD AC Fault",
+          "equation":"bytes[1]"
+        },
+        {
+          "params":"POD_AC_OverVoltageFault",
+          "HRN":"POD AC Over Voltage Fault",
+          "equation":"(bytes[1] >> 0) & 1"
+        },
+        {
+          "params":"POD_AC_UnderVoltageFault",
+          "HRN":"POD AC Under Voltage Fault",
+          "equation":"(bytes[1] >> 1) & 1"
+        },
+        {
+          "params":"POD_AC_OverCurrentFault",
+          "HRN":"POD AC Over Current Fault",
+          "equation":"(bytes[1] >> 2) & 1"
+        },
+        {
+          "params":"POD_AC_VoltageHwFault",
+          "HRN":"POD AC Voltage Hardware Fault",
+          "equation":"(bytes[1] >> 3) & 1"
+        },
+        {
+          "params":"POD_AC_CurrentHwFault",
+          "HRN":"POD AC Current Hardware Fault",
+          "equation":"(bytes[1] >> 4) & 1"
+        },
+        {
+          "params":"POD_AC_RelayLeakageFault",
+          "HRN":"POD AC Relay Leakage Fault",
+          "equation":"(bytes[1] >> 5) & 1"
+        },
+        {
+          "params":"POD_UserLedStatus",
+          "HRN":"User Led Module Connected / Not Connected",
+          "equation":"(bytes[2] >> 0) & 1"
+        },
+        {
+          "params":"POD_WeatherSensorStatus",
+          "HRN":"Weather Sensor Module Connected / Not Connected",
+          "equation":"(bytes[2] >> 1) & 1"
+        },
+        {
+          "params":"POD_ExternalAdcStatus",
+          "HRN":"External ADC Module Connected / Not Connected",
+          "equation":"(bytes[2] >> 2) & 1"
+        },
+        {
+          "params":"POD_OtherFaults",
+          "HRN":"POD Other Faults",
+          "equation":"bytes[3]"
+        },
+        {
+          "params":"POD_EarthFault",
+          "HRN":"POD Earth Fault",
+          "equation":"(bytes[3] >> 0) & 1"
+        },
+        {
+          "params":"POD_ProximityFault",
+          "HRN":"POD Proximity Fault",
+          "equation":"(bytes[3] >> 1) & 1"
+        },
+        {
+          "params":"POD_IntTempFault",
+          "HRN":"POD Internal Temperature Fault",
+          "equation":"(bytes[3] >> 2) & 1"
+        },
+        {
+          "params":"POD_DC_VoltageFault",
+          "HRN":"POD Dc Voltage Fault",
+          "equation":"(bytes[3] >> 3) & 1"
+        },
+        {
+          "params":"POD_ExtHumidityFault",
+          "HRN":"POD Dc Voltage Fault",
+          "equation":"(bytes[3] >> 4) & 1"
+        },
+        {
+          "params":"POD_DBHeartBeatFault",
+          "HRN":"POD Dc Voltage Fault",
+          "equation":"(bytes[3] >> 5) & 1"
+        },
+        {
+          "params":"POD_Uptime",
+          "HRN":"POD Uptime (ms)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x023":[
+        {
+          "params":"POD_ResetBootloader",
+          "HRN":"POD Reset To Bootloader",
+          "equation":"1"
+        }
+      ],
+      "0x024":[
+        {
+          "params":"POD_ResetApp",
+          "HRN":"POD Reset To Application",
+          "equation":"1"
+        }
+      ],
+      "0x025":[
+        {
+          "params":"POD_DpmOn",
+          "HRN":"POD DPM Relay ON",
+          "equation":"1"
+        }
+      ],
+      "0x026":[
+        {
+          "params":"POD_DpmOff",
+          "HRN":"POD DPM Relay OFF",
+          "equation":"1"
+        }
+      ],
+      "0x027":[
+        {
+          "params":"POD_AtherOn",
+          "HRN":"POD S340 Relay ON",
+          "equation":"1"
+        }
+      ],
+      "0x028":[
+        {
+          "params":"POD_AtherOff",
+          "HRN":"POD S340 Relay OFF",
+          "equation":"1"
+        }
+      ],
+      "0x029":[
+        {
+          "params":"POD_WriteAppSign",
+          "HRN":"POD Write App Sign",
+          "equation":"1"
+        }
+      ],
+      "0x02a":[
+        {
+          "params":"POD_GetLpcId",
+          "HRN":"POD LPC Unique ID",
+          "equation":"bytes[0]"
+        }
+      ],
+      "0x02b":[
+        {
+          "params":"POD_GetFirmwareVersion",
+          "HRN":"POD Get Firmware Version",
+          "equation":"1"
+        }
+      ],
+      "0x02c":[
+        {
+          "params":"POD_FastOn",
+          "HRN":"POD DC Relay ON",
+          "equation":"1"
+        }
+      ],
+      "0x02d":[
+        {
+          "params":"POD_FastOff",
+          "HRN":"POD DC Relay OFF",
+          "equation":"1"
+        }
+      ],
+      "0x05e":[
+        {
+          "params":"POD_IrStatus",
+          "HRN":"POD Infrared/Dock Status",
+          "condition":"(bytes[0] == 0x07)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_DpmStatus",
+          "HRN":"POD DPM Relay Status",
+          "condition":"(bytes[0] == 0x08)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AtherStatus",
+          "HRN":"POD S340 AC Relay",
+          "condition":"(bytes[0] == 0x09)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_FastStatus",
+          "HRN":"POD DC Relay Status",
+          "condition":"(bytes[0] == 0x0a)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_UserLedColour",
+          "HRN":"POD User LED Status",
+          "condition":"(bytes[0] == 0x0b)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_VehicleHeartbeat",
+          "HRN":"POD Vehicle Heartbeat",
+          "condition":"(bytes[0] == 0x24)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_ExternalTemp",
+          "HRN":"POD External Temp",
+          "condition":"(bytes[0] == 0x80)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_ExtHumidity",
+          "HRN":"POD External Humidity",
+          "condition":"(bytes[0] == 0x81)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_InternalTemp",
+          "HRN":"POD Internal / On board temp",
+          "condition":"(bytes[0] == 0x82)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        },
+        {
+          "params":"POD_AC_Voltage",
+          "HRN":"POD AC Voltage",
+          "condition":"(bytes[0] == 0x91)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_AC_Current",
+          "HRN":"POD AC Current",
+          "condition":"(bytes[0] == 0x92)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        },
+        {
+          "params":"POD_DC_Voltage",
+          "HRN":"POD DC Voltage",
+          "condition":"(bytes[0] == 0x93)",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256) / 1000.00"
+        }
+      ],
+      "0x05f":[
+        {
+          "params":"POD_ResponseCommand",
+          "HRN":"POD Response Command ID",
+          "equation":"bytes[0]"
+        },
+        {
+          "params":"POD_ResponseStatus",
+          "HRN":"POD Response Status (Ack/Nak)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_ResponseReason",
+          "HRN":"POD Response REASON",
+          "equation":"bytes[3]"
+        },
+        {
+          "params":"POD_ResponseValue",
+          "HRN":"POD Response Value",
+          "equation":"(bytes[4] + bytes[5]*256 + bytes[6]*256*256 + bytes[7]*256*256*256)"
+        }
+      ],
+      "0x060":[
+        {
+          "params":"POD_Bootloader_Heartbeat",
+          "HRN":"Pod Bootloader Heartbeat",
+          "equation":"2"
+        }
+      ],
+      "0x061":[
+        {
+          "params":"POD_Bootloader_ResponseFlashErase",
+          "HRN":"Pod Bootloader Response Flash Erase",
+          "condition":"(bytes[0] == 0x63)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_Bootloader_ResponsePageNumber",
+          "HRN":"Pod Bootloader Response Page Number",
+          "condition":"(bytes[0] == 0x64)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_Bootloader_ResponseFlashData",
+          "HRN":"Pod Bootloader Response Flash Data",
+          "condition":"(bytes[0] == 0x65)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_Bootloader_ResponseFlashWrite",
+          "HRN":"Pod Bootloader Response Flash Write",
+          "condition":"(bytes[0] == 0x66)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_Bootloader_ResponseFlashCrc",
+          "HRN":"Pod Bootloader Response Flash Crc",
+          "condition":"(bytes[0] == 0x67)",
+          "equation":"bytes[2]"
+        },
+        {
+          "params":"POD_Bootloader_ResponseJumpToApp",
+          "HRN":"Pod Bootloader Response Jump to App",
+          "condition":"(bytes[0] == 0x68)",
+          "equation":"bytes[2]"
+        }
+      ],
+      "0x063":[
+        {
+          "params":"POD_Bootloader_FlashErase",
+          "HRN":"Pod Bootloader Flash Erase",
+          "equation":"1"
+        }
+      ],
+      "0x064":[
+        {
+          "params":"POD_Bootloader_PageNumber",
+          "HRN":"Pod Bootloader Page Number",
+          "equation":"1"
+        }
+      ],
+      "0x068":[
+        {
+          "params":"POD_Bootloader_JumpToApp",
+          "HRN":"Pod Bootloader Jump to Application",
+          "equation":"1"
+        }
+      ],
+      "0x070":[
+        {
+          "params":"POD_S340_ChargerType",
+          "HRN":"S340 Charger Type",
+          "equation":"bytes[0]"
+        },
+        {
+          "params":"POD_S340_McuChargingState",
+          "HRN":"S340 Mcu Charging State",
+          "equation":"bytes[1]"
+        }
+      ],
+      "0x071":[
+        {
+          "params":"POD_S340_StartAcCharging",
+          "HRN":"S340 Start Ac Charging",
+          "equation":"1"
+        }
+      ],
+      "0x072":[
+        {
+          "params":"POD_S340_StartDcCharging",
+          "HRN":"S340 Start Dc Charging",
+          "equation":"1"
+        },
+        {
+          "params":"POD_S340_CcRate",
+          "HRN":"S340 CC Rate",
+          "equation":"(bytes[0] + bytes[1]*256)"
+        }
+      ],
+      "0x073":[
+        {
+          "params":"POD_S340_StartCv",
+          "HRN":"S340 Start CV",
+          "equation":"1"
+        }
+      ],
+      "0x074":[
+        {
+          "params":"POD_S340_StopCharging",
+          "HRN":"S340 Stop Charging",
+          "equation":"1"
+        }
+      ]
+    }
+  },
+  "OBC": {
+    "v1": {
+      "0x192": [
+        {
+          "params": "CHA_MCR",
+          "HRN": "Maximum Current Ref",
+          "equation": "((bytes[1] *256)+bytes[0])"
+        },
+        {
+          "params": "CHA_CD",
+          "HRN": "",
+          "equation": "(bytes[3] >> 4) & 1"
+        },
+        {
+          "params": "CHA_RFC",
+          "HRN": "",
+          "equation": "(bytes[3] >> 3) & 1"
+        },
+        {
+          "params": "CHA_CVT",
+          "HRN": "",
+          "equation": "(bytes[3] >> 2) & 1"
+        },
+        {
+          "params": "CHA_CC",
+          "HRN": "",
+          "equation": "(bytes[3] >> 0) & 1"
+        },
+        {
+          "params": "CHA_CV",
+          "HRN": "",
+          "equation": "(bytes[3] >> 1) & 1"
+        },
+        {
+          "params": "CHA_RMCCT",
+          "HRN": "Required Minimum CC Time",
+          "equation": "(bytes[5] >> 0) & 1"
+        },
+        {
+          "params": "CHA_OOVP",
+          "HRN": "Output Over Voltage Protection",
+          "equation": "(bytes[6] >> 7) & 1"
+        },
+        {
+          "params": "CHA_FFF",
+          "HRN": "Fan Failure Fault",
+          "equation": "(bytes[6] >> 6) & 1"
+        },
+        {
+          "params": "CHA_IUV",
+          "HRN": "Input Under Voltage Fault",
+          "equation": "(bytes[6] >> 5) & 1"
+        },
+        {
+          "params": "CHA_OSC",
+          "HRN": "Output Short Circuit",
+          "equation": "(bytes[6] >> 4) & 1"
+        },
+        {
+          "params": "CHA_NL",
+          "HRN": "No Load",
+          "equation": "(bytes[6] >> 3) & 1"
+        },
+        {
+          "params": "CHA_OOI",
+          "HRN": "Output Over Current",
+          "equation": "(bytes[6] >> 2) & 1"
+        },
+        {
+          "params": "CHA_OOV",
+          "HRN": "Output Over Voltage",
+          "equation": "(bytes[6] >> 1) & 1"
+        },
+        {
+          "params": "CHA_SPIF",
+          "HRN": "SPI Failure Fault",
+          "equation": "(bytes[6] >> 0) & 1"
+        },
+        {
+          "params": "CHA_PAOT",
+          "HRN": "PFC Ambient Over Temperature",
+          "equation": "(bytes[7] >> 7) & 1"
+        },
+        {
+          "params": "CHA_HW_PIOV",
+          "HRN": "HW Triggered Input Over Voltage",
+          "equation": "(bytes[7] >> 6) & 1"
+        },
+        {
+          "params": "CHA_PIUV",
+          "HRN": "PFC Input Under Voltage",
+          "equation": "(bytes[7] >> 5) & 1"
+        },
+        {
+          "params": "CHA_PIOT",
+          "HRN": "PFC Input Over Temperature",
+          "equation": "(bytes[7] >> 4) & 1"
+        },
+        {
+          "params": "CHA_SW_PIOV",
+          "HRN": "SW Triggered Input Over Voltage",
+          "equation": "(bytes[7] >> 3) & 1"
+        },
+        {
+          "params": "CHA_FLF",
+          "HRN": "Flyback Line Fault",
+          "equation": "(bytes[7] >> 2) & 1"
+        },
+        {
+          "params": "CHA_OTS",
+          "HRN": "Over Temperature Secondary",
+          "equation": "(bytes[7] >> 1) & 1"
+        },
+        {
+          "params": "CHA_OTP",
+          "HRN": "Over Temperature Primary",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x231": [
+        {
+          "params": "CHA_Vout",
+          "HRN": "Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Iout",
+          "HRN": "Output Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x232": [
+        {
+          "params": "CHA_Vpfc_out",
+          "HRN": "PFC Output Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) "
+        },
+        {
+          "params": "CHA_PFC_Health",
+          "HRN": "PFC Health",
+          "equation": "bytes[6]"
+        },
+        {
+          "params": "CHA_PFC_AmbientTemp",
+          "HRN": "PFC Ambient Temperature",
+          "equation": "((bytes[5] *256)+bytes[4])"
+        }
+      ],
+      "0x233": [
+        {
+          "params": "CHA_Vrms",
+          "HRN": "Input Voltage",
+          "equation": "((bytes[3] *256)+bytes[2]) /100.0"
+        },
+        {
+          "params": "CHA_Irms",
+          "HRN": "Input Current",
+          "equation": "((bytes[7] *256)+bytes[6]) /100.0"
+        }
+      ],
+      "0x234": [
+        {
+          "params": "CHA_PSFB_DiodeTemp",
+          "HRN": "PSFB Diode Temperature",
+          "equation": "((bytes[3] *256)+bytes[2])"
+        }
+      ],
+      "0x238": [
+        {
+          "params": "CHA_PFC_Fan_Speed",
+          "HRN": "PFC Fan speed",
+          "equation": "(bytes[1] * 256) + bytes[0]"
+        },
+        {
+          "params": "CHA_PSFB_Fan_Speed",
+          "HRN": "PSFB Fan speed",
+          "equation": "(bytes[3] * 256) + bytes[2]"
+        }
+      ],
+      "0x460": [
+        {
+          "params": "CHA_Resp",
+          "HRN": "CC CV Stop resp ",
+          "equation": "(bytes[7] * 256) + bytes[6]"
+        }
+      ],
+      "0x430": [
+        {
+          "params": "CHA_Iref",
+          "HRN": "Current reference from VCU",
+          "equation": "(bytes[1] * 256) + (bytes[0])"
+        }
+      ],
+      "0x432": [
+        {
+          "params": "CHA_StopCV",
+          "HRN": "Stop CV command from VCU",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ],
+      "0x434": [
+        {
+          "params": "CHA_AskVersion",
+          "HRN": "Ask Charger Firmware Version",
+          "equation": "(bytes[7] >> 0) & 1"
+        }
+      ]
+    }
+  }
+}

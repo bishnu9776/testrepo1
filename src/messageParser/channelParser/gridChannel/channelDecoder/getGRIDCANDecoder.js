@@ -1,8 +1,7 @@
-import {keys, isNil, flatten} from "ramda"
+import {flatten, isNil, keys} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
-import {log} from "../../../../logger"
 import {convertIntCANIdToHex} from "../../bikeChannel/channelDecoder/utils/convertIntCANIdToHex"
 
 // eslint-disable-next-line no-new-func
@@ -82,10 +81,10 @@ export const getGRIDCANDecoder = metricRegistry => {
         const decoderKey = decoderKeys.filter(key => new RegExp(hexCanId).test(key))
 
         if (decoderKey.length !== 1) {
-          log.error(
-            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}`, hexCanId, decoderKey}},
-            "CI CAN message does not map to one decoder for its CAN id"
-          )
+          // log.error(
+          //   {ctx: {keyToCheck: `${attributes.channel}`, hexCanId, decoderKey}},
+          //   "CI CAN message does not map to one decoder for its CAN id"
+          // )
 
           metricRegistry.updateStat("Counter", "grid_can_messages_ignored", 1, {
             channel: attributes.channel,
