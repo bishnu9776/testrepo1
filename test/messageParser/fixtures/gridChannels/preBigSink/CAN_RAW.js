@@ -6,20 +6,13 @@ export const CAN_RAW = {
   },
   data: [
     {
-      timestamp: 1603054576.364,
-      seq_num: 23701680,
-      global_seq: "145564436",
-      can_id: 94,
-      pod_id: "0xffffd",
-      data: "-7998392934674398464"
-    },
-    {
-      timestamp: 1603054576.365,
-      seq_num: 23701681,
-      global_seq: "145564437",
-      can_id: 94,
-      pod_id: "0xffffd",
-      data: "-7926335344088186880"
+      timestamp: 1586189566.96,
+      seq_num: 82121,
+      global_seq: 49767849,
+      can_id: "0x05e",
+      pod_id: "0xfffe8",
+      data: "91000000c6ad0300",
+      db_id: "DB_001f7b100e91"
     }
   ]
 }

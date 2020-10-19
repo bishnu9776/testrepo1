@@ -1,4 +1,4 @@
-import {keys, isNil} from "ramda"
+import {keys, isNil, flatten} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
@@ -10,23 +10,16 @@ const createFn = eqn => Function("bytes", `return ${eqn}`)
 
 const {env} = process
 
-const decodeGRIDCANRaw = (canRaw, decoderForCANId) => {
-  const {
-    can_id: canId,
-    data: value,
-    timestamp,
-    seq_num: seqNum,
-    db_id: dbId,
-    global_seq: globalSeq,
-    pod_id: podId
-  } = canRaw
-  const numberOfBytes = parseInt(env.VI_CAN_MESSAGE_BYTE_LENGTH || "16", 10)
+const decodeGRIDCANRaw = (canRaw, decoderForCANId, attributes) => {
+  const {bike_id: dbId} = attributes
+  const {can_id: canId, data: value, timestamp, seq_num: seqNum, global_seq: globalSeq, pod_id: podId} = canRaw
+  const numberOfBytes = parseInt(env.VI_GRID_CAN_MESSAGE_BYTE_LENGTH, 10)
   const bytes = convertHexToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
   const decodedDataItems = dataItems.map(dataItem => {
     if (decoderForCANId[dataItem].condition && !decoderForCANId[dataItem].condition(bytes)) {
-      return {}
+      return null
     }
 
     return {
@@ -41,7 +34,7 @@ const decodeGRIDCANRaw = (canRaw, decoderForCANId) => {
     }
   })
 
-  return decodedDataItems.filter(e => !isNilOrEmpty(e))
+  return decodedDataItems.filter(e => !!e)
 }
 
 const populateDecoderConfig = config => {
@@ -73,33 +66,36 @@ const populateDecoderConfig = config => {
 }
 
 export const getGRIDCANDecoder = metricRegistry => {
-  const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
+  const decoderConfigPath = env.VI_GRID_CAN_DECODER_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
   const decoder = populateDecoderConfig(decoderConfig)
 
   return message => {
     const {data, attributes} = message
 
-    return data.map(d => {
-      const {can_id: canId} = d.canRaw
+    return flatten(
+      data.map(d => {
+        const {can_id: canId} = d
 
-      const decoderKeys = keys(decoder)
-      const decoderKey = decoderKeys.filter(key => new RegExp(canId).test(key))
+        const decoderKeys = keys(decoder)
+        const hexCanId = convertIntCANIdToHex(canId)
+        const decoderKey = decoderKeys.filter(key => new RegExp(hexCanId).test(key))
 
-      if (decoderKey.length !== 1) {
-        log.error(
-          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes?.channel}`}},
-          "CI CAN message does not map to one decoder for its CAN id"
-        )
+        if (decoderKey.length !== 1) {
+          log.error(
+            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}`, hexCanId, decoderKey}},
+            "CI CAN message does not map to one decoder for its CAN id"
+          )
 
-        metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
-          channel: attributes?.channel,
-          can_id: convertIntCANIdToHex(canId)
-        })
-        return []
-      }
+          metricRegistry.updateStat("Counter", "grid_can_messages_ignored", 1, {
+            channel: attributes.channel,
+            can_id: hexCanId
+          })
+          return []
+        }
 
-      return decodeGRIDCANRaw(d.canRaw, decoder[decoderKey[0]])
-    })
+        return decodeGRIDCANRaw(d, decoder[decoderKey[0]], attributes)
+      })
+    )
   }
 }
