@@ -4,7 +4,7 @@ import {getCreateCIEventFromMessageFn} from "../../../../../src/messageParser/ch
 import {SESSION_DATA} from "../../../fixtures/gridChannels/preBigSink/SESSION_DATA"
 import {clearEnv} from "../../../../utils"
 
-describe("Parses SESSION_DATA", () => {
+describe("Parses pre big sink SESSION_DATA", () => {
   let metricRegistry
   let appContext
   let log

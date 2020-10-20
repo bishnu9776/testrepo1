@@ -3,7 +3,7 @@ import {getMockMetricRegistry} from "../../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../../src/messageParser/channelParser/gridChannel"
 import {NETWORK_DATA} from "../../../fixtures/gridChannels/preBigSink/NETWORK_DATA"
 
-describe("Parses NETWORK_DATA", () => {
+describe("Parses pre big sink NETWORK_DATA", () => {
   let metricRegistry
   let appContext
   let log
