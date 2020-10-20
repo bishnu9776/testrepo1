@@ -13,7 +13,7 @@ const getDeviceProbe = ({device, probe}) => {
     instance_id: "1",
     agent_version: version,
     schema_version: process.env.VI_PROBE_ES_SCHEMA_VERSION,
-    plant: "ather",
+    plant: env.VI_PLANT || "ather",
     tenant: "ather",
     device_uuid: device,
     probe: {

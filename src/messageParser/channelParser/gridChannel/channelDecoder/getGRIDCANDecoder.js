@@ -81,11 +81,6 @@ export const getGRIDCANDecoder = metricRegistry => {
         const decoderKey = decoderKeys.filter(key => new RegExp(hexCanId).test(key))
 
         if (decoderKey.length !== 1) {
-          // log.error(
-          //   {ctx: {keyToCheck: `${attributes.channel}`, hexCanId, decoderKey}},
-          //   "CI CAN message does not map to one decoder for its CAN id"
-          // )
-
           metricRegistry.updateStat("Counter", "grid_can_messages_ignored", 1, {
             channel: attributes.channel,
             can_id: hexCanId

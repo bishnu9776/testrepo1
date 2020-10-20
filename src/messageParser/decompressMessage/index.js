@@ -57,12 +57,6 @@ export const getDecompresserFn = ({log}) => {
 
       if (isPreBigSink) {
         const isAvro = attributes.version === "v1"
-        // (attributes.channel === "rms_data" && attributes.version === "v1") ||
-        // attributes.channel === "logs" ||
-        // attributes.channel === "can_raw" ||
-        // attributes.channel === "session_data" ||
-        // (attributes.channel === "network_data" && attributes.version === "v1") ||
-        // (attributes.channel === "db_data" && attributes.version === "v1")
         return isAvro ? deserializeAvro({message, log}) : JSON.parse(message.data.toString())
       }
 
