@@ -38,6 +38,26 @@ describe("Parses grid CAN_RAW", () => {
         sequence: 82121,
         timestamp: "2020-04-06T16:12:46.960Z",
         value: 241.094
+      },
+      {
+        attributes: {
+          bike_id: "DB_001f7b100e99",
+          channel: "can_raw",
+          version: "v1"
+        },
+        channel: "can_raw",
+        data_item_name: "can_raw",
+        device_uuid: "DB_001f7b100e99",
+        timestamp: "2020-04-06T16:12:46.960Z",
+        value: {
+          can_id: "0x05e",
+          data: "91000000c6ad0300",
+          db_id: "DB_001f7b100e91",
+          global_seq: 49767849,
+          pod_id: "0xfffe8",
+          seq_num: 82121,
+          timestamp: 1586189566.96
+        }
       }
     ])
   })

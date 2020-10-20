@@ -1,6 +1,7 @@
 import {flatten} from "ramda"
 import {getDataItem} from "../utils/getDataItem"
 import {getGRIDCANDecoder} from "./channelDecoder/getGRIDCANDecoder"
+import {parseCANRAW} from "../bikeChannel/CAN_RAW"
 
 export const parseGridCANRaw = metricRegistry => {
   const decodeGridCANMessage = getGRIDCANDecoder(metricRegistry)
@@ -8,16 +9,18 @@ export const parseGridCANRaw = metricRegistry => {
   return message => {
     const decodedMessage = flatten(decodeGridCANMessage(message))
 
-    return decodedMessage.map(e => {
-      const timestamp = new Date(e.timestamp * 1000).toISOString()
-      return getDataItem({
-        dataItemName: e.key,
-        attributes: message.attributes,
-        timestamp,
-        value: e.value,
-        sequence: e.seq_num,
-        canId: e.can_id
+    return decodedMessage
+      .map(e => {
+        const timestamp = new Date(e.timestamp * 1000).toISOString()
+        return getDataItem({
+          dataItemName: e.key,
+          attributes: message.attributes,
+          timestamp,
+          value: e.value,
+          sequence: e.seq_num,
+          canId: e.can_id
+        })
       })
-    })
+      .concat(parseCANRAW({data: message.data, attributes: message.attributes}))
   }
 }
