@@ -1,6 +1,6 @@
 import {GPSTPV} from "../../fixtures/bikeChannels/GPSTPV"
 import {getCreateBikeEventFromMessageFn} from "../../../../src/messageParser/channelParser/bikeChannel"
-import probe from "../../../fixtures/probe.json"
+import probe from "../../../fixtures/bike-probe.json"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {clearEnv} from "../../../utils"

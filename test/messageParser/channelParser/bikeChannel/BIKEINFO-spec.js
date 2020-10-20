@@ -1,6 +1,6 @@
 import {BIKEINFO} from "../../fixtures/bikeChannels/BIKEINFO"
 import {getCreateBikeEventFromMessageFn} from "../../../../src/messageParser/channelParser/bikeChannel"
-import probe from "../../../fixtures/probe.json"
+import probe from "../../../fixtures/bike-probe.json"
 import {getParsedMessageFn} from "../../../utils/getParsedMessage"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"

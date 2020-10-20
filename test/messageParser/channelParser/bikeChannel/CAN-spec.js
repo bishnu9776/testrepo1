@@ -1,6 +1,6 @@
 import {getCreateBikeEventFromMessageFn} from "../../../../src/messageParser/channelParser/bikeChannel"
 import {CAN_BMS} from "../../fixtures/bikeChannels/CAN"
-import probe from "../../../fixtures/probe.json"
+import probe from "../../../fixtures/bike-probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../../utils"
 import {getParsedMessageFn, getParsedCANRawMessageFn} from "../../../utils/getParsedMessage"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"

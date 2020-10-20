@@ -22,7 +22,6 @@ describe("Pipeline spec", () => {
   let log
 
   beforeEach(() => {
-    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
     env.VI_SHOULD_SEND_PROBE = "true"
@@ -39,7 +38,7 @@ describe("Pipeline spec", () => {
       metricRegistry: getMockMetricRegistry(),
       log
     }
-    probePath = `${process.cwd()}/test/fixtures/probe`
+    probePath = `${process.cwd()}/test/fixtures/bike-probe.json`
 
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
@@ -173,10 +172,19 @@ describe("Pipeline spec", () => {
   })
 
   describe("ci", () => {
-    it("post big sink ci events flow through pipeline from source gcp", done => {
+    beforeEach(() => {
       process.env.VI_INPUT_TYPE = "ci"
-      process.env.VI_SHOULD_SEND_PROBE = "false"
       process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
+      process.env.VI_PLANT = "atherci"
+    })
+
+    afterEach(() => {
+      clearEnv()
+    })
+
+    it("post big sink ci events flow through pipeline from source gcp", done => {
+      process.env.VI_SHOULD_SEND_PROBE = "false"
+
       const source = {
         stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
       }
@@ -202,12 +210,56 @@ describe("Pipeline spec", () => {
       })
     })
 
-    it("pre big sink ci events flow through pipeline from source gcp", () => {
-      // have a rms_data avro sample file with v1
-      // use existing message with v1_5 and make it byte_array
-      // assert number of events
-      // assert number of acknowledge calls
-      // assert plant
+    it("pre big sink ci events flow through pipeline from source gcp", done => {
+      process.env.VI_SHOULD_SEND_PROBE = "true"
+      process.env.VI_CI_PRE_BIG_SINK_MODE = "true"
+      const sampleAvroMessage = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/ci/RMS_DATA_v1`))
+      const sampleByteArrayMessage = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/ci/DB_DATA_v1_5`))
+
+      const source = {
+        stream: from([
+          {
+            message: {data: Buffer.from(sampleAvroMessage.data.data), attributes: sampleAvroMessage.attributes},
+            acknowledgeMessage: acknowledgeMessageSpy
+          },
+          {
+            message: {
+              data: Buffer.from(sampleByteArrayMessage.data.data),
+              attributes: sampleByteArrayMessage.attributes
+            },
+            acknowledgeMessage: acknowledgeMessageSpy
+          }
+        ])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          const probeEvents = output.filter(e => e.tag === "MTConnectDevices")
+          const dataItemEvents = output.filter(e => e.tag === "MTConnectDataItems")
+          const acks = output.filter(e => e.tag === ACK_MSG_TAG)
+
+          expect(probeEvents.length).to.eql(2)
+          expect(acks.length).to.eql(2)
+          output.every(e => expect(e.plant).to.eql("atherci"))
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+
+          expect(output.length).to.eql(703)
+          expect(dataItemEvents.length).to.eql(699)
+
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath: `${process.cwd()}/test/fixtures/ci-probe.json`,
+        kafkaProducer,
+        appContext
+      })
     })
   })
 

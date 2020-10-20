@@ -1,6 +1,6 @@
 import {omit} from "ramda"
 import {getMergeProbeInfoFn} from "../../src/messageParser/mergeProbeInfo"
-import probe from "../fixtures/probe.json"
+import probe from "../fixtures/bike-probe.json"
 import {getDataItem} from "../utils/getDataItem"
 
 describe("Merge probe info", () => {

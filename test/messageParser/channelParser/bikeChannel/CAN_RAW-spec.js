@@ -3,7 +3,7 @@ import {CAN_RAW} from "../../fixtures/bikeChannels/CAN_RAW"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getParsedCANRawMessageFn} from "../../../utils/getParsedMessage"
-import probe from "../../../fixtures/probe.json"
+import probe from "../../../fixtures/bike-probe.json"
 
 describe("Parses CAN_RAW", () => {
   let metricRegistry
