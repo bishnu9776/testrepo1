@@ -26,8 +26,8 @@ export const getEventFormatter = () => {
       received_at: new Date().toISOString(),
       agent: "ather",
       instance_id: id,
-      plant: process.env.VI_INPUT_TYPE === "ci" ? "atherci" : "ather",
-      tenant: "ather",
+      plant: process.env.VI_PLANT || "ather",
+      tenant: process.env.VI_TENANT || "ather",
       schema_version: schemaVersion,
       data_item_id: getDataItemId({dataItemName: data_item_name, deviceId: device_uuid}) // TODO: Remove adding data item id within the parsers and update tests
     }

@@ -74,6 +74,8 @@ describe("Pipeline spec", () => {
           output.push(message)
         },
         complete: () => {
+          output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
           const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
           expect(output.length).to.eql(122)
           expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
@@ -110,6 +112,8 @@ describe("Pipeline spec", () => {
           output.push(message)
         },
         complete: () => {
+          output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
           expect(output.length).to.eql(122)
           expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
           expect(acknowledgeMessageSpy.callCount).to.eql(2)
@@ -148,6 +152,7 @@ describe("Pipeline spec", () => {
           const dataItemEvent = output.filter(e => e.tag === "MTConnectDataItems")
           expect(output.length).to.eql(3)
           output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
           expect(dataItemEvent.length).to.eql(1)
           expect(dataItemEvent[0].schema_version).to.eql("3")
           expect(dataItemEvent[0].data_item_id).to.eql("s_123-BMS_Cell3")
@@ -176,6 +181,7 @@ describe("Pipeline spec", () => {
       process.env.VI_INPUT_TYPE = "ci"
       process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
       process.env.VI_PLANT = "atherci"
+      process.env.VI_TENANT = "atherci"
     })
 
     afterEach(() => {
@@ -196,6 +202,7 @@ describe("Pipeline spec", () => {
         complete: () => {
           expect(output.length).to.eql(4)
           output.every(e => expect(e.plant).to.eql("atherci"))
+          output.every(e => expect(e.tenant).to.eql("atherci"))
           expect(acknowledgeMessageSpy.callCount).to.eql(1)
           done()
         }
@@ -244,6 +251,7 @@ describe("Pipeline spec", () => {
           expect(probeEvents.length).to.eql(2)
           expect(acks.length).to.eql(2)
           output.every(e => expect(e.plant).to.eql("atherci"))
+          output.every(e => expect(e.tenant).to.eql("atherci"))
           expect(acknowledgeMessageSpy.callCount).to.eql(2)
 
           expect(output.length).to.eql(703)
