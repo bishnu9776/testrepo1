@@ -30,33 +30,45 @@ describe("Parses grid CAN_RAW", () => {
 
     expect(createDataItemsFromMessage({message: CAN_RAW})).to.eql([
       {
-        can_id: "0x05e",
+        can_id: "0x070",
+        pod_id: "0xfffa4",
+        data_item_name: "POD_S340_ChargerType",
+        value: 2,
+        device_uuid: "DB_001f7b10161e",
+        sequence: 3788817,
+        timestamp: "2020-10-22T09:46:56.341Z",
         channel: "can_raw",
-        data_item_id: "POD_AC_Voltage-v1",
-        data_item_name: "POD_AC_Voltage",
-        device_uuid: "DB_001f7b100e99",
-        sequence: 82121,
-        timestamp: "2020-04-06T16:12:46.960Z",
-        value: 241.094
+        data_item_id: "POD_S340_ChargerType-v1"
+      },
+      {
+        can_id: "0x070",
+        pod_id: "0xfffa4",
+        data_item_name: "POD_S340_McuChargingState",
+        value: 32,
+        sequence: 3788817,
+        timestamp: "2020-10-22T09:46:56.341Z",
+        device_uuid: "DB_001f7b10161e",
+        channel: "can_raw",
+        data_item_id: "POD_S340_McuChargingState-v1"
       },
       {
         attributes: {
-          bike_id: "DB_001f7b100e99",
+          bike_id: "DB_001f7b10161e",
           channel: "can_raw",
           version: "v1"
         },
         channel: "can_raw",
         data_item_name: "can_raw",
-        device_uuid: "DB_001f7b100e99",
-        timestamp: "2020-04-06T16:12:46.960Z",
+        device_uuid: "DB_001f7b10161e",
+        timestamp: "2020-10-22T09:46:56.341Z",
         value: {
-          can_id: "0x05e",
-          data: "91000000c6ad0300",
-          db_id: "DB_001f7b100e91",
-          global_seq: 49767849,
-          pod_id: "0xfffe8",
-          seq_num: 82121,
-          timestamp: 1586189566.96
+          can_id: 112,
+          data: "153122550539354627",
+          db_id: "DB_001f7b10161e",
+          global_seq: 79869961,
+          pod_id: "0xfffa4",
+          seq_num: 3788817,
+          timestamp: 1603360016.341
         }
       }
     ])

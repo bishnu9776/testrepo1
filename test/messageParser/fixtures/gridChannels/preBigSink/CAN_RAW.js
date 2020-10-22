@@ -2,17 +2,17 @@ export const CAN_RAW = {
   attributes: {
     channel: "can_raw",
     version: "v1",
-    bike_id: "DB_001f7b100e99"
+    bike_id: "DB_001f7b10161e"
   },
   data: [
     {
-      timestamp: 1586189566.96,
-      seq_num: 82121,
-      global_seq: 49767849,
-      can_id: "0x05e",
-      pod_id: "0xfffe8",
-      data: "91000000c6ad0300",
-      db_id: "DB_001f7b100e91"
+      timestamp: 1603360016.341,
+      seq_num: 3788817,
+      global_seq: 79869961,
+      can_id: 112,
+      pod_id: "0xfffa4",
+      data: "153122550539354627",
+      db_id: "DB_001f7b10161e"
     }
   ]
 }

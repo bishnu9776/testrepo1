@@ -1,8 +1,8 @@
 import {flatten, isNil, keys} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
-import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
 import {convertIntCANIdToHex} from "../../bikeChannel/channelDecoder/utils/convertIntCANIdToHex"
+import {convertLongToBytes} from "../../bikeChannel/channelDecoder/utils/convertLongToBytes"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
@@ -13,7 +13,7 @@ const decodeGRIDCANRaw = (canRaw, decoderForCANId, attributes) => {
   const {bike_id: dbId} = attributes
   const {can_id: canId, data: value, timestamp, seq_num: seqNum, global_seq: globalSeq, pod_id: podId} = canRaw
   const numberOfBytes = parseInt(env.VI_GRID_CAN_MESSAGE_BYTE_LENGTH, 10)
-  const bytes = convertHexToBytes(value, numberOfBytes)
+  const bytes = convertLongToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
   const decodedDataItems = dataItems.map(dataItem => {

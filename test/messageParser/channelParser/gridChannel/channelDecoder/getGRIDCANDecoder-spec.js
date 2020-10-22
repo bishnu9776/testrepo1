@@ -19,14 +19,24 @@ describe("GRID CAN decoder", () => {
     it("should decode can data for grid can", () => {
       expect(getGRIDCANDecoder(getMockMetricRegistry())(CAN_RAW)).to.eql([
         {
-          can_id: "0x05e",
-          db_id: "DB_001f7b100e99",
-          global_seq: 49767849,
-          key: "POD_AC_Voltage",
-          pod_id: "0xfffe8",
-          seq_num: 82121,
-          timestamp: 1586189566.96,
-          value: 241.094
+          can_id: 112,
+          db_id: "DB_001f7b10161e",
+          global_seq: 79869961,
+          key: "POD_S340_ChargerType",
+          pod_id: "0xfffa4",
+          seq_num: 3788817,
+          timestamp: 1603360016.341,
+          value: 2
+        },
+        {
+          can_id: 112,
+          db_id: "DB_001f7b10161e",
+          global_seq: 79869961,
+          key: "POD_S340_McuChargingState",
+          pod_id: "0xfffa4",
+          seq_num: 3788817,
+          timestamp: 1603360016.341,
+          value: 32
         }
       ])
     })

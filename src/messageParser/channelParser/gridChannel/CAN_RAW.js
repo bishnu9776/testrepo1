@@ -18,7 +18,8 @@ export const parseGridCANRaw = metricRegistry => {
           timestamp,
           value: e.value,
           sequence: e.seq_num,
-          canId: e.can_id
+          canId: e.can_id,
+          podId: e.pod_id
         })
       })
       .concat(parseCANRAW({data: message.data, attributes: message.attributes}))
