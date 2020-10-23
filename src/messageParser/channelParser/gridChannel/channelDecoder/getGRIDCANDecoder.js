@@ -1,30 +1,24 @@
-import {keys, isNil} from "ramda"
+import {flatten, isNil, keys} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
-import {convertHexToBytes} from "../../bikeChannel/channelDecoder/utils/convertHexToBytes"
+import {convertIntCANIdToHex} from "../../bikeChannel/channelDecoder/utils/convertIntCANIdToHex"
+import {convertLongToBytes} from "../../bikeChannel/channelDecoder/utils/convertLongToBytes"
 
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
 const {env} = process
 
-const decodeGRIDCANRaw = (canRaw, decoderForCANId) => {
-  const {
-    can_id: canId,
-    data: value,
-    timestamp,
-    seq_num: seqNum,
-    db_id: dbId,
-    global_seq: globalSeq,
-    pod_id: podId
-  } = canRaw
-  const numberOfBytes = parseInt(env.VI_CAN_MESSAGE_BYTE_LENGTH || "16", 10)
-  const bytes = convertHexToBytes(value, numberOfBytes)
+const decodeGRIDCANRaw = (canRaw, decoderForCANId, attributes) => {
+  const {bike_id: dbId} = attributes
+  const {can_id: canId, data: value, timestamp, seq_num: seqNum, global_seq: globalSeq, pod_id: podId} = canRaw
+  const numberOfBytes = parseInt(env.VI_GRID_CAN_MESSAGE_BYTE_LENGTH, 10)
+  const bytes = convertLongToBytes(value, numberOfBytes)
   const dataItems = keys(decoderForCANId)
 
   const decodedDataItems = dataItems.map(dataItem => {
     if (decoderForCANId[dataItem].condition && !decoderForCANId[dataItem].condition(bytes)) {
-      return {}
+      return null
     }
 
     return {
@@ -39,7 +33,7 @@ const decodeGRIDCANRaw = (canRaw, decoderForCANId) => {
     }
   })
 
-  return decodedDataItems.filter(e => !isNilOrEmpty(e))
+  return decodedDataItems.filter(e => !!e)
 }
 
 const populateDecoderConfig = config => {
@@ -70,22 +64,32 @@ const populateDecoderConfig = config => {
   return decoder
 }
 
-export const getGRIDCANDecoder = () => {
-  const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
+export const getGRIDCANDecoder = metricRegistry => {
+  const decoderConfigPath = env.VI_GRID_CAN_DECODER_CONFIG_PATH
   const decoderConfig = loadJSONFile(decoderConfigPath)
   const decoder = populateDecoderConfig(decoderConfig)
 
   return message => {
-    const {data} = message
+    const {data, attributes} = message
 
-    return data.map(d => {
-      const {can_id: canId} = d.canRaw
+    return flatten(
+      data.map(d => {
+        const {can_id: canId} = d
 
-      const decoderKeys = keys(decoder)
-      let decodeKey = decoderKeys.filter(key => new RegExp(canId).test(key))
-      decodeKey = decoder[decodeKey]
+        const decoderKeys = keys(decoder)
+        const hexCanId = convertIntCANIdToHex(canId)
+        const decoderKey = decoderKeys.filter(key => new RegExp(hexCanId).test(key))
 
-      return decodeGRIDCANRaw(d.canRaw, decodeKey)
-    })
+        if (decoderKey.length !== 1) {
+          metricRegistry.updateStat("Counter", "grid_can_messages_ignored", 1, {
+            channel: attributes.channel,
+            can_id: hexCanId
+          })
+          return []
+        }
+
+        return decodeGRIDCANRaw(d, decoder[decoderKey[0]], attributes)
+      })
+    )
   }
 }

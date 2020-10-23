@@ -1,5 +1,5 @@
 import {omit} from "ramda"
-import probe from "../fixtures/probe.json"
+import probe from "../fixtures/bike-probe.json"
 import {clearEnv} from "../utils"
 import {getProbeAppender} from "../../src/probeAppender/getProbeAppender"
 import {getGen1Probe, getGen2Probe} from "./probeFixtures"

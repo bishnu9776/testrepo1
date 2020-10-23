@@ -4,9 +4,7 @@ import {ACK_MSG_TAG} from "../constants"
 import {errorFormatter} from "../utils/errorFormatter"
 import {getMergeProbeInfoFn} from "./mergeProbeInfo"
 import {dedupDataItems} from "./dedupDataItems"
-import {getAttributesFormatter} from "./formatAttributes"
 import {getChannelParser} from "./channelParser"
-import {getInputMessageTags} from "../metrics/tags"
 
 const {env} = process
 
@@ -28,19 +26,13 @@ const handleParseFailures = (message, error, appContext) => {
   )
 }
 
+// decompresses / decodes, converts message into array of connect events, dedups, merges probe info
 export const getMessageParser = ({appContext, probe}) => {
   const {metricRegistry} = appContext
   const maybeDedupDataItems = getDedupFn(metricRegistry)
-  const maybeDecompressMessage = getDecompresserFn(appContext)
+  const decompressMessage = getDecompresserFn(appContext)
   const createDataItemsFromMessage = getChannelParser()(appContext, probe)
   const mergeProbeInfo = getMergeProbeInfoFn(probe)
-  const formatAttributes = getAttributesFormatter()
-  const channelsToDrop = env.VI_CHANNELS_TO_DROP ? env.VI_CHANNELS_TO_DROP.split(",") : []
-  const shouldFilterDevice = JSON.parse(env.VI_SHOULD_FILTER_DEVICE || "false")
-  const deviceFilterRegex = new RegExp(env.VI_DEVICE_FILTER_REGEX || ".*")
-
-  const shouldDropChannel = channel => Array.isArray(channelsToDrop) && channelsToDrop.includes(channel)
-  const shouldDropDevice = device => (shouldFilterDevice ? !deviceFilterRegex.test(device) : false)
 
   return async event => {
     const {message, acknowledgeMessage} = event
@@ -48,13 +40,8 @@ export const getMessageParser = ({appContext, probe}) => {
     const endOfEvent = [{message, tag: ACK_MSG_TAG, acknowledgeMessage}]
 
     try {
-      const attributes = formatAttributes(message.attributes)
-      if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
-        metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getInputMessageTags(message))
-        return endOfEvent
-      }
-
-      decompressedMessage = await maybeDecompressMessage(message)
+      const {attributes} = message
+      decompressedMessage = await decompressMessage(message)
 
       if (isNil(decompressedMessage)) {
         metricRegistry.updateStat("Counter", "decompress_failures", 1, {})

@@ -22,7 +22,6 @@ describe("Pipeline spec", () => {
   let log
 
   beforeEach(() => {
-    env.VI_GCP_PUBSUB_DATA_COMPRESSION_FLAG = "false"
     env.VI_PROBE_DATAITEM_WHITELIST = "MCU_SOC"
     env.VI_SHOULD_DEDUP_DATA = "true"
     env.VI_SHOULD_SEND_PROBE = "true"
@@ -39,7 +38,7 @@ describe("Pipeline spec", () => {
       metricRegistry: getMockMetricRegistry(),
       log
     }
-    probePath = `${process.cwd()}/test/fixtures/probe`
+    probePath = `${process.cwd()}/test/fixtures/bike-probe.json`
 
     sinon.stub(kafkaProducer, "getKafkaSender").callsFake(() => {
       return stream => stream
@@ -61,144 +60,252 @@ describe("Pipeline spec", () => {
     nock.cleanAll()
   })
 
-  it("bike events flow through pipeline from source gcp", done => {
-    const source = {
-      stream: from([
-        {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
-        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
-      ])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
-        expect(output.length).to.eql(123)
-        expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-        output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
-        output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
-        expect(probeEvent.length).to.eql(1)
-        expect(probeEvent[0].schema_version).to.eql("4")
-        expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        expect(acknowledgeMessageSpy.callCount).to.eql(2)
-        done()
+  describe("bike", () => {
+    it("gen 1 bike events flow through pipeline from source gcp", done => {
+      const source = {
+        stream: from([
+          {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+          {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+        ])
       }
-    }
-
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
-    })
-  })
-
-  it("valid events flow through the pipeline when model for device is present", done => {
-    const source = {
-      stream: from([
-        {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
-        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
-      ])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        expect(output.length).to.eql(123)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        done()
-      }
-    }
-
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
-    })
-  })
-
-  it("gen 2 bike events flow through pipeline from source kafka", done => {
-    setGen2Envs()
-    const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
-    const source = {
-      stream: from([
-        {
-          message: {data: Buffer.from(input.value.data), attributes: input.attributes},
-          acknowledgeMessage: acknowledgeMessageSpy
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
         },
-        {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
-      ])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
-        const dataItemEvent = output.filter(e => e.tag === "MTConnectDataItems")
-        expect(output.length).to.eql(4)
-        output.every(e => expect(e.plant).to.eql("ather"))
-        expect(dataItemEvent.length).to.eql(1)
-        expect(dataItemEvent[0].schema_version).to.eql("3")
-        expect(dataItemEvent[0].data_item_id).to.eql("s_123-BMS_Cell3")
-        expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
-        expect(probeEvent.length).to.eql(1)
-        expect(probeEvent[0].schema_version).to.eql("4")
-        expect(probeEvent.length).to.eql(1)
-        expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(2) // two ack event, as we acknowledge invalid event also
-        expect(acknowledgeMessageSpy.callCount).to.eql(2)
-        done()
+        complete: () => {
+          output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
+          const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
+          expect(output.length).to.eql(122)
+          expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
+          output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
+          output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
+          expect(probeEvent.length).to.eql(1)
+          expect(probeEvent[0].schema_version).to.eql("4")
+          expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
+          expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          done()
+        }
       }
-    }
 
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
+    })
+
+    it("gen 1bike events flow through the pipeline when model for device is present", done => {
+      const source = {
+        stream: from([
+          {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+          {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+        ])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
+          expect(output.length).to.eql(122)
+          expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
+    })
+
+    it("gen 2 bike events flow through pipeline from source kafka", done => {
+      setGen2Envs()
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const source = {
+        stream: from([
+          {
+            message: {data: Buffer.from(input.value.data), attributes: input.attributes},
+            acknowledgeMessage: acknowledgeMessageSpy
+          },
+          {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+        ])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
+          const dataItemEvent = output.filter(e => e.tag === "MTConnectDataItems")
+          expect(output.length).to.eql(3)
+          output.every(e => expect(e.plant).to.eql("ather"))
+          output.every(e => expect(e.tenant).to.eql("ather"))
+          expect(dataItemEvent.length).to.eql(1)
+          expect(dataItemEvent[0].schema_version).to.eql("3")
+          expect(dataItemEvent[0].data_item_id).to.eql("s_123-BMS_Cell3")
+          expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
+          expect(probeEvent.length).to.eql(1)
+          expect(probeEvent[0].schema_version).to.eql("4")
+          expect(probeEvent.length).to.eql(1)
+          expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
     })
   })
 
-  it("ci events flow through pipeline from source gcp", done => {
-    process.env.VI_INPUT_TYPE = "ci"
-    process.env.VI_SHOULD_SEND_PROBE = "false"
-    process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
-    const source = {
-      stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
-    }
-    const output = []
-    const observer = {
-      next: message => {
-        output.push(message)
-      },
-      complete: () => {
-        expect(output.length).to.eql(4)
-        output.every(e => expect(e.plant).to.eql("atherci"))
-        expect(acknowledgeMessageSpy.callCount).to.eql(1)
-        done()
-      }
-    }
+  describe("ci", () => {
+    beforeEach(() => {
+      process.env.VI_INPUT_TYPE = "ci"
+      process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
+      process.env.VI_PLANT = "atherci"
+      process.env.VI_TENANT = "atherci"
+    })
 
-    getPipeline({
-      source,
-      observer,
-      probePath,
-      kafkaProducer,
-      appContext
+    afterEach(() => {
+      clearEnv()
+    })
+
+    it("post big sink ci events flow through pipeline from source gcp", done => {
+      process.env.VI_SHOULD_SEND_PROBE = "false"
+
+      const source = {
+        stream: from([{message: getDeflateCompressedGCPEvent(POD_INFO), acknowledgeMessage: acknowledgeMessageSpy}])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          expect(output.length).to.eql(4)
+          output.every(e => expect(e.plant).to.eql("atherci"))
+          output.every(e => expect(e.tenant).to.eql("atherci"))
+          expect(acknowledgeMessageSpy.callCount).to.eql(1)
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
+    })
+
+    it("pre big sink ci events flow through pipeline from source gcp", done => {
+      process.env.VI_SHOULD_SEND_PROBE = "true"
+      process.env.VI_CI_PRE_BIG_SINK_MODE = "true"
+      const sampleAvroMessage = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/ci/RMS_DATA_v1`))
+      const sampleByteArrayMessage = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/ci/DB_DATA_v1_5`))
+
+      const source = {
+        stream: from([
+          {
+            message: {data: Buffer.from(sampleAvroMessage.data.data), attributes: sampleAvroMessage.attributes},
+            acknowledgeMessage: acknowledgeMessageSpy
+          },
+          {
+            message: {
+              data: Buffer.from(sampleByteArrayMessage.data.data),
+              attributes: sampleByteArrayMessage.attributes
+            },
+            acknowledgeMessage: acknowledgeMessageSpy
+          }
+        ])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          const probeEvents = output.filter(e => e.tag === "MTConnectDevices")
+          const dataItemEvents = output.filter(e => e.tag === "MTConnectDataItems")
+          const acks = output.filter(e => e.tag === ACK_MSG_TAG)
+
+          expect(probeEvents.length).to.eql(2)
+          expect(acks.length).to.eql(2)
+          output.every(e => expect(e.plant).to.eql("atherci"))
+          output.every(e => expect(e.tenant).to.eql("atherci"))
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+
+          expect(output.length).to.eql(703)
+          expect(dataItemEvents.length).to.eql(699)
+
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath: `${process.cwd()}/test/fixtures/ci-probe.json`,
+        kafkaProducer,
+        appContext
+      })
     })
   })
 
-  it.skip("retry's observable chain if producing to kafka fails", () => {})
+  describe("dropping devices / channels", () => {
+    it("drops events whose channel is in drop list or device matches given regex", done => {
+      env.VI_CHANNELS_TO_DROP = "can_mcu/v1_0_0"
+      env.VI_SHOULD_FILTER_DEVICE = "true"
+      env.VI_DEVICE_FILTER_REGEX = "s_101"
 
-  it.skip("retry's observable chain if error on gcp stream", () => {})
+      const message = getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU")
+      const source = {
+        stream: from([
+          {message, acknowledgeMessage: acknowledgeMessageSpy},
+          {
+            message: {...message, attributes: {...message.attributes, deviceId: "s_100", subFolder: "can_mcu/v1_2_0"}},
+            acknowledgeMessage: acknowledgeMessageSpy
+          }
+        ])
+      }
+      const output = []
+      const observer = {
+        next: e => {
+          output.push(e)
+        },
+        complete: () => {
+          expect(output.length).to.eql(0)
+          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
+    })
+  })
 })

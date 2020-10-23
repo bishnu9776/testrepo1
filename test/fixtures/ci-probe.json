@@ -1,0 +1,22 @@
+{
+  "ureg": {
+    "data_item_name": "ureg",
+    "data_item_type": "NETWORK_DATA",
+    "category": "SAMPLE"
+  },
+  "signal_strength": {
+    "data_item_name": "signal_strength",
+    "data_item_type": "NETWORK_DATA",
+    "category": "SAMPLE"
+  },
+  "service_provider": {
+    "data_item_name": "service_provider",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  },
+  "sim_status": {
+    "data_item_name": "sim_status",
+    "data_item_type": "NETWORK_DATA",
+    "category": "EVENT"
+  }
+}

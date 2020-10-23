@@ -1,7 +1,7 @@
 import {difference} from "ramda"
 import {MCU} from "../../fixtures/bikeChannels/MCU"
 import {getCreateBikeEventFromMessageFn} from "../../../../src/messageParser/channelParser/bikeChannel"
-import probe from "../../../fixtures/probe.json"
+import probe from "../../../fixtures/bike-probe.json"
 import {clearEnv, setChannelDecoderConfigFileEnvs} from "../../../utils"
 import {getMockLog} from "../../../stubs/logger"
 import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"

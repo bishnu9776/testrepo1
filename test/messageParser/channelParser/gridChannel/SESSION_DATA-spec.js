@@ -4,7 +4,7 @@ import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/chann
 import {SESSION_DATA} from "../../fixtures/gridChannels/SESSION_DATA"
 import {clearEnv} from "../../../utils"
 
-describe("Parses POD_INFO", () => {
+describe("Parses SESSION_DATA", () => {
   let metricRegistry
   let appContext
   let log

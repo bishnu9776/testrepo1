@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path"
 import {difference} from "ramda"
 import {getMessageParser} from "../../src/messageParser"
-import probe from "../fixtures/probe.json"
+import probe from "../fixtures/bike-probe.json"
 import {ACK_MSG_TAG} from "../../src/constants"
 import {getDeflateCompressedGCPEvent} from "../utils/getMockGCPEvent"
 import {getMockLog} from "../stubs/logger"
@@ -10,8 +10,9 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setEnv, setGen2Envs} from "..
 import {GPSTPV} from "./fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
+import {getAttributesFormatter} from "../../src/messageParser/formatAttributes"
 
-const {env} = process
+const formatAttributes = getAttributesFormatter(getMockMetricRegistry())
 
 describe("Parse GCP message", () => {
   let appContext
@@ -91,7 +92,7 @@ describe("Parse GCP message", () => {
       const messageParser = getMessageParser({appContext, probe})
       const message = getDeflateCompressedGCPEvent({
         data: GPSTPV.data,
-        attributes: {subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id}
+        attributes: formatAttributes({subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id})
       })
       const output = await messageParser({message, acknowledgeMessage})
       const expected = parsedGCPEvents
@@ -104,7 +105,7 @@ describe("Parse GCP message", () => {
     it("formats attributes for v1 data and parses correctly for GPS_TPV", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const requiredKeys = [
         "channel",
         "data_item_id",
@@ -128,7 +129,7 @@ describe("Parse GCP message", () => {
     it("formats attributes for v1 data and parses correctly for CAN ", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(121)
       expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
@@ -139,7 +140,7 @@ describe("Parse GCP message", () => {
     it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(13)
       expect(output[12].tag).to.eql(ACK_MSG_TAG)
@@ -148,7 +149,7 @@ describe("Parse GCP message", () => {
     it("formats attributes for v1 data and parses correctly for CAN_RAW ", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_RAW`))
-      const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
+      const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(186)
       expect(output[185].tag).to.eql(ACK_MSG_TAG)
@@ -178,37 +179,11 @@ describe("Parse GCP message", () => {
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
       const messageParser = getMessageParser({appContext, probe})
       const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
-      const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
+      const message = {data: Buffer.from(input.value.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(2)
       expect(output[output.length - 1].tag).to.eql(ACK_MSG_TAG)
       expect(output[0].data_item_id).to.eql("s_123-BMS_Cell3")
-    })
-  })
-
-  describe("should ack message without decompressing or parsing", () => {
-    beforeEach(() => {
-      env.VI_CHANNELS_TO_DROP = "gps_tpv"
-    })
-
-    it("when message contains channel specified to drop", async () => {
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv"}}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
-    })
-
-    it("when message contains bike_id which doesn't match the regex device filter", async () => {
-      env.VI_SHOULD_FILTER_DEVICE = "true"
-      env.VI_DEVICE_FILTER_REGEX = "00$"
-      const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
-      const message = {data: Buffer.from(input.data.data), attributes: {subFolder: "v1/gps_tpv", deviceId: "s_199"}}
-      const output = await messageParser({message, acknowledgeMessage})
-      expect(output.length).to.eql(1)
-      expect(output[0].tag).to.eql(ACK_MSG_TAG)
     })
   })
 })
