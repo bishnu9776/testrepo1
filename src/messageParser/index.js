@@ -20,7 +20,7 @@ const handleParseFailures = (message, error, appContext) => {
   const {metricRegistry, log} = appContext
   const {data, attributes} = message
   metricRegistry.updateStat("Counter", "parse_failures", 1, {})
-  log.error(
+  log.warn(
     {ctx: {data: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(error)},
     "Could not parse gcp message"
   )

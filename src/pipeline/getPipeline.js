@@ -26,7 +26,7 @@ const getPipelineRetryConfig = () => ({
 
 const defaultObserver = log => ({
   complete: () => {
-    log.error("GCP stream completed. Exiting application")
+    log.info("GCP stream completed. Exiting application")
     delayAndExit(4)
   },
   error: error => {

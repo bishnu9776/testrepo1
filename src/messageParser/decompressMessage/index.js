@@ -20,7 +20,7 @@ const decompressUsingInflate = async ({message, log}) => {
     const decompressedMessage = await inflate(data)
     return JSON.parse(decompressedMessage.toString())
   } catch (e) {
-    log.error(
+    log.warn(
       {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}},
       "Error decompressing using inflate."
     )
