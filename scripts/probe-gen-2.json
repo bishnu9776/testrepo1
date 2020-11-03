@@ -1670,8 +1670,8 @@
     "units": "",
     "values_schema": {"$ref": "values_schema.json#/log"}
   },
-  "LON_DEG": {
-    "data_item_name": "LON_DEG",
+  "LAT_DEG": {
+    "data_item_name": "LAT_DEG",
     "component": "gps",
     "subcomponent": "",
     "data_item_type": "LOCATION",
