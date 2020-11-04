@@ -1769,8 +1769,8 @@
       "type": "number"
     }
   },
-  "BMS_State_of_charge": {
-    "data_item_name": "BMS_State_of_charge",
+  "BMS_SoC": {
+    "data_item_name": "BMS_SoC",
     "component": "mcu",
     "subcomponent": "",
     "data_item_type": "BATTERY_STATE",
@@ -1817,8 +1817,8 @@
       "type": "number"
     }
   },
-  "BMS_Voltage": {
-    "data_item_name": "BMS_Voltage",
+  "BMS_Battery_Voltage": {
+    "data_item_name": "BMS_Battery_Voltage",
     "component": "battery",
     "subcomponent": "",
     "data_item_type": "VOLTAGE",
