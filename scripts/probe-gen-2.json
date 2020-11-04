@@ -1793,18 +1793,6 @@
       "type": "number"
     }
   },
-  "error_code": {
-    "data_item_name": "error_code",
-    "component": "heman",
-    "subcomponent": "",
-    "data_item_type": "HEMAN",
-    "sub_type": "",
-    "category": "CONDITION",
-    "units": "",
-    "values_schema": {
-      "$ref": "values_schema.json#/condition"
-    }
-  },
   "MOT_NPres_RPM": {
     "data_item_name": "MOT_NPres_RPM",
     "component": "motor",
@@ -2090,7 +2078,7 @@
     "category": "EVENT",
     "units": "",
     "values_schema": {
-      "type": "integer"
+      "type": "string"
     }
   },
   "ttff_s": {
@@ -2105,6 +2093,18 @@
       "type": "number"
     }
   },
+  "error_code": {
+    "data_item_name": "error_code",
+    "component": "heman",
+    "subcomponent": "",
+    "data_item_type": "HEMAN",
+    "sub_type": "",
+    "category": "CONDITION",
+    "units": "",
+    "values_schema": {
+      "$ref": "values_schema.json#/condition"
+    }
+  },
   "isvalid": {
     "data_item_name": "isvalid",
     "component": "heman",
@@ -2114,7 +2114,19 @@
     "category": "EVENT",
     "units": "",
     "values_schema": {
-      "type": "integer"
+      "type": "string"
+    }
+  },
+  "model": {
+    "data_item_name": "model",
+    "component": "vehicle",
+    "subcomponent": "",
+    "data_item_type": "VERSION",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": "",
+    "values_schema": {
+      "type": "string"
     }
   },
   "ACC_X_MPS2": {
@@ -2160,7 +2172,7 @@
     "subcomponent": "",
     "data_item_type": "ACCELERATION",
     "sub_type": "",
-    "category": "SAMPLE",
+    "category": "COMPOSITE",
     "units": "",
     "values_schema": {
       "$ref": "values_schema.json#/spatial"
@@ -2202,8 +2214,18 @@
       "type": "number"
     }
   },
-  "message": {
+  "angular_velocity": {
     "synthetic": true,
+    "data_item_name": "angular_velocity",
+    "component": "imu",
+    "subcomponent": "",
+    "data_item_type": "ANGULAR_VELOCITY",
+    "sub_type": "VERTICAL",
+    "category": "COMPOSITE",
+    "units": "",
+    "values_schema": {"$ref":  "values_schema.json#/spatial"}
+  },
+  "message": {
     "data_item_name": "message",
     "component": "logs",
     "subcomponent": "",
