@@ -1,6 +1,6 @@
 import fs from "fs"
 import path from "path"
-import probe from "probe-gen-2.json"
+import probe from "./probe-gen-2.json"
 
 const updatedProbe = {}
 
