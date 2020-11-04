@@ -1,6 +1,6 @@
 import fs from "fs"
 import path from "path"
-import probe from "../../kubernetes-ather/releases/staging/files/probe-gen-2.json"
+import probe from "probe-gen-2.json"
 
 const updatedProbe = {}
 
@@ -23,4 +23,4 @@ Object.keys(probe).filter(dataItem => probe[dataItem]["values_schema"]).forEach(
   updatedProbe[dataItem] = probe[dataItem]
 })
 
-fs.writeFileSync(path.join(__dirname, "probe-gen-2.json"), JSON.stringify(updatedProbe, null, 2))
+fs.writeFileSync(path.join(__dirname, "probe-gen-2-with-values-schema.json"), JSON.stringify(updatedProbe, null, 2))
