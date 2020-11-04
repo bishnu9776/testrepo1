@@ -6,7 +6,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Temp5": {
     "data_item_name": "BMS_Aux_Temp5",
@@ -15,7 +18,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Temp4": {
     "data_item_name": "BMS_Aux_Temp4",
@@ -24,7 +30,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Temp1": {
     "data_item_name": "BMS_Aux_Temp1",
@@ -33,7 +42,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_MinCellVoltage": {
     "data_item_name": "BMS_MinCellVoltage",
@@ -42,7 +54,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "MIN",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_MaxCellVoltage": {
     "data_item_name": "BMS_MaxCellVoltage",
@@ -51,7 +66,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "MAX",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_CellVoltageDelta": {
     "data_item_name": "BMS_CellVoltageDelta",
@@ -60,7 +78,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "DELTA",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell1": {
     "data_item_name": "BMS_Cell1",
@@ -69,7 +90,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell2": {
     "data_item_name": "BMS_Cell2",
@@ -78,7 +102,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell3": {
     "data_item_name": "BMS_Cell3",
@@ -87,7 +114,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell4": {
     "data_item_name": "BMS_Cell4",
@@ -96,7 +126,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell5": {
     "data_item_name": "BMS_Cell5",
@@ -105,7 +138,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell6": {
     "data_item_name": "BMS_Cell6",
@@ -114,7 +150,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell7": {
     "data_item_name": "BMS_Cell7",
@@ -123,7 +162,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell8": {
     "data_item_name": "BMS_Cell8",
@@ -132,7 +174,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell9": {
     "data_item_name": "BMS_Cell9",
@@ -141,7 +186,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell10": {
     "data_item_name": "BMS_Cell10",
@@ -150,7 +198,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell11": {
     "data_item_name": "BMS_Cell11",
@@ -159,7 +210,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell12": {
     "data_item_name": "BMS_Cell12",
@@ -168,7 +222,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell13": {
     "data_item_name": "BMS_Cell13",
@@ -177,7 +234,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Cell14": {
     "data_item_name": "BMS_Cell14",
@@ -186,7 +246,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Temp6": {
     "data_item_name": "BMS_Aux_Temp6",
@@ -195,7 +258,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "BOX_AMBIENT",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_AFE_Temp3": {
     "data_item_name": "BMS_AFE_Temp3",
@@ -204,7 +270,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_AFE_Temp2": {
     "data_item_name": "BMS_AFE_Temp2",
@@ -213,7 +282,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_AFE_Temp1": {
     "data_item_name": "BMS_AFE_Temp1",
@@ -222,7 +294,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Temp3": {
     "data_item_name": "BMS_Aux_Temp3",
@@ -231,7 +306,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Humidity": {
     "data_item_name": "BMS_Humidity",
@@ -240,7 +318,10 @@
     "data_item_type": "RELATIVE_HUMIDITY",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "PERCENT"
+    "units": "PERCENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_ThermalAlert": {
     "data_item_name": "BMS_ThermalAlert",
@@ -249,7 +330,10 @@
     "data_item_type": "FLAG",
     "sub_type": "THERMAL",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_UBatt_V": {
     "data_item_name": "MOT_UBatt_V",
@@ -258,7 +342,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_TorqueActual_Nm": {
     "data_item_name": "MOT_TorqueActual_Nm",
@@ -267,7 +354,10 @@
     "data_item_type": "TORQUE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "NEWTON_METER"
+    "units": "NEWTON_METER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_KillSwitchEcho": {
     "data_item_name": "MOT_KillSwitchEcho",
@@ -276,7 +366,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_IBatt_A": {
     "data_item_name": "MOT_IBatt_A",
@@ -285,7 +378,10 @@
     "data_item_type": "AMPERAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "AMPERE"
+    "units": "AMPERE",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_ErrorCode": {
     "data_item_name": "MOT_ErrorCode",
@@ -294,7 +390,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_Tpcb_C": {
     "data_item_name": "MOT_Tpcb_C",
@@ -303,7 +402,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_Vrms": {
     "data_item_name": "CHA_Vrms",
@@ -312,7 +414,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "ALTERNATING",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_Vout": {
     "data_item_name": "CHA_Vout",
@@ -321,7 +426,10 @@
     "data_item_type": "VOLTAGE",
     "sub_type": "DIRECT",
     "category": "SAMPLE",
-    "units": "VOLT"
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_Iout": {
     "data_item_name": "CHA_Iout",
@@ -330,7 +438,10 @@
     "data_item_type": "AMPERAGE",
     "sub_type": "DIRECT",
     "category": "SAMPLE",
-    "units": "AMPERE"
+    "units": "AMPERE",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_Irms": {
     "data_item_name": "CHA_Irms",
@@ -339,7 +450,10 @@
     "data_item_type": "AMPERAGE",
     "sub_type": "ALTERNATING",
     "category": "SAMPLE",
-    "units": "AMPERE"
+    "units": "AMPERE",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_FMS_Flag": {
     "data_item_name": "CHA_FMS_Flag",
@@ -348,7 +462,10 @@
     "data_item_type": "FLAG",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_CV": {
     "data_item_name": "CHA_CV",
@@ -357,7 +474,10 @@
     "data_item_type": "FLAG",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_CC": {
     "data_item_name": "CHA_CC",
@@ -366,7 +486,10 @@
     "data_item_type": "FLAG",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_CD": {
     "data_item_name": "CHA_CD",
@@ -375,7 +498,10 @@
     "data_item_type": "FLAG",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "vehicle_status": {
     "data_item_name": "vehicle_status",
@@ -384,7 +510,10 @@
     "data_item_type": "STATUS",
     "sub_type": "VEHICLE",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "isvisible": {
     "data_item_name": "isvisible",
@@ -393,7 +522,10 @@
     "data_item_type": "?",
     "sub_type": "?",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ept_s": {
     "data_item_name": "ept_s",
@@ -402,7 +534,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "SECOND"
+    "units": "SECOND",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "epx_m": {
     "data_item_name": "epx_m",
@@ -411,7 +546,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER"
+    "units": "METER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "epy_m": {
     "data_item_name": "epy_m",
@@ -420,7 +558,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER"
+    "units": "METER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "epv_m": {
     "data_item_name": "epv_m",
@@ -429,7 +570,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER"
+    "units": "METER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "epd_deg": {
     "data_item_name": "epd_deg",
@@ -438,7 +582,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "DEGREE"
+    "units": "DEGREE",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "eps_mps2": {
     "data_item_name": "eps_mps2",
@@ -447,7 +594,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER/SECOND^2"
+    "units": "METER/SECOND^2",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "epc_mps2": {
     "data_item_name": "epc_mps2",
@@ -456,7 +606,10 @@
     "data_item_type": "ESTIMATED_ERROR",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER/SECOND^2"
+    "units": "METER/SECOND^2",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "track_deg": {
     "data_item_name": "track_deg",
@@ -465,7 +618,10 @@
     "data_item_type": "ANGLE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "DEGREE"
+    "units": "DEGREE",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "speed_mps": {
     "data_item_name": "speed_mps",
@@ -474,7 +630,10 @@
     "data_item_type": "SPEED",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER/SECOND"
+    "units": "METER/SECOND",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "climb_mps": {
     "data_item_name": "climb_mps",
@@ -483,7 +642,10 @@
     "data_item_type": "CLIMB",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER/SECOND"
+    "units": "METER/SECOND",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "alt_m": {
     "data_item_name": "alt_m",
@@ -492,7 +654,10 @@
     "data_item_type": "ALTITUDE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "METER"
+    "units": "METER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "data": {
     "data_item_name": "data",
@@ -501,7 +666,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "network_status": {
     "data_item_name": "network_status",
@@ -510,7 +678,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "network_signal": {
     "data_item_name": "network_signal",
@@ -519,7 +690,10 @@
     "data_item_type": "SIGNAL",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "screen_brightness": {
     "data_item_name": "screen_brightness",
@@ -528,7 +702,10 @@
     "data_item_type": "BRIGHTNESS",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "LUMEN"
+    "units": "LUMEN",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "display_status": {
     "data_item_name": "display_status",
@@ -537,7 +714,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "screen_brightness_control": {
     "data_item_name": "screen_brightness_control",
@@ -546,7 +726,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "touchscreen_status": {
     "data_item_name": "touchscreen_status",
@@ -555,7 +738,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "bluetooth_device_status": {
     "data_item_name": "bluetooth_device_status",
@@ -564,7 +750,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "vehicle_range": {
     "data_item_name": "vehicle_range",
@@ -573,7 +762,10 @@
     "data_item_type": "DISTANCE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "KILOMETER"
+    "units": "KILOMETER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "cpu_thermal_zone0": {
     "data_item_name": "cpu_thermal_zone0",
@@ -582,7 +774,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ddr_temperature": {
     "data_item_name": "ddr_temperature",
@@ -591,7 +786,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "gsm_temperature": {
     "data_item_name": "gsm_temperature",
@@ -600,7 +798,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "buck_temperature": {
     "data_item_name": "buck_temperature",
@@ -609,7 +810,10 @@
     "data_item_type": "TEMPERATURE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "CELSIUS"
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "als_lux": {
     "data_item_name": "als_lux",
@@ -618,7 +822,10 @@
     "data_item_type": "ILLUMINANCE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "LUMEN/METER^2"
+    "units": "LUMEN/METER^2",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "imu_fault": {
     "data_item_name": "imu_fault",
@@ -627,7 +834,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "als_fault": {
     "data_item_name": "als_fault",
@@ -636,7 +846,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "touch_fault": {
     "data_item_name": "touch_fault",
@@ -645,7 +858,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "lcd_power_fault": {
     "data_item_name": "lcd_power_fault",
@@ -654,7 +870,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "lcd_backlight_fault": {
     "data_item_name": "lcd_backlight_fault",
@@ -663,7 +882,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "gps_power_fault": {
     "data_item_name": "gps_power_fault",
@@ -672,7 +894,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ldu_fault": {
     "data_item_name": "ldu_fault",
@@ -681,7 +906,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_brake": {
     "data_item_name": "left_brake",
@@ -690,7 +918,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_brake": {
     "data_item_name": "right_brake",
@@ -699,7 +930,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "head_lamp_switch": {
     "data_item_name": "head_lamp_switch",
@@ -708,7 +942,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "horn_switch": {
     "data_item_name": "horn_switch",
@@ -717,7 +954,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_indicator_switch": {
     "data_item_name": "left_indicator_switch",
@@ -726,7 +966,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_indicator_switch": {
     "data_item_name": "right_indicator_switch",
@@ -735,7 +978,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "no_indicator_switch": {
     "data_item_name": "no_indicator_switch",
@@ -744,7 +990,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "key_switch": {
     "data_item_name": "key_switch",
@@ -753,7 +1002,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "start_switch": {
     "data_item_name": "start_switch",
@@ -762,7 +1014,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_scroll_switch": {
     "data_item_name": "left_scroll_switch",
@@ -771,7 +1026,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_scroll_switch": {
     "data_item_name": "right_scroll_switch",
@@ -780,7 +1038,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "side_stand": {
     "data_item_name": "side_stand",
@@ -789,7 +1050,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ldu": {
     "data_item_name": "ldu",
@@ -798,7 +1062,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "gsm_power": {
     "data_item_name": "gsm_power",
@@ -807,7 +1074,10 @@
     "data_item_type": "WATTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "WATT"
+    "units": "WATT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "gps_power": {
     "data_item_name": "gps_power",
@@ -816,7 +1086,10 @@
     "data_item_type": "WATTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "WATT"
+    "units": "WATT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "als_power": {
     "data_item_name": "als_power",
@@ -825,7 +1098,10 @@
     "data_item_type": "WATTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "WATT"
+    "units": "WATT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "imu_power": {
     "data_item_name": "imu_power",
@@ -834,7 +1110,10 @@
     "data_item_type": "WATTAGE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "WATT"
+    "units": "WATT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "motor_fan": {
     "data_item_name": "motor_fan",
@@ -843,7 +1122,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "low_beam": {
     "data_item_name": "low_beam",
@@ -852,7 +1134,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "high_beam": {
     "data_item_name": "high_beam",
@@ -861,7 +1146,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "tail_lamp": {
     "data_item_name": "tail_lamp",
@@ -870,7 +1158,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "stop_lamp": {
     "data_item_name": "stop_lamp",
@@ -879,7 +1170,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "horn": {
     "data_item_name": "horn",
@@ -888,7 +1182,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_indicator": {
     "data_item_name": "left_indicator",
@@ -897,7 +1194,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_indicator": {
     "data_item_name": "right_indicator",
@@ -906,7 +1206,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "position_lamp": {
     "data_item_name": "position_lamp",
@@ -915,7 +1218,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "license_plate": {
     "data_item_name": "license_plate",
@@ -924,7 +1230,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "high_beam_fault": {
     "data_item_name": "high_beam_fault",
@@ -933,7 +1242,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "low_beam_fault": {
     "data_item_name": "low_beam_fault",
@@ -942,7 +1254,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_indicator_open_fault": {
     "data_item_name": "left_indicator_open_fault",
@@ -951,7 +1266,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_indicator_open_fault": {
     "data_item_name": "right_indicator_open_fault",
@@ -960,7 +1278,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "left_indicator_fault": {
     "data_item_name": "left_indicator_fault",
@@ -969,7 +1290,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "right_indicator_fault": {
     "data_item_name": "right_indicator_fault",
@@ -978,7 +1302,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "motor_fan_fault": {
     "data_item_name": "motor_fan_fault",
@@ -987,7 +1314,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "tail_lamp_fault": {
     "data_item_name": "tail_lamp_fault",
@@ -996,7 +1326,10 @@
     "data_item_type": "FAULT",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "kill_switch": {
     "data_item_name": "kill_switch",
@@ -1005,7 +1338,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "gsm_1_8v": {
     "data_item_name": "gsm_1_8v",
@@ -1014,7 +1350,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "charger_status": {
     "data_item_name": "charger_status",
@@ -1023,7 +1362,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "vcu_status": {
     "data_item_name": "vcu_status",
@@ -1032,7 +1374,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "bms_key_in_status": {
     "data_item_name": "bms_key_in_status",
@@ -1041,7 +1386,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "motor_power_status": {
     "data_item_name": "motor_power_status",
@@ -1050,7 +1398,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "key": {
     "data_item_name": "key",
@@ -1059,7 +1410,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "value": {
     "data_item_name": "value",
@@ -1068,28 +1422,40 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BCM_ChaType": {
     "data_item_name": "BCM_ChaType",
     "component": "can",
     "subcomponent": "",
     "data_item_type": "STATUS",
-    "category": "EVENT"
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BCM_ChaState": {
     "data_item_name": "BCM_ChaState",
     "component": "can",
     "subcomponent": "",
     "data_item_type": "STATUS",
-    "category": "EVENT"
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "CHA_AuthStatus": {
     "data_item_name": "CHA_AuthStatus",
     "component": "can",
     "subcomponent": "",
     "data_item_type": "STATUS",
-    "category": "EVENT"
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_ThrottleOut_pct": {
     "data_item_name": "MOT_ThrottleOut_pct",
@@ -1098,7 +1464,10 @@
     "data_item_type": "THROTTLE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "PERCENT"
+    "units": "PERCENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Aux_Humidity": {
     "data_item_name": "BMS_Aux_Humidity",
@@ -1107,7 +1476,10 @@
     "data_item_type": "RELATIVE_HUMIDITY",
     "sub_type": "AUX",
     "category": "SAMPLE",
-    "units": "PERCENT"
+    "units": "PERCENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_Keyin_Status": {
     "data_item_name": "BMS_Keyin_Status",
@@ -1116,7 +1488,10 @@
     "data_item_type": "?",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "MOT_PowerStage": {
     "data_item_name": "MOT_PowerStage",
@@ -1125,7 +1500,10 @@
     "data_item_type": "MOTOR_POWERED",
     "sub_type": "ACTUAL",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "POD_S340_ChargerType": {
     "data_item_name": "POD_S340_ChargerType",
@@ -1134,7 +1512,10 @@
     "data_item_type": "POD_HEARTBEAT",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode1": {
     "data_item_name": "betaDisplay_motorMode1",
@@ -1143,7 +1524,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_1",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode2": {
     "data_item_name": "betaDisplay_motorMode2",
@@ -1152,7 +1536,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_2",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode3": {
     "data_item_name": "betaDisplay_motorMode3",
@@ -1161,7 +1548,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_3",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode4": {
     "data_item_name": "betaDisplay_motorMode4",
@@ -1170,7 +1560,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_4",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode5": {
     "data_item_name": "betaDisplay_motorMode5",
@@ -1179,7 +1572,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_5",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode6": {
     "data_item_name": "betaDisplay_motorMode6",
@@ -1188,7 +1584,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_6",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode7": {
     "data_item_name": "betaDisplay_motorMode7",
@@ -1197,7 +1596,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_7",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode8": {
     "data_item_name": "betaDisplay_motorMode8",
@@ -1206,7 +1608,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_8",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "betaDisplay_motorMode9": {
     "data_item_name": "betaDisplay_motorMode9",
@@ -1215,7 +1620,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "display_9",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode1": {
     "data_item_name": "beta_motorMode1",
@@ -1224,7 +1632,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_1",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode2": {
     "data_item_name": "beta_motorMode2",
@@ -1233,7 +1644,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_2",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode3": {
     "data_item_name": "beta_motorMode3",
@@ -1242,7 +1656,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_3",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode4": {
     "data_item_name": "beta_motorMode4",
@@ -1251,7 +1668,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_4",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode5": {
     "data_item_name": "beta_motorMode5",
@@ -1260,7 +1680,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_5",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode6": {
     "data_item_name": "beta_motorMode6",
@@ -1269,7 +1692,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_6",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode7": {
     "data_item_name": "beta_motorMode7",
@@ -1278,7 +1704,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_7",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode8": {
     "data_item_name": "beta_motorMode8",
@@ -1287,7 +1716,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_8",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "beta_motorMode9": {
     "data_item_name": "beta_motorMode9",
@@ -1296,7 +1728,10 @@
     "data_item_type": "RANGE_PREDICTION_COEFFICIENT",
     "sub_type": "raw_9",
     "category": "SAMPLE",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BCM_VehState": {
     "data_item_name": "BCM_VehState",
@@ -1305,7 +1740,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BCM_DriveMode": {
     "data_item_name": "BCM_DriveMode",
@@ -1314,7 +1752,10 @@
     "data_item_type": "STATUS",
     "sub_type": "",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "GTW_OdoData": {
     "data_item_name": "GTW_OdoData",
@@ -1323,7 +1764,10 @@
     "data_item_type": "DISTANCE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "KILOMETER"
+    "units": "KILOMETER",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BMS_State_of_charge": {
     "data_item_name": "BMS_State_of_charge",
@@ -1332,7 +1776,10 @@
     "data_item_type": "BATTERY_STATE",
     "sub_type": "",
     "category": "SAMPLE",
-    "units": "PERCENT"
+    "units": "PERCENT",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "BCM_InChaSolFeedback": {
     "data_item_name": "BCM_InChaSolFeedback",
@@ -1341,7 +1788,166 @@
     "data_item_type": "SWITCH",
     "sub_type": "BCM_InChaSolFeedback",
     "category": "EVENT",
-    "units": ""
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "error_code": {
+    "data_item_name": "error_code",
+    "component": "heman",
+    "subcomponent": "",
+    "data_item_type": "HEMAN",
+    "sub_type": "",
+    "category": "CONDITION",
+    "units": "",
+    "values_schema": {
+      "$ref": "values_schema.json#/condition"
+    }
+  },
+  "MOT_NPres_RPM": {
+    "data_item_name": "MOT_NPres_RPM",
+    "component": "motor",
+    "subcomponent": "",
+    "data_item_type": "ROTARY_VELOCITY",
+    "sub_type": "",
+    "category": "SAMPLE",
+    "units": "REVOLUTION/MINUTE",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "BMS_Voltage": {
+    "data_item_name": "BMS_Voltage",
+    "component": "battery",
+    "subcomponent": "",
+    "data_item_type": "VOLTAGE",
+    "sub_type": "",
+    "category": "SAMPLE",
+    "units": "VOLT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "BMS_Current": {
+    "data_item_name": "BMS_Current",
+    "component": "battery",
+    "subcomponent": "",
+    "data_item_type": "AMPERAGE",
+    "sub_type": "",
+    "category": "SAMPLE",
+    "units": "AMPERE",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "MOT_Tmot_C": {
+    "data_item_name": "MOT_Tmot_C",
+    "component": "motor",
+    "subcomponent": "",
+    "data_item_type": "TEMPERATURE",
+    "sub_type": "",
+    "category": "SAMPLE",
+    "units": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "CHA_Mode": {
+    "data_item_name": "CHA_Mode",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "CHA_Type": {
+    "data_item_name": "CHA_Type",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "POD_AuthenticationStatus": {
+    "data_item_name": "POD_AuthenticationStatus",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "CI_Recoverable_Fault": {
+    "data_item_name": "CI_Recoverable_Fault",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "FAULT",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "CHA_State_of_Protocol": {
+    "data_item_name": "CHA_State_of_Protocol",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "GRID_Type": {
+    "data_item_name": "GRID_Type",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "POD_Type": {
+    "data_item_name": "POD_Type",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "STATUS",
+    "category": "EVENT",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "POD_ID": {
+    "data_item_name": "POD_ID",
+    "component": "can",
+    "subcomponent": "",
+    "data_item_type": "ID",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
+  },
+  "incognito_mode": {
+    "data_item_name": "incognito_mode",
+    "component": "vcu",
+    "subcomponent": "INCOGNITO",
+    "data_item_type": "MODE",
+    "sub_type": "",
+    "category": "EVENT",
+    "units": "",
+    "values_schema": {
+      "type": "number"
+    }
   },
   "release_name": {
     "data_item_name": "release_name",
@@ -1351,7 +1957,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "bms_version": {
     "data_item_name": "bms_version",
@@ -1361,7 +1969,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "charger_version": {
     "data_item_name": "charger_version",
@@ -1371,7 +1981,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "sim_ccid": {
     "data_item_name": "sim_ccid",
@@ -1381,7 +1993,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "sim_cimi": {
     "data_item_name": "sim_cimi",
@@ -1391,7 +2005,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "mender_artifact_ver": {
     "data_item_name": "mender_artifact_ver",
@@ -1401,7 +2017,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "mcu_version": {
     "data_item_name": "mcu_version",
@@ -1411,7 +2029,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "vin": {
     "data_item_name": "vin",
@@ -1421,7 +2041,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "bike_type": {
     "data_item_name": "bike_type",
@@ -1431,7 +2053,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "motor_version": {
     "data_item_name": "motor_version",
@@ -1441,7 +2065,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "system_boot_time": {
     "data_item_name": "system_boot_time",
@@ -1451,7 +2077,9 @@
     "sub_type": "SYSTEM_BOOT",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "string"}
+    "values_schema": {
+      "type": "string"
+    }
   },
   "mode": {
     "data_item_name": "mode",
@@ -1461,7 +2089,9 @@
     "sub_type": "FIX",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "integer"}
+    "values_schema": {
+      "type": "integer"
+    }
   },
   "ttff_s": {
     "data_item_name": "ttff_s",
@@ -1471,16 +2101,9 @@
     "sub_type": "?",
     "category": "SAMPLE",
     "units": "SECOND",
-    "values_schema": {"type": "number"}
-  },
-  "error_code": {
-    "data_item_name": "error_code",
-    "component": "heman",
-    "subcomponent": "",
-    "data_item_type": "HEMAN",
-    "sub_type": "",
-    "category": "CONDITION",
-    "units": ""
+    "values_schema": {
+      "type": "number"
+    }
   },
   "isvalid": {
     "data_item_name": "isvalid",
@@ -1490,103 +2113,9 @@
     "sub_type": "",
     "category": "EVENT",
     "units": "",
-    "values_schema": {"type": "integer"}
-  },
-  "MOT_NPres_RPM": {
-    "data_item_name": "MOT_NPres_RPM",
-    "component": "motor",
-    "subcomponent": "",
-    "data_item_type": "ROTARY_VELOCITY",
-    "sub_type": "",
-    "category": "SAMPLE",
-    "units": "REVOLUTION/MINUTE"
-  },
-  "BMS_Voltage": {
-    "data_item_name": "BMS_Voltage",
-    "component": "battery",
-    "subcomponent": "",
-    "data_item_type": "VOLTAGE",
-    "sub_type": "",
-    "category": "SAMPLE",
-    "units": "VOLT"
-  },
-  "BMS_Current": {
-    "data_item_name": "BMS_Current",
-    "component": "battery",
-    "subcomponent": "",
-    "data_item_type": "AMPERAGE",
-    "sub_type": "",
-    "category": "SAMPLE",
-    "units": "AMPERE"
-  },
-  "MOT_Tmot_C": {
-    "data_item_name": "MOT_Tmot_C",
-    "component": "motor",
-    "subcomponent": "",
-    "data_item_type": "TEMPERATURE",
-    "sub_type": "",
-    "category": "SAMPLE",
-    "units": "CELSIUS"
-  },
-  "CHA_Mode": {
-    "data_item_name": "CHA_Mode",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "CHA_Type": {
-    "data_item_name": "CHA_Type",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "POD_AuthenticationStatus": {
-    "data_item_name": "POD_AuthenticationStatus",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "CI_Recoverable_Fault": {
-    "data_item_name": "CI_Recoverable_Fault",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "FAULT",
-    "sub_type": "",
-    "category": "EVENT",
-    "units": ""
-  },
-  "CHA_State_of_Protocol": {
-    "data_item_name": "CHA_State_of_Protocol",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "GRID_Type": {
-    "data_item_name": "GRID_Type",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "POD_Type": {
-    "data_item_name": "POD_Type",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "STATUS",
-    "category": "EVENT"
-  },
-  "POD_ID": {
-    "data_item_name": "POD_ID",
-    "component": "can",
-    "subcomponent": "",
-    "data_item_type": "ID",
-    "sub_type": "",
-    "category": "EVENT",
-    "units": ""
+    "values_schema": {
+      "type": "integer"
+    }
   },
   "ACC_X_MPS2": {
     "data_item_name": "ACC_X_MPS2",
@@ -1596,7 +2125,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "METER/SECOND^2",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ACC_Y_MPS2": {
     "data_item_name": "ACC_Y_MPS2",
@@ -1606,7 +2137,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "METER/SECOND^2",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "ACC_Z_MPS2": {
     "data_item_name": "ACC_Z_MPS2",
@@ -1616,7 +2149,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "METER/SECOND^2",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "acceleration": {
     "synthetic": true,
@@ -1627,7 +2162,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "",
-    "values_schema": {"$ref": "values_schema.json#/spatial"}
+    "values_schema": {
+      "$ref": "values_schema.json#/spatial"
+    }
   },
   "GYR_X_DEG": {
     "data_item_name": "GYR_X_DEG",
@@ -1637,7 +2174,9 @@
     "sub_type": "LONGTITUDINAL",
     "category": "SAMPLE",
     "units": "DEGREE/SECOND",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "GYR_Y_DEG": {
     "data_item_name": "GYR_Y_DEG",
@@ -1647,7 +2186,9 @@
     "sub_type": "LATERAL",
     "category": "SAMPLE",
     "units": "DEGREE/SECOND",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "GYR_Z_DEG": {
     "data_item_name": "GYR_Z_DEG",
@@ -1657,7 +2198,9 @@
     "sub_type": "VERTICAL",
     "category": "SAMPLE",
     "units": "DEGREE/SECOND",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "message": {
     "synthetic": true,
@@ -1668,7 +2211,9 @@
     "sub_type": "",
     "category": "LOG",
     "units": "",
-    "values_schema": {"$ref": "values_schema.json#/log"}
+    "values_schema": {
+      "$ref": "values_schema.json#/log"
+    }
   },
   "LAT_DEG": {
     "data_item_name": "LAT_DEG",
@@ -1678,7 +2223,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "DEGREE",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "LON_DEG": {
     "data_item_name": "LON_DEG",
@@ -1688,7 +2235,9 @@
     "sub_type": "",
     "category": "SAMPLE",
     "units": "DEGREE",
-    "values_schema": {"type": "number"}
+    "values_schema": {
+      "type": "number"
+    }
   },
   "location": {
     "synthetic": true,
@@ -1699,15 +2248,8 @@
     "sub_type": "",
     "category": "LOCATION",
     "units": "DEGREE",
-    "values_schema": {"$ref": "values_schema.json#/location"}
-  },
-  "incognito_mode": {
-    "data_item_name": "incognito_mode",
-    "component": "vcu",
-    "subcomponent": "INCOGNITO",
-    "data_item_type": "MODE",
-    "sub_type": "",
-    "category": "EVENT",
-    "units": ""
+    "values_schema": {
+      "$ref": "values_schema.json#/location"
+    }
   }
 }
