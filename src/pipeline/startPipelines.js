@@ -1,25 +1,17 @@
 import {createProducer} from "node-microservice/dist/kafka/producer/create-producer"
-import {log} from "../logger"
 import {getPipeline} from "./getPipeline"
-import {getMetricRegistry} from "../metrics/metricRegistry"
-import {collectProcessStats} from "../metrics/processStats"
 import {getSourceStream} from "../source"
 
 const {env} = process
 
 const pipelines = []
 
-export const startPipelines = async () => {
+export const startPipelines = async appContext => {
+  const {log} = appContext
   const kafkaProps = {
     parentLog: log
   }
   const kafkaProducer = await createProducer(kafkaProps)
-  const metricRegistry = getMetricRegistry(log)
-
-  const appContext = {log, metricRegistry}
-
-  metricRegistry.startStatsReporting()
-  collectProcessStats(metricRegistry)
   const source = await getSourceStream(appContext)
 
   pipelines.push(
