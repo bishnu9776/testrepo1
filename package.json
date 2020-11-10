@@ -49,7 +49,7 @@
     "rxjs": "6.6.3"
   },
   "devDependencies": {
-    "@babel/node": "7.12.1",
+    "@babel/node": "7.12.6",
     "babel-preset-vi-node": "1.0.158",
     "chai": "4.2.0",
     "choma": "1.2.1",
