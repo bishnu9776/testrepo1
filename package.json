@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@babel/node": "7.12.6",
-    "babel-preset-vi-node": "1.0.160",
+    "babel-preset-vi-node": "1.0.161",
     "chai": "4.2.0",
     "choma": "1.2.1",
     "csvtojson": "2.0.10",
