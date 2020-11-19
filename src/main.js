@@ -1,4 +1,5 @@
-import {handleSignals, getMetricRegistry, createApp} from "node-microservice"
+import {handleSignals, createApp} from "node-microservice"
+import {getMetricRegistry} from "node-microservice/dist/metrics"
 import {log} from "./logger"
 import {errorFormatter} from "./utils/errorFormatter"
 import {startPipelines, stopPipelines} from "./pipeline/startPipelines"
