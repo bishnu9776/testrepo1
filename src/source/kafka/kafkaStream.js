@@ -7,7 +7,7 @@ const isInvalidAttributes = attributes =>
 
 const getAttributesForGen1 = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
-    const attributesObj = headers[0].inputTopic.toString().split("/")
+    const attributesObj = headers[0].inputTopic.toString().split(".")
     if (isInvalidAttributes(attributesObj)) {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
       throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
