@@ -1,5 +1,5 @@
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
-import {getAttributesForGen2} from "../../../src/source/kafka/kafkaStream"
+import {getAttributesForGen2} from "../../../src/source/kafka/getAttributesForGen"
 
 describe("getAttributesForGen spec", () => {
   let metricRegistry
@@ -24,7 +24,7 @@ describe("getAttributesForGen spec", () => {
         )
       })
 
-      it("should throw if component is not defined", () => {
+      it("should throw if channel is not defined", () => {
         const headers = [{inputTopic: ".devices.device_1.events.v1"}]
         expect(() => getAttributesForGen2(headers, metricRegistry)).to.throw(
           `Device/channel not present, topic: ${headers[0].inputTopic}`
@@ -58,7 +58,7 @@ describe("getAttributesForGen spec", () => {
         )
       })
 
-      it("should throw if component is not defined", () => {
+      it("should throw if channel is not defined", () => {
         const headers = [{inputTopic: ".devices.Gen-2.device_1.events.v1"}]
         expect(() => getAttributesForGen2(headers, metricRegistry)).to.throw(
           `Device/channel not present, topic: ${headers[0].inputTopic}`
