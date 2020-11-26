@@ -2,8 +2,8 @@ import {errorFormatter} from "../../utils/errorFormatter"
 import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
 import {getInputMessageTags} from "../../metrics/tags"
 
-const isInvalidAttributes = attributes =>
-  isNilOrEmpty(attributes[2]) && isNilOrEmpty(attributes[5]) && isNilOrEmpty(attributes[5])
+const isInvalidAttributes = (attributes, indicesToValidate) =>
+  indicesToValidate.some(index => isNilOrEmpty(attributes[index]))
 
 const getAttributesForGen1 = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
@@ -20,16 +20,25 @@ const getAttributesForGen1 = (headers, metricRegistry) => {
   throw new Error(`Invalid headers`)
 }
 
-const getAttributesForGen2 = (headers, metricRegistry) => {
+export const getAttributesForGen2 = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
     const attributesObj = headers[0].inputTopic.toString().split(".")
-    if (isInvalidAttributes(attributesObj)) {
+    let deviceAttributeIndex = 2
+    const gen2AttributeRegex = new RegExp("gen-2", "gi")
+    const isNewAttributeStructure = gen2AttributeRegex.test(attributesObj[2])
+    if (isNewAttributeStructure) {
+      deviceAttributeIndex += 1
+    }
+    const versionAttributeIndex = deviceAttributeIndex + 2
+    const componentAttributeIndex = deviceAttributeIndex + 3
+    if (isInvalidAttributes(attributesObj, [deviceAttributeIndex, versionAttributeIndex, componentAttributeIndex])) {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
       throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
     }
+
     return {
-      deviceId: attributesObj[2],
-      subFolder: `${attributesObj[4]}/${attributesObj[5]}`
+      deviceId: attributesObj[deviceAttributeIndex],
+      subFolder: `${attributesObj[versionAttributeIndex]}/${attributesObj[componentAttributeIndex]}`
     }
   }
   throw new Error(`Invalid headers`)
@@ -91,7 +100,7 @@ export const kafkaStream = (appContext, observer) => {
         const parsedEvent = parseEvent(event, resolve)
         sendToObserver(parsedEvent)
       })
-      const parsedLastEvent = parseEvent(appContext, lastEvent, resolve)
+      const parsedLastEvent = parseEvent(lastEvent, resolve)
       sendToObserver(parsedLastEvent, acknowledgeMessage)
     })
   }
