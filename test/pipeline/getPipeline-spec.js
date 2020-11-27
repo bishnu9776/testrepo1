@@ -61,6 +61,21 @@ describe("Pipeline spec", () => {
   })
 
   describe("bike", () => {
+    const expectForGen1 = output => {
+      output.every(e => expect(e.plant).to.eql("ather"))
+      output.every(e => expect(e.tenant).to.eql("ather"))
+      const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
+      expect(output.length).to.eql(122)
+      expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
+      output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
+      output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
+      expect(probeEvent.length).to.eql(1)
+      expect(probeEvent[0].schema_version).to.eql("4")
+      expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
+      expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
+      expect(acknowledgeMessageSpy.callCount).to.eql(2)
+    }
+
     it("gen 1 bike events flow through pipeline from source gcp", done => {
       const source = {
         stream: from([
@@ -74,18 +89,7 @@ describe("Pipeline spec", () => {
           output.push(message)
         },
         complete: () => {
-          output.every(e => expect(e.plant).to.eql("ather"))
-          output.every(e => expect(e.tenant).to.eql("ather"))
-          const probeEvent = output.filter(e => e.tag === "MTConnectDevices")
-          expect(output.length).to.eql(122)
-          expect(output.filter(e => e.data_item_name === "can_raw").length).to.eql(100)
-          output.filter(e => e.data_item_name === "can_raw").every(e => expect(e.data_item_id).to.eql("can_raw-v1"))
-          output.filter(e => e.tag === "MTConnectDataItems").every(e => expect(e.schema_version).to.eql("3"))
-          expect(probeEvent.length).to.eql(1)
-          expect(probeEvent[0].schema_version).to.eql("4")
-          expect(output.filter(e => e.channel === "can_mcu/v1_0_0" && e.data_item_name !== "can_raw").length).to.eql(20)
-          expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
-          expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          expectForGen1(output)
           done()
         }
       }
@@ -99,7 +103,7 @@ describe("Pipeline spec", () => {
       })
     })
 
-    it("gen 1bike events flow through the pipeline when model for device is present", done => {
+    it("gen 1 bike events flow through the pipeline when model for device is present", done => {
       const source = {
         stream: from([
           {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
@@ -162,6 +166,38 @@ describe("Pipeline spec", () => {
           expect(probeEvent.length).to.eql(1)
           expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
           expect(acknowledgeMessageSpy.callCount).to.eql(2)
+          done()
+        }
+      }
+
+      getPipeline({
+        source,
+        observer,
+        probePath,
+        kafkaProducer,
+        appContext
+      })
+    })
+
+    it("gen 1 bike events flow through pipeline from source kafka", done => {
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
+
+      const source = {
+        stream: from([
+          {
+            message: {data: Buffer.from(input.data.data), attributes: input.attributes},
+            acknowledgeMessage: acknowledgeMessageSpy
+          },
+          {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
+        ])
+      }
+      const output = []
+      const observer = {
+        next: message => {
+          output.push(message)
+        },
+        complete: () => {
+          expectForGen1(output)
           done()
         }
       }
