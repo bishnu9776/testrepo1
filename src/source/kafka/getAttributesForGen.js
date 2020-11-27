@@ -3,10 +3,13 @@ import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
 const isInvalidAttributes = (attributes, indicesToValidate) =>
   indicesToValidate.some(index => isNilOrEmpty(attributes[index]))
 
-const getAttributesForGen1 = (headers, metricRegistry) => {
+export const getAttributesForGen1 = (headers, metricRegistry) => {
   if (headers && headers[0].inputTopic) {
     const attributesObj = headers[0].inputTopic.toString().split(".")
-    if (isInvalidAttributes(attributesObj)) {
+    const deviceAttributeIndex = 3
+    const versionAttributeIndex = deviceAttributeIndex + 2
+    const componentAttributeIndex = deviceAttributeIndex + 3
+    if (isInvalidAttributes(attributesObj, [deviceAttributeIndex, versionAttributeIndex, componentAttributeIndex])) {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
       throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
     }
@@ -47,5 +50,9 @@ export const getAttributesForGen = gen => {
     "gen-1": getAttributesForGen1,
     "gen-2": getAttributesForGen2
   }
-  return genToGetAttributeFnMap[gen]
+  if (genToGetAttributeFnMap[gen]) {
+    return genToGetAttributeFnMap[gen]
+  }
+
+  throw new Error(`genAttribute mapping not defined for gen: ${gen}`)
 }
