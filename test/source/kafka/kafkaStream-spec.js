@@ -11,6 +11,7 @@ describe("Kafka Stream", () => {
   let appContext
 
   beforeEach(async () => {
+    process.env.VI_GEN = "gen-2"
     appContext = {
       log: getMockLog(),
       metricRegistry: getMockMetricRegistry()
@@ -115,15 +116,14 @@ describe("Kafka Stream", () => {
     })
   })
 
-  it("should send data in observable stream when there is a batch", () => {
-    const topic2 = JSON.stringify(Buffer.from(".devices.device-2.events.v1.buffered"))
+  const assertKafkaMessagesFromTopic = topicName => {
     const kafkaInput = getKafkaInput(kafkaEvent)
     const kafkaInput2 = getKafkaInput({
       ...kafkaEvent,
       headers: [
         {
           inputTopic: {
-            data: topic2
+            data: topicName
           }
         }
       ]
@@ -143,5 +143,15 @@ describe("Kafka Stream", () => {
     })
 
     getKafkaStream([kafkaInput, kafkaInput2])
+  }
+
+  it("should send data in observable stream when there is a batch with legacy attribute structure", () => {
+    const topicWithLegacyStructure = JSON.stringify(Buffer.from(".devices.device-2.events.v1.buffered"))
+    assertKafkaMessagesFromTopic(topicWithLegacyStructure)
+  })
+
+  it("should send data in observable stream when there is a batch with new attribute structure", () => {
+    const topicWithNewStructure = JSON.stringify(Buffer.from(".devices.GEN-2.device-2.events.v1.buffered"))
+    assertKafkaMessagesFromTopic(topicWithNewStructure)
   })
 })
