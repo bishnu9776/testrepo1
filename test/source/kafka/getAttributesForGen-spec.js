@@ -1,11 +1,59 @@
 import {getMockMetricRegistry} from "../../stubs/getMockMetricRegistry"
-import {getAttributesForGen2} from "../../../src/source/kafka/getAttributesForGen"
+import {
+  getAttributesForGen,
+  getAttributesForGen1,
+  getAttributesForGen2
+} from "../../../src/source/kafka/getAttributesForGen"
+import {getMockLog} from "../../stubs/logger"
 
 describe("getAttributesForGen spec", () => {
   let metricRegistry
+  let log
+  let appContext
 
   beforeEach(() => {
+    log = getMockLog()
     metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
+  })
+
+  it("should throw error when gen attribute mapping is not defined", () => {
+    expect(() => getAttributesForGen("foo", appContext)).to.throw(`genAttribute mapping not defined for gen: foo`)
+    expect(log.error.callCount).to.eql(1)
+  })
+
+  describe("GEN 1", () => {
+    it("should throw if device is not defined", () => {
+      const headers = [{inputTopic: ".devices.gen-1"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.throw(
+        `Device/channel not present, topic: ${headers[0].inputTopic}`
+      )
+    })
+
+    it("should throw if version is not defined", () => {
+      const headers = [{inputTopic: ".devices.gen-1.device_1.events"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.throw(
+        `Device/channel not present, topic: ${headers[0].inputTopic}`
+      )
+    })
+
+    it("should throw if channel is not defined", () => {
+      const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.throw(
+        `Device/channel not present, topic: ${headers[0].inputTopic}`
+      )
+    })
+
+    it("should parse attributes correctly", () => {
+      const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.foo"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.not.throw(
+        `Device/channel not present, topic: ${headers[0].inputTopic}`
+      )
+
+      const {deviceId, subFolder} = getAttributesForGen1(headers, metricRegistry)
+      expect(deviceId).to.be.eql("device_1")
+      expect(subFolder).to.be.eql("v1/foo")
+    })
   })
 
   describe("GEN 2", () => {

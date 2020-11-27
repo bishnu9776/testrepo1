@@ -4,7 +4,7 @@ import {getInputMessageTags} from "../../metrics/tags"
 import {getAttributesForGen} from "./getAttributesForGen"
 
 const getParseEvent = appContext => {
-  const getAttributes = getAttributesForGen(process.env.VI_GEN)
+  const getAttributes = getAttributesForGen(process.env.VI_GEN, appContext)
   return (event, resolve) => {
     const {value, headers} = event
     const {log, metricRegistry} = appContext
