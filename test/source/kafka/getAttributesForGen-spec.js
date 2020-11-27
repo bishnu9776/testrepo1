@@ -4,16 +4,22 @@ import {
   getAttributesForGen1,
   getAttributesForGen2
 } from "../../../src/source/kafka/getAttributesForGen"
+import {getMockLog} from "../../stubs/logger"
 
 describe("getAttributesForGen spec", () => {
   let metricRegistry
+  let log
+  let appContext
 
   beforeEach(() => {
+    log = getMockLog()
     metricRegistry = getMockMetricRegistry()
+    appContext = {log, metricRegistry}
   })
 
   it("should throw error when gen attribute mapping is not defined", () => {
-    expect(() => getAttributesForGen("foo")).to.throw(`genAttribute mapping not defined for gen: foo`)
+    expect(() => getAttributesForGen("foo", appContext)).to.throw(`genAttribute mapping not defined for gen: foo`)
+    expect(log.error.callCount).to.eql(1)
   })
 
   describe("GEN 1", () => {

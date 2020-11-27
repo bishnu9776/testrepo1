@@ -45,7 +45,8 @@ export const getAttributesForGen2 = (headers, metricRegistry) => {
   throw new Error(`Invalid headers`)
 }
 
-export const getAttributesForGen = gen => {
+export const getAttributesForGen = (gen, appContext) => {
+  const {log} = appContext
   const genToGetAttributeFnMap = {
     "gen-1": getAttributesForGen1,
     "gen-2": getAttributesForGen2
@@ -54,5 +55,6 @@ export const getAttributesForGen = gen => {
     return genToGetAttributeFnMap[gen]
   }
 
+  log.error(`genAttribute mapping not defined for gen: ${gen}`)
   throw new Error(`genAttribute mapping not defined for gen: ${gen}`)
 }
