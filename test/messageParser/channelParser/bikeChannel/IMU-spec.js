@@ -26,7 +26,6 @@ describe("Parses IMU", () => {
     expect(createDataItemsFromMessage({message: IMU})).to.eql([
       {
         channel: "imu",
-        data_item_id: "acc_x_mps2-v1",
         data_item_name: "acc_x_mps2",
         device_uuid: "s_248",
         sequence: 10645396,
@@ -35,7 +34,6 @@ describe("Parses IMU", () => {
       },
       {
         channel: "imu",
-        data_item_id: "gyr_z_deg-v1",
         data_item_name: "gyr_z_deg",
         device_uuid: "s_248",
         sequence: 10645397,

@@ -28,7 +28,6 @@ describe("Parses pre big sink SESSION_DATA", () => {
         auth_status: "NONE",
         channel: "session_data",
         charging_type: 2,
-        data_item_id: "session-v1",
         data_item_name: "session",
         device_uuid: "DB_001f7b100569",
         end_reason: "VEHICLE_INTERRUPTED",

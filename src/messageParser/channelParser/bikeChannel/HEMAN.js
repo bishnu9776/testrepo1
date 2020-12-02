@@ -1,5 +1,4 @@
 import {flatten} from "ramda"
-import {getDataItemId} from "../../../utils/helpers"
 
 export const parseHEMAN = ({data, attributes}) => {
   return flatten(
@@ -10,7 +9,6 @@ export const parseHEMAN = ({data, attributes}) => {
       return {
         timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
         data_item_name: "error_code",
-        data_item_id: getDataItemId({dataItemName: "error_code", deviceId}),
         device_uuid: deviceId,
         native_code: event.error_code,
         condition_level: event.end_timestamp ? "NORMAL" : "FAULT",

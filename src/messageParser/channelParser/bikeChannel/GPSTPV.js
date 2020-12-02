@@ -1,6 +1,5 @@
 import {flatten} from "ramda"
 import {getDataItem} from "../utils/getDataItem"
-import {getDataItemId} from "../../../utils/helpers"
 
 const eventAndSampleKeys = [
   "mode",
@@ -30,7 +29,6 @@ export const parseGPSTPV = ({data, attributes}) => {
         value: {lat: event.lat_deg || null, lon: event.lon_deg || null},
         data_item_name: "location",
         data_item_type: "LOCATION",
-        data_item_id: getDataItemId({dataItemName: "location", deviceId}),
         timestamp,
         device_uuid: deviceId,
         sequence: event.seq_num,

@@ -1,5 +1,4 @@
 import {flatten} from "ramda"
-import {getDataItemId} from "../../../utils/helpers"
 
 export const parseGen2UnbufferedData = ({message}) => {
   const {data, attributes} = message
@@ -12,7 +11,6 @@ export const parseGen2UnbufferedData = ({message}) => {
       return {
         timestamp: new Date(parseFloat(timestamp) * 1000).toISOString(),
         data_item_name: dataItemName,
-        data_item_id: getDataItemId({dataItemName, deviceId}),
         device_uuid: deviceId,
         native_code: event.error_code,
         condition_level: event.end_timestamp ? "NORMAL" : "FAULT",

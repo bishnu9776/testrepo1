@@ -26,7 +26,6 @@ describe("Parses SESSION", () => {
     expect(createDataItemsFromMessage({message: SESSION})).to.eql([
       {
         channel: "session",
-        data_item_id: "vehicle_status-v1",
         data_item_name: "vehicle_status",
         device_uuid: "s_248",
         end_ts: "2019-10-06T14:24:26.646Z",

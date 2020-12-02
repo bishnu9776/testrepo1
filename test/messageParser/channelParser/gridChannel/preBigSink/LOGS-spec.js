@@ -26,7 +26,6 @@ describe("Parses pre big sink LOGS", () => {
     expect(createDataItemsFromMessage({message: LOGS})).to.eql([
       {
         channel: "logs",
-        data_item_id: "message-v1",
         data_item_name: "message",
         device_uuid: "DB_001f7b101618",
         timestamp: "2020-10-18T20:55:45.808Z",
@@ -37,7 +36,6 @@ describe("Parses pre big sink LOGS", () => {
       },
       {
         channel: "logs",
-        data_item_id: "message-v1",
         data_item_name: "message",
         device_uuid: "DB_001f7b101618",
         timestamp: "2020-10-18T20:55:45.820Z",

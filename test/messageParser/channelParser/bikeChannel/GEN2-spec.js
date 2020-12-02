@@ -29,7 +29,6 @@ describe("Parses GEN2", () => {
 
     const parsedDataItem = (dataItemName, value) => ({
       channel: "buffered_channel",
-      data_item_id: `s_123-${dataItemName}`,
       data_item_name: dataItemName,
       device_uuid: "s_123",
       timestamp: "2019-10-05T18:27:04.164Z",
@@ -51,7 +50,6 @@ describe("Parses GEN2", () => {
 
     const parsedDataItem = (dataItemName, value) => ({
       channel: "logs",
-      data_item_id: `s_123-${dataItemName}`,
       data_item_name: dataItemName,
       device_uuid: "s_123",
       timestamp: "2019-10-05T18:27:04.164Z",
@@ -93,7 +91,6 @@ describe("Parses GEN2", () => {
     expect(createDataItemsFromMessage({message: UNBUFFERED, probe})).to.eql([
       {
         channel: "unbuffered_channel",
-        data_item_id: "s_248-error_code",
         data_item_name: "error_code",
         device_uuid: "s_248",
         is_valid: -1,
@@ -110,7 +107,6 @@ describe("Parses GEN2", () => {
     expect(createDataItemsFromMessage({message: UNBUFFERED_STRICT, probe})).to.eql([
       {
         channel: "unbuffered_channel",
-        data_item_id: "s_248-error_code",
         data_item_name: "error_code",
         device_uuid: "s_248",
         native_code: "M043",

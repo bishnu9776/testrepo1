@@ -26,7 +26,6 @@ describe("Parses grid CAN", () => {
     expect(createDataItemsFromMessage({message: {data: CAN.data, attributes: CAN.attributes}})).to.eql([
       {
         channel: "can",
-        data_item_id: "POD_AC_Voltage-v1",
         data_item_name: "POD_AC_Voltage",
         device_uuid: "DB_001f7b100e91",
         pod_id: "0xfffe8",

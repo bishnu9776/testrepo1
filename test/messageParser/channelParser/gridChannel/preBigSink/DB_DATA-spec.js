@@ -26,7 +26,6 @@ describe("Parses pre big sink DB_DATA", () => {
     expect(createDataItemsFromMessage({message: DB_DATA})).to.eql([
       {
         channel: "db_data",
-        data_item_id: "temp_sensor1-v1",
         data_item_name: "temp_sensor1",
         device_uuid: "DB_D81910297370017",
         sequence: 17176736,
@@ -35,7 +34,6 @@ describe("Parses pre big sink DB_DATA", () => {
       },
       {
         channel: "db_data",
-        data_item_id: "temp_sensor2-v1",
         data_item_name: "temp_sensor2",
         device_uuid: "DB_D81910297370017",
         sequence: 17176736,
@@ -44,7 +42,6 @@ describe("Parses pre big sink DB_DATA", () => {
       },
       {
         channel: "db_data",
-        data_item_id: "temp_sensor3-v1",
         data_item_name: "temp_sensor3",
         device_uuid: "DB_D81910297370017",
         sequence: 17176736,
@@ -53,7 +50,6 @@ describe("Parses pre big sink DB_DATA", () => {
       },
       {
         channel: "db_data",
-        data_item_id: "temp_sensor4-v1",
         data_item_name: "temp_sensor4",
         device_uuid: "DB_D81910297370017",
         sequence: 17176736,
@@ -62,7 +58,6 @@ describe("Parses pre big sink DB_DATA", () => {
       },
       {
         channel: "db_data",
-        data_item_id: "temp_sensor5-v1",
         data_item_name: "temp_sensor5",
         device_uuid: "DB_D81910297370017",
         sequence: 17176736,

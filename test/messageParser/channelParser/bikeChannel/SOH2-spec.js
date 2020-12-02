@@ -26,7 +26,6 @@ describe("Parses SOH2", () => {
     expect(createDataItemsFromMessage({message: SOH2})).to.eql([
       {
         channel: "soh2",
-        data_item_id: "FinalSoHCapacityEstimate_CellBlock_Cell1-v1",
         data_item_name: "FinalSoHCapacityEstimate_CellBlock_Cell1",
         device_uuid: "s_194",
         sequence: 1,
@@ -35,7 +34,6 @@ describe("Parses SOH2", () => {
       },
       {
         channel: "soh2",
-        data_item_id: "FinalSoHCapacityEstimate_CellBlock_Cell2-v1",
         data_item_name: "FinalSoHCapacityEstimate_CellBlock_Cell2",
         device_uuid: "s_194",
         sequence: 2,

@@ -24,7 +24,7 @@ describe("Parses VCU", () => {
   })
 
   it("parses given message", () => {
-    const requiredKeys = ["channel", "data_item_id", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
+    const requiredKeys = ["channel", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
     const createDataItemsFromMessage = getCreateBikeEventFromMessageFn(appContext, probe)
 
     const parsedMessage = createDataItemsFromMessage({message: VCU})

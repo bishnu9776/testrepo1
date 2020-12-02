@@ -1,5 +1,4 @@
 import {flatten} from "ramda"
-import {getDataItemId} from "../../../utils/helpers"
 
 export const parseSESSION = ({data, attributes}) => {
   return flatten(
@@ -12,7 +11,6 @@ export const parseSESSION = ({data, attributes}) => {
       return {
         timestamp,
         data_item_name: "vehicle_status",
-        data_item_id: getDataItemId({dataItemName: "vehicle_status", deviceId}),
         device_uuid: deviceId,
         is_visible: event.isvisible,
         session_id: event.session_id,
