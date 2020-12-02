@@ -61,7 +61,7 @@
     "nock": "13.0.5",
     "sinon": "9.2.1",
     "sinon-chai": "3.5.0",
-    "snake-case": "3.0.3"
+    "snake-case": "3.0.4"
   },
   "mocha": {
     "require": [
