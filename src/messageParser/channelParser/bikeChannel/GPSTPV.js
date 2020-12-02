@@ -23,16 +23,16 @@ const eventAndSampleKeys = [
 export const parseGPSTPV = ({data, attributes}) => {
   return flatten(
     data.map(event => {
-      const bikeId = attributes.bike_id
+      const deviceId = attributes.device_id
       const timestamp = new Date(event.timestamp * 1000).toISOString()
 
       const locationEvent = {
         value: {lat: event.lat_deg || null, lon: event.lon_deg || null},
         data_item_name: "location",
         data_item_type: "LOCATION",
-        data_item_id: getDataItemId({dataItemName: "location", deviceId: bikeId}),
+        data_item_id: getDataItemId({dataItemName: "location", deviceId}),
         timestamp,
-        device_uuid: bikeId,
+        device_uuid: deviceId,
         sequence: event.seq_num,
         mode: event.mode,
         channel: attributes.channel

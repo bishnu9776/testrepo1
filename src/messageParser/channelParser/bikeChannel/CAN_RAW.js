@@ -9,7 +9,7 @@ export const parseCANRAW = ({data, attributes}) => {
         value: {...e},
         attributes,
         channel: attributes.channel,
-        device_uuid: attributes.bike_id,
+        device_uuid: attributes.device_id,
         timestamp
       }
     })

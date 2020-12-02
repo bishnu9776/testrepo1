@@ -1,7 +1,7 @@
 export const HEMAN = {
   attributes: {
     channel: "heman",
-    bike_id: "s_248",
+    device_id: "s_248",
     version: "v1"
   },
   data: [

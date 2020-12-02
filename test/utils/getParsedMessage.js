@@ -25,7 +25,7 @@ export const getParsedMessageFn = (channel, device, canId) => (
 
 export const getParsedCANRawMessageFn = (channel, device, timestamp) => value => ({
   attributes: {
-    bike_id: device,
+    device_id: device,
     channel,
     version: "v1"
   },

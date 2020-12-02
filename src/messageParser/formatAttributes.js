@@ -8,13 +8,13 @@ const attributesFormatter = metricRegistry => ({
         return {
           channel: subFolder.split("/").slice(1).join("/"),
           version: subFolder.split("/")[0],
-          bike_id: deviceId
+          device_id: deviceId
         }
       }
 
       return {
         channel: subFolder,
-        bike_id: deviceId,
+        device_id: deviceId,
         version: "legacy"
       }
     } catch (e) {
@@ -22,7 +22,7 @@ const attributesFormatter = metricRegistry => ({
       return null
     }
   },
-  // TODO: Instead of using the word bike_id, use device_id and update all channel parser tests to be given the formatted attributes
+  // TODO: Instead of using the word device_id, use device_id and update all channel parser tests to be given the formatted attributes
   ci: attributes => {
     try {
       const isPreBigSink = JSON.parse(process.env.VI_CI_PRE_BIG_SINK_MODE || "false")
@@ -32,12 +32,12 @@ const attributesFormatter = metricRegistry => ({
         return {
           channel: subFolder.split("/").slice(1).join("/"),
           version: subFolder.split("/")[0],
-          bike_id: deviceId
+          device_id: deviceId
         }
       }
 
-      const deviceid = attributes.db_id || attributes.bike_id
-      return {channel: attributes.channel, version: attributes.version, bike_id: deviceid}
+      const device = attributes.db_id || attributes.bike_id
+      return {channel: attributes.channel, version: attributes.version, device_id: device}
     } catch (e) {
       metricRegistry.updateStat("Counter", "num_invalid_attributes_events", 1, attributes)
       return null
