@@ -3,7 +3,6 @@ import {getMockMetricRegistry} from "../../../stubs/getMockMetricRegistry"
 import {getCreateCIEventFromMessageFn} from "../../../../src/messageParser/channelParser/gridChannel"
 import {CAN} from "../../fixtures/gridChannels/CAN"
 import {clearEnv} from "../../../utils"
-import {getAttributesFormatter} from "../../../../src/messageParser/formatAttributes"
 
 describe("Parses grid CAN", () => {
   let metricRegistry
@@ -24,11 +23,7 @@ describe("Parses grid CAN", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateCIEventFromMessageFn(appContext)
-    const formatAttributes = getAttributesFormatter(metricRegistry) // Note: Doing this as CAN attributes differs from attributes in other channels
-
-    expect(
-      createDataItemsFromMessage({message: {data: CAN.data, attributes: formatAttributes(CAN.attributes)}})
-    ).to.eql([
+    expect(createDataItemsFromMessage({message: {data: CAN.data, attributes: CAN.attributes}})).to.eql([
       {
         channel: "can",
         data_item_id: "POD_AC_Voltage-v1",
