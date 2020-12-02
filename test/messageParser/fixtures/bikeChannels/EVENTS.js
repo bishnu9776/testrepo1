@@ -2,7 +2,7 @@ export const EVENTS = {
   attributes: {
     version: "v1",
     channel: "events",
-    bike_id: "s_248"
+    device_id: "s_248"
   },
   data: [
     {

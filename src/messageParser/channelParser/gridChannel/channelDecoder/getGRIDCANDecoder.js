@@ -10,7 +10,7 @@ const createFn = eqn => Function("bytes", `return ${eqn}`)
 const {env} = process
 
 const decodeGRIDCANRaw = (canRaw, decoderForCANId, attributes) => {
-  const {bike_id: dbId} = attributes
+  const {device_id: dbId} = attributes
   const {can_id: canId, data: value, timestamp, seq_num: seqNum, global_seq: globalSeq, pod_id: podId} = canRaw
   const numberOfBytes = parseInt(env.VI_GRID_CAN_MESSAGE_BYTE_LENGTH, 10)
   const bytes = convertLongToBytes(value, numberOfBytes)

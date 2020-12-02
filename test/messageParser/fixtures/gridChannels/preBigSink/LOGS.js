@@ -2,7 +2,7 @@ export const LOGS = {
   attributes: {
     channel: "logs",
     version: "v1",
-    bike_id: "DB_001f7b101618"
+    device_id: "DB_001f7b101618"
   },
   data: [
     {

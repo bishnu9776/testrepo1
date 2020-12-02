@@ -68,7 +68,7 @@ describe("Parses GEN2", () => {
     const createDataItemsFromMessage = getCreateBikeEventFromMessageFn(appContext, probe)
     const parsedDataItem = (timestamp, value) => ({
       attributes: {
-        bike_id: "s_3739",
+        device_id: "s_3739",
         channel: "buffered_channel",
         version: "v1"
       },

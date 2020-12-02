@@ -1,5 +1,5 @@
 export const DB_INFO = {
-  attributes: {version: "v1_5", channel: "db_info", bike_id: "DB_D81910297370011"},
+  attributes: {version: "v1_5", channel: "db_info", device_id: "DB_D81910297370011"},
   data: [
     {
       timestamp: "1598249281",

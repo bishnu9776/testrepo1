@@ -20,6 +20,6 @@ export const BIKEINFO = {
   attributes: {
     channel: "bike_info",
     version: "v1",
-    bike_id: "s_100"
+    device_id: "s_100"
   }
 }

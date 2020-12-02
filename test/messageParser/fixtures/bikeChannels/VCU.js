@@ -10,6 +10,6 @@ export const VCU = {
   attributes: {
     version: "v1",
     channel: "vcu",
-    bike_id: "s_248"
+    device_id: "s_248"
   }
 }
