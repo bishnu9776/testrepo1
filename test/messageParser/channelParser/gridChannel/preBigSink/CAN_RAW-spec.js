@@ -53,7 +53,7 @@ describe("Parses grid CAN_RAW", () => {
       },
       {
         attributes: {
-          bike_id: "DB_001f7b10161e",
+          device_id: "DB_001f7b10161e",
           channel: "can_raw",
           version: "v1"
         },

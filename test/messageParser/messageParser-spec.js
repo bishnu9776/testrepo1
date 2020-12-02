@@ -92,7 +92,7 @@ describe("Parse GCP message", () => {
       const messageParser = getMessageParser({appContext, probe})
       const message = getDeflateCompressedGCPEvent({
         data: GPSTPV.data,
-        attributes: formatAttributes({subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.bike_id})
+        attributes: formatAttributes({subFolder: GPSTPV.attributes.channel, deviceId: GPSTPV.attributes.device_id})
       })
       const output = await messageParser({message, acknowledgeMessage})
       const expected = parsedGCPEvents

@@ -1,5 +1,5 @@
 export const SOH = {
-  attributes: {channel: "soh", bike_id: "BMS-EOL1", version: "v1"},
+  attributes: {channel: "soh", device_id: "BMS-EOL1", version: "v1"},
   data: [
     {
       seq_num: 1,
