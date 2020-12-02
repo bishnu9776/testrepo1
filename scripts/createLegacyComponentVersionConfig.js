@@ -1,5 +1,5 @@
 /**
- *  This script is too convert the text snippet to json config
+ *  This script is to convert the text snippet to json config
  *  input sample (Device specific and default mapping: https://systeminsights.jira.com/wiki/spaces/ATHER/pages/868516048/Parsers)
  *  Update inputFilePath and outputFilePath with respective file paths.
  *  Remove extra bracket ")" at the end of default config in config txt if present.
@@ -10,9 +10,9 @@
 import readline from 'readline'
 import fs from "fs"
 
-const inputFilePath = "path/to/file/name.txt"
+const inputFilePath = "/Users/rose/systeminsights/svcs/svc-ather-collector/scripts/config.txt"
 const readLineInterface = readline.createInterface({
-  input: fs.createReadStream(inputFileName)
+  input: fs.createReadStream(inputFilePath)
 })
 
 const deviceKeyRegex = new RegExp("(.*) to" )
@@ -41,7 +41,7 @@ readLineInterface.on('line', line => {
   createLegacyComponentVersionConfig(line)
 })
 
-const outputFilePath = "path/to/file/output.json"
+const outputFilePath = "legacyDecoderConfig.json"
 
 readLineInterface.on('close', () => {
   fs.writeFileSync(outputFilePath, JSON.stringify(defaultConfig, null, 2), {flag: "w"})
