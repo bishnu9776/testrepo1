@@ -22,7 +22,7 @@ const attributesFormatter = metricRegistry => ({
       return null
     }
   },
-  // TODO: Instead of using the word device_id, use device_id and update all channel parser tests to be given the formatted attributes
+
   ci: attributes => {
     try {
       const isPreBigSink = JSON.parse(process.env.VI_CI_PRE_BIG_SINK_MODE || "false")
@@ -45,7 +45,6 @@ const attributesFormatter = metricRegistry => ({
   }
 })
 
-// TODO: Only src should use this. Remove usages from tests
 export const getAttributesFormatter = metricRegistry => {
   return attributesFormatter(metricRegistry)[process.env.VI_INPUT_TYPE || "bike"]
 }
