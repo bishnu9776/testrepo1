@@ -163,6 +163,7 @@ describe("Pipeline spec", () => {
           expect(output.filter(e => e.channel === "buffered_channel").length).to.eql(1) // after deduping only 1 message
           expect(probeEvent.length).to.eql(1)
           expect(probeEvent[0].schema_version).to.eql("4")
+          expect(probeEvent[0].probe.data_items.data_item[0].id).to.eql("s_123-MCU_SOC")
           expect(probeEvent.length).to.eql(1)
           expect(output.filter(e => e.tag === ACK_MSG_TAG).length).to.eql(1)
           expect(acknowledgeMessageSpy.callCount).to.eql(2)
@@ -218,6 +219,7 @@ describe("Pipeline spec", () => {
       process.env.VI_SHOULD_UPDATE_DEVICE_RULES = "false"
       process.env.VI_PLANT = "atherci"
       process.env.VI_TENANT = "atherci"
+      process.env.VI_GRID_DATAITEM_ID_VERSION = "v1"
     })
 
     afterEach(() => {
@@ -237,6 +239,7 @@ describe("Pipeline spec", () => {
         },
         complete: () => {
           expect(output.length).to.eql(4)
+          expect(output[0].data_item_id).to.eql("pod1_id-v1")
           output.every(e => expect(e.plant).to.eql("atherci"))
           output.every(e => expect(e.tenant).to.eql("atherci"))
           expect(acknowledgeMessageSpy.callCount).to.eql(1)
@@ -289,7 +292,7 @@ describe("Pipeline spec", () => {
           output.every(e => expect(e.plant).to.eql("atherci"))
           output.every(e => expect(e.tenant).to.eql("atherci"))
           expect(acknowledgeMessageSpy.callCount).to.eql(2)
-
+          expect(dataItemEvents[0].data_item_id).to.eql("temp_sensor1-v1")
           expect(output.length).to.eql(703)
           expect(dataItemEvents.length).to.eql(699)
 

@@ -12,9 +12,35 @@ export const isValid = log => event => {
   return false
 }
 
+export const getDataItemIdForDevice = () => {
+  const inputType = process.env.VI_INPUT_TYPE || "bike"
+  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
+
+  return ({dataItemName, deviceId}) => {
+    if (inputType === "ci") {
+      return getDataItemIdForGrid({dataItemName})
+    }
+    return getDataItemIdForBike({dataItemName, deviceId, isGen2Data})
+  }
+}
+
+const getDataItemIdForBike = ({dataItemName, deviceId, isGen2Data}) => {
+  if (isGen2Data) {
+    return `${deviceId}-${dataItemName}`
+  }
+
+  return `${dataItemName}-${process.env.VI_GEN1_DATAITEM_ID_VERSION}`
+}
+
+const getDataItemIdForGrid = ({dataItemName}) => {
+  return `${dataItemName}-${process.env.VI_GRID_DATAITEM_ID_VERSION}`
+}
+
 // Note: Remove agent, instance_id after ensuring zero downstream dependencies
 export const getEventFormatter = () => {
   const schemaVersion = process.env.VI_DATAITEM_ES_SCHEMA_VERSION
+  const getDataItemId = getDataItemIdForDevice()
+
   /* eslint-disable camelcase */
   return event => {
     const {device_uuid, data_item_name, timestamp} = event
@@ -29,18 +55,8 @@ export const getEventFormatter = () => {
       plant: process.env.VI_PLANT || "ather",
       tenant: process.env.VI_TENANT || "ather",
       schema_version: schemaVersion,
-      data_item_id: getDataItemId({dataItemName: data_item_name, deviceId: device_uuid}) // TODO: Remove adding data item id within the parsers and update tests
+      data_item_id: getDataItemId({dataItemName: data_item_name, deviceId: device_uuid})
     }
   }
   /* eslint-disable camelcase */
-}
-
-export const getDataItemId = ({dataItemName, deviceId}) => {
-  const isGen2Data = JSON.parse(process.env.VI_COLLECTOR_IS_GEN_2_DATA || "false")
-
-  if (isGen2Data) {
-    return `${deviceId}-${dataItemName}`
-  }
-
-  return `${dataItemName}-${process.env.VI_GEN1_DATAITEM_ID_VERSION}`
 }
