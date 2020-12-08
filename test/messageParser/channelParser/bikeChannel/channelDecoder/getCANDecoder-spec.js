@@ -199,7 +199,7 @@ describe("CAN decoder", () => {
         expect(parsedData).to.eql([[]])
         expect(metricRegistry.updateStat).to.have.been.calledWith("Counter", "can_legacy_message_ignored", 1, {
           can_id: "0x158",
-          channel: "can"
+          channel: "can_raw"
         })
       })
     })
