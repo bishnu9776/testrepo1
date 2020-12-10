@@ -17,7 +17,7 @@ describe("Parses CAN_RAW", () => {
 
   it("parses given messages", () => {
     const createDataItemsFromMessage = getCreateBikeEventFromMessageFn(appContext, probe)
-    const getParsedMessage = getParsedCANRawMessageFn("can_raw", "BMS-EOL5", 1)
+    const getParsedMessage = getParsedCANRawMessageFn("can_default", "BMS-EOL5", 1)
     expect(createDataItemsFromMessage({message: CAN_RAW})).to.eql([
       getParsedMessage({
         can_id: 306,

@@ -86,7 +86,7 @@ export const getCANDecoder = metricRegistry => {
 
   const decoder = populateDecoderConfig(decoderConfig)
   const legacyDecoder = populateLegacyDecoderConfig(decoderConfig, legacyComponentVersionConfig)
-  const isLegacy = channel => channel === "can"
+  const isLegacy = channel => channel === "can_raw"
 
   return message => {
     const {attributes, data} = message

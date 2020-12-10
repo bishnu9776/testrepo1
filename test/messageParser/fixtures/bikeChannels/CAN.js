@@ -41,7 +41,7 @@ export const CAN_BMS = {
 
 export const LEGACY_CAN_MCU = {
   attributes: {
-    channel: "can",
+    channel: "can_raw",
     device_id: "s_2404",
     version: "v1"
   },
@@ -50,7 +50,7 @@ export const LEGACY_CAN_MCU = {
 
 export const LEGACY_CAN_BMS = {
   attributes: {
-    channel: "can",
+    channel: "can_raw",
     device_id: "BEAGLE-ESS-4",
     version: "v1"
   },

@@ -16,7 +16,7 @@ export const CAN_RAW = {
     }
   ],
   attributes: {
-    channel: "can_raw",
+    channel: "can_default",
     version: "v1",
     device_id: "BMS-EOL5"
   }

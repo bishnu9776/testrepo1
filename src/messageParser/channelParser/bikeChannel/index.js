@@ -51,12 +51,12 @@ const getGen1DataParser = appContext => {
     soh: parseSOH,
     soh2: parseSOH2,
     logs: parseLOG,
-    can_raw: parseCANRAW
+    can_default: parseCANRAW
   }
   const channelNotInParserConfig = channel => isNil(channelParserConfig[channel])
   return ({message}) => {
     const {channel} = message.attributes
-    if (channel !== "can_raw" && channel.match(/^can/)) {
+    if (channel !== "can_default" && channel.match(/^can/)) {
       return channelParserConfig.can(message)
     }
     if (channelNotInParserConfig(channel)) {
