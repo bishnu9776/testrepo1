@@ -79,7 +79,7 @@ describe("Pipeline spec", () => {
     it("gen 1 bike events flow through pipeline from source gcp", done => {
       const source = {
         stream: from([
-          {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+          {message: getDecompressedGCPEvent("/test/fixtures/bike/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
           {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
         ])
       }
@@ -106,7 +106,7 @@ describe("Pipeline spec", () => {
     it("gen 1 bike events flow through the pipeline when model for device is present", done => {
       const source = {
         stream: from([
-          {message: getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
+          {message: getDecompressedGCPEvent("/test/fixtures/bike/CAN_MCU"), acknowledgeMessage: acknowledgeMessageSpy},
           {message: "foobar", acknowledgeMessage: acknowledgeMessageSpy}
         ])
       }
@@ -136,7 +136,7 @@ describe("Pipeline spec", () => {
 
     it("gen 2 bike events flow through pipeline from source kafka", done => {
       setGen2Envs()
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/GEN_2`))
       const source = {
         stream: from([
           {
@@ -181,7 +181,7 @@ describe("Pipeline spec", () => {
     })
 
     it("gen 1 bike events flow through pipeline from source kafka", done => {
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/CAN_MCU`))
 
       const source = {
         stream: from([
@@ -316,7 +316,7 @@ describe("Pipeline spec", () => {
       env.VI_SHOULD_FILTER_DEVICE = "true"
       env.VI_DEVICE_FILTER_REGEX = "s_101"
 
-      const message = getDecompressedGCPEvent("/test/fixtures/avro/CAN_MCU")
+      const message = getDecompressedGCPEvent("/test/fixtures/bike/CAN_MCU")
       const source = {
         stream: from([
           {message, acknowledgeMessage: acknowledgeMessageSpy},

@@ -10,7 +10,7 @@ import {clearEnv, setChannelDecoderConfigFileEnvs, setEnv, setGen2Envs} from "..
 import {GPSTPV} from "./fixtures/bikeChannels/GPSTPV"
 import {getMockMetricRegistry} from "../stubs/getMockMetricRegistry"
 import {clearStub} from "../stubs/clearStub"
-import {getAttributesFormatter} from "../../src/messageParser/formatAttributes"
+import {getAttributesFormatter} from "../../src/messageParser/getAttributesFormatter"
 
 const formatAttributes = getAttributesFormatter(getMockMetricRegistry())
 
@@ -98,7 +98,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for GPS_TPV", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GPS_TPV`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/GPS_TPV`))
       const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const requiredKeys = ["channel", "data_item_name", "device_uuid", "sequence", "timestamp", "value"]
       const output = await messageParser({message, acknowledgeMessage})
@@ -114,7 +114,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for CAN ", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(121)
@@ -125,7 +125,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for LOGS ", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/LOGS`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(13)
@@ -134,7 +134,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for CAN_RAW ", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_RAW`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/CAN_RAW`))
       const message = {data: Buffer.from(input.data.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(186)
@@ -143,7 +143,7 @@ describe("Parse GCP message", () => {
 
     it("it should log and ack the message if unable to parse", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/UNPARSABLE_LOGS`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/UNPARSABLE_LOGS`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(1)
@@ -164,7 +164,7 @@ describe("Parse GCP message", () => {
 
     it("formats attributes for v1 data and parses correctly for GEN2 ", async () => {
       const messageParser = getMessageParser({appContext, probe})
-      const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/avro/GEN_2`))
+      const input = JSON.parse(fs.readFileSync(`${pathToFixtures}/bike/GEN_2`))
       const message = {data: Buffer.from(input.value.data), attributes: formatAttributes(input.attributes)}
       const output = await messageParser({message, acknowledgeMessage})
       expect(output.length).to.eql(2)
