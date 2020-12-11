@@ -2,7 +2,7 @@ export const GPSTPV = {
   attributes: {
     version: "v1",
     channel: "gps_tpv",
-    bike_id: "s_248"
+    device_id: "s_248"
   },
   data: [
     {

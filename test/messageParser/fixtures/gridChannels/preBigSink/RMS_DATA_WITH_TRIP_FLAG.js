@@ -1,5 +1,5 @@
 export const RMS_DATA_WITH_TRIP_FLAG = {
-  attributes: {version: "v1", channel: "rms_data", bike_id: "DB_D81910297370017"},
+  attributes: {version: "v1", channel: "rms_data", device_id: "DB_D81910297370017"},
   data: [
     {
       timestamp: 1603057919.952,

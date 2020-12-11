@@ -1,6 +1,6 @@
 export const GEN2_BUFFERED = {
   attributes: {
-    bike_id: "s_123",
+    device_id: "s_123",
     channel: "buffered_channel",
     version: "v1"
   },

@@ -1,6 +1,6 @@
 export const GEN2_LOGS = {
   attributes: {
-    bike_id: "s_123",
+    device_id: "s_123",
     channel: "logs",
     version: "v1"
   },

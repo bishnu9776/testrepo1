@@ -21,7 +21,6 @@ describe("Parses DB_INFO", () => {
     expect(createDataItemsFromMessage({message: DB_INFO})).to.eql([
       {
         channel: "db_info",
-        data_item_id: "mac_address-v2",
         data_item_name: "mac_address",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,
@@ -30,7 +29,6 @@ describe("Parses DB_INFO", () => {
       },
       {
         channel: "db_info",
-        data_item_id: "mender_artifact_ver-v2",
         data_item_name: "mender_artifact_ver",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,
@@ -39,7 +37,6 @@ describe("Parses DB_INFO", () => {
       },
       {
         channel: "db_info",
-        data_item_id: "rms_firmware_version-v2",
         data_item_name: "rms_firmware_version",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,
@@ -48,7 +45,6 @@ describe("Parses DB_INFO", () => {
       },
       {
         channel: "db_info",
-        data_item_id: "obc_firmware_version-v2",
         data_item_name: "obc_firmware_version",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,
@@ -57,7 +53,6 @@ describe("Parses DB_INFO", () => {
       },
       {
         channel: "db_info",
-        data_item_id: "gsm_modem_status-v2",
         data_item_name: "gsm_modem_status",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,
@@ -66,7 +61,6 @@ describe("Parses DB_INFO", () => {
       },
       {
         channel: "db_info",
-        data_item_id: "reset_cause-v2",
         data_item_name: "reset_cause",
         device_uuid: "DB_D81910297370011",
         sequence: 245634,

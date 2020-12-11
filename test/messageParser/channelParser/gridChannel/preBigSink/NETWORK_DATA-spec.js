@@ -21,7 +21,6 @@ describe("Parses pre big sink NETWORK_DATA", () => {
     expect(createDataItemsFromMessage({message: NETWORK_DATA})).to.eql([
       {
         channel: "network_data",
-        data_item_id: "nwk_iface_type-v1",
         data_item_name: "nwk_iface_type",
         device_uuid: "DB_001f7b100e8f",
         sequence: 9015626,
@@ -30,7 +29,6 @@ describe("Parses pre big sink NETWORK_DATA", () => {
       },
       {
         channel: "network_data",
-        data_item_id: "pod1_session_id-v1",
         data_item_name: "pod1_session_id",
         device_uuid: "DB_001f7b100e8f",
         sequence: 9015626,

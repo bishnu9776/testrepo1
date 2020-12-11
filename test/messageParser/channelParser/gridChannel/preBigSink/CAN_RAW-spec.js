@@ -37,8 +37,7 @@ describe("Parses grid CAN_RAW", () => {
         device_uuid: "DB_001f7b10161e",
         sequence: 3788817,
         timestamp: "2020-10-22T09:46:56.341Z",
-        channel: "can_raw",
-        data_item_id: "POD_S340_ChargerType-v1"
+        channel: "can_raw"
       },
       {
         can_id: "0x070",
@@ -48,12 +47,11 @@ describe("Parses grid CAN_RAW", () => {
         sequence: 3788817,
         timestamp: "2020-10-22T09:46:56.341Z",
         device_uuid: "DB_001f7b10161e",
-        channel: "can_raw",
-        data_item_id: "POD_S340_McuChargingState-v1"
+        channel: "can_raw"
       },
       {
         attributes: {
-          bike_id: "DB_001f7b10161e",
+          device_id: "DB_001f7b10161e",
           channel: "can_raw",
           version: "v1"
         },

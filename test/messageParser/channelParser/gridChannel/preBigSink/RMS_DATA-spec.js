@@ -27,7 +27,6 @@ describe("Parses pre big sink RMS_DATA", () => {
     expect(createDataItemsFromMessage({message: RMS_DATA})).to.eql([
       {
         channel: "rms_data",
-        data_item_id: "phase1_voltage-v1",
         data_item_name: "phase1_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,
@@ -36,7 +35,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "phase2_voltage-v1",
         data_item_name: "phase2_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,
@@ -45,7 +43,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "phase3_voltage-v1",
         data_item_name: "phase3_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,
@@ -60,7 +57,6 @@ describe("Parses pre big sink RMS_DATA", () => {
     expect(createDataItemsFromMessage({message: RMS_DATA_WITH_TRIP_FLAG})).to.eql([
       {
         channel: "rms_data",
-        data_item_id: "phase1_voltage-v1",
         data_item_name: "phase1_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -69,7 +65,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P1_over_voltage-v1",
         data_item_name: "P1_over_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -78,7 +73,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P1_under_voltage-v1",
         data_item_name: "P1_under_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -87,7 +81,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P1_over_current-v1",
         data_item_name: "P1_over_current",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -96,7 +89,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P2_over_voltage-v1",
         data_item_name: "P2_over_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -105,7 +97,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P2_under_voltage-v1",
         data_item_name: "P2_under_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -114,7 +105,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P2_over_current-v1",
         data_item_name: "P2_over_current",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -123,7 +113,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P3_over_voltage-v1",
         data_item_name: "P3_over_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -132,7 +121,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P3_under_voltage-v1",
         data_item_name: "P3_under_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -141,7 +129,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "P3_over_current-v1",
         data_item_name: "P3_over_current",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,
@@ -150,7 +137,6 @@ describe("Parses pre big sink RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "Bad_frequency-v1",
         data_item_name: "Bad_frequency",
         device_uuid: "DB_D81910297370017",
         sequence: 117346,

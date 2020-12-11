@@ -26,7 +26,6 @@ describe("Parses HEMAN", () => {
     expect(createDataItemsFromMessage({message: HEMAN})).to.eql([
       {
         channel: "heman",
-        data_item_id: "error_code-v1",
         data_item_name: "error_code",
         device_uuid: "s_248",
         is_valid: -1,

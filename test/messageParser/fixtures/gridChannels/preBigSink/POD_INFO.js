@@ -2,7 +2,7 @@ export const POD_INFO = {
   attributes: {
     channel: "pod_info",
     version: "v1_5",
-    bike_id: "DB_D81910297370019"
+    device_id: "DB_D81910297370019"
   },
   data: {
     timestamp: "1603053930",

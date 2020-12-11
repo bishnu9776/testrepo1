@@ -1,5 +1,5 @@
 export const SESSION_DATA = {
-  attributes: {channel: "session_data", bike_id: "DB_001f7b100569", version: "v1"},
+  attributes: {channel: "session_data", device_id: "DB_001f7b100569", version: "v1"},
   data: {
     timestamp: 1585909207.379,
     seq_num: 169,

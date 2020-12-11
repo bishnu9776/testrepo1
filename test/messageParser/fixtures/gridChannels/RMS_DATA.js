@@ -1,5 +1,5 @@
 export const RMS_DATA = {
-  attributes: {version: "v1_5", channel: "rms_data", bike_id: "DB_D81910297370017"},
+  attributes: {version: "v1_5", channel: "rms_data", device_id: "DB_D81910297370017"},
   data: [
     {
       timestamp: "1599636933",

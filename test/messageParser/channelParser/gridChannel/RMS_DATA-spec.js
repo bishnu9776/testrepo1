@@ -26,7 +26,6 @@ describe("Parses RMS_DATA", () => {
     expect(createDataItemsFromMessage({message: RMS_DATA})).to.eql([
       {
         channel: "rms_data",
-        data_item_id: "phase1_voltage-v1",
         data_item_name: "phase1_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,
@@ -35,7 +34,6 @@ describe("Parses RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "phase2_voltage-v1",
         data_item_name: "phase2_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,
@@ -44,7 +42,6 @@ describe("Parses RMS_DATA", () => {
       },
       {
         channel: "rms_data",
-        data_item_id: "phase3_voltage-v1",
         data_item_name: "phase3_voltage",
         device_uuid: "DB_D81910297370017",
         sequence: 17176728,

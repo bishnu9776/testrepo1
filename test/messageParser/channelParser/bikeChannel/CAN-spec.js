@@ -34,10 +34,10 @@ describe("Parses CAN", () => {
       const getCANRawMessage = getParsedCANRawMessageFn("can_bms/e55", "BEAGLE-ESS-4", 1)
 
       const parsedData = [
-        getParsedMessage("BMS_2_Aux_Temp1-v1", "BMS_2_Aux_Temp1", 29.57, 1, 1),
-        getParsedMessage("BMS_2_Aux_Temp2-v1", "BMS_2_Aux_Temp2", 29.67, 1, 1),
-        getParsedMessage("BMS_2_Aux_Temp3-v1", "BMS_2_Aux_Temp3", 29.06, 1, 1),
-        getParsedMessage("BMS_2_Aux_Temp4-v1", "BMS_2_Aux_Temp4", 29.21, 1, 1),
+        getParsedMessage("BMS_2_Aux_Temp1", 29.57, 1, 1),
+        getParsedMessage("BMS_2_Aux_Temp2", 29.67, 1, 1),
+        getParsedMessage("BMS_2_Aux_Temp3", 29.06, 1, 1),
+        getParsedMessage("BMS_2_Aux_Temp4", 29.21, 1, 1),
         getCANRawMessage({
           bike_id: "BEAGLE-ESS-4",
           can_id: "344",

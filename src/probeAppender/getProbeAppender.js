@@ -1,6 +1,6 @@
 import {contains, intersection} from "ramda"
 import {isNilOrEmpty} from "../utils/isNilOrEmpty"
-import {getDataItemId} from "../utils/helpers"
+import {getDataItemIdForDevice} from "../utils/helpers"
 
 const {env} = process
 
@@ -43,6 +43,7 @@ const getType = dataItemType => {
 
 const formatProbe = ({probe, whitelistedDataItems, deviceId}) => {
   const formattedProbe = []
+  const getDataItemId = getDataItemIdForDevice()
   const dataItems = Object.keys(probe)
   const keysInWhitelistedDataItems = intersection(dataItems, whitelistedDataItems)
   const keysToCheckForValidValues = ["units", "sub_type", "subcomponent"]

@@ -27,7 +27,6 @@ describe("Parses EVENTS", () => {
     expect(createDataItemsFromMessage({message: EVENTS})).to.eql([
       {
         channel: "events",
-        data_item_id: "beta_motorMode2-v1",
         data_item_name: "beta_motorMode2",
         device_uuid: "s_248",
         sequence: 74092,
@@ -36,7 +35,6 @@ describe("Parses EVENTS", () => {
       },
       {
         channel: "events",
-        data_item_id: "intercept_motorMode2-v1",
         data_item_name: "intercept_motorMode2",
         device_uuid: "s_248",
         sequence: 74093,

@@ -105,7 +105,7 @@ describe("CAN decoder", () => {
         const dataWithAbsentComponent = {
           attributes: {
             channel: "can_foo",
-            bike_id: "s_2404",
+            device_id: "s_2404",
             version: "v1"
           },
           data: [
@@ -129,7 +129,7 @@ describe("CAN decoder", () => {
         const dataWithAbsentVersion = {
           attributes: {
             channel: "can_motor/foo",
-            bike_id: "s_2404",
+            device_id: "s_2404",
             version: "v1"
           },
           data: [
@@ -153,7 +153,7 @@ describe("CAN decoder", () => {
         const dataWithAbsentCanId = {
           attributes: {
             channel: "can_motor/MAHLEV2",
-            bike_id: "s_2404",
+            device_id: "s_2404",
             version: "v1"
           },
           data: [
@@ -191,7 +191,7 @@ describe("CAN decoder", () => {
 
       it("should give empty array when canId is not present in legacy decoder config ", () => {
         const message = {
-          attributes: {...LEGACY_CAN_BMS.attributes, bike_id: "bike1"},
+          attributes: {...LEGACY_CAN_BMS.attributes, device_id: "bike1"},
           data: LEGACY_CAN_BMS.data
         }
 

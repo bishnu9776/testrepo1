@@ -26,7 +26,6 @@ describe("Parses SOH", () => {
     expect(createDataItemsFromMessage({message: SOH})).to.eql([
       {
         channel: "soh",
-        data_item_id: "avg_soh_cap-v1",
         data_item_name: "avg_soh_cap",
         device_uuid: "BMS-EOL1",
         sequence: 1,
@@ -35,7 +34,6 @@ describe("Parses SOH", () => {
       },
       {
         channel: "soh",
-        data_item_id: "soh_starttime-v1",
         data_item_name: "soh_starttime",
         device_uuid: "BMS-EOL1",
         sequence: 1,

@@ -1,7 +1,7 @@
 export const UNBUFFERED = {
   attributes: {
     channel: "unbuffered_channel",
-    bike_id: "s_248",
+    device_id: "s_248",
     version: "v1"
   },
   data: [
@@ -21,7 +21,7 @@ export const UNBUFFERED = {
 export const UNBUFFERED_STRICT = {
   attributes: {
     channel: "unbuffered_channel",
-    bike_id: "s_248",
+    device_id: "s_248",
     version: "v1"
   },
   data: [

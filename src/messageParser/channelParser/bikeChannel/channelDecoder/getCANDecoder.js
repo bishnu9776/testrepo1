@@ -90,7 +90,7 @@ export const getCANDecoder = metricRegistry => {
 
   return message => {
     const {attributes, data} = message
-    const device = attributes.bike_id
+    const device = attributes.device_id
 
     return data.map(d => {
       const {can_id: canId} = d

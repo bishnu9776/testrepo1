@@ -34,7 +34,7 @@ describe("Decompresses gcp message", () => {
 
   describe("v1", () => {
     it("uses avro deserialization", async () => {
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/MCU`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn(appContext)
       const output = await decompressMessage(message)
@@ -42,7 +42,7 @@ describe("Decompresses gcp message", () => {
     })
 
     it("handles long type without precision loss when deserializing avro", async () => {
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/CAN_MCU`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/CAN_MCU`))
       const message = {data: Buffer.from(input.data.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn(appContext)
       const output = await decompressMessage(message)
@@ -53,7 +53,7 @@ describe("Decompresses gcp message", () => {
     })
 
     it("handles gen2 data when deserializing avro", async () => {
-      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/avro/GEN_2`))
+      const input = JSON.parse(fs.readFileSync(`${process.cwd()}/test/fixtures/bike/GEN_2`))
       const message = {data: Buffer.from(input.value.data), attributes: input.attributes}
       const decompressMessage = getDecompresserFn(appContext)
       const output = await decompressMessage(message)

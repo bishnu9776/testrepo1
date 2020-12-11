@@ -1,7 +1,7 @@
 export const IMU = {
   attributes: {
     channel: "imu",
-    bike_id: "s_248",
+    device_id: "s_248",
     version: "v1"
   },
   data: [

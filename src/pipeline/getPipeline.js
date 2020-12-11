@@ -11,7 +11,7 @@ import {delayAndExit} from "../utils/delayAndExit"
 import {loadFileFromAbsolutePath} from "../utils/loadFileFromAbsolutePath"
 import {getDeviceInfoHandler} from "../deviceModel/getDeviceInfoHandler"
 import {getProbeAppender} from "../probeAppender/getProbeAppender"
-import {getAttributesFormatter} from "../messageParser/formatAttributes"
+import {getAttributesFormatter} from "../messageParser/getAttributesFormatter"
 import {getInputMessageTags} from "../metrics/tags"
 
 const {env} = process
@@ -68,7 +68,7 @@ const filterEventsBasedOnChannelAndDevice = metricRegistry => {
 
     const {attributes} = message
 
-    if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.bike_id)) {
+    if (shouldDropChannel(attributes.channel) || shouldDropDevice(attributes.device_id)) {
       metricRegistry.updateStat("Counter", "num_input_messages_dropped", 1, getInputMessageTags(message))
       acknowledgeMessage()
       return false

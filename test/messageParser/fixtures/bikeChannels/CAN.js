@@ -1,7 +1,7 @@
 export const CAN_MCU = {
   attributes: {
     channel: "can_mcu/v1_0_0",
-    bike_id: "s_2404",
+    device_id: "s_2404",
     version: "v1"
   },
   data: [
@@ -25,7 +25,7 @@ export const CAN_MCU = {
 export const CAN_BMS = {
   attributes: {
     channel: "can_bms/e55",
-    bike_id: "BEAGLE-ESS-4",
+    device_id: "BEAGLE-ESS-4",
     version: "v1"
   },
   data: [
@@ -42,7 +42,7 @@ export const CAN_BMS = {
 export const LEGACY_CAN_MCU = {
   attributes: {
     channel: "can_raw",
-    bike_id: "s_2404",
+    device_id: "s_2404",
     version: "v1"
   },
   data: CAN_MCU.data
@@ -51,7 +51,7 @@ export const LEGACY_CAN_MCU = {
 export const LEGACY_CAN_BMS = {
   attributes: {
     channel: "can_raw",
-    bike_id: "BEAGLE-ESS-4",
+    device_id: "BEAGLE-ESS-4",
     version: "v1"
   },
   data: CAN_BMS.data

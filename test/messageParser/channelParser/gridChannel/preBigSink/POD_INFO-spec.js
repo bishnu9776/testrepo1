@@ -26,7 +26,6 @@ describe("Parses pre big sink POD_INFO", () => {
     expect(createDataItemsFromMessage({message: POD_INFO})).to.eql([
       {
         channel: "pod_info",
-        data_item_id: "pod1_id-v1",
         data_item_name: "pod1_id",
         device_uuid: "DB_D81910297370019",
         sequence: 24101008,
@@ -35,7 +34,6 @@ describe("Parses pre big sink POD_INFO", () => {
       },
       {
         channel: "pod_info",
-        data_item_id: "pod1_firmware_version-v1",
         data_item_name: "pod1_firmware_version",
         device_uuid: "DB_D81910297370019",
         sequence: 24101008,
@@ -44,7 +42,6 @@ describe("Parses pre big sink POD_INFO", () => {
       },
       {
         channel: "pod_info",
-        data_item_id: "pod1_hardware_version-v1",
         data_item_name: "pod1_hardware_version",
         device_uuid: "DB_D81910297370019",
         sequence: 24101008,

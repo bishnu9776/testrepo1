@@ -1,4 +1,4 @@
-const attributes = {channel: "can", db_id: "DB_001f7b100e91", version: "v1"}
+const attributes = {channel: "can", device_id: "DB_001f7b100e91", version: "v1"}
 
 export const CAN = {
   attributes,

@@ -2,7 +2,7 @@ export const CAN_RAW = {
   attributes: {
     channel: "can_raw",
     version: "v1",
-    bike_id: "DB_001f7b10161e"
+    device_id: "DB_001f7b10161e"
   },
   data: [
     {
