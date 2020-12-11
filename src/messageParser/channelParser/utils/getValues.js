@@ -4,15 +4,11 @@ import {errorFormatter} from "../../../utils/errorFormatter"
 import {delayAndExit} from "../../../utils/delayAndExit"
 
 const parseNumber = value => {
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(value)) {
-    return isNil(value) ? null : value
-  }
-
   const isNumber = typeof value === "number"
   const isString = typeof value === "string"
 
-  if (isString && value.length === 0) {
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(value) || (isString && value.length === 0)) {
     return value
   }
 
