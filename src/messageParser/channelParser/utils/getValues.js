@@ -3,7 +3,24 @@ import {isNil, all, last} from "ramda"
 import {errorFormatter} from "../../../utils/errorFormatter"
 import {delayAndExit} from "../../../utils/delayAndExit"
 
-const getSingleValue = ({event, valuesKeys}) => (isNil(event[valuesKeys[0].value]) ? null : event[valuesKeys[0].value])
+const parseNumber = value => {
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(value)) {
+    return isNil(value) ? null : value
+  }
+
+  const isNumber = typeof value === "number"
+  const isString = typeof value === "string"
+
+  if (isString && value.length === 0) {
+    return value
+  }
+
+  return isNumber || isString ? parseFloat(value) : value
+}
+
+const getSingleValue = ({event, valuesKeys}) =>
+  isNil(event[valuesKeys[0].value]) ? null : parseNumber(event[valuesKeys[0].value])
 const getCompositeValue = ({event, valuesKeys}) => {
   const compositeValue = valuesKeys.reduce((acc, {key, value}) => {
     return {...acc, [key]: isNil(event[value]) ? null : event[value]}

@@ -33,7 +33,8 @@ export const GEN2_BUFFERED = {
       ACC_Z_MPS2: 4.45,
       GYR_X_DEG: null,
       GYR_Y_DEG: null,
-      GYR_Z_DEG: null
+      GYR_Z_DEG: null,
+      MOT_Tmot_C: "1.1"
     }
   ]
 }

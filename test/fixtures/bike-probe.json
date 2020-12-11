@@ -37,6 +37,13 @@
       "type": "number"
     }
   },
+  "MOT_Tmot_C": {
+    "data_item_name": "MOT_Tmot_C",
+    "data_item_type": "CELSIUS",
+    "values_schema": {
+      "type": "number"
+    }
+  },
   "ACC_Y_MPS2": {
     "data_item_name": "ACC_Y_MPS2",
     "data_item_type": "ACCELERATION",
