@@ -5,7 +5,7 @@ import {getAttributesFormatter} from "../../src/messageParser/getAttributesForma
 describe("get attribute formatter", () => {
   let metricRegistry
 
-  describe("should format attribute for bikes:", () => {
+  describe("should format attribute for bikes", () => {
     beforeEach(() => {
       process.env.VI_INPUT_TYPE = "bike"
       metricRegistry = getMockMetricRegistry()
@@ -15,7 +15,7 @@ describe("get attribute formatter", () => {
       clearEnv()
     })
 
-    it("new bikes", () => {
+    it("should format attributes of new bikes messages correctly", () => {
       const formatEvent = getAttributesFormatter(metricRegistry)
       const attributes = {subFolder: "v1/can_mcu/v1_0_0", deviceId: "device-1"}
       expect(formatEvent(attributes)).to.eql({
@@ -25,7 +25,7 @@ describe("get attribute formatter", () => {
       })
     })
 
-    it("legacy bikes", () => {
+    it("should format attributes of legacy bikes messages correctly", () => {
       const formatEvent = getAttributesFormatter(metricRegistry)
       const attributes = {subFolder: "can_mcu/v1_0_0", deviceId: "device-1"}
       expect(formatEvent(attributes)).to.eql({
@@ -46,7 +46,7 @@ describe("get attribute formatter", () => {
       clearEnv()
     })
 
-    it("for pre big sink", () => {
+    it("should handle pre big sink data correctly", () => {
       process.env.VI_CI_PRE_BIG_SINK_MODE = "true"
       const formatEvent = getAttributesFormatter(metricRegistry)
       const attributes = {subFolder: "v1_5/db_data", deviceId: "DB_1"}
@@ -56,13 +56,25 @@ describe("get attribute formatter", () => {
         version: "v1_5"
       })
     })
-    it("for post big sink", () => {
+
+    it("should handle post big sink data with db_id correctly,", () => {
       process.env.VI_CI_PRE_BIG_SINK_MODE = "false"
       const formatEvent = getAttributesFormatter(metricRegistry)
       const attributes = {channel: "db_data", version: "v1", db_id: "DB_1"}
       expect(formatEvent(attributes)).to.eql({
         channel: "db_data",
         device_id: "DB_1",
+        version: "v1"
+      })
+    })
+
+    it("should handle post big sink data with bike_id correctly,", () => {
+      process.env.VI_CI_PRE_BIG_SINK_MODE = "false"
+      const formatEvent = getAttributesFormatter(metricRegistry)
+      const attributes = {channel: "db_data", version: "v1", bike_id: "device_1"}
+      expect(formatEvent(attributes)).to.eql({
+        channel: "db_data",
+        device_id: "device_1",
         version: "v1"
       })
     })
