@@ -1,5 +1,4 @@
-import {keys, isNil, head} from "ramda"
-import {log} from "../../../../logger"
+import {head, isNil, keys} from "ramda"
 import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertLongToBytes} from "./utils/convertLongToBytes"
@@ -101,10 +100,6 @@ export const getCANDecoder = metricRegistry => {
         const decoderKeys = keys(decoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
-          log.error(
-            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}${canId}`}},
-            "Event does not map to one decoder for its CAN id"
-          )
           metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
             channel: attributes.channel,
             can_id: convertIntCANIdToHex(canId)
@@ -117,10 +112,6 @@ export const getCANDecoder = metricRegistry => {
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
       if (isNilOrEmpty(decoderForCANId)) {
-        log.debug(
-          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderForCANId}},
-          "Event does not map to a decoder for its CAN id"
-        )
         metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
           channel: attributes.channel,
           can_id: convertIntCANIdToHex(canId)
