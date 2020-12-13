@@ -6,9 +6,10 @@ import {delayAndExit} from "../../../utils/delayAndExit"
 const parseNumber = value => {
   const isNumber = typeof value === "number"
   const isString = typeof value === "string"
+  const isEmptyString = isString && value.length === 0
 
   // eslint-disable-next-line no-restricted-globals
-  if (isNaN(value) || (isString && value.length === 0)) {
+  if (isNaN(value) || isEmptyString) {
     return value
   }
 
