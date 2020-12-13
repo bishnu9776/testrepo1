@@ -7,6 +7,7 @@ export const getRoutingConfig = () => {
   const probeTopics = env.VI_KAFKA_SINK_PROBE_TOPICS ? env.VI_KAFKA_SINK_PROBE_TOPICS.split(",") : []
   const whitelistedDataItems = env.VI_DATAITEM_WHITELIST ? env.VI_DATAITEM_WHITELIST.split(",") : []
   const whitelistedCanRawDataItems = env.VI_CANRAW_DATAITEM_WHITELIST ? env.VI_CANRAW_DATAITEM_WHITELIST.split(",") : []
+  const hemanTopics = env.VI_KAFKA_SINK_HEMAN_TOPICS ? env.VI_KAFKA_SINK_HEMAN_TOPICS.split(",") : []
 
   return [
     {
@@ -24,6 +25,10 @@ export const getRoutingConfig = () => {
     {
       filter: e => e.tag === "MTConnectDevices",
       topics: probeTopics
+    },
+    {
+      filter: e => e.data_item_name === "error_code",
+      topics: hemanTopics
     }
   ]
 }
