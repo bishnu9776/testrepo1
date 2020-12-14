@@ -1,6 +1,6 @@
 import {path, pipe} from "ramda"
 import monitoring from "@google-cloud/monitoring"
-import errorFormatter from "../utils/errorFormatter"
+import {errorFormatter} from "../utils/errorFormatter"
 
 export const collectSubscriptionStats = ({appContext, credentialsPath, projectId, subscriptionName, statsInterval}) => {
   const {log, metricRegistry} = appContext
