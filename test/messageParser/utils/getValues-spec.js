@@ -69,6 +69,16 @@ describe("getValues spec", () => {
         data_item_type: "VALUE_NUMBER",
         values_schema: {type: "number"}
       },
+      value_number_as_string: {
+        data_item_name: "value_number_as_string",
+        data_item_type: "VALUE_NUMBER_AS_STRING",
+        values_schema: {type: "number"}
+      },
+      value_float_as_string: {
+        data_item_name: "value_float_as_string",
+        data_item_type: "VALUE_FLOAT_AS_STRING",
+        values_schema: {type: "number"}
+      },
       value_string: {
         data_item_name: "value_string",
         data_item_type: "VALUE_STRING",
@@ -96,6 +106,8 @@ describe("getValues spec", () => {
     const event = {
       value_int: 1,
       value_number: 2.2,
+      value_float_as_string: "1.44",
+      value_number_as_string: "1.0", // float is also of type number
       value_string: "3",
       value_boolean: false,
       LAT_DEG: 72.71,
@@ -117,6 +129,18 @@ describe("getValues spec", () => {
         const log = getMockLog()
         const getValues = getValuesFn(probe, log)
         expect(getValues({event, probe, dataItemName: "value_number"})).to.be.equal(2.2)
+      })
+
+      it("should return value as float/number if schema is of type number and event value is stringified float val", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+        expect(getValues({event, probe, dataItemName: "value_float_as_string"})).to.be.equal(1.44)
+      })
+
+      it("should return value as integer/number if schema is of type number and event value is stringified integer val", () => {
+        const log = getMockLog()
+        const getValues = getValuesFn(probe, log)
+        expect(getValues({event, probe, dataItemName: "value_number_as_string"})).to.be.equal(1)
       })
 
       it("should return value as is if schema is string ", () => {

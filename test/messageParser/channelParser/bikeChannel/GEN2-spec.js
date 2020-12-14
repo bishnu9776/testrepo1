@@ -39,6 +39,7 @@ describe("Parses GEN2", () => {
       parsedDataItem("ACC_X_MPS2", 2.23),
       parsedDataItem("ACC_Y_MPS2", 3.32),
       parsedDataItem("ACC_Z_MPS2", "4.45"),
+      parsedDataItem("MOT_Tmot_C", 1.1),
       parsedDataItem("BMS_Cell3", "3.5231"),
       parsedDataItem("acceleration", {x: 2.23, y: 3.32, z: 4.45}),
       parsedDataItem("acc_x", {x: 2.23})
