@@ -105,13 +105,13 @@ export const getCANDecoder = metricRegistry => {
             {
               ctx: {
                 event: JSON.stringify(message, null, 2),
-                keyToCheck: `${attributes.channel}${convertIntCANIdToHex(canId)}`,
+                keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
                 decoderKeyForCANId
               }
             },
             `Legacy CAN decoder: Event does not map to one decoder for its CAN id: ${
               attributes.channel
-            }${convertIntCANIdToHex(canId)}`
+            }:${convertIntCANIdToHex(canId)}`
           )
           metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
             channel: attributes.channel,
@@ -129,11 +129,11 @@ export const getCANDecoder = metricRegistry => {
           {
             ctx: {
               event: JSON.stringify(message, null, 2),
-              keyToCheck: `${attributes.channel}${convertIntCANIdToHex(canId)}`,
+              keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
               decoderKey
             }
           },
-          `CAN decoder: Event does not map to a decoder for its CAN id: ${attributes.channel}${convertIntCANIdToHex(
+          `CAN decoder: Event does not map to a decoder for its CAN id: ${attributes.channel}:${convertIntCANIdToHex(
             canId
           )}`
         )
