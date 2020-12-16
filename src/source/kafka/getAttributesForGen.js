@@ -3,23 +3,33 @@ import {isNilOrEmpty} from "../../utils/isNilOrEmpty"
 const isInvalidAttributes = (attributes, indicesToValidate) =>
   indicesToValidate.some(index => isNilOrEmpty(attributes[index]))
 
+const isCANChannelWithComponentRequired = channel =>
+  (channel !== "can_default" || channel !== "can_raw") && channel.match(/^can/)
+
 export const getAttributesForGen1 = (headers, metricRegistry) => {
-  let subFolder
   if (headers && headers[0].inputTopic) {
     const attributesObj = headers[0].inputTopic.toString().split(".")
     const deviceAttributeIndex = 3
     const versionAttributeIndex = deviceAttributeIndex + 2
     const channelAttributeIndex = deviceAttributeIndex + 3
     const componentAttributesIndex = deviceAttributeIndex + 4
+
     if (isInvalidAttributes(attributesObj, [deviceAttributeIndex, versionAttributeIndex, channelAttributeIndex])) {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
       throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
     }
-    if (!isNilOrEmpty(attributesObj[componentAttributesIndex])) {
-      subFolder = `${attributesObj[5]}/${attributesObj[6]}/${attributesObj[7]}`
-    } else {
-      subFolder = `${attributesObj[5]}/${attributesObj[6]}`
+
+    const channel = attributesObj[channelAttributeIndex]
+    const component = attributesObj[componentAttributesIndex]
+
+    if (isCANChannelWithComponentRequired(channel) && isNilOrEmpty(component)) {
+      metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_component")
+      throw new Error(`Component is not present, topic: ${headers[0].inputTopic}`)
     }
+
+    const subFolder = !isNilOrEmpty(attributesObj[componentAttributesIndex])
+      ? `${attributesObj[5]}/${attributesObj[6]}/${attributesObj[7]}`
+      : `${attributesObj[5]}/${attributesObj[6]}`
 
     return {
       deviceId: attributesObj[3],

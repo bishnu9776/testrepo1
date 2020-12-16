@@ -44,6 +44,13 @@ describe("getAttributesForGen spec", () => {
       )
     })
 
+    it("should throw if parse component is not specified for can channel", () => {
+      const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.can_bms"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.throw(
+        `Component is not present, topic: ${headers[0].inputTopic}`
+      )
+    })
+
     it("should parse attributes correctly", () => {
       const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.foo"}]
       expect(() => getAttributesForGen1(headers, metricRegistry)).to.not.throw(
