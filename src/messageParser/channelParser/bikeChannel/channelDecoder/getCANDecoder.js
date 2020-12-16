@@ -3,6 +3,7 @@ import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertLongToBytes} from "./utils/convertLongToBytes"
 import {convertIntCANIdToHex} from "./utils/convertIntCANIdToHex"
+import {log} from "../../../../logger"
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
@@ -100,6 +101,10 @@ export const getCANDecoder = metricRegistry => {
         const decoderKeys = keys(decoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
+          log.warn(
+            {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: `${attributes.channel}${canId}`}},
+            "Legacy CAN decoder: Event does not map to one decoder for its CAN id"
+          )
           metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
             channel: attributes.channel,
             can_id: convertIntCANIdToHex(canId)
@@ -112,6 +117,10 @@ export const getCANDecoder = metricRegistry => {
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
       if (isNilOrEmpty(decoderForCANId)) {
+        log.warn(
+          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderForCANId}},
+          "CAN decoder: Event does not map to a decoder for its CAN id"
+        )
         metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
           channel: attributes.channel,
           can_id: convertIntCANIdToHex(canId)
