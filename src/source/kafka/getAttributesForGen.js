@@ -4,18 +4,26 @@ const isInvalidAttributes = (attributes, indicesToValidate) =>
   indicesToValidate.some(index => isNilOrEmpty(attributes[index]))
 
 export const getAttributesForGen1 = (headers, metricRegistry) => {
+  let subFolder
   if (headers && headers[0].inputTopic) {
     const attributesObj = headers[0].inputTopic.toString().split(".")
     const deviceAttributeIndex = 3
     const versionAttributeIndex = deviceAttributeIndex + 2
-    const componentAttributeIndex = deviceAttributeIndex + 3
-    if (isInvalidAttributes(attributesObj, [deviceAttributeIndex, versionAttributeIndex, componentAttributeIndex])) {
+    const channelAttributeIndex = deviceAttributeIndex + 3
+    const componentAttributesIndex = deviceAttributeIndex + 4
+    if (isInvalidAttributes(attributesObj, [deviceAttributeIndex, versionAttributeIndex, channelAttributeIndex])) {
       metricRegistry.updateStat("Counter", "num_events_dropped", 1, "invalid_attributes")
       throw new Error(`Device/channel not present, topic: ${headers[0].inputTopic}`)
     }
+    if (!isNilOrEmpty(attributesObj[componentAttributesIndex])) {
+      subFolder = `${attributesObj[5]}/${attributesObj[6]}/${attributesObj[7]}`
+    } else {
+      subFolder = `${attributesObj[5]}/${attributesObj[6]}`
+    }
+
     return {
       deviceId: attributesObj[3],
-      subFolder: `${attributesObj[5]}/${attributesObj[6]}`
+      subFolder
     }
   }
   throw new Error(`Invalid headers`)

@@ -54,6 +54,17 @@ describe("getAttributesForGen spec", () => {
       expect(deviceId).to.be.eql("device_1")
       expect(subFolder).to.be.eql("v1/foo")
     })
+
+    it("should parse attributes with component correctly", () => {
+      const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.can_bms.v1_0_0"}]
+      expect(() => getAttributesForGen1(headers, metricRegistry)).to.not.throw(
+        `Device/channel not present, topic: ${headers[0].inputTopic}`
+      )
+
+      const {deviceId, subFolder} = getAttributesForGen1(headers, metricRegistry)
+      expect(deviceId).to.be.eql("device_1")
+      expect(subFolder).to.be.eql("v1/can_bms/v1_0_0")
+    })
   })
 
   describe("GEN 2", () => {
