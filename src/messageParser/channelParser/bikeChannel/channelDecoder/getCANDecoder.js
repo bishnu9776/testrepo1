@@ -118,8 +118,8 @@ export const getCANDecoder = metricRegistry => {
       const decoderForCANId = decoder[decoderKey]
       if (isNilOrEmpty(decoderForCANId)) {
         log.warn(
-          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderForCANId}},
-          `CAN decoder: Event does not map to a decoder for its CAN id: ${decoderForCANId}`
+          {ctx: {event: JSON.stringify(message, null, 2), keyToCheck: decoderKey}},
+          `CAN decoder: Event does not map to a decoder for its CAN id: ${decoderKey}`
         )
         metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
           channel: attributes.channel,
