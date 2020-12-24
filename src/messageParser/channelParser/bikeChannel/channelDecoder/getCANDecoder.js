@@ -101,7 +101,7 @@ export const getCANDecoder = metricRegistry => {
         const decoderKeys = keys(decoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
-          log.warn(
+          log.trace(
             {
               ctx: {
                 keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
@@ -124,7 +124,7 @@ export const getCANDecoder = metricRegistry => {
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
       if (isNilOrEmpty(decoderForCANId)) {
-        log.warn(
+        log.trace(
           {
             ctx: {
               keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
