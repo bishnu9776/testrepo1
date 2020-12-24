@@ -104,7 +104,6 @@ export const getCANDecoder = metricRegistry => {
           log.warn(
             {
               ctx: {
-                event: JSON.stringify(message, null, 2),
                 keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
                 decoderKeyForCANId
               }
@@ -128,7 +127,6 @@ export const getCANDecoder = metricRegistry => {
         log.warn(
           {
             ctx: {
-              event: JSON.stringify(message, null, 2),
               keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
               decoderKey
             }
