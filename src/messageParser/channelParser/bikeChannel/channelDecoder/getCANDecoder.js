@@ -78,37 +78,21 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
   return legacyDecoder
 }
 
-const addLogAndMetricForInvalidLagacyCanIds = (attributes, canId, decoderKeyForCANId, metricRegistry) => {
+const addLogAndMetricForInvalidCanIds = (attributes, canId, decoderKey, metricRegistry, tag) => {
   log.trace(
     {
       ctx: {
         keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
-        decoderKeyForCANId
-      }
-    },
-    `Legacy CAN decoder: Event does not map to one decoder for its CAN id: ${attributes.channel}:${convertIntCANIdToHex(
-      canId
-    )}`
-  )
-  metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
-    channel: attributes.channel,
-    can_id: convertIntCANIdToHex(canId)
-  })
-}
-
-const addLogAndMetricForInvalidCanIds = (attributes, canId, decoderKey, metricRegistry) => {
-  log.trace(
-    {
-      ctx: {
-        keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
-        decoderKey
+        decoderKey,
+        ...(tag && {tag})
       }
     },
     `CAN decoder: Event does not map to a decoder for its CAN id: ${attributes.channel}:${convertIntCANIdToHex(canId)}`
   )
   metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
     channel: attributes.channel,
-    can_id: convertIntCANIdToHex(canId)
+    can_id: convertIntCANIdToHex(canId),
+    ...(tag && {tag})
   })
 }
 
@@ -135,7 +119,7 @@ export const getCANDecoder = metricRegistry => {
         const decoderKeys = keys(decoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
-          addLogAndMetricForInvalidLagacyCanIds(attributes, canId, decoderKeyForCANId, metricRegistry)
+          addLogAndMetricForInvalidCanIds(attributes, canId, decoderKeyForCANId, metricRegistry, "legacy")
           return []
         }
         const decoderForCANId = decoderForDevice[head(decoderKeyForCANId)]
