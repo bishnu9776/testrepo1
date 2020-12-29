@@ -28,11 +28,11 @@ export const getAttributesForGen1 = (headers, metricRegistry) => {
     }
 
     const subFolder = !isNilOrEmpty(attributesObj[componentAttributesIndex])
-      ? `${attributesObj[5]}/${attributesObj[6]}/${attributesObj[7]}`
-      : `${attributesObj[5]}/${attributesObj[6]}`
+      ? `${attributesObj[versionAttributeIndex]}/${attributesObj[channelAttributeIndex]}/${attributesObj[componentAttributesIndex]}`
+      : `${attributesObj[versionAttributeIndex]}/${attributesObj[channelAttributeIndex]}`
 
     return {
-      deviceId: attributesObj[3],
+      deviceId: attributesObj[deviceAttributeIndex],
       subFolder
     }
   }

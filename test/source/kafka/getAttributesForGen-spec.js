@@ -44,7 +44,7 @@ describe("getAttributesForGen spec", () => {
       )
     })
 
-    it("should throw if parse component is not specified for can channel", () => {
+    it("should throw if component is not specified for can channel", () => {
       const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.can_bms"}]
       expect(() => getAttributesForGen1(headers, metricRegistry)).to.throw(
         `Component is not present, topic: ${headers[0].inputTopic}`
@@ -53,10 +53,6 @@ describe("getAttributesForGen spec", () => {
 
     it("should parse attributes correctly", () => {
       const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.foo"}]
-      expect(() => getAttributesForGen1(headers, metricRegistry)).to.not.throw(
-        `Device/channel not present, topic: ${headers[0].inputTopic}`
-      )
-
       const {deviceId, subFolder} = getAttributesForGen1(headers, metricRegistry)
       expect(deviceId).to.be.eql("device_1")
       expect(subFolder).to.be.eql("v1/foo")
@@ -64,10 +60,6 @@ describe("getAttributesForGen spec", () => {
 
     it("should parse attributes with component correctly", () => {
       const headers = [{inputTopic: ".devices.gen-1.device_1.events.v1.can_bms.v1_0_0"}]
-      expect(() => getAttributesForGen1(headers, metricRegistry)).to.not.throw(
-        `Device/channel not present, topic: ${headers[0].inputTopic}`
-      )
-
       const {deviceId, subFolder} = getAttributesForGen1(headers, metricRegistry)
       expect(deviceId).to.be.eql("device_1")
       expect(subFolder).to.be.eql("v1/can_bms/v1_0_0")
@@ -99,10 +91,6 @@ describe("getAttributesForGen spec", () => {
 
       it("should parse attributes correctly", () => {
         const headers = [{inputTopic: ".devices.device_1.events.v1.foo"}]
-        expect(() => getAttributesForGen2(headers, metricRegistry)).to.not.throw(
-          `Device/channel not present, topic: ${headers[0].inputTopic}`
-        )
-
         const {deviceId, subFolder} = getAttributesForGen2(headers, metricRegistry)
         expect(deviceId).to.be.eql("device_1")
         expect(subFolder).to.be.eql("v1/foo")
@@ -133,10 +121,6 @@ describe("getAttributesForGen spec", () => {
 
       it("should parse attributes correctly", () => {
         const headers = [{inputTopic: ".devices.Gen-2.device_1.events.v1.foo"}]
-        expect(() => getAttributesForGen2(headers, metricRegistry)).to.not.throw(
-          `Device/channel not present, topic: ${headers[0].inputTopic}`
-        )
-
         const {deviceId, subFolder} = getAttributesForGen2(headers, metricRegistry)
         expect(deviceId).to.be.eql("device_1")
         expect(subFolder).to.be.eql("v1/foo")
@@ -144,10 +128,6 @@ describe("getAttributesForGen spec", () => {
 
       it("should parse attributes correctly with case incensitive gen info", () => {
         const headers = [{inputTopic: ".devices.gen-2.device_1.events.v1.foo"}]
-        expect(() => getAttributesForGen2(headers, metricRegistry)).to.not.throw(
-          `Device/channel not present, topic: ${headers[0].inputTopic}`
-        )
-
         const {deviceId, subFolder} = getAttributesForGen2(headers, metricRegistry)
         expect(deviceId).to.be.eql("device_1")
         expect(subFolder).to.be.eql("v1/foo")
