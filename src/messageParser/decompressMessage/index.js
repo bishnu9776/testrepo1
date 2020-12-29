@@ -29,12 +29,12 @@ const decompressUsingInflate = async ({message, log}) => {
 }
 
 const deserializeAvro = async ({message, log}) => {
-  const {data, attributes} = message
   try {
     return await deserializeAvroMessage(message)
   } catch (e) {
-    log.info(
-      {ctx: {message: JSON.stringify(data), attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(e)},
+    const {attributes} = message
+    log.trace(
+      {ctx: {attributes: JSON.stringify(attributes, null, 2)}, error: errorFormatter(e)},
       "Error deserializing avro message."
     )
     return null

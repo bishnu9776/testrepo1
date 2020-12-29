@@ -3,6 +3,7 @@ import {isNilOrEmpty} from "../../../../utils/isNilOrEmpty"
 import {loadJSONFile} from "../../../../utils/loadJSONFile"
 import {convertLongToBytes} from "./utils/convertLongToBytes"
 import {convertIntCANIdToHex} from "./utils/convertIntCANIdToHex"
+import {log} from "../../../../logger"
 // eslint-disable-next-line no-new-func
 const createFn = eqn => Function("bytes", `return ${eqn}`)
 
@@ -77,6 +78,24 @@ const populateLegacyDecoderConfig = (config, defaultComponentToVersionMapping) =
   return legacyDecoder
 }
 
+const addLogAndMetricForInvalidCanIds = (attributes, canId, decoderKey, metricRegistry, tag) => {
+  log.trace(
+    {
+      ctx: {
+        keyToCheck: `${attributes.channel}:${convertIntCANIdToHex(canId)}`,
+        decoderKey,
+        ...(tag && {tag})
+      }
+    },
+    `CAN decoder: Event does not map to a decoder for its CAN id: ${attributes.channel}:${convertIntCANIdToHex(canId)}`
+  )
+  metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
+    channel: attributes.channel,
+    can_id: convertIntCANIdToHex(canId),
+    ...(tag && {tag})
+  })
+}
+
 export const getCANDecoder = metricRegistry => {
   const decoderConfigPath = env.VI_CAN_DECODER_CONFIG_PATH
   const legacyComponentVersionConfigPath = env.VI_CAN_LEGACY_COMPONENT_VERSION_CONFIG_PATH
@@ -100,10 +119,7 @@ export const getCANDecoder = metricRegistry => {
         const decoderKeys = keys(decoderForDevice)
         const decoderKeyForCANId = decoderKeys.filter(key => new RegExp(canId).test(key))
         if (decoderKeyForCANId.length !== 1) {
-          metricRegistry.updateStat("Counter", "can_legacy_message_ignored", 1, {
-            channel: attributes.channel,
-            can_id: convertIntCANIdToHex(canId)
-          })
+          addLogAndMetricForInvalidCanIds(attributes, canId, decoderKeyForCANId, metricRegistry, "legacy")
           return []
         }
         const decoderForCANId = decoderForDevice[head(decoderKeyForCANId)]
@@ -112,10 +128,7 @@ export const getCANDecoder = metricRegistry => {
       const decoderKey = `${componentKeys.join(".")}.${canId}`
       const decoderForCANId = decoder[decoderKey]
       if (isNilOrEmpty(decoderForCANId)) {
-        metricRegistry.updateStat("Counter", "can_message_ignored", 1, {
-          channel: attributes.channel,
-          can_id: convertIntCANIdToHex(canId)
-        })
+        addLogAndMetricForInvalidCanIds(attributes, canId, decoderKey, metricRegistry)
         return []
       }
       return decodeCANRaw(d, decoderForCANId)
